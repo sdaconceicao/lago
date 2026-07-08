@@ -1,4 +1,5 @@
 "use client";
+import type { CSSProperties } from "react";
 import {
   ProgressBar as AriaProgressBar,
   type ProgressBarProps as AriaProgressBarProps,
@@ -23,7 +24,7 @@ export function ProgressBar({ label, ...props }: ProgressBarProps) {
               style={
                 {
                   "--percent": (isIndeterminate ? 100 : percentage) + "%",
-                } as any
+                } as CSSProperties
               }
             />
           </div>

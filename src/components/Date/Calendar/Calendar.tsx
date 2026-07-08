@@ -24,7 +24,7 @@ export function Calendar<T extends DateValue>({
   errorMessage,
   ...props
 }: CalendarProps<T>) {
-  let months = props.visibleDuration?.months || 1;
+  const months = props.visibleDuration?.months || 1;
   return (
     <AriaCalendar {...props}>
       <div className="months">

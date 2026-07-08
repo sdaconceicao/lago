@@ -49,7 +49,7 @@ export function Tag({
 }: Omit<TagProps, "children"> & {
   children?: React.ReactNode;
 }) {
-  let textValue = typeof children === "string" ? children : undefined;
+  const textValue = typeof children === "string" ? children : undefined;
   return (
     <AriaTag
       textValue={textValue}

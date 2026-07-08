@@ -56,7 +56,7 @@ export interface TreeItemProps extends Partial<AriaTreeItemProps> {
 }
 
 export function TreeItem(props: TreeItemProps) {
-  let textValue = typeof props.title === "string" ? props.title : "";
+  const textValue = typeof props.title === "string" ? props.title : "";
   return (
     <AriaTreeItem textValue={textValue} {...props}>
       {props.title != null ? (

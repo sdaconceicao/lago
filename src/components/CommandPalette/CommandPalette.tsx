@@ -19,11 +19,11 @@ export interface CommandPaletteProps<T>
 }
 
 export function CommandPalette<T>(props: CommandPaletteProps<T>) {
-  let { isOpen, onOpenChange } = props;
-  let { contains } = useFilter({ sensitivity: "base" });
+  const { isOpen, onOpenChange } = props;
+  const { contains } = useFilter({ sensitivity: "base" });
 
   useEffect(() => {
-    let isMacUA = /mac(os|intosh)/i.test(navigator.userAgent);
+    const isMacUA = /mac(os|intosh)/i.test(navigator.userAgent);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "j" && (isMacUA ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();

@@ -21,7 +21,7 @@ export function ListBox<T>({ children, ...props }: ListBoxProps<T>) {
 }
 
 export function ListBoxItem(props: ListBoxItemProps) {
-  let textValue =
+  const textValue =
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
   return (
@@ -54,7 +54,7 @@ export function DropdownListBox<T>(props: ListBoxProps<T>) {
 }
 
 export function DropdownItem(props: ListBoxItemProps) {
-  let textValue =
+  const textValue =
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
   return (

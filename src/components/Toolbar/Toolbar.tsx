@@ -8,7 +8,7 @@ import {
 import "./Toolbar.css";
 
 export function Toolbar(props: ToolbarProps) {
-  let { orientation = "horizontal" } = props;
+  const { orientation = "horizontal" } = props;
   return (
     <ToggleButtonGroupContext.Provider value={{ orientation }}>
       <SeparatorContext.Provider

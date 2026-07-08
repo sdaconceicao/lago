@@ -1,4 +1,5 @@
 "use client";
+import type { CSSProperties } from "react";
 import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
@@ -29,7 +30,7 @@ export function Meter({ label, ...props }: MeterProps) {
                       : percentage < 90
                         ? "var(--orange)"
                         : "var(--red)",
-                } as any
+                } as CSSProperties
               }
             />
           </div>
