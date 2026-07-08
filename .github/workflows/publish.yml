@@ -1,0 +1,30 @@
+name: Publish Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  check-version:
+    name: Check if Version Exists
+    uses: ./.github/workflows/workflow-check-version.yml
+
+  checks:
+    name: Status Checks
+    needs: [check-version]
+    uses: ./.github/workflows/workflow-typescript-checks.yml
+    if: needs.check-version.outputs.should-publish == 'true'
+
+  publish:
+    name: Publish Package
+    needs: [checks]
+    uses: ./.github/workflows/workflow-publish-to-registry.yml
+    with:
+      cached-build-id: ${{ needs.checks.outputs.cache-key }}
+    secrets:
+      TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}

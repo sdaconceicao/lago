@@ -1,0 +1,88 @@
+name: Setup Environment
+
+on:
+  workflow_call:
+    secrets:
+      NPM_REGISTRY_READ_TOKEN:
+        description: "Optional registry token (e.g. GitHub Packages PAT). Exposed to the install environment for package preinstall scripts."
+        required: false
+    inputs:
+      checkout-ref:
+        description: "Optional ref to checkout (for PR workflows)"
+        required: false
+        type: string
+      working-directory:
+        description: "Directory relative to repo root where dependencies are installed and scripts run (e.g. apps/web). Use '.' for the repository root."
+        required: false
+        default: "."
+        type: string
+    outputs:
+      cache-key:
+        description: "Cache key for the build"
+        value: ${{ jobs.setup.outputs.cache-key }}
+
+jobs:
+  setup:
+    name: Setup Environment
+    runs-on: ubuntu-latest
+    env:
+      PKG_INSTALL: pnpm install --frozen-lockfile
+      NPM_REGISTRY_READ_TOKEN: ${{ secrets.NPM_REGISTRY_READ_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_READ_TOKEN }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.value }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.checkout-ref || github.sha }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "lts/*"
+          registry-url: https://npm.pkg.github.com
+
+      - name: Setup Cache
+        uses: actions/cache@v5
+        id: restore-build
+        with:
+          path: ./*
+          key: cache-${{ runner.os }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ inputs.working-directory }}
+
+      - name: Cache node modules
+        uses: actions/cache@v5
+        id: node_modules
+        with:
+          path: |
+            ${{ inputs.working-directory }}/node_modules
+            **/node_modules
+            ~/.npm
+            ~/.local/share/pnpm/store
+          key: ds-deps-${{ runner.os }}-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) }}
+
+      - name: Install dependencies
+        if: steps.node_modules.outputs.cache-hit != 'true'
+        run: |
+          echo "Running: $PKG_INSTALL"
+          timeout 900 sh -c "$PKG_INSTALL"
+          code=$?
+          if [ "$code" -ne 0 ]; then
+            echo "::error::dependency install failed or timed out (exit $code; 124 = hit the 15m step limit)"
+            echo "::group::npm debug log (tail)"
+            tail -n 250 "$HOME"/.npm/_logs/*.log 2>/dev/null || echo "no npm debug logs found"
+            echo "::endgroup::"
+            exit "$code"
+          fi
+
+      - name: Set cache key
+        id: cache-key
+        run: echo "value=cache-${{ runner.os }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ inputs.working-directory }}" >> $GITHUB_OUTPUT

@@ -1,0 +1,42 @@
+---
+description: REQUIRED — Use jcodemunch MCP for all codebase exploration, search, and navigation. Do not use built-in Read/Grep/Glob/SemanticSearch for discovery.
+alwaysApply: true
+---
+
+# jcodemunch MCP — Required Codebase Tools
+
+This repo is indexed with jcodemunch. You **MUST** use jcodemunch MCP tools (`user-jcodemunch` server) for all exploration, search, and reading. The repo identifier is `local/design-system-86dbfa87`.
+
+**Do NOT use** built-in `Read`, `Grep`, `Glob`, or `SemanticSearch` for finding files, searching code, or reading file contents until you have tried jcodemunch (or it returned no results). Use built-in `Read` only when you are about to edit a file and need exact contents for the edit.
+
+## Tool Priority (Mandatory)
+
+You MUST use these jcodemunch tools instead of the corresponding built-in tools:
+
+| Task                                 | Use jcodemunch                       | Instead of           |
+| ------------------------------------ | ------------------------------------ | -------------------- |
+| Understand repo structure            | `get_repo_outline`                   | SemanticSearch, Glob |
+| Browse file tree                     | `get_file_tree` (with `path_prefix`) | Glob, Shell `ls`     |
+| Find functions/classes/types         | `search_symbols`                     | Grep, SemanticSearch |
+| Find text/strings/config values      | `search_text`                        | Grep                 |
+| Read a file's symbols and signatures | `get_file_outline`                   | Read (full file)     |
+| Read a specific symbol's source      | `get_symbol` / `get_symbols`         | Read (full file)     |
+| Read file contents                   | `get_file_content`                   | Read                 |
+
+## Required Workflow
+
+1. **Start every exploration** with `get_repo_outline` or `get_file_tree` — NEVER use Glob or shell `ls` for discovery.
+2. **Search for symbols** with `search_symbols` — NEVER use Grep or SemanticSearch for finding functions/classes/types.
+3. **Search for text/strings** with `search_text` — NEVER use Grep for text search until jcodemunch has been tried.
+4. **Read file structure** with `get_file_outline` or **read content** with `get_file_content` — NEVER use Read for discovery or full-file reads until jcodemunch is tried or you are about to edit that file.
+5. **Drill into symbols** with `get_symbol` / `get_symbols` when you need one function or component.
+6. **Fall back** to built-in tools only when: (a) jcodemunch returns no results, or (b) you are performing an edit and need the exact file contents for the edit.
+
+## All Calls Must Include `repo`
+
+Every jcodemunch tool call requires: `"repo": "local/design-system-86dbfa87"`
+
+## Keep the Index Fresh
+
+- After creating or significantly modifying files, run `index_folder` with `path` set to the workspace root and `incremental: true` so subsequent searches reflect changes.
+- If results seem stale, run `invalidate_cache` then re-index.

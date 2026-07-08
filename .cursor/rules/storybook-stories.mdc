@@ -1,0 +1,398 @@
+---
+title: Storybook Component Stories
+filetypes: ["*.stories.tsx"]
+---
+
+# Storybook Component Stories Rules
+
+When creating or modifying Storybook story files (`*.stories.tsx`), follow these rules:
+
+## Default Story (REQUIRED)
+
+**CRITICAL**: Every story file MUST start with a `Default` story as the first exported story. This connects to Storybook's argTypes controls and allows users to interact with all component props.
+
+```typescript
+export default meta;
+type Story = StoryObj<typeof ComponentName>;
+
+// Default story (MUST be first)
+export const Default: Story = {
+  args: {
+    // Component props here - these connect to argTypes controls
+    label: "Example label",
+    size: "md",
+  },
+  // Optional render function if component needs wrapper
+};
+```
+
+**Rules:**
+
+- Always named exactly `Default`
+- Always the first story after `export default meta`
+- Uses `args` property to define default props
+- These args connect directly to Storybook's Controls panel
+- May include `render` function if component requires wrapper or specific structure
+- Should demonstrate the component in its most common/default state
+
+## Component Props Documentation (REQUIRED)
+
+**CRITICAL**: All component props MUST have JSDoc comments describing their purpose, type, and behavior. This documentation is used by Storybook to generate controls and documentation.
+
+```typescript
+/**
+ * Props for the Button component
+ */
+export interface ButtonProps {
+  /** The text or content to display inside the button */
+  children: ReactNode;
+  /** The color variant of the button. Controls the visual appearance and semantic meaning. */
+  color?: "primary" | "secondary" | "tertiary";
+  /** The size variant of the button. Affects padding, font size, and overall dimensions. */
+  size?: "sm" | "md" | "lg" | "xl";
+  /** Disables the button and shows a disabled state. Prevents user interaction. */
+  isDisabled?: boolean;
+  /** CSS class name for custom styling. Merged with component's default classes. */
+  className?: string;
+}
+```
+
+**Rules:**
+
+- Document ALL props with JSDoc comments using `/** */` syntax
+- Be descriptive - explain what the prop does, not just its type
+- Mention default values when relevant (e.g., `/** Defaults to "md" */`)
+- Explain behavior and side effects (e.g., "Prevents user interaction")
+- Always export prop interfaces/types
+- JSDoc comments must be directly above each prop in the interface
+- Use complete sentences with proper punctuation
+
+**Example of well-documented props:**
+
+```typescript
+export interface CheckboxProps {
+  /** The label text displayed next to the checkbox */
+  label?: ReactNode;
+  /** Helper text displayed below the label. Provides additional context or instructions. */
+  hint?: ReactNode;
+  /** The size variant of the checkbox. Affects the checkbox size and text spacing. */
+  size?: "sm" | "md";
+  /** Whether the checkbox is checked by default (uncontrolled) */
+  defaultSelected?: boolean;
+  /** Whether the checkbox is disabled. Prevents interaction and applies disabled styling. */
+  isDisabled?: boolean;
+  /** Whether the checkbox is in an indeterminate state. Shows a dash instead of a checkmark. */
+  isIndeterminate?: boolean;
+}
+```
+
+## Story Descriptions (REQUIRED)
+
+Every story (except Default) MUST include a description explaining what the story demonstrates and what it's implementing.
+
+```typescript
+export const Sizes: Story = {
+    render: () => (
+        <div className="flex items-center gap-4">
+            <Button size="sm">Small</Button>
+            <Button size="md">Medium</Button>
+            <Button size="lg">Large</Button>
+        </div>
+    ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Button component supports four size variants: sm, md, lg, and xl. Each size affects padding, font size, and overall button dimensions.",
+            },
+        },
+    },
+};
+```
+
+**Rules:**
+
+- Every story except `Default` must have a description
+- Use `parameters.docs.description.story` to add the description
+- Clear and concise explanation of what the story demonstrates
+- Focus on what the story is implementing/showcasing
+- Include key details about props, behaviors, or use cases
+- Use complete sentences with proper punctuation
+- Explain the purpose and when to use the variant/pattern shown
+
+**Good description examples:**
+
+```typescript
+// ✅ Good - explains what and why
+description: {
+    story: "Button supports disabled and loading states. Disabled buttons cannot be interacted with, and loading buttons show a spinner animation while processing an action.",
+}
+
+// ✅ Good - explains the variants shown
+description: {
+    story: "Checkbox supports two size variants: sm (default) and md. The size affects both the checkbox itself and the spacing between the checkbox and label text.",
+}
+
+// ❌ Bad - too vague
+description: {
+    story: "Shows different sizes.",
+}
+```
+
+## Grouping Variants (REQUIRED)
+
+**CRITICAL**: Group related variants into single stories using `render` functions. Do NOT create separate stories for each variant. Each size, color, state, etc. should be a single story showing all variants together.
+
+**✅ CORRECT - Grouped:**
+
+```typescript
+// Single story showing all sizes
+export const Sizes: Story = {
+    render: () => (
+        <div className="flex items-center gap-4">
+            <Button size="sm">Small</Button>
+            <Button size="md">Medium</Button>
+            <Button size="lg">Large</Button>
+            <Button size="xl">Extra Large</Button>
+        </div>
+    ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Button component supports four size variants: sm, md, lg, and xl. Each size affects padding, font size, and overall button dimensions.",
+            },
+        },
+    },
+};
+
+// Single story showing all states
+export const States: Story = {
+    render: () => (
+        <div className="flex items-center gap-4">
+            <Button color="primary">Default</Button>
+            <Button color="primary" isDisabled>Disabled</Button>
+            <Button color="primary" isLoading>Loading</Button>
+        </div>
+    ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Button supports disabled and loading states. Disabled buttons cannot be interacted with, and loading buttons show a spinner animation.",
+            },
+        },
+    },
+};
+```
+
+**❌ INCORRECT - Separate stories:**
+
+```typescript
+// DON'T create separate stories for each variant
+export const Small: Story = { args: { size: "sm" } };
+export const Medium: Story = { args: { size: "md" } };
+export const Large: Story = { args: { size: "lg" } };
+export const Disabled: Story = { args: { isDisabled: true } };
+export const Loading: Story = { args: { isLoading: true } };
+```
+
+**What to group:**
+
+- **Sizes** → Single "Sizes" story showing all size variants (sm, md, lg, xl, etc.)
+- **Colors** → Single "Colors" story showing all color variants
+- **States** → Single "States" story showing all state variants (default, disabled, loading, error, etc.)
+- **Placements** → Single "Placements" story showing all placement options
+- **Themes** → Single "Themes" story showing all theme variants
+- **Variants** → Single "Variants" story if component has multiple variant types
+
+**Grouping best practices:**
+
+- Use flex containers to display variants side-by-side or in a grid
+- Add visual separators or headings if showing many variants
+- Keep related variants together (e.g., all sizes, all colors, all states)
+- Use consistent spacing and layout
+
+## Story File Structure
+
+Every story file must follow this structure:
+
+```typescript
+import type { Meta, StoryObj } from "@storybook/react";
+import { ComponentName } from "./component-name";
+
+const meta: Meta<typeof ComponentName> = {
+    title: "Base/Category/ComponentName",
+    component: ComponentName,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: "Brief description of what the component does and its primary use cases.",
+            },
+        },
+    },
+    tags: ["autodocs"],
+};
+
+export default meta;
+type Story = StoryObj<typeof ComponentName>;
+
+// Default story (REQUIRED - first, connects to argTypes)
+export const Default: Story = {
+    args: {
+        // Default props that connect to Controls panel
+        label: "Example",
+        size: "md",
+    },
+};
+
+// Grouped variant stories (each showing all variants together)
+export const Sizes: Story = {
+    render: () => (/* all sizes */),
+    parameters: {
+        docs: {
+            description: {
+                story: "Description of what this story demonstrates.",
+            },
+        },
+    },
+};
+
+export const Colors: Story = {
+    render: () => (/* all colors */),
+    parameters: {
+        docs: {
+            description: {
+                story: "Description of what this story demonstrates.",
+            },
+        },
+    },
+};
+
+export const States: Story = {
+    render: () => (/* all states */),
+    parameters: {
+        docs: {
+            description: {
+                story: "Description of what this story demonstrates.",
+            },
+        },
+    },
+};
+```
+
+## Naming Conventions
+
+- **Story names**: PascalCase (e.g., `WithIcons`, `Sizes`, `States`, `Colors`)
+- **File names**: kebab-case (e.g., `button.stories.tsx`, `checkbox.stories.tsx`)
+- **Story names should be descriptive** and clearly indicate what's shown:
+  - `Sizes` - shows all size variants
+  - `Colors` - shows all color variants
+  - `States` - shows all state variants
+  - `WithIcons` - shows component with icons
+  - `WithHint` - shows component with hint text
+  - `AsLink` - shows component rendered as a link
+
+## Complete Example
+
+Here's a complete example following all rules:
+
+```typescript
+import type { Meta, StoryObj } from "@storybook/react";
+import { Button } from "./button";
+
+const meta: Meta<typeof Button> = {
+    title: "Base/Buttons/Button",
+    component: Button,
+    parameters: {
+        layout: "centered",
+        docs: {
+            description: {
+                component: "A versatile button component that supports multiple color variants, sizes, and states. Can be used as a button or link element.",
+            },
+        },
+    },
+    tags: ["autodocs"],
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+// Default story - connects to Controls panel
+export const Default: Story = {
+    args: {
+        color: "primary",
+        size: "md",
+        children: "Button",
+    },
+};
+
+// All sizes grouped in one story
+export const Sizes: Story = {
+    render: () => (
+        <div className="flex items-center gap-4">
+            <Button size="sm">Small</Button>
+            <Button size="md">Medium</Button>
+            <Button size="lg">Large</Button>
+            <Button size="xl">Extra Large</Button>
+        </div>
+    ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Button component supports four size variants: sm, md, lg, and xl. Each size affects padding, font size, and overall button dimensions.",
+            },
+        },
+    },
+};
+
+// All colors grouped in one story
+export const Colors: Story = {
+    render: () => (
+        <div className="flex flex-col gap-6">
+            <div className="flex items-center gap-4">
+                <Button color="primary">Primary</Button>
+                <Button color="secondary">Secondary</Button>
+                <Button color="tertiary">Tertiary</Button>
+            </div>
+        </div>
+    ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Button component supports multiple color variants: primary, secondary, tertiary, and link styles. Each also has a destructive variant for dangerous actions.",
+            },
+        },
+    },
+};
+
+// All states grouped in one story
+export const States: Story = {
+    render: () => (
+        <div className="flex items-center gap-4">
+            <Button color="primary">Default</Button>
+            <Button color="primary" isDisabled>Disabled</Button>
+            <Button color="primary" isLoading>Loading</Button>
+        </div>
+    ),
+    parameters: {
+        docs: {
+            description: {
+                story: "Button supports disabled and loading states. Disabled buttons cannot be interacted with, and loading buttons show a spinner animation.",
+            },
+        },
+    },
+};
+```
+
+## Checklist
+
+Before completing a story file, verify:
+
+- [ ] **Default story is present and first** - connects to argTypes controls
+- [ ] **Default story uses `args`** - allows interactive control of all props
+- [ ] **All component props have JSDoc comments** - every prop in the interface is documented
+- [ ] **Prop interfaces are exported** - Storybook can generate controls
+- [ ] **Related variants are grouped** - Sizes, Colors, States are single stories showing all variants
+- [ ] **Every story (except Default) has a description** - explains what the story demonstrates
+- [ ] **Descriptions are clear and informative** - explain what and why, not just what
+- [ ] **No separate stories for individual variants** - group them instead
+- [ ] **No linter errors** - code follows project standards

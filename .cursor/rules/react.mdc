@@ -1,0 +1,630 @@
+---
+description: React Standards
+globs: **/*.tsx
+alwaysApply: false
+---
+
+# React Component Standards
+
+## Quick Reference
+
+This rule works with:
+
+- **Pure Functions Guide** - Extract logic from components
+- **Unit Testing Standards** - Test components thoroughly
+
+## Core Principles
+
+1. **Always use functional components** - No class components
+2. **Keep components focused on rendering** - Extract logic to utilities and hooks
+3. **Break out logic into pure functions** - Follow [Pure Functions Guide](mdc:pure-functions.mdc)
+4. **All components must have unit tests** - 100% test coverage required
+5. **Use hooks for complex state logic** - Extract reusable logic into custom hooks
+6. **Optimize performance** - Use `useMemo` for computed values, `useCallback` for functions
+7. **Use useEffect appropriately** - Only for side effects, not for derived state or computed values
+
+## Component Structure
+
+### File Organization
+
+```text
+ComponentName/
+├── index.tsx
+├── ComponentName.test.tsx
+├── ComponentName.hooks.ts (if complex state logic)
+└── ComponentName.utils.ts (if complex calculations)
+```
+
+### Component Template
+
+```tsx
+
+interface ComponentNameProps {
+  // Required props should not have default values
+  requiredProp: string;
+  // Optional props should have default values
+  optionalProp?: string;
+}
+
+export const ComponentName: FunctionComponent<ComponentNameProps> = ({
+  requiredProp,
+  optionalProp = "default value",
+}: ComponentNameProps) => {
+  // Custom hooks at the top
+  const { data, loading } = useComponentData(requiredProp);
+
+  // Memoized computed values
+  const processedData = useMemo(() => {
+    return processData(data);
+  }, [data]);
+
+  // Memoized callbacks
+  const handleClick = useCallback(() => {
+    // Handle click logic
+  }, []);
+
+  // Component logic here (keep minimal)
+
+  // Return JSX last
+  return <div className={css.componentName}>{/* Component content */}</div>;
+};
+
+export default ComponentName;
+```
+
+### Array and Object Syntax
+
+```tsx
+export const Navigation = ({
+  items,
+  currentPath,
+  className,
+}: NavigationProps) => {
+  return (
+    <nav className={className ? `${css.navigation} ${className}` : css.navigation}>
+      {items.map((item) => {
+        const navItemClasses = [
+          css.navItem,
+          css[item.type],
+          currentPath === item.path ? css.active : '',
+          item.disabled ? css.disabled : '',
+        ].filter(Boolean).join(' ');
+
+        return (
+          <a
+            key={item.path}
+            href={item.path}
+            className={navItemClasses}
+          >
+            {item.label}
+          </a>
+        );
+      })}
+    </nav>
+  );
+};
+```
+
+## Logic Extraction
+
+### Pure Functions in Utils
+
+```tsx
+// ComponentName.utils.ts
+export const processData = (data: RawData[]): ProcessedData[] => {
+  return data
+    .filter((item) => item.isValid)
+    .map((item) => ({
+      ...item,
+      processedValue: calculateValue(item),
+    }))
+    .sort((a, b) => a.processedValue - b.processedValue);
+};
+
+export const calculateValue = (item: RawData): number => {
+  return item.baseValue * item.multiplier;
+};
+```
+
+### Component Using Utils
+
+```tsx
+export const ComponentName = ({ data }: { data: RawData[] }) => {
+  const processedData = useMemo(() => {
+    return processData(data);
+  }, [data]);
+
+  return (
+    <div className={css.componentName}>
+      {processedData.map((item) => (
+        <DataItem key={item.id} item={item} />
+      ))}
+    </div>
+  );
+};
+```
+
+## Custom Hooks
+
+### When to Create Hooks
+
+- Complex state management
+- Reusable component logic
+- DOM manipulation with refs
+- API calls and data fetching
+- Form handling
+
+### Hook Structure
+
+```tsx
+// ComponentName.hooks.ts
+export const useComponentData = (id: string) => {
+  const [data, setData] = useState<Data | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const result = await api.getData(id);
+        setData(result);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  return { data, loading, error };
+};
+```
+
+### Component Using Hooks
+
+```tsx
+export const ComponentName = ({ id }: { id: string }) => {
+  const { data, loading, error } = useComponentData(id);
+
+  if (loading) return <div className={css.loading}>Loading...</div>;
+  if (error) return <div className={css.error}>{error}</div>;
+  if (!data) return null;
+
+  return <div className={css.componentName}>{/* Render data */}</div>;
+};
+```
+
+## When to Use useEffect
+
+### Appropriate Use Cases
+
+`useEffect` should only be used for **side effects** - operations that interact with the outside world or need to happen after render:
+
+1. **Data Fetching** - Fetching data from APIs when component mounts or dependencies change
+2. **DOM Manipulation** - Direct DOM operations that can't be done declaratively
+3. **Subscriptions** - Setting up and cleaning up event listeners, WebSocket connections, or timers
+4. **External Integrations** - Integrating with third-party libraries that require imperative APIs
+5. **Cleanup Operations** - Cleaning up resources when component unmounts or dependencies change
+
+### When NOT to Use useEffect
+
+**Avoid `useEffect` for:**
+
+1. **Derived State** - Use `useMemo` or compute directly in render
+2. **Event Handlers** - Use callbacks directly in JSX
+3. **Synchronous Updates** - Use state setters directly
+4. **Computed Values** - Use `useMemo` instead
+5. **Resetting State on Prop Change** - Use a `key` prop or compute in render
+
+### Examples
+
+#### ✅ Correct: Data Fetching
+
+```tsx
+export const useUserData = (userId: string) => {
+  const [data, setData] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    
+    const fetchUser = async () => {
+      setLoading(true);
+      try {
+        const user = await api.getUser(userId);
+        if (!cancelled) {
+          setData(user);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.error(error);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchUser();
+    
+    return () => {
+      cancelled = true;
+    };
+  }, [userId]);
+
+  return { data, loading };
+};
+```
+
+#### ✅ Correct: DOM Manipulation
+
+```tsx
+export const useClickOutside = (ref: RefObject<HTMLElement>, callback: () => void) => {
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        callback();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref, callback]);
+};
+```
+
+#### ✅ Correct: Subscription Management
+
+```tsx
+export const useWebSocket = (url: string) => {
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const ws = new WebSocket(url);
+    
+    ws.onmessage = (event) => {
+      setMessage(event.data);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [url]);
+
+  return message;
+};
+```
+
+#### ❌ Incorrect: Derived State
+
+```tsx
+// ❌ Don't do this
+const [fullName, setFullName] = useState('');
+
+useEffect(() => {
+  setFullName(`${firstName} ${lastName}`);
+}, [firstName, lastName]);
+
+// ✅ Do this instead
+const fullName = useMemo(() => {
+  return `${firstName} ${lastName}`;
+}, [firstName, lastName]);
+```
+
+#### ❌ Incorrect: Event Handler Setup
+
+```tsx
+// ❌ Don't do this
+useEffect(() => {
+  const handleClick = () => {
+    // handle click
+  };
+  buttonRef.current?.addEventListener('click', handleClick);
+  return () => {
+    buttonRef.current?.removeEventListener('click', handleClick);
+  };
+}, []);
+
+// ✅ Do this instead
+<button onClick={handleClick}>Click me</button>
+```
+
+#### ❌ Incorrect: Synchronous State Updates
+
+```tsx
+// ❌ Don't do this
+useEffect(() => {
+  if (someCondition) {
+    setValue(newValue);
+  }
+}, [someCondition]);
+
+// ✅ Do this instead
+const value = someCondition ? newValue : defaultValue;
+```
+
+### useEffect Best Practices
+
+1. **Always include dependencies** - Use exhaustive-deps ESLint rule
+2. **Clean up side effects** - Return cleanup functions from useEffect
+3. **Avoid infinite loops** - Ensure dependencies are stable or memoized
+4. **Use separate effects** - Split unrelated side effects into separate useEffect calls
+5. **Consider alternatives** - Before using useEffect, ask if the problem can be solved declaratively
+
+## Performance Optimization
+
+### useMemo for Computed Values
+
+```tsx
+export const ComponentName = ({ items }: { items: Item[] }) => {
+  // Memoize expensive calculations
+  const sortedItems = useMemo(() => {
+    return [...items].sort((a, b) => a.name.localeCompare(b.name));
+  }, [items]);
+
+  const filteredItems = useMemo(() => {
+    return sortedItems.filter((item) => item.isActive);
+  }, [sortedItems]);
+
+  const totalValue = useMemo(() => {
+    return filteredItems.reduce((sum, item) => sum + item.value, 0);
+  }, [filteredItems]);
+
+  return (
+    <div className={css.componentName}>
+      <div className={css.total}>Total: {totalValue}</div>
+      {filteredItems.map((item) => (
+        <ItemCard key={item.id} item={item} />
+      ))}
+    </div>
+  );
+};
+```
+
+### useCallback for Functions
+
+```tsx
+export const ComponentName = ({ onSave }: { onSave: (data: Data) => void }) => {
+  const [formData, setFormData] = useState<Data>({});
+
+  // Memoize event handlers
+  const handleInputChange = useCallback((field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    onSave(formData);
+  }, [formData, onSave]);
+
+  const handleReset = useCallback(() => {
+    setFormData({});
+  }, []);
+
+  return (
+    <form className={css.form} onSubmit={handleSubmit}>
+      <input
+        onChange={(e) => handleInputChange("name", e.target.value)}
+        className={css.input}
+      />
+      <button type="submit" className={css.button}>
+        Save
+      </button>
+      <button type="button" onClick={handleReset} className={css.button}>
+        Reset
+      </button>
+    </form>
+  );
+};
+```
+
+## Testing Requirements
+
+### Test File Structure
+
+```tsx
+// ComponentName.test.tsx
+import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { ComponentName } from "./ComponentName";
+
+describe("ComponentName", () => {
+  const defaultProps = {
+    requiredProp: "test value",
+    optionalProp: "optional value",
+  };
+
+  it("renders with required props", () => {
+    render(<ComponentName {...defaultProps} />);
+    expect(screen.getByText("test value")).toBeInTheDocument();
+  });
+
+  it("renders with optional props", () => {
+    render(<ComponentName requiredProp="required" optionalProp="custom" />);
+    expect(screen.getByText("custom")).toBeInTheDocument();
+  });
+
+  it("handles user interactions", async () => {
+    const user = userEvent.setup();
+    const mockOnClick = jest.fn();
+
+    render(<ComponentName {...defaultProps} onClick={mockOnClick} />);
+
+    const button = screen.getByRole("button");
+    await user.click(button);
+
+    expect(mockOnClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("applies correct CSS classes", () => {
+    render(<ComponentName {...defaultProps} />);
+
+    const container = screen.getByTestId("component-name");
+    expect(container).toHaveClass("componentName");
+  });
+
+  it("applies conditional classes correctly", () => {
+    render(
+      <ComponentName {...defaultProps} isActive={true} variant="primary" />
+    );
+
+    const container = screen.getByTestId("component-name");
+    expect(container).toHaveClass("componentName", "active", "primary");
+  });
+});
+```
+
+### Test Coverage Requirements
+
+- Test all prop variations
+- Test user interactions
+- Test edge cases
+- Test conditional class application
+- Test hook behavior
+- Test utility function integration
+
+## Best Practices
+
+### 1. Component Organization
+
+- One component per file
+- Group related files in component folder
+- Keep components small and focused
+- Extract complex logic to utilities and hooks
+
+### 2. State Management
+
+- Use hooks for local state
+- Extract complex state logic to custom hooks
+- Keep component state minimal
+- Use context for shared state
+
+### 3. Performance
+
+- Memoize expensive calculations with `useMemo`
+- Memoize functions with `useCallback`
+- Use `React.memo` for pure components
+- Avoid unnecessary re-renders
+
+### 4. Side Effects
+
+- Use `useEffect` only for side effects (data fetching, subscriptions, DOM manipulation)
+- Never use `useEffect` for derived state or computed values
+- Always clean up side effects in the return function
+- Include all dependencies in the dependency array
+
+### 5. Code Quality
+
+- Write meaningful component names
+- Document complex logic
+- Follow consistent formatting
+- Use TypeScript strictly
+- Test thoroughly
+
+## Example: Complete Component
+
+### UserProfile Component
+
+```tsx
+// UserProfile/index.tsx
+import css from "./UserProfile.module.css";
+import { useUserData } from "./UserProfile.hooks";
+import { formatUserName, calculateUserStats } from "./UserProfile.utils";
+
+interface UserProfileProps {
+  userId: string;
+  showStats?: boolean;
+  variant?: "default" | "compact" | "detailed";
+  isSelected?: boolean;
+  className?: string;
+}
+
+export const UserProfile: FunctionComponent<UserProfileProps> = ({
+  userId,
+  showStats = false,
+  variant = "default",
+  isSelected = false,
+  className,
+}: UserProfileProps) => {
+  const { user, loading, error } = useUserData(userId);
+
+  const formattedName = useMemo(() => {
+    return user ? formatUserName(user) : "";
+  }, [user]);
+
+  const stats = useMemo(() => {
+    return user ? calculateUserStats(user) : null;
+  }, [user]);
+
+  const handleEdit = useCallback(() => {
+    // Handle edit logic
+  }, []);
+
+  const profileClasses = [
+    css.userProfile,
+    variant === "compact" ? css.compact : '',
+    variant === "detailed" ? css.detailed : '',
+    isSelected ? css.selected : '',
+    className,
+  ].filter(Boolean).join(' ');
+
+  if (loading) return <div className={css.loading}>Loading...</div>;
+  if (error) return <div className={css.error}>{error}</div>;
+  if (!user) return null;
+
+  return (
+    <div className={profileClasses}>
+      <header className={css.header}>
+        <h1 className={css.name}>{formattedName}</h1>
+        <button onClick={handleEdit} className={css.editButton}>
+          Edit
+        </button>
+      </header>
+
+      <main className={css.content}>
+        <div className={css.info}>
+          <p className={css.email}>{user.email}</p>
+          <p className={css.role}>{user.role}</p>
+        </div>
+
+        {showStats && stats && (
+          <div className={css.stats}>
+            <h2>Statistics</h2>
+            <p>Posts: {stats.postCount}</p>
+            <p>Comments: {stats.commentCount}</p>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default UserProfile;
+```
+
+## Automated Checks
+
+- Verify functional component usage (no class components)
+- Check CSS module file naming and structure
+- Ensure logic is extracted to utilities and hooks
+- Verify test file existence and coverage
+- Check for proper use of `useMemo` and `useCallback`
+- Validate component file organization
+- Ensure pure function usage from utilities
+- Verify `useEffect` is only used for side effects, not derived state
+
+## Remember
+
+> "React components should be focused on rendering UI, with logic extracted to pure functions and custom hooks. Use CSS Modules for styling, optimize performance with memoization, use useEffect only for side effects, and ensure comprehensive testing coverage."
+
+## Related Rules
+
+- [Pure Functions Guide](mdc:pure-functions.mdc) - For extracting logic from components
+- [CSS Modules Styling Standards](mdc:styling-css-modules.mdc) - For component styling and CSS structure
+- [Unit Testing Standards](mdc:testing-unit-standards.mdc) - For testing React components thoroughly

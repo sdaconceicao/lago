@@ -1,0 +1,44 @@
+name: Setup Playwright browsers
+description: Detect Playwright usage and conditionally cache/install browser binaries
+outputs:
+  uses-playwright:
+    description: true when Playwright is detected, otherwise false
+    value: ${{ steps.detect.outputs.uses-playwright }}
+  cache-hit:
+    description: true when Playwright browser cache is restored
+    value: ${{ steps.playwright-cache.outputs.cache-hit }}
+runs:
+  using: composite
+  steps:
+    - name: Detect Playwright usage
+      id: detect
+      shell: bash
+      run: |
+        USES_PLAYWRIGHT=$(node -e "const fs=require('fs');let uses=false;if(fs.existsSync('package.json')){const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));const deps={...(pkg.dependencies||{}),...(pkg.devDependencies||{}),...(pkg.peerDependencies||{}),...(pkg.optionalDependencies||{})};uses=Boolean(deps['@playwright/test']||deps.playwright||Object.values(pkg.scripts||{}).some((s)=>/\\bplaywright\\b/.test(s)));}process.stdout.write(String(uses));")
+        echo "uses-playwright=${USES_PLAYWRIGHT}" >> "$GITHUB_OUTPUT"
+        echo "uses-playwright=${USES_PLAYWRIGHT}"
+
+    - name: Compute lockfile hash
+      id: lockfile-hash
+      if: steps.detect.outputs.uses-playwright == 'true'
+      shell: bash
+      run: |
+        if [ -f pnpm-lock.yaml ]; then
+          HASH=$(shasum -a 256 pnpm-lock.yaml | awk '{print $1}')
+        else
+          HASH=no-lockfile
+        fi
+        echo "value=${HASH}" >> "$GITHUB_OUTPUT"
+
+    - name: Cache Playwright browsers
+      if: steps.detect.outputs.uses-playwright == 'true'
+      id: playwright-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ github.repository }}-${{ steps.lockfile-hash.outputs.value }}
+
+    - name: Install Playwright browsers
+      if: steps.detect.outputs.uses-playwright == 'true' && steps.playwright-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: pnpm exec playwright install --with-deps chromium

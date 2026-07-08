@@ -1,0 +1,65 @@
+name: Check Version
+
+on:
+  workflow_call:
+    outputs:
+      should-publish:
+        description: "Whether the version should be published"
+        value: ${{ jobs.check-version.outputs.should-publish }}
+
+jobs:
+  check-version:
+    name: Check if Version Exists
+    runs-on: ubuntu-latest
+    outputs:
+      should-publish: ${{ steps.check.outputs.should-publish }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get package version
+        id: package-version
+        run: |
+          echo "version=$(node -pe "require('./package.json').version")" >> $GITHUB_OUTPUT
+          echo "package_name=$(node -pe "require('./package.json').name")" >> $GITHUB_OUTPUT
+
+      - name: Check if version exists in GitHub Packages
+        id: check
+        run: |
+          VERSION="${{ steps.package-version.outputs.version }}"
+          PACKAGE_NAME="${{ steps.package-version.outputs.package_name }}"
+
+          echo "Checking if version $VERSION of $PACKAGE_NAME exists..."
+
+          # Try to fetch package metadata from GitHub Packages
+          HTTP_CODE=$(curl -s -o /tmp/package.json -w "%{http_code}" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.npm.install-v1+json" \
+              "https://npm.pkg.github.com/$PACKAGE_NAME")
+
+          if [ "$HTTP_CODE" = "200" ]; then
+              # Package exists, check if version is in the versions list
+              VERSION_EXISTS=$(node -pe "
+                  const pkg = require('/tmp/package.json');
+                  pkg.versions && pkg.versions['$VERSION'] ? 'true' : 'false'
+              ")
+              
+              if [ "$VERSION_EXISTS" = "true" ]; then
+                  echo "Version $VERSION already exists in registry"
+                  echo "should-publish=false" >> $GITHUB_OUTPUT
+              else
+                  echo "Version $VERSION not found in registry"
+                  echo "should-publish=true" >> $GITHUB_OUTPUT
+              fi
+          elif [ "$HTTP_CODE" = "404" ]; then
+              # Package doesn't exist at all, or version doesn't exist
+              echo "Package or version not found (404)"
+              echo "should-publish=true" >> $GITHUB_OUTPUT
+          else
+              # Error case - default to false to avoid accidental republishing
+              echo "Error checking version (HTTP $HTTP_CODE). Defaulting to should-publish=false"
+              echo "should-publish=false" >> $GITHUB_OUTPUT
+          fi

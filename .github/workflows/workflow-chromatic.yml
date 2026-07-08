@@ -1,0 +1,42 @@
+name: Chromatic
+
+on:
+  workflow_call:
+    inputs:
+      cached-build-id:
+        description: "ID for cached build"
+        required: true
+        type: string
+
+    secrets:
+      chromatic-token:
+        description: "Chromatic project token"
+        required: true
+
+jobs:
+  chromatic:
+    name: Deploy to Chromatic
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Restore Build
+        uses: actions/cache/restore@v4
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ inputs.cached-build-id }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Deploy to Chromatic
+        uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.chromatic-token }}
+          onlyChanged: true # Only build changed stories, to enable turbosnap
+          autoAcceptChanges: "main" # Accept all changes on main branch

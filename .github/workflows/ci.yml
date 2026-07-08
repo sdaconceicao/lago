@@ -1,0 +1,18 @@
+name: CI Checks
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  checks:
+    name: Status Checks
+    uses: ./.github/workflows/workflow-typescript-checks.yml
+    with:
+  chromatic:
+    needs: [checks]
+    uses: ./.github/workflows/workflow-chromatic.yml
+    with:
+      cached-build-id: ${{ needs.checks.outputs.cache-key }}
+    secrets:
+      chromatic-token: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}

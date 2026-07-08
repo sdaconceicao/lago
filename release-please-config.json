@@ -1,0 +1,17 @@
+{
+  "release-type": "node",
+  "versioning": "default",
+  "separate-pull-requests": true,
+  "pull-request-title-pattern": "chore${scope}: Release ${component} ${version}",
+  "bootstrap-sha": "0dbfc690c887e167708959a0f1a53407d73059c3",
+  "packages": {
+    ".": {
+      "package-name": "lago"
+    }
+  },
+  "changelog-sections": [
+    { "type": "feat", "section": "Features" },
+    { "type": "fix", "section": "Bug Fixes" },
+    { "type": "chore", "section": "Chores", "hidden": true }
+  ]
+}

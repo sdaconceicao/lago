@@ -1,0 +1,240 @@
+---
+description: Pure Functions Guide
+globs: **/*.ts,**/*.tsx
+alwaysApply: false
+---
+
+# Pure Functions Guide
+
+## Quick Reference
+
+This rule works with:
+
+- **React Standards** - Extract logic from React components
+- **Unit Testing Standards** - Test pure functions thoroughly
+
+## What Makes a Function Pure
+
+A pure function is a function that:
+
+- **Always returns the same output for the same input** (deterministic)
+- **Has no side effects** (doesn't modify external state)
+- **Doesn't depend on external state** (no global variables, API calls, etc.)
+- **Is predictable and testable**
+
+## Pure Function Template
+
+```typescript
+export const functionName = (param1: Type1, param2: Type2): ReturnType => {
+  // Pure logic here - no side effects
+  const result = /* calculation */;
+  return result;
+};
+```
+
+## Examples
+
+### ✅ Good - Pure Functions
+
+```typescript
+// Pure: Same input always produces same output
+export const add = (a: number, b: number): number => a + b;
+
+// Pure: No side effects, predictable
+export const formatCurrency = (amount: number, currency: string): string => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(amount);
+};
+
+// Pure: Transforms data without mutation
+export const sortUsersByName = (users: User[]): User[] => {
+  return [...users].sort((a, b) => a.name.localeCompare(b.name));
+};
+```
+
+### ❌ Bad - Impure Functions
+
+```typescript
+// Impure: Side effect - modifies external state
+export const updateUserProfile = (userId: string, profile: UserProfile) => {
+  globalState.profiles[userId] = profile; // Side effect!
+  return profile;
+};
+
+// Impure: Depends on external state
+export const getCurrentUser = (): User => {
+  return globalState.currentUser; // External dependency!
+};
+
+// Impure: API call - not predictable
+export const fetchUserData = async (userId: string): Promise<User> => {
+  const response = await api.getUser(userId); // External API call!
+  return response.data;
+};
+```
+
+## When to Use Pure Functions
+
+Use pure functions for:
+
+- **Data transformations** (filtering, sorting, mapping)
+- **Calculations** (mathematical operations, business logic)
+- **Formatting** (date formatting, number formatting, text processing)
+- **Validation** (input validation, data validation)
+- **Utility functions** (string manipulation, array operations)
+
+## Breaking Out Pure Functions from Components
+
+### Before (Impure Component Logic)
+
+```typescript
+const UserList = ({ users }: { users: User[] }) => {
+  // Impure logic mixed with component
+  const sortedUsers = users.sort((a, b) => a.name.localeCompare(b.name));
+  const activeUsers = sortedUsers.filter(user => user.isActive);
+
+  return (
+    <div>
+      {activeUsers.map(user => <UserCard key={user.id} user={user} />)}
+    </div>
+  );
+};
+```
+
+### After (Pure Functions + Clean Component)
+
+```typescript
+// Pure utility functions
+export const sortUsersByName = (users: User[]): User[] => {
+  return [...users].sort((a, b) => a.name.localeCompare(b.name));
+};
+
+export const filterActiveUsers = (users: User[]): User[] => {
+  return users.filter(user => user.isActive);
+};
+
+// Clean component using pure functions
+const UserList = ({ users }: { users: User[] }) => {
+  const sortedUsers = sortUsersByName(users);
+  const activeUsers = filterActiveUsers(sortedUsers);
+
+  return (
+    <div>
+      {activeUsers.map(user => <UserCard key={user.id} user={user} />)}
+    </div>
+  );
+};
+```
+
+## Testing Pure Functions
+
+Pure functions are easy to test because they're predictable:
+
+```typescript
+describe("sortUsersByName", () => {
+  it("sorts users alphabetically by name", () => {
+    const users = [
+      { id: "1", name: "Charlie" },
+      { id: "2", name: "Alice" },
+      { id: "3", name: "Bob" },
+    ];
+
+    const result = sortUsersByName(users);
+
+    expect(result[0].name).toBe("Alice");
+    expect(result[1].name).toBe("Bob");
+    expect(result[2].name).toBe("Charlie");
+  });
+
+  it("does not mutate original array", () => {
+    const users = [
+      { id: "1", name: "Charlie" },
+      { id: "2", name: "Alice" },
+    ];
+    const originalUsers = [...users];
+
+    sortUsersByName(users);
+
+    expect(users).toEqual(originalUsers);
+  });
+});
+```
+
+## Common Patterns for Pure Functions
+
+### 1. Immutable Updates
+
+```typescript
+// Instead of mutating objects
+export const updateUser = (
+  users: User[],
+  userId: string,
+  updates: Partial<User>
+): User[] => {
+  return users.map((user) =>
+    user.id === userId ? { ...user, ...updates } : user
+  );
+};
+```
+
+### 2. Data Transformation Pipelines
+
+```typescript
+export const processUserData = (users: User[]): ProcessedUser[] => {
+  return users
+    .filter((user) => user.isActive)
+    .map((user) => ({
+      ...user,
+      displayName: `${user.firstName} ${user.lastName}`,
+      lastSeen: formatDate(user.lastLogin),
+    }))
+    .sort((a, b) => b.lastSeen.localeCompare(a.lastSeen));
+};
+```
+
+### 3. Memoization for Expensive Operations
+
+```typescript
+const memoizedCalculation = useMemo(() => {
+  return expensiveCalculation(data);
+}, [data]);
+```
+
+## Benefits of Pure Functions
+
+1. **Testability** - Easy to unit test with predictable inputs/outputs
+2. **Reusability** - Can be used anywhere without side effects
+3. **Performance** - Can be memoized and optimized
+4. **Debugging** - Easier to trace issues
+5. **Parallelization** - Safe to run in parallel
+6. **Reasoning** - Easier to understand and reason about
+
+## Red Flags (Functions That Are Usually Impure)
+
+- Functions that modify global state
+- Functions that make API calls
+- Functions that read from localStorage/sessionStorage
+- Functions that depend on current time/date
+- Functions that generate random numbers
+- Functions that modify DOM elements
+- Functions that log to console (in production)
+
+## Best Practices
+
+1. **Start with pure functions** - Make functions pure by default
+2. **Extract side effects** - Move impure operations to the edges
+3. **Use composition** - Combine pure functions to build complex logic
+4. **Test thoroughly** - Pure functions should have 100% test coverage
+5. **Document assumptions** - Make dependencies explicit in function signatures
+6. **Keep functions small** - Single responsibility principle applies
+
+## Remember
+
+"A pure function is like a mathematical function: it always returns the same output for the same input, and it has no side effects. It's the foundation of functional programming and makes your code more predictable, testable, and maintainable."
+
+## Related Rules
+
+- [React Standards](mdc:react.mdc) - For component structure and logic extraction patterns
+- [Unit Testing Standards](mdc:testing-unit-standards.mdc) - For testing pure functions thoroughly

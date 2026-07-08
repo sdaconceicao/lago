@@ -1,0 +1,55 @@
+name: Publish to Registry
+
+on:
+  workflow_call:
+    inputs:
+      cached-build-id:
+        description: "ID for cached build"
+        required: true
+        type: string
+    secrets:
+      TOKEN_GITHUB:
+        description: "Github token to publish code"
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    outputs:
+      RELEASED_VERSION: ${{ steps.released-version.outputs.version }}
+
+    steps:
+      - name: Restore Build
+        uses: actions/cache/restore@v4
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ inputs.cached-build-id }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Get Released Version
+        id: released-version
+        run: echo "version=$(node -pe "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Setup Node for GitHub Packages
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://npm.pkg.github.com
+
+      - name: Publish on GitHub Packages
+        run: |
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.TOKEN_GITHUB }}

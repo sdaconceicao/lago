@@ -1,0 +1,6 @@
+@import "../../styles/theme.css";
+
+.react-aria-TimeField {
+  display: flex;
+  flex-direction: column;
+}

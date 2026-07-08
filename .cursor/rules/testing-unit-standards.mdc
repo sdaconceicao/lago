@@ -1,0 +1,456 @@
+---
+description: Unit Testing Standards
+globs: **/*.test.ts,**/*.test.tsx
+alwaysApply: false
+---
+
+# Unit Testing Standards
+
+## Quick Reference
+
+This rule works with:
+
+- **React Standards** - Test React components thoroughly
+- **Pure Functions Guide** - Test extracted logic functions
+- **CSS Modules Styling Standards** - Test CSS class application
+- **E2E Testing Standards** - Complementary testing coverage
+
+## Core Principles
+
+1. **Test the smallest units of code possible** - Functions, components, and utilities in isolation
+2. **Tests should be thorough and cover all scenarios** - Happy path, edge cases, and error conditions
+3. **Tests should be independent and isolated** - No dependencies between tests
+4. **Write tests that are easy to maintain** - Clear, readable, and well-structured
+5. **100% test coverage required** - All code paths must be tested
+6. **Follow testing best practices** - Use proper assertions and testing patterns
+
+## Test Structure
+
+### File Organization
+
+- Test files should mirror source files
+- Name format: `{sourcefile}.test.{ts|tsx}`
+- Group related tests using `describe` blocks
+- Use clear test descriptions with `it` blocks
+
+### Test Coverage Requirements
+
+- Happy path scenarios
+- Edge cases (null, undefined, false, -1, 0, etc.)
+- Error conditions and exceptions
+- Boundary conditions
+- Type constraints and validation
+
+## Testing Pure Functions
+
+### Test Requirements
+
+```typescript
+describe("pureFunction", () => {
+  it("handles happy path", () => {
+    expect(pureFunction(validInput)).toEqual(expectedOutput);
+  });
+
+  it("handles edge cases", () => {
+    expect(pureFunction(null)).toEqual(defaultValue);
+    expect(pureFunction(undefined)).toEqual(defaultValue);
+    expect(pureFunction(-1)).toEqual(boundaryValue);
+    expect(pureFunction(0)).toEqual(specialCase);
+  });
+
+  it("handles invalid inputs", () => {
+    expect(() => pureFunction(invalidInput)).toThrow(ExpectedError);
+  });
+
+  it("maintains function purity", () => {
+    const input = { value: 5 };
+    const result1 = pureFunction(input);
+    const result2 = pureFunction(input);
+
+    expect(result1).toEqual(result2);
+    expect(input).toEqual({ value: 5 }); // Original unchanged
+  });
+});
+```
+
+### Best Practices
+
+- Test input/output combinations thoroughly
+- Verify function purity (same input equals same output)
+- Test boundary conditions and limits
+- Test type constraints and validation
+- Document test cases clearly
+- Test all possible code paths
+
+## React Component Testing with React Testing Library
+
+### Query Priority Order
+
+```typescript
+// Preferred order of queries:
+getByRole("button", { name: /submit/i }); // 1st: Accessible roles
+getByLabelText("Username"); // 2nd: Form labels
+getByText("Welcome"); // 3rd: Text content
+getByTestId("submit-button"); // Last resort: Test IDs
+```
+
+### Query Selection Guidelines
+
+- **Single Elements:**
+  - `getBy*`: Element must exist
+  - `queryBy*`: Element might not exist
+  - `findBy*`: Element appears asynchronously
+- **Multiple Elements:**
+  - `getAllBy*`: Elements must exist
+  - `queryAllBy*`: Elements might not exist
+  - `findAllBy*`: Elements appear asynchronously
+
+### Component Test Structure
+
+```typescript
+describe('Component', () => {
+  const defaultProps = {
+    required: 'value',
+    optional: 'default'
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders with default props', () => {
+    render(<Component {...defaultProps} />);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+
+  it('renders with custom props', () => {
+    render(<Component {...defaultProps} optional="custom" />);
+    expect(screen.getByText('custom')).toBeInTheDocument();
+  });
+
+  it('handles user interactions', async () => {
+    const user = userEvent.setup();
+    const mockOnClick = jest.fn();
+
+    render(<Component {...defaultProps} onClick={mockOnClick} />);
+
+    const button = screen.getByRole('button');
+    await user.click(button);
+
+    expect(mockOnClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('handles async operations', async () => {
+    render(<Component {...defaultProps} />);
+    const element = await screen.findByText(/loaded/i);
+    expect(element).toBeInTheDocument();
+  });
+
+  it('applies correct CSS classes', () => {
+    render(<Component {...defaultProps} />);
+
+    const container = screen.getByTestId('component');
+    expect(container).toHaveClass('componentName');
+  });
+});
+```
+
+### Common Assertions
+
+```typescript
+// DOM Presence
+expect(element).toBeInTheDocument();
+expect(element).not.toBeInTheDocument();
+
+// Attributes and Properties
+expect(element).toHaveAttribute("aria-label", "Close");
+expect(element).toHaveClass("active");
+expect(element).toHaveValue("input text");
+
+// Content
+expect(element).toHaveTextContent("Welcome");
+expect(element).toContainHTML("<span>content</span>");
+
+// State
+expect(element).toBeEnabled();
+expect(element).toBeDisabled();
+expect(element).toBeChecked();
+expect(element).toBeRequired();
+
+// Events
+expect(mockFunction).toHaveBeenCalledTimes(1);
+expect(mockFunction).toHaveBeenCalledWith(expectedArgs);
+```
+
+## Breaking Out Pure Functions
+
+### Identify Pure Function Candidates
+
+- Data transformations and calculations
+- Formatting and validation functions
+- Filter, sort, and map operations
+- Mathematical computations
+- String and array manipulations
+
+### Extraction Process
+
+```typescript
+// Before: Inside component
+const Component = () => {
+  const sortedItems = items.sort((a, b) => a.date - b.date);
+  const filteredItems = sortedItems.filter(item => item.isActive);
+  return <div>{filteredItems.map(item => <Item {...item} />)}</div>
+}
+
+// After: Pure functions in utils
+export const sortItemsByDate = (items: Item[]): Item[] => {
+  return [...items].sort((a, b) => a.date - b.date);
+};
+
+export const filterActiveItems = (items: Item[]): Item[] => {
+  return items.filter(item => item.isActive);
+};
+
+// Component using pure functions
+const Component = () => {
+  const sortedItems = sortItemsByDate(items);
+  const filteredItems = filterActiveItems(sortedItems);
+
+  return <div>{filteredItems.map(item => <Item {...item} />)}</div>
+}
+```
+
+### Testing Extracted Functions
+
+```typescript
+describe("sortItemsByDate", () => {
+  it("sorts items by date in ascending order", () => {
+    const items = [
+      { id: "1", date: new Date("2023-01-03") },
+      { id: "2", date: new Date("2023-01-01") },
+      { id: "3", date: new Date("2023-01-02") },
+    ];
+
+    const result = sortItemsByDate(items);
+
+    expect(result[0].id).toBe("2");
+    expect(result[1].id).toBe("3");
+    expect(result[2].id).toBe("1");
+  });
+
+  it("does not mutate original array", () => {
+    const items = [
+      { id: "1", date: new Date("2023-01-02") },
+      { id: "2", date: new Date("2023-01-01") },
+    ];
+    const originalItems = [...items];
+
+    sortItemsByDate(items);
+
+    expect(items).toEqual(originalItems);
+  });
+
+  it("handles empty array", () => {
+    const result = sortItemsByDate([]);
+    expect(result).toEqual([]);
+  });
+});
+```
+
+## Custom Hook Testing
+
+### Hook Testing Structure
+
+```typescript
+import { renderHook, act } from "@testing-library/react";
+
+describe("useCustomHook", () => {
+  it("returns initial state", () => {
+    const { result } = renderHook(() => useCustomHook());
+
+    expect(result.current.value).toBe(initialValue);
+    expect(result.current.setValue).toBeInstanceOf(Function);
+  });
+
+  it("updates state when setValue is called", () => {
+    const { result } = renderHook(() => useCustomHook());
+
+    act(() => {
+      result.current.setValue("new value");
+    });
+
+    expect(result.current.value).toBe("new value");
+  });
+
+  it("handles async operations", async () => {
+    const { result } = renderHook(() => useCustomHook());
+
+    await act(async () => {
+      await result.current.fetchData();
+    });
+
+    expect(result.current.data).toBeDefined();
+    expect(result.current.loading).toBe(false);
+  });
+});
+```
+
+## Test Overlap Strategy
+
+### Unit Tests (Primary Focus)
+
+- Test pure functions thoroughly
+- Test component rendering and props
+- Test component callbacks and events
+- Test edge cases and error conditions
+- Test utility functions and helpers
+- Test custom hooks in isolation
+
+## Best Practices
+
+### 1. Test Organization
+
+- Group related tests logically using `describe` blocks
+- Use clear, descriptive test names that explain the scenario
+- Keep tests focused and atomic - one assertion per test when possible
+- Use `beforeEach` and `afterEach` for setup and cleanup
+
+### 2. Test Maintenance
+
+- Avoid testing implementation details
+- Use meaningful test data and fixtures
+- Keep tests DRY but readable
+- Update tests when requirements change
+- Use descriptive variable names in tests
+
+### 3. Mocking and Stubbing
+
+- Mock external dependencies and APIs
+- Use `jest.fn()` for callback props
+- Mock complex objects and services
+- Document mock behavior and expectations
+- Use `jest.spyOn()` for method mocking
+
+### 4. Performance and Reliability
+
+- Keep tests fast and focused
+- Avoid unnecessary setup and teardown
+- Clean up after tests properly
+- Use `beforeAll` and `afterAll` appropriately
+- Avoid flaky tests with proper waiting
+
+## Example: Complete Component Test
+
+```typescript
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { SearchInput } from './SearchInput';
+
+describe('SearchInput', () => {
+  const defaultProps = {
+    placeholder: 'Search...',
+    onSearch: jest.fn(),
+    debounceMs: 300
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it('renders with default props', () => {
+    render(<SearchInput {...defaultProps} />);
+
+    const input = screen.getByRole('searchbox');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute('placeholder', 'Search...');
+  });
+
+  it('calls onSearch after user input with debounce', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    render(<SearchInput {...defaultProps} />);
+
+    const input = screen.getByRole('searchbox');
+    await user.type(input, 'test');
+
+    jest.advanceTimersByTime(300);
+
+    await waitFor(() => {
+      expect(defaultProps.onSearch).toHaveBeenCalledWith('test');
+    });
+  });
+
+  it('handles empty input', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    render(<SearchInput {...defaultProps} />);
+
+    const input = screen.getByRole('searchbox');
+    await user.clear(input);
+
+    jest.advanceTimersByTime(300);
+
+    await waitFor(() => {
+      expect(defaultProps.onSearch).toHaveBeenCalledWith('');
+    });
+  });
+
+  it('shows loading state while searching', async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+    render(<SearchInput {...defaultProps} />);
+
+    const input = screen.getByRole('searchbox');
+    await user.type(input, 'test');
+
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+
+    jest.advanceTimersByTime(300);
+
+    await waitFor(() => {
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    });
+  });
+
+  it('applies correct CSS classes', () => {
+    render(<SearchInput {...defaultProps} />);
+
+    const container = screen.getByTestId('search-input');
+    expect(container).toHaveClass('searchInput');
+
+    const input = screen.getByRole('searchbox');
+    expect(input).toHaveClass('input');
+  });
+});
+```
+
+## Testing Checklist
+
+- [ ] Test all prop variations and combinations
+- [ ] Test user interactions and events
+- [ ] Test edge cases and boundary conditions
+- [ ] Test error conditions and exceptions
+- [ ] Test async operations and loading states
+- [ ] Test CSS class application and styling
+- [ ] Test accessibility features and roles
+- [ ] Test component state changes
+- [ ] Test utility function integration
+- [ ] Verify function purity for pure functions
+- [ ] Test all code paths and branches
+- [ ] Use proper query methods (getByRole first)
+- [ ] Mock external dependencies appropriately
+- [ ] Clean up after tests
+- [ ] Use descriptive test names
+
+## Remember
+
+> "Unit tests should be fast, focused, and thorough. Test the smallest units of code possible, use proper testing patterns, and ensure comprehensive coverage. For React components, prefer `getByRole` queries and test user behavior, not implementation details."
+
+## Related Rules
+
+- [React Standards](mdc:react.mdc) - For component structure and testing requirements
+- [Pure Functions Guide](mdc:pure-functions.mdc) - For testing pure functions and extracted logic
+- [CSS Modules Styling Standards](mdc:styling-css-modules.mdc) - For testing CSS class application
+- [E2E Testing Standards](mdc:testing-e2e-standards.mdc) - For complementary user workflow testing
