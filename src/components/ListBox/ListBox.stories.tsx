@@ -27,7 +27,7 @@ Example.args = {
   selectionMode: "single",
 };
 
-export const Sections: Story = (args) => (
+export const Sections: Story = (_args) => (
   <ListBox aria-label="Sandwich contents" selectionMode="multiple">
     <ListBoxSection>
       <Header>Veggies</Header>

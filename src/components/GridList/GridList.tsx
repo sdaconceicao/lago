@@ -34,7 +34,7 @@ export function GridListItem({
 }: Omit<GridListItemProps, "children"> & {
   children?: React.ReactNode;
 }) {
-  let textValue = typeof children === "string" ? children : undefined;
+  const textValue = typeof children === "string" ? children : undefined;
   return (
     <AriaGridListItem textValue={textValue} {...props}>
       {({ selectionMode, selectionBehavior, allowsDragging }) => (

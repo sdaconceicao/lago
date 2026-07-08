@@ -72,7 +72,8 @@ export function TableHeader<T>({
   children,
   ...otherProps
 }: TableHeaderProps<T>) {
-  let { selectionBehavior, selectionMode, allowsDragging } = useTableOptions();
+  const { selectionBehavior, selectionMode, allowsDragging } =
+    useTableOptions();
 
   return (
     <AriaTableHeader {...otherProps}>
@@ -101,7 +102,7 @@ export function TableHeader<T>({
 }
 
 export function Row<T>({ id, columns, children, ...otherProps }: RowProps<T>) {
-  let { selectionBehavior, allowsDragging } = useTableOptions();
+  const { selectionBehavior, allowsDragging } = useTableOptions();
 
   return (
     <AriaRow id={id} {...otherProps}>
