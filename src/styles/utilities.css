@@ -39,7 +39,7 @@
     forced-color-adjust: none;
     -webkit-tap-highlight-color: transparent;
 
-    @media (prefers-color-scheme: dark) {
+    :root.dark-mode & {
       --button-shadow: oklch(
         from var(--button-color) var(--lightness-200) var(--chroma-200) h
       );
@@ -97,7 +97,7 @@
           calc(-1 * var(--button-gradient-size)) var(--button-gradient-size)
           var(--button-gradient); /* inner gradient */
 
-      @media (prefers-color-scheme: dark) {
+      :root.dark-mode & {
         --button-highlight: rgb(255 255 255 / 0.4);
         --button-gradient: rgb(255 255 255 / 0.2);
         --button-shadow: var(--button-border);
@@ -174,7 +174,7 @@
       /* inner gradient */ var(--indicator-drop-shadow); /* optional drop shadow */
     will-change: scale;
 
-    @media (prefers-color-scheme: dark) {
+    :root.dark-mode & {
       box-shadow:
         inset 0 1px 0 rgb(255 255 255 / 0.4),
         /* top specular highlight */ inset 0 4px 2px rgb(255 255 255 / 0.1),
@@ -206,7 +206,7 @@
         /* border */ inset 0 2px 0 var(--indicator-highlight),
         /* top specular highlight */ var(--indicator-drop-shadow); /* optional drop shadow */
 
-      @media (prefers-color-scheme: dark) {
+      :root.dark-mode & {
         --indicator-highlight: rgb(255 255 255 / 0.5);
         --indicator-gradient: rgb(255 255 255 / 0.12);
         box-shadow:
@@ -260,7 +260,7 @@
     transition: box-shadow 200ms;
     forced-color-adjust: none;
 
-    @media (prefers-color-scheme: dark) {
+    :root.dark-mode & {
       --inset-border: var(--gray-200);
       --border-color-hover: var(--gray-300);
       --inset-highlight: var(--gray-400);
@@ -294,7 +294,7 @@
       --inset-shadow-offset: 1px;
       --inset-shadow-size: 3px;
 
-      @media (prefers-color-scheme: light) {
+      :root:not(.dark-mode) & {
         --inset-background: var(--gray-300);
         --inset-border: var(--gray-500);
         --inset-border-size: 0.5px;

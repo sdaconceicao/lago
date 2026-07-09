@@ -1,0 +1,87 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Design Tokens/Setup" />
+
+# Design Tokens
+
+All visual styling in Lago is driven by CSS custom properties (design tokens).
+This page covers how to consume and customize them. The **Colors**, **Text**,
+and **Spacing** stories show the **live** values for the current theme — toggle
+the **Theme** toolbar (System / Light / Dark) to see how they change.
+
+## Using Lago tokens in a consuming app
+
+Lago ships a single stylesheet that defines every design token as a CSS custom
+property on the `:root` element, plus a `:root.dark-mode` block for dark
+values. Theming is driven entirely by the `dark-mode` class on `<html>`, which
+`ThemeProvider` toggles based on the selected theme (system, light, or dark).
+
+### 1. Import the stylesheet
+
+Import the compiled tokens/components CSS once at your app's entry point:
+
+```ts
+import { ThemeProvider } from "lago";
+import "lago/styles";
+```
+
+### 2. Wrap your app
+
+Wrap your tree in `ThemeProvider`. By default it follows the OS preference
+(`defaultTheme="system"`). Pass `defaultTheme="light"` or `"dark"` to force a
+theme, or call `setTheme` / use `useTheme()` at runtime.
+
+```tsx
+<ThemeProvider defaultTheme="system">
+  <App />
+</ThemeProvider>
+```
+
+### 3. Customize the tokens
+
+Override any token with your own CSS. Because tokens cascade, you only need to
+change a few root values to re-skin the whole library:
+
+- **Rebrand:** set `--tint` to your brand color — the entire
+  `--tint-100 … --tint-1600` scale is derived from it automatically.
+- **Neutrals:** override `--gray`, or the `--lightness-*` / `--chroma-*` ramps,
+  to reshape the gray scale.
+- **Semantic colors:** override individual tokens such as `--text-color`,
+  `--border-color`, `--field-background`, or `--highlight-background` directly.
+- **Typeface:** Lago inherits the native `system-ui` font stack rather than
+  shipping a font-family token — set `font-family` on your `:root` or `body`
+  and every component picks it up (see the **Text** story).
+
+```css
+:root {
+  --tint: oklch(0.7 0.15 250); /* your brand color */
+  --background-color: #fafafa;
+  --text-color: oklch(30% 0 0);
+  font-family: "Inter", system-ui, sans-serif; /* your typeface */
+}
+
+:root.dark-mode {
+  --background-color: #121212;
+  --text-color: oklch(95% 0 0);
+}
+```
+
+### 4. Dark mode
+
+Leave `defaultTheme="system"` to follow the OS, or force it. Dark values live
+under `:root.dark-mode`, so override that selector (not `prefers-color-scheme`)
+to customize them.
+
+### 5. Use tokens in your own components
+
+Reference tokens directly in your CSS for a consistent look:
+
+```css
+.my-card {
+  background: var(--field-background);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: var(--spacing-4);
+  color: var(--text-color);
+}
+```
