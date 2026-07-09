@@ -1,0 +1,37 @@
+name: "Check PR title"
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - edited
+
+jobs:
+  main:
+    name: Validate PR title
+    runs-on: ubuntu-slim
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: amannn/action-semantic-pull-request@v6
+        # Skip bot PRs and release-please PRs (opened via PAT, not github-actions[bot])
+        if: |
+          github.event.pull_request.user.login != 'dependabot[bot]' &&
+          github.event.pull_request.user.login != 'github-actions[bot]' &&
+          !startsWith(github.event.pull_request.head.ref, 'release-please--')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            fix
+            feat
+            chore
+          subjectPattern: '^[A-Z]{2,10}-\d+\s.+$'
+          subjectPatternError: |
+            Subject must begin with a Jira ticket, e.g.
+            feat: CL-3 Added new component
+      # Status check for all PRs to allow merging
+      - name: Title Check Passed
+        run: |
+          echo "Title check passed"
