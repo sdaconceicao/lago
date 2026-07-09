@@ -1,5 +1,8 @@
 name: Testing Typescript
 
+permissions:
+  contents: read
+
 on:
   workflow_call:
     inputs:
@@ -7,22 +10,10 @@ on:
         description: "ID for cached build"
         required: true
         type: string
-      working-directory:
-        description: "Directory relative to repo root where dependencies are installed and scripts run (e.g. apps/web). Use '.' for the repository root."
-        required: false
-        default: "."
-        type: string
-
 jobs:
   testing:
     name: Testing status checks
     runs-on: ubuntu-latest
-    env:
-      PKG_RUN: pnpm
-      PKG_EXEC: pnpm exec
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory }}
 
     steps:
       - name: Restore Build
@@ -33,7 +24,7 @@ jobs:
           key: ${{ inputs.cached-build-id }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
 
       - name: Setup Node
         uses: actions/setup-node@v5
@@ -45,13 +36,13 @@ jobs:
         uses: ./.github/actions/setup-playwright
 
       - name: Run linting
-        run: $PKG_RUN run lint
+        run: pnpm lint
 
       - name: Run formatting
-        run: $PKG_RUN run format:check
+        run: pnpm format:check
 
       - name: Run type checking - frontend
-        run: $PKG_EXEC tsc --noEmit
+        run: pnpm exec tsc --noEmit
 
       - name: Run tests
-        run: $PKG_RUN run test:coverage
+        run: pnpm test:coverage

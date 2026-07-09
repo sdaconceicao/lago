@@ -1,5 +1,9 @@
 name: TypeScript checks
 
+permissions:
+  contents: read
+  packages: read
+
 on:
   workflow_call:
     secrets:
@@ -10,11 +14,6 @@ on:
       checkout-ref:
         description: "Git ref (branch, tag, or SHA) passed to actions/checkout in setup. Leave unset to use the default ref for the triggering workflow."
         required: false
-        type: string
-      working-directory:
-        description: "Directory relative to repo root where dependencies are installed and scripts run (e.g. apps/web). Use '.' for the repository root."
-        required: false
-        default: "."
         type: string
     outputs:
       cache-key:
@@ -29,7 +28,6 @@ jobs:
       NPM_REGISTRY_READ_TOKEN: ${{ secrets.NPM_REGISTRY_READ_TOKEN }}
     with:
       checkout-ref: ${{ inputs.checkout-ref }}
-      working-directory: ${{ inputs.working-directory }}
 
   testing:
     name: Lint and Testing
@@ -37,4 +35,3 @@ jobs:
     uses: ./.github/workflows/workflow-typescript-testing.yml
     with:
       cached-build-id: ${{ needs.setup.outputs.cache-key }}
-      working-directory: ${{ inputs.working-directory }}
