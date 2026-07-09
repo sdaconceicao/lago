@@ -30,7 +30,6 @@ jobs:
     name: Setup Environment
     runs-on: ubuntu-latest
     env:
-      PKG_INSTALL: pnpm install --frozen-lockfile
       NPM_REGISTRY_READ_TOKEN: ${{ secrets.NPM_REGISTRY_READ_TOKEN }}
       NODE_AUTH_TOKEN: ${{ secrets.NPM_REGISTRY_READ_TOKEN }}
     defaults:
@@ -47,7 +46,7 @@ jobs:
           ref: ${{ inputs.checkout-ref || github.sha }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
 
       - name: Setup Node
         uses: actions/setup-node@v5
@@ -75,17 +74,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.node_modules.outputs.cache-hit != 'true'
-        run: |
-          echo "Running: $PKG_INSTALL"
-          timeout 900 sh -c "$PKG_INSTALL"
-          code=$?
-          if [ "$code" -ne 0 ]; then
-            echo "::error::dependency install failed or timed out (exit $code; 124 = hit the 15m step limit)"
-            echo "::group::npm debug log (tail)"
-            tail -n 250 "$HOME"/.npm/_logs/*.log 2>/dev/null || echo "no npm debug logs found"
-            echo "::endgroup::"
-            exit "$code"
-          fi
+        run: pnpm install --frozen-lockfile
 
       - name: Set cache key
         id: cache-key

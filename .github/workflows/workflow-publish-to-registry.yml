@@ -24,17 +24,17 @@ jobs:
 
     steps:
       - name: Restore Build
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: restore-build
         with:
           path: ./*
           key: ${{ inputs.cached-build-id }}
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: pnpm
@@ -47,7 +47,7 @@ jobs:
         run: pnpm run build
 
       - name: Setup Node for GitHub Packages
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 24
           registry-url: https://npm.pkg.github.com
