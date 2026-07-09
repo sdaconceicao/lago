@@ -66,9 +66,7 @@ export {
 } from "./components/Date/Calendar/Calendar";
 
 // Hooks
-export { useBreakpoint } from "./hooks/use-breakpoint";
 export { useClipboard } from "./hooks/use-clipboard";
-export { useResizeObserver } from "./hooks/use-resize-observer";
 
 // Providers
 export { ThemeProvider, useTheme } from "./providers/theme-provider";
