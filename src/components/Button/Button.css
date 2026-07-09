@@ -34,7 +34,7 @@
   }
 
   .react-aria-ProgressBar {
-    @media (prefers-color-scheme: dark) {
+    :root.dark-mode & {
       --highlight-background: var(--gray-1600);
     }
   }

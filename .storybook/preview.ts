@@ -1,14 +1,30 @@
 import type { ReactNode } from "react";
 import { createElement, useEffect } from "react";
 import type { Preview } from "@storybook/react-vite";
-import { ThemeProvider, useTheme } from "../src/providers/theme-provider";
+import {
+  type Theme,
+  ThemeProvider,
+  useTheme,
+} from "../src/providers/theme-provider";
 import "./storybook-utilities.css";
+
+const getResolvedTheme = (theme: Theme): "light" | "dark" => {
+  if (theme === "system") {
+    if (typeof window === "undefined") return "light";
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+
+  return theme;
+};
 
 const StorybookThemeSync = ({
   theme,
   children,
 }: {
-  theme: "light" | "dark";
+  theme: Theme;
   children: ReactNode;
 }) => {
   const { setTheme } = useTheme();
@@ -23,13 +39,14 @@ const StorybookThemeSync = ({
 export const globalTypes = {
   theme: {
     name: "Theme",
-    description: "Global theme for all stories",
+    description: "Global theme for all stories (defaults to system)",
     toolbar: {
       icon: "mirror",
       dynamicTitle: true,
       items: [
-        { value: "light", title: "Light" },
-        { value: "dark", title: "Dark" },
+        { value: "system", title: "System", icon: "browser" },
+        { value: "light", title: "Light", icon: "sun" },
+        { value: "dark", title: "Dark", icon: "moon" },
       ],
     },
   },
@@ -37,13 +54,12 @@ export const globalTypes = {
 
 const preview: Preview = {
   initialGlobals: {
-    theme: "light",
+    theme: "system",
   },
   decorators: [
     (Story, context) => {
-      const storybookTheme =
-        context.globals.theme === "dark" ? "dark" : "light";
-      const isDarkMode = storybookTheme === "dark";
+      const storybookTheme = (context.globals.theme as Theme) ?? "system";
+      const isDarkMode = getResolvedTheme(storybookTheme) === "dark";
 
       if (typeof document !== "undefined") {
         document.body.classList.toggle("sb-theme-dark", isDarkMode);
@@ -56,7 +72,7 @@ const preview: Preview = {
       }
 
       return createElement(ThemeProvider, {
-        defaultTheme: "light",
+        defaultTheme: "system",
         children: createElement(StorybookThemeSync, {
           theme: storybookTheme,
           children: createElement(Story),
@@ -65,6 +81,11 @@ const preview: Preview = {
     },
   ],
   parameters: {
+    options: {
+      storySort: {
+        order: ["Lago", "Design Tokens", "Components", "*"],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,
