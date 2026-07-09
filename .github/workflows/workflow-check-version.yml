@@ -1,5 +1,9 @@
 name: Check Version
 
+permissions:
+  contents: read
+  packages: read
+
 on:
   workflow_call:
     outputs:

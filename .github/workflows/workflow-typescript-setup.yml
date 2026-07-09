@@ -1,5 +1,9 @@
 name: Setup Environment
 
+permissions:
+  contents: read
+  packages: read
+
 on:
   workflow_call:
     secrets:

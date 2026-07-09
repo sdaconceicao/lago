@@ -1,5 +1,9 @@
 name: TypeScript checks
 
+permissions:
+  contents: read
+  packages: read
+
 on:
   workflow_call:
     secrets:

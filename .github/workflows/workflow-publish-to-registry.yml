@@ -1,5 +1,9 @@
 name: Publish to Registry
 
+permissions:
+  contents: read
+  packages: write
+
 on:
   workflow_call:
     inputs:
