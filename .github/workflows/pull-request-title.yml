@@ -27,10 +27,6 @@ jobs:
             fix
             feat
             chore
-          subjectPattern: '^[A-Z]{2,10}-\d+\s.+$'
-          subjectPatternError: |
-            Subject must begin with a Jira ticket, e.g.
-            feat: CL-3 Added new component
       # Status check for all PRs to allow merging
       - name: Title Check Passed
         run: |
