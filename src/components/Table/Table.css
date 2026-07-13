@@ -12,7 +12,7 @@
   width: 100%;
   word-break: break-word;
   forced-color-adjust: none;
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
 
   div& {
     padding: 0;

@@ -1,3 +1,6 @@
+/* fonts */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
+
 /* colors */
 :root {
   /* Change this variable to set the theme color for all components. */
@@ -208,6 +211,11 @@
 
 /* typography and spacing scale */
 :root {
+  /* Default type family for all components. Override on `:root` or `body`
+   * to use a custom typeface. */
+  --font-family:
+    "Open Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
   --font-size: 0.875rem; /* 14px */
   --font-size-sm: 0.75rem; /* 12px */
   --font-size-lg: 1rem; /* 16px */

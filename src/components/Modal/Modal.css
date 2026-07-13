@@ -9,7 +9,7 @@
   background: rgba(0 0 0 / 0.5);
   overflow: clip;
   z-index: 100;
-  font-family: system-ui;
+  font-family: var(--font-family);
   font-size: var(--font-size);
 
   &[data-entering] {

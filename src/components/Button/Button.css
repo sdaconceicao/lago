@@ -5,7 +5,7 @@
   border: none;
   border-radius: var(--radius);
   appearance: none;
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
   font-weight: 500;
   margin: 0;
   height: var(--spacing-8);
@@ -40,7 +40,7 @@
   }
 
   kbd {
-    font: var(--font-size-sm) system-ui;
+    font: var(--font-size-sm) var(--font-family);
     background: var(--highlight-hover);
     border: 0.5px solid var(--tint-500);
     padding: 0 var(--spacing-1);

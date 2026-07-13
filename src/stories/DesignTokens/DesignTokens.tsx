@@ -65,13 +65,12 @@ const codeStyle: React.CSSProperties = {
 };
 
 /**
- * The font family Lago's components render in. Lago intentionally does not ship
- * a `--font-family` token; components inherit the native `system-ui` stack so
- * the UI matches the host OS (San Francisco on macOS/iOS, Segoe UI on Windows,
- * Roboto on Android). Consumers override it by setting `font-family` on `:root`
- * or `body`.
+ * The font family Lago's components render in. Lago ships an `--font-family`
+ * token that defaults to Open Sans (with a native `system-ui` fallback stack).
+ * Every component references this token, so consumers can re-skin the whole
+ * library's typeface by overriding `--font-family` on `:root` or `body`.
  */
-const FONT_FAMILY = "system-ui";
+const FONT_FAMILY_FALLBACK = "'Open Sans', system-ui, sans-serif";
 
 const valueStyle: React.CSSProperties = {
   color: "var(--text-color)",
@@ -198,15 +197,16 @@ export const ColorTokens = () => {
 export const TextTokens = () => {
   useThemeChange();
 
+  const fontFamily = readVar("--font-family") || FONT_FAMILY_FALLBACK;
+
   return (
     <>
       <p style={descriptionStyle}>
-        Lago inherits the native <code style={codeStyle}>{FONT_FAMILY}</code>{" "}
-        font stack rather than shipping a{" "}
-        <code style={codeStyle}>--font-family</code> token, so the UI matches
-        the host operating system (San Francisco on macOS/iOS, Segoe UI on
-        Windows, Roboto on Android). To use a custom typeface, set{" "}
-        <code style={codeStyle}>font-family</code> on your{" "}
+        Lago ships an <code style={codeStyle}>--font-family</code> token that
+        defaults to <code style={codeStyle}>Open Sans</code> (with a native{" "}
+        <code style={codeStyle}>system-ui</code> fallback stack). Every
+        component references this token, so to use a custom typeface just
+        override <code style={codeStyle}>--font-family</code> on your{" "}
         <code style={codeStyle}>:root</code> or{" "}
         <code style={codeStyle}>body</code> and every component picks it up.
       </p>
@@ -217,9 +217,9 @@ export const TextTokens = () => {
           marginBottom: 28,
         }}
       >
-        <span style={nameStyle}>font-family</span>
-        <span style={valueStyle}>{FONT_FAMILY}</span>
-        <span style={{ fontFamily: FONT_FAMILY, color: "var(--text-color)" }}>
+        <span style={nameStyle}>--font-family</span>
+        <span style={valueStyle}>{fontFamily}</span>
+        <span style={{ fontFamily, color: "var(--text-color)" }}>
           The quick brown fox
         </span>
       </div>
@@ -228,7 +228,7 @@ export const TextTokens = () => {
         render={(name) => (
           <span
             style={{
-              fontFamily: FONT_FAMILY,
+              fontFamily,
               fontSize: readVar(name),
               color: "var(--text-color)",
             }}

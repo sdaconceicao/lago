@@ -48,16 +48,16 @@ change a few root values to re-skin the whole library:
   to reshape the gray scale.
 - **Semantic colors:** override individual tokens such as `--text-color`,
   `--border-color`, `--field-background`, or `--highlight-background` directly.
-- **Typeface:** Lago inherits the native `system-ui` font stack rather than
-  shipping a font-family token — set `font-family` on your `:root` or `body`
-  and every component picks it up (see the **Text** story).
+- **Typeface:** Lago ships an `--font-family` token that defaults to Open Sans
+  (with a native `system-ui` fallback stack) — override `--font-family` on your
+  `:root` or `body` and every component picks it up (see the **Text** story).
 
 ```css
 :root {
   --tint: oklch(0.7 0.15 250); /* your brand color */
   --background-color: #fafafa;
   --text-color: oklch(30% 0 0);
-  font-family: "Inter", system-ui, sans-serif; /* your typeface */
+  --font-family: "Inter", system-ui, sans-serif; /* your typeface */
 }
 
 :root.dark-mode {
