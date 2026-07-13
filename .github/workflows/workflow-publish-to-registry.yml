@@ -2,7 +2,7 @@ name: Publish to Registry
 
 permissions:
   contents: read
-  id-token: write # Required for npm trusted publishing (OIDC)
+  id-token: write
 
 on:
   workflow_call:
@@ -48,7 +48,5 @@ jobs:
       - name: Update npm for trusted publishing
         run: npm install -g npm@latest
 
-      # No NODE_AUTH_TOKEN: authentication and provenance are handled via the
-      # OIDC id-token, configured as a trusted publisher on npmjs.com.
       - name: Publish to npm
         run: npm publish
