@@ -12,7 +12,7 @@
   transition:
     transform 200ms,
     opacity 200ms;
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
   padding: 8px;
 
   &[data-trigger="MenuTrigger"],

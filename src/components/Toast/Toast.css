@@ -38,7 +38,7 @@
     flex-direction: column;
     flex: 1 1 auto;
     min-width: 0;
-    font: var(--font-size) system-ui;
+    font: var(--font-size) var(--font-family);
 
     [slot="title"] {
       font-weight: 600;

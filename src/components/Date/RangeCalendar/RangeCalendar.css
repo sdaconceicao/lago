@@ -7,7 +7,7 @@
   overflow: auto;
   width: 100%;
   max-width: fit-content;
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
   color: var(--text-color);
 
   .months {

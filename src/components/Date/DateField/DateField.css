@@ -11,7 +11,7 @@
   padding: 0 var(--spacing-3);
   box-sizing: border-box;
   border-radius: var(--radius);
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
   color: var(--field-text-color);
   height: var(--spacing-8);
   line-height: var(--spacing-8);

@@ -13,7 +13,7 @@
   .react-aria-SliderOutput {
     grid-area: output;
     text-align: end;
-    font: var(--font-size) system-ui;
+    font: var(--font-size) var(--font-family);
     color: var(--text-color);
   }
 

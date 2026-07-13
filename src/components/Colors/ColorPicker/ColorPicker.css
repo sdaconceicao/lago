@@ -10,7 +10,7 @@
   outline: none;
   appearance: none;
   vertical-align: middle;
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
   color: var(--text-color);
   -webkit-tap-highlight-color: transparent;
 

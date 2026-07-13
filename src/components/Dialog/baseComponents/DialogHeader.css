@@ -31,14 +31,16 @@
 
     .react-aria-Heading[slot="title"] {
       margin: 0;
-      font-size: var(--font-size-lg);
+      font: var(--font-size-lg) var(--font-family);
+
       font-weight: 600;
       color: var(--text-color);
     }
 
     .dialog-subtitle {
       margin: 0;
-      font-size: var(--font-size);
+      font: var(--font-size) var(--font-family);
+
       color: var(--text-color-placeholder);
     }
   }

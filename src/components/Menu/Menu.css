@@ -36,7 +36,7 @@
   outline: none;
   cursor: default;
   color: var(--text-color);
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
   position: relative;
   display: grid;
   grid-column-start: 1;
@@ -116,7 +116,7 @@
     grid-area: end;
     justify-self: end;
     margin-inline-start: var(--spacing-4);
-    font-family: system-ui;
+    font-family: var(--font-family);
     font-size: var(--font-size-sm);
     text-align: end;
     background: var(--highlight-hover);

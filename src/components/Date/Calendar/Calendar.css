@@ -9,7 +9,7 @@
   width: 100%;
   max-width: fit-content;
   color: var(--text-color);
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
 
   .months {
     display: flex;
@@ -41,7 +41,7 @@
   }
 
   [slot="errorMessage"] {
-    font: var(--font-size-sm) system-ui;
+    font: var(--font-size-sm) var(--font-family);
     color: var(--invalid-color);
   }
 }

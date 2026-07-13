@@ -9,7 +9,7 @@
   grid-template-columns: 1fr auto;
   width: 250px;
   color: var(--text-color);
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
 
   .value {
     grid-area: value;

@@ -15,7 +15,7 @@
   margin: 0;
   border: none;
   border-radius: var(--radius);
-  font: var(--font-size) system-ui;
+  font: var(--font-size) var(--font-family);
   color: var(--field-text-color);
   outline: none;
   -webkit-tap-highlight-color: transparent;

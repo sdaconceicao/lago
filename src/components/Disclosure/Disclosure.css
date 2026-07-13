@@ -14,7 +14,7 @@
     text-shadow: none;
     width: 100%;
     color: var(--text-color);
-    font: var(--font-size) system-ui;
+    font: var(--font-size) var(--font-family);
     font-weight: 600;
     display: flex;
     align-items: center;
@@ -59,6 +59,7 @@
 }
 
 .react-aria-DisclosurePanel {
+  font: var(--font-size) var(--font-family);
   color: var(--text-color);
   height: var(--disclosure-panel-height);
   transition: height 250ms;
