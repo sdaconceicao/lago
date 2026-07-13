@@ -2,7 +2,7 @@ name: Publish to Registry
 
 permissions:
   contents: read
-  packages: write
+  id-token: write # Required for npm trusted publishing (OIDC)
 
 on:
   workflow_call:
@@ -11,10 +11,6 @@ on:
         description: "ID for cached build"
         required: true
         type: string
-    secrets:
-      TOKEN_GITHUB:
-        description: "Github token to publish code"
-        required: true
 
 jobs:
   publish:
@@ -38,6 +34,7 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+          registry-url: https://registry.npmjs.org
 
       - name: Get Released Version
         id: released-version
@@ -46,14 +43,12 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Setup Node for GitHub Packages
-        uses: actions/setup-node@v5
-        with:
-          node-version: 24
-          registry-url: https://npm.pkg.github.com
+      # Trusted publishing (OIDC) requires npm >= 11.5.1, which is newer than
+      # the npm bundled with Node 24.
+      - name: Update npm for trusted publishing
+        run: npm install -g npm@latest
 
-      - name: Publish on GitHub Packages
-        run: |
-          npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.TOKEN_GITHUB }}
+      # No NODE_AUTH_TOKEN: authentication and provenance are handled via the
+      # OIDC id-token, configured as a trusted publisher on npmjs.com.
+      - name: Publish to npm
+        run: npm publish

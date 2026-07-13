@@ -7,7 +7,7 @@ on:
 
 permissions:
   contents: read
-  packages: write
+  id-token: write # Required for npm trusted publishing (OIDC)
 
 jobs:
   check-version:
@@ -20,11 +20,9 @@ jobs:
     uses: ./.github/workflows/workflow-typescript-checks.yml
     if: needs.check-version.outputs.should-publish == 'true'
 
-  #publish:
-  #  name: Publish Package
-  #  needs: [checks]
-  #  uses: ./.github/workflows/workflow-publish-to-registry.yml
-  #  with:
-  #    cached-build-id: ${{ needs.checks.outputs.cache-key }}
-  #  secrets:
-  #    TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+  publish:
+    name: Publish Package
+    needs: [checks]
+    uses: ./.github/workflows/workflow-publish-to-registry.yml
+    with:
+      cached-build-id: ${{ needs.checks.outputs.cache-key }}

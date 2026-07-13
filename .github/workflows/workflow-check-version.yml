@@ -2,7 +2,6 @@ name: Check Version
 
 permissions:
   contents: read
-  packages: read
 
 on:
   workflow_call:
@@ -30,7 +29,7 @@ jobs:
           echo "version=$(node -pe "require('./package.json').version")" >> $GITHUB_OUTPUT
           echo "package_name=$(node -pe "require('./package.json').name")" >> $GITHUB_OUTPUT
 
-      - name: Check if version exists in GitHub Packages
+      - name: Check if version exists on npm
         id: check
         run: |
           VERSION="${{ steps.package-version.outputs.version }}"
@@ -38,11 +37,10 @@ jobs:
 
           echo "Checking if version $VERSION of $PACKAGE_NAME exists..."
 
-          # Try to fetch package metadata from GitHub Packages
+          # Fetch package metadata from the npm registry (public, no auth needed)
           HTTP_CODE=$(curl -s -o /tmp/package.json -w "%{http_code}" \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
               -H "Accept: application/vnd.npm.install-v1+json" \
-              "https://npm.pkg.github.com/$PACKAGE_NAME")
+              "https://registry.npmjs.org/$PACKAGE_NAME")
 
           if [ "$HTTP_CODE" = "200" ]; then
               # Package exists, check if version is in the versions list
