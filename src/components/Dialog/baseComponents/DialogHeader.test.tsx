@@ -5,7 +5,9 @@ describe("DialogHeader", () => {
   it("renders the title as a heading", () => {
     render(<DialogHeader title="Sign up" />);
 
-    expect(screen.getByRole("heading", { name: "Sign up" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Sign up" })
+    ).toBeInTheDocument();
   });
 
   it("renders the subtitle with the dialog-subtitle class", () => {
