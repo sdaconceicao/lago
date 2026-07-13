@@ -6,14 +6,28 @@ import {
   Dialog as RACDialog,
   DialogTrigger as RACDialogTrigger,
 } from "react-aria-components/Dialog";
+import { DialogBody, type DialogBodyProps } from "./baseComponents/DialogBody";
+import {
+  DialogFooter,
+  type DialogFooterProps,
+} from "./baseComponents/DialogFooter";
+import {
+  DialogHeader,
+  type DialogHeaderProps,
+} from "./baseComponents/DialogHeader";
 import "./Dialog.css";
 
 export function Dialog(props: DialogProps) {
   return <RACDialog {...props} />;
 }
 
+Dialog.Header = DialogHeader;
+Dialog.Body = DialogBody;
+Dialog.Footer = DialogFooter;
+
 export function DialogTrigger(props: DialogTriggerProps) {
   return <RACDialogTrigger {...props} />;
 }
 
-export { Heading };
+export { DialogBody, DialogFooter, DialogHeader, Heading };
+export type { DialogBodyProps, DialogFooterProps, DialogHeaderProps };
