@@ -1,4 +1,4 @@
-name: Pull Request Status Checks
+name: "Pull Request Status Checks"
 
 permissions:
   contents: read

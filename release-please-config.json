@@ -6,7 +6,7 @@
   "bootstrap-sha": "0dbfc690c887e167708959a0f1a53407d73059c3",
   "packages": {
     ".": {
-      "package-name": "lago"
+      "package-name": "@code-x/lago"
     }
   },
   "changelog-sections": [
