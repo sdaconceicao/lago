@@ -27,7 +27,7 @@
     }
   }
 
-  .lucide-chevron-down {
+  :global(.lucide-chevron-down) {
     margin-inline-start: var(--spacing-2);
   }
 
