@@ -1,11 +1,19 @@
 "use client";
 import React from "react";
+import clsx from "clsx";
 import {
   Separator as RACSeparator,
   type SeparatorProps,
 } from "react-aria-components/Separator";
-import "./Separator.css";
+import styles from "./Separator.module.css";
 
 export function Separator(props: SeparatorProps) {
-  return <RACSeparator {...props} />;
+  return (
+    <RACSeparator
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-Separator", styles.separator)
+      }
+    />
+  );
 }

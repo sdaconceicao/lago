@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
 import { Button } from "react-aria-components/Button";
 import {
@@ -9,16 +10,31 @@ import {
   type HeadingProps,
 } from "react-aria-components/Disclosure";
 import { Heading } from "../Content/Content";
-import "./Disclosure.css";
+import styles from "./Disclosure.module.css";
 
 export function Disclosure(props: DisclosureProps) {
-  return <AriaDisclosure {...props} />;
+  return (
+    <AriaDisclosure
+      {...props}
+      className={clsx(
+        "react-aria-Disclosure",
+        styles.disclosure,
+        props.className
+      )}
+    />
+  );
 }
 
 export function DisclosureHeader({ children, ...props }: HeadingProps) {
   return (
-    <Heading {...props}>
-      <Button slot="trigger" className="disclosure-button">
+    <Heading
+      {...props}
+      className={clsx("react-aria-Heading", styles.heading, props.className)}
+    >
+      <Button
+        slot="trigger"
+        className={clsx("react-aria-Button", styles.disclosureButton)}
+      >
         <ChevronRight size={16} />
         <span>{children}</span>
       </Button>
@@ -28,7 +44,10 @@ export function DisclosureHeader({ children, ...props }: HeadingProps) {
 
 export function DisclosurePanel(props: DisclosurePanelProps) {
   return (
-    <AriaDisclosurePanel {...props}>
+    <AriaDisclosurePanel
+      {...props}
+      className={clsx("react-aria-DisclosurePanel", styles.disclosurePanel)}
+    >
       <div>{props.children}</div>
     </AriaDisclosurePanel>
   );

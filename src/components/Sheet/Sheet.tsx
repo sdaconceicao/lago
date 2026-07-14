@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   Heading,
   Modal,
@@ -7,13 +8,13 @@ import {
 } from "react-aria-components/Modal";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { Dialog } from "../Dialog/Dialog";
-import "./Sheet.css";
+import styles from "./Sheet.module.css";
 
 export function Sheet(props: ModalOverlayProps) {
   return (
-    <ModalOverlay className="sheet-overlay">
+    <ModalOverlay className={clsx("sheet-overlay", styles.sheetOverlay)}>
       {composeRenderProps(props.children, (children) => (
-        <Modal className="sheet">
+        <Modal className={clsx("sheet", styles.sheet)}>
           <Dialog>{children}</Dialog>
         </Modal>
       ))}

@@ -1,6 +1,7 @@
 "use client";
 import { type CSSProperties } from "react";
 import { flushSync } from "react-dom";
+import clsx from "clsx";
 import { X } from "lucide-react";
 import {
   Text,
@@ -11,7 +12,7 @@ import {
   UNSTABLE_ToastRegion as ToastRegion,
 } from "react-aria-components/Toast";
 import { Button } from "../Button/Button";
-import "./Toast.css";
+import styles from "./Toast.module.css";
 
 // Define the type for your toast content. This interface defines the properties of your toast content, affecting what you
 // pass to the queue calls as arguments.
@@ -37,13 +38,18 @@ export const queue = new ToastQueue<MyToastContent>({
 export function MyToastRegion() {
   return (
     // The ToastRegion should be rendered at the root of your app.
-    <ToastRegion queue={queue}>
+    <ToastRegion
+      queue={queue}
+      className={clsx("react-aria-ToastRegion", styles.toastRegion)}
+    >
       {({ toast }) => (
         <MyToast
           toast={toast}
           style={{ viewTransitionName: toast.key } as CSSProperties}
         >
-          <ToastContent>
+          <ToastContent
+            className={clsx("react-aria-ToastContent", styles.toastContent)}
+          >
             <Text slot="title">{toast.content.title}</Text>
             {toast.content.description && (
               <Text slot="description">{toast.content.description}</Text>
@@ -59,5 +65,10 @@ export function MyToastRegion() {
 }
 
 export function MyToast(props: ToastProps<MyToastContent>) {
-  return <Toast {...props} />;
+  return (
+    <Toast
+      {...props}
+      className={clsx("react-aria-Toast", styles.toast, props.className)}
+    />
+  );
 }

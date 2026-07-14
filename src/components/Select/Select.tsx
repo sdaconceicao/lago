@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
 import {
   Select as AriaSelect,
@@ -12,7 +13,7 @@ import { Button } from "../Button/Button";
 import { Description, FieldError, Label } from "../Form/Form";
 import { DropdownItem, DropdownListBox } from "../ListBox/ListBox";
 import { Popover } from "../Popover/Popover";
-import "./Select.css";
+import styles from "./Select.module.css";
 
 export interface SelectProps<T, M extends "single" | "multiple"> extends Omit<
   AriaSelectProps<T, M>,
@@ -34,7 +35,7 @@ export function Select<T, M extends "single" | "multiple" = "single">({
   ...props
 }: SelectProps<T, M>) {
   return (
-    <AriaSelect {...props}>
+    <AriaSelect {...props} className={clsx("react-aria-Select", styles.select)}>
       {label && <Label>{label}</Label>}
       <Button>
         <SelectValue />
@@ -42,7 +43,7 @@ export function Select<T, M extends "single" | "multiple" = "single">({
       </Button>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
-      <Popover hideArrow className="select-popover">
+      <Popover hideArrow className={styles.selectPopover}>
         <SelectListBox items={items}>{children}</SelectListBox>
       </Popover>
     </AriaSelect>

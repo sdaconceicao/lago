@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { Calendar as CalendarIcon } from "lucide-react";
 import {
   DatePicker as AriaDatePicker,
@@ -12,7 +13,8 @@ import { Popover } from "../../Popover/Popover";
 import { Calendar } from "../Calendar/Calendar";
 import { DateInput, DateSegment } from "../DateField/DateField";
 import { FieldGroup } from "../FieldGroup";
-import "./DatePicker.css";
+import utils from "../../../styles/utilities.module.css";
+import styles from "./DatePicker.module.css";
 
 export interface DatePickerProps<
   T extends DateValue,
@@ -29,11 +31,16 @@ export function DatePicker<T extends DateValue>({
   ...props
 }: DatePickerProps<T>) {
   return (
-    <AriaDatePicker {...props}>
+    <AriaDatePicker
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-DatePicker", styles.datePicker)
+      }
+    >
       <Label>{label}</Label>
       <FieldGroup
         stateContext={DatePickerStateContext}
-        className="react-aria-Group inset"
+        className={clsx("react-aria-Group", styles.group, utils.inset)}
       >
         <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
         <FieldButton>

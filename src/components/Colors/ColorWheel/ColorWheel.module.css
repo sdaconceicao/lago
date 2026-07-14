@@ -1,0 +1,7 @@
+.colorWheel {
+  &[data-disabled] {
+    :global(.react-aria-ColorWheelTrack) {
+      background: gray !important;
+    }
+  }
+}

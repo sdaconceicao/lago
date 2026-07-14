@@ -1,10 +1,16 @@
 "use client";
+import clsx from "clsx";
 import {
   ToggleButtonGroup as RACToggleButtonGroup,
   type ToggleButtonGroupProps,
 } from "react-aria-components/ToggleButtonGroup";
-import "./ToggleButtonGroup.css";
+import styles from "./ToggleButtonGroup.module.css";
 
 export function ToggleButtonGroup(props: ToggleButtonGroupProps) {
-  return <RACToggleButtonGroup {...props} />;
+  return (
+    <RACToggleButtonGroup
+      {...props}
+      className={clsx("react-aria-ToggleButtonGroup", styles.toggleButtonGroup)}
+    />
+  );
 }

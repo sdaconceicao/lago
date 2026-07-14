@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
 import {
   ComboBox as AriaComboBox,
@@ -12,7 +13,9 @@ import {
 import { Description, FieldButton, FieldError, Label } from "../Form/Form";
 import { DropdownItem, DropdownListBox } from "../ListBox/ListBox";
 import { Popover } from "../Popover/Popover";
-import "./ComboBox.css";
+import utils from "../../styles/utilities.module.css";
+import textFieldStyles from "../TextField/TextField.module.css";
+import styles from "./ComboBox.module.css";
 
 export interface ComboBoxProps<T, M extends "single" | "multiple"> extends Omit<
   AriaComboBoxProps<T, M>,
@@ -34,10 +37,20 @@ export function ComboBox<T, M extends "single" | "multiple" = "single">({
   ...props
 }: ComboBoxProps<T, M>) {
   return (
-    <AriaComboBox {...props}>
+    <AriaComboBox
+      {...props}
+      className={clsx("react-aria-ComboBox", styles.comboBox)}
+    >
       {label && <Label>{label}</Label>}
-      <div className="combobox-field">
-        <Input className="react-aria-Input inset" placeholder={placeholder} />
+      <div className={clsx(styles.comboboxField)}>
+        <Input
+          className={clsx(
+            "react-aria-Input",
+            textFieldStyles.input,
+            utils.inset
+          )}
+          placeholder={placeholder}
+        />
         <FieldButton>
           <ChevronDown />
         </FieldButton>
@@ -47,7 +60,7 @@ export function ComboBox<T, M extends "single" | "multiple" = "single">({
       )}
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
-      <Popover hideArrow className="combobox-popover">
+      <Popover hideArrow className={styles.comboboxPopover}>
         <ComboBoxListBox>{children}</ComboBoxListBox>
       </Popover>
     </AriaComboBox>

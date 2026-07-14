@@ -1,5 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
+import clsx from "clsx";
 import {
   CheckboxButton,
   CheckboxField,
@@ -7,7 +8,8 @@ import {
   type ValidationResult,
 } from "react-aria-components/Checkbox";
 import { Description, FieldError } from "../Form/Form";
-import "./Checkbox.css";
+import utils from "../../styles/utilities.module.css";
+import styles from "./Checkbox.module.css";
 
 interface CheckboxProps extends CheckboxFieldProps {
   children?: ReactNode;
@@ -22,11 +24,18 @@ export function Checkbox({
   ...props
 }: CheckboxProps) {
   return (
-    <CheckboxField {...props}>
-      <CheckboxButton>
+    <CheckboxField
+      {...props}
+      className={clsx("react-aria-CheckboxField", styles.checkboxField)}
+    >
+      <CheckboxButton
+        className={clsx("react-aria-CheckboxButton", styles.checkboxButton)}
+      >
         {({ isIndeterminate }) => (
           <>
-            <div className="indicator">
+            <div
+              className={clsx("indicator", utils.indicator, styles.indicator)}
+            >
               <svg
                 viewBox="0 0 18 18"
                 aria-hidden="true"

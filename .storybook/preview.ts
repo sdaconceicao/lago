@@ -6,6 +6,7 @@ import {
   ThemeProvider,
   useTheme,
 } from "../src/providers/theme-provider";
+import "../src/styles/theme.css";
 import "./storybook-utilities.css";
 
 const getResolvedTheme = (theme: Theme): "light" | "dark" => {

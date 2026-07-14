@@ -1,11 +1,12 @@
 "use client";
+import clsx from "clsx";
 import {
   CheckboxGroup as AriaCheckboxGroup,
   type CheckboxGroupProps as AriaCheckboxGroupProps,
   type ValidationResult,
 } from "react-aria-components/CheckboxGroup";
 import { Description, FieldError, Label } from "../Form/Form";
-import "./CheckboxGroup.css";
+import styles from "./CheckboxGroup.module.css";
 
 export interface CheckboxGroupProps extends Omit<
   AriaCheckboxGroupProps,
@@ -27,9 +28,15 @@ export function CheckboxGroup({
   ...props
 }: CheckboxGroupProps) {
   return (
-    <AriaCheckboxGroup {...props} data-orientation={orientation}>
+    <AriaCheckboxGroup
+      {...props}
+      data-orientation={orientation}
+      className={clsx("react-aria-CheckboxGroup", styles.checkboxGroup)}
+    >
       {label && <Label>{label}</Label>}
-      <div className="checkbox-items">{children}</div>
+      <div className={clsx("checkbox-items", styles.checkboxItems)}>
+        {children}
+      </div>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
     </AriaCheckboxGroup>

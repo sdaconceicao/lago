@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Calendar as AriaCalendar,
@@ -12,7 +13,8 @@ import {
 } from "react-aria-components/Calendar";
 import { Button } from "../../Button/Button";
 import { Text } from "../../Content/Content";
-import "./Calendar.css";
+import utils from "../../../styles/utilities.module.css";
+import styles from "./Calendar.module.css";
 
 export interface CalendarProps<
   T extends DateValue,
@@ -26,17 +28,28 @@ export function Calendar<T extends DateValue>({
 }: CalendarProps<T>) {
   const months = props.visibleDuration?.months || 1;
   return (
-    <AriaCalendar {...props}>
-      <div className="months">
+    <AriaCalendar
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-Calendar", styles.calendar)
+      }
+    >
+      <div className={clsx("months", styles.months)}>
         {Array.from({ length: months }, (_, i) => (
-          <div key={i} className="month">
+          <div key={i} className={clsx("month", styles.month)}>
             <header>
               {i === 0 && (
                 <Button slot="previous" variant="quiet">
                   <ChevronLeft />
                 </Button>
               )}
-              <CalendarHeading offset={{ months: i }} />
+              <CalendarHeading
+                offset={{ months: i }}
+                className={clsx(
+                  "react-aria-CalendarHeading",
+                  styles.calendarHeading
+                )}
+              />
               {i === months - 1 && (
                 <Button slot="next" variant="quiet">
                   <ChevronRight />
@@ -58,12 +71,23 @@ export function CalendarCell(props: CalendarCellProps) {
   return (
     <AriaCalendarCell
       {...props}
-      className="react-aria-CalendarCell button-base"
+      className={clsx(
+        "react-aria-CalendarCell",
+        styles.calendarCell,
+        utils.buttonBase
+      )}
       data-variant="quiet"
     />
   );
 }
 
 export function CalendarGrid(props: CalendarGridProps) {
-  return <AriaCalendarGrid {...props} />;
+  return (
+    <AriaCalendarGrid
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-CalendarGrid", styles.calendarGrid)
+      }
+    />
+  );
 }

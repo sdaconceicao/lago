@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button } from "./Button";
+import utils from "../../styles/utilities.module.css";
+import styles from "./Button.module.css";
 
 describe("Button", () => {
   it("renders a button with its children", () => {
@@ -16,7 +18,8 @@ describe("Button", () => {
 
     expect(screen.getByRole("button")).toHaveClass(
       "react-aria-Button",
-      "button-base"
+      styles.button,
+      utils.buttonBase
     );
   });
 

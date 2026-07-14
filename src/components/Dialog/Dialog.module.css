@@ -1,0 +1,26 @@
+.dialogPreview {
+  position: relative;
+  box-sizing: border-box;
+  width: max-content;
+  max-width: min(500px, 90vw);
+  padding: 0;
+  border-radius: var(--radius-xl);
+  background: var(--overlay-background);
+  color: var(--text-color);
+  outline: 1px solid var(--overlay-border);
+  box-shadow: 0 8px 32px rgba(0 0 0 / 0.2);
+}
+
+.dialog {
+  position: relative;
+  outline: none;
+  max-height: inherit;
+  box-sizing: border-box;
+  overflow: auto;
+  padding: var(--spacing-6);
+
+  :global(.react-aria-Heading[slot="title"]) {
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+}

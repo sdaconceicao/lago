@@ -1,5 +1,6 @@
 "use client";
 import type { ReactNode } from "react";
+import clsx from "clsx";
 import {
   SwitchButton,
   SwitchField,
@@ -7,7 +8,8 @@ import {
   type ValidationResult,
 } from "react-aria-components/Switch";
 import { Description, FieldError } from "../Form/Form";
-import "./Switch.css";
+import utils from "../../styles/utilities.module.css";
+import styles from "./Switch.module.css";
 
 export interface SwitchProps extends Omit<SwitchFieldProps, "children"> {
   children: ReactNode;
@@ -22,14 +24,23 @@ export function Switch({
   ...props
 }: SwitchProps) {
   return (
-    <SwitchField {...props}>
-      <SwitchButton>
+    <SwitchField
+      {...props}
+      className={clsx("react-aria-SwitchField", styles.switchField)}
+    >
+      <SwitchButton
+        className={clsx("react-aria-SwitchButton", styles.switchButton)}
+      >
         {({ isSelected, isDisabled }) => (
           <>
-            <div className="track indicator">
+            <div className={clsx("track", styles.track, utils.indicator)}>
               <div
                 data-disabled={isDisabled || undefined}
-                className={isSelected ? "handle" : "handle indicator"}
+                className={
+                  isSelected
+                    ? clsx("handle", styles.handle)
+                    : clsx("handle", styles.handle, utils.indicator)
+                }
               />
             </div>
             {children}

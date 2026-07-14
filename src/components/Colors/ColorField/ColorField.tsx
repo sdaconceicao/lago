@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   ColorField as AriaColorField,
   type ColorFieldProps as AriaColorFieldProps,
@@ -6,7 +7,9 @@ import {
   type ValidationResult,
 } from "react-aria-components/ColorField";
 import { Description, FieldError, Label } from "../../Form/Form";
-import "./ColorField.css";
+import utils from "../../../styles/utilities.module.css";
+import textFieldStyles from "../../TextField/TextField.module.css";
+import styles from "./ColorField.module.css";
 
 export interface ColorFieldProps extends AriaColorFieldProps {
   label?: string;
@@ -23,9 +26,15 @@ export function ColorField({
   ...props
 }: ColorFieldProps) {
   return (
-    <AriaColorField {...props}>
+    <AriaColorField
+      {...props}
+      className={clsx("react-aria-ColorField", styles.colorField)}
+    >
       {label && <Label>{label}</Label>}
-      <Input className="react-aria-Input inset" placeholder={placeholder} />
+      <Input
+        className={clsx("react-aria-Input", textFieldStyles.input, utils.inset)}
+        placeholder={placeholder}
+      />
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
     </AriaColorField>

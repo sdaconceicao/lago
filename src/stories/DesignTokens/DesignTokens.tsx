@@ -3,7 +3,6 @@ import { type ReactNode, useEffect, useState } from "react";
 // definitions are present in the preview iframe even when a Design Tokens
 // story is loaded directly (before any component story has injected them).
 import "../../styles/theme.css";
-import "../../styles/utilities.css";
 
 const readVar = (name: string): string =>
   getComputedStyle(document.documentElement).getPropertyValue(name).trim();

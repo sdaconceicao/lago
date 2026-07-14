@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { X } from "lucide-react";
 import { Heading } from "react-aria-components/Dialog";
 import { Button } from "../../Button/Button";
-import "./DialogHeader.css";
+import styles from "./DialogHeader.module.css";
 
 export interface DialogHeaderProps extends Omit<
   HTMLAttributes<HTMLElement>,
@@ -33,15 +33,25 @@ export function DialogHeader({
       {...props}
       className={clsx(
         "dialog-header",
+        styles.dialogHeader,
         hideCloseButton && "dialog-header--no-close",
+        hideCloseButton && styles.dialogHeaderNoClosed,
         className
       )}
     >
-      {icon && <div className="dialog-header-icon">{icon}</div>}
+      {icon && (
+        <div className={clsx("dialog-header-icon", styles.dialogHeaderIcon)}>
+          {icon}
+        </div>
+      )}
       {(title || subtitle) && (
-        <div className="dialog-header-text">
+        <div className={clsx("dialog-header-text", styles.dialogHeaderText)}>
           {title && <Heading slot="title">{title}</Heading>}
-          {subtitle && <p className="dialog-subtitle">{subtitle}</p>}
+          {subtitle && (
+            <p className={clsx("dialog-subtitle", styles.dialogSubtitle)}>
+              {subtitle}
+            </p>
+          )}
         </div>
       )}
       {children}

@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { Search, X } from "lucide-react";
 import {
   SearchField as AriaSearchField,
@@ -8,7 +9,9 @@ import {
   type ValidationResult,
 } from "react-aria-components/SearchField";
 import { Description, FieldError, Label } from "../Form/Form";
-import "./SearchField.css";
+import utils from "../../styles/utilities.module.css";
+import textFieldStyles from "../TextField/TextField.module.css";
+import styles from "./SearchField.module.css";
 
 export interface SearchFieldProps extends AriaSearchFieldProps {
   label?: string;
@@ -25,11 +28,21 @@ export function SearchField({
   ...props
 }: SearchFieldProps) {
   return (
-    <AriaSearchField {...props}>
+    <AriaSearchField
+      {...props}
+      className={clsx(
+        "react-aria-SearchField",
+        styles.searchField,
+        props.className
+      )}
+    >
       {label && <Label>{label}</Label>}
       <Search size={18} />
-      <Input placeholder={placeholder} className="react-aria-Input inset" />
-      <Button className="clear-button">
+      <Input
+        placeholder={placeholder}
+        className={clsx("react-aria-Input", textFieldStyles.input, utils.inset)}
+      />
+      <Button className={clsx("clear-button", styles.clearButton)}>
         <X size={14} />
       </Button>
       {description && <Description>{description}</Description>}

@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   TimeField as AriaTimeField,
   type TimeFieldProps as AriaTimeFieldProps,
@@ -7,7 +8,7 @@ import {
 } from "react-aria-components/TimeField";
 import { DateInput, DateSegment } from "../Date/DateField/DateField";
 import { Description, FieldError, Label } from "../Form/Form";
-import "./TimeField.css";
+import styles from "./TimeField.module.css";
 
 export interface TimeFieldProps<
   T extends TimeValue,
@@ -24,7 +25,12 @@ export function TimeField<T extends TimeValue>({
   ...props
 }: TimeFieldProps<T>) {
   return (
-    <AriaTimeField {...props}>
+    <AriaTimeField
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-TimeField", styles.timeField)
+      }
+    >
       <Label>{label}</Label>
       <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
       {description && <Description>{description}</Description>}

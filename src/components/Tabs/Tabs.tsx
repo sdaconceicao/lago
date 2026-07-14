@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   Tab as RACTab,
   TabList as RACTabList,
@@ -13,23 +14,38 @@ import {
   type TabsProps,
 } from "react-aria-components/Tabs";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import "./Tabs.css";
+import styles from "./Tabs.module.css";
 
 export function Tabs(props: TabsProps) {
-  return <RACTabs {...props} />;
+  return (
+    <RACTabs
+      {...props}
+      className={clsx("react-aria-Tabs", styles.tabs, props.className)}
+    />
+  );
 }
 
 export function TabList<T>(props: TabListProps<T>) {
-  return <RACTabList {...props} />;
+  return (
+    <RACTabList
+      {...props}
+      className={clsx("react-aria-TabList", styles.tabList, props.className)}
+    />
+  );
 }
 
 export function Tab(props: TabProps) {
   return (
-    <RACTab {...props}>
+    <RACTab
+      {...props}
+      className={clsx("react-aria-Tab", styles.tab, props.className)}
+    >
       {composeRenderProps(props.children, (children) => (
         <>
           {children}
-          <SelectionIndicator />
+          <SelectionIndicator
+            className={clsx("react-aria-SelectionIndicator")}
+          />
         </>
       ))}
     </RACTab>
@@ -37,9 +53,23 @@ export function Tab(props: TabProps) {
 }
 
 export function TabPanels<T>(props: TabPanelsProps<T>) {
-  return <RACTabPanels {...props} />;
+  return (
+    <RACTabPanels
+      {...props}
+      className={clsx(
+        "react-aria-TabPanels",
+        styles.tabPanels,
+        props.className
+      )}
+    />
+  );
 }
 
 export function TabPanel(props: TabPanelProps) {
-  return <RACTabPanel {...props} />;
+  return (
+    <RACTabPanel
+      {...props}
+      className={clsx("react-aria-TabPanel", styles.tabPanel, props.className)}
+    />
+  );
 }
