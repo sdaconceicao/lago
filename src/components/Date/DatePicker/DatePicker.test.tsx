@@ -23,6 +23,15 @@ describe("DatePicker", () => {
     expect(year).toHaveAttribute("aria-valuenow", "2024");
   });
 
+  it("does not open the calendar when a date segment is clicked", async () => {
+    const user = userEvent.setup();
+    render(<DatePicker label="Event date" defaultValue={JUNE_15} />);
+
+    await user.click(screen.getAllByRole("spinbutton")[0]);
+
+    expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+  });
+
   it("opens the calendar popover from the trigger button", async () => {
     const user = userEvent.setup();
     render(<DatePicker label="Event date" defaultValue={JUNE_15} />);

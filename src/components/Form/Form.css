@@ -65,8 +65,11 @@
   forced-color-adjust: none;
   border-radius: var(--radius-sm);
   border: none;
-  margin-left: calc(-1 * var(--spacing-8) + 4px);
-  height: calc(100% - 8px);
+  flex-shrink: 0;
+  cursor: pointer;
+  /* Inset equally on all sides: top/bottom margin (via height) matches the
+   * left/right margins (the Group's gap and right padding, both --spacing-2). */
+  height: calc(100% - var(--spacing-4));
   aspect-ratio: 1/1;
   padding: 0;
   display: flex;
