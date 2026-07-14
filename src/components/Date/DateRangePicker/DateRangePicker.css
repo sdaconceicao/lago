@@ -49,6 +49,11 @@
     padding: 0 var(--spacing-2);
   }
 
+  .field-Button {
+    margin-left: 0;
+    height: calc(100% - var(--spacing-4));
+  }
+
   /* Neutralize the standalone field styling — the Group is the field here. */
   .react-aria-DateInput {
     display: flex;
