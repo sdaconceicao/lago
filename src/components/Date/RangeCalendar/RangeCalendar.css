@@ -38,6 +38,8 @@
   .react-aria-CalendarGrid {
     border-collapse: collapse;
     border-spacing: 0;
+    table-layout: fixed;
+    width: 100%;
   }
 
   [slot="errorMessage"] {
@@ -46,57 +48,133 @@
   }
 
   .react-aria-CalendarCell {
+    width: 100%;
+    aspect-ratio: unset;
+    box-sizing: border-box;
     margin: 2px 0;
     padding: 0 calc(var(--gap) / 2);
     position: relative;
     z-index: 1;
     outline: none;
+    cursor: pointer;
 
     span {
+      position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      height: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      flex-shrink: 0;
       border-radius: 9999px;
       transition: scale 200ms;
     }
 
     &[data-selected] {
       border-radius: 0;
-      background: var(--button-background);
-      border-color: var(--tint-700);
-      border-style: solid;
-      border-width: 0;
-      border-top-width: 0.5px;
-      border-bottom-width: 0.5px;
-      margin: 1.5px 0;
+      background: transparent;
+      margin: 2px 0;
 
-      @media (forced-colors: active) {
-        border-color: Highlight;
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline: calc(var(--gap) / -2);
+        background: var(--button-background);
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700);
+        pointer-events: none;
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight;
+        }
       }
 
-      &[data-selection-start],
-      &:is(td:first-child > *, [aria-disabled] + td > *) {
+      &[data-selection-start]:not([data-selection-end])::before {
+        inset-inline-start: calc(var(--gap) / 2);
         border-start-start-radius: 9999px;
         border-end-start-radius: 9999px;
-        border-inline-start-width: 0.5px;
-        margin-inline-start: calc(var(--gap) / 2 - 0.5px);
-        padding-inline-start: 0;
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700),
+          inset 0.5px 0 0 var(--tint-700);
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight,
+            inset 0.5px 0 0 Highlight;
+        }
       }
 
-      &[data-selection-end],
-      &:is(td:last-child > *, td:has(+ [aria-disabled]) > *) {
+      &[data-selection-end]:not([data-selection-start])::before {
+        inset-inline-end: calc(var(--gap) / 2);
         border-end-end-radius: 9999px;
         border-start-end-radius: 9999px;
-        border-inline-end-width: 0.5px;
-        margin-inline-end: calc(var(--gap) / 2 - 0.5px);
-        padding-inline-end: 0;
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700),
+          inset -0.5px 0 0 var(--tint-700);
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight,
+            inset -0.5px 0 0 Highlight;
+        }
+      }
+
+      &[data-selected]:is(td:first-child > *, [aria-disabled] + td > *):not(
+          [data-selection-start]
+        )::before {
+        inset-inline-start: 0;
+        border-start-start-radius: 9999px;
+        border-end-start-radius: 9999px;
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700),
+          inset 0.5px 0 0 var(--tint-700);
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight,
+            inset 0.5px 0 0 Highlight;
+        }
+      }
+
+      &[data-selected]:is(td:last-child > *, td:has(+ [aria-disabled]) > *):not(
+          [data-selection-end]
+        )::before {
+        inset-inline-end: 0;
+        border-end-end-radius: 9999px;
+        border-start-end-radius: 9999px;
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700),
+          inset -0.5px 0 0 var(--tint-700);
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight,
+            inset -0.5px 0 0 Highlight;
+        }
       }
 
       &[data-selection-start],
       &[data-selection-end] {
         z-index: 2;
+      }
+
+      &[data-selection-start][data-selection-end]::before {
+        display: none;
       }
 
       &:not([data-selection-start], [data-selection-end]) span {
