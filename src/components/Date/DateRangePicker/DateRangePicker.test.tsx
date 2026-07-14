@@ -27,6 +27,26 @@ describe("DateRangePicker", () => {
     expect(values).toEqual(["6", "10", "2024", "6", "15", "2024"]);
   });
 
+  it("does not open the calendar when a date segment is clicked", async () => {
+    const user = userEvent.setup();
+    render(<DateRangePicker label="Event dates" defaultValue={RANGE} />);
+
+    await user.click(screen.getAllByRole("spinbutton")[0]);
+
+    expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+  });
+
+  it("opens the calendar when the field separator is clicked", async () => {
+    const user = userEvent.setup();
+    render(<DateRangePicker label="Event dates" defaultValue={RANGE} />);
+
+    expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+
+    await user.click(screen.getByText("–"));
+
+    expect(await screen.findByRole("grid")).toBeInTheDocument();
+  });
+
   it("opens the range calendar popover from the trigger button", async () => {
     const user = userEvent.setup();
     render(<DateRangePicker label="Event dates" defaultValue={RANGE} />);

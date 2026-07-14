@@ -2,25 +2,27 @@
 @import "../../../styles/utilities.css";
 
 .react-aria-DateRangePicker {
-  color: var(--text-color);
+  width: 100%;
   max-width: 100%;
+  color: var(--text-color);
 
+  /* The Group is the field box; clicking it (outside the number segments)
+   * opens the calendar. */
   .react-aria-Group {
     display: flex;
     align-items: center;
-    width: fit-content;
-    min-width: 220px;
+    gap: var(--spacing-2);
+    width: 100%;
     max-width: 100%;
-    height: var(--spacing-8);
     box-sizing: border-box;
-    overflow: clip;
-    position: relative;
-    padding: 0 var(--spacing-1) 0 var(--spacing-3);
+    height: calc(var(--spacing-10) + var(--spacing-2));
+    padding: 0 var(--spacing-2) 0 var(--spacing-4);
     border-radius: var(--radius);
     font-size: var(--font-size);
     color: var(--field-text-color);
     white-space: nowrap;
-    cursor: text;
+    overflow: clip;
+    cursor: pointer;
 
     &[data-focus-within] {
       outline: 2px solid var(--focus-ring-color);
@@ -33,39 +35,40 @@
   }
 
   .date-fields {
-    flex: 1;
     display: flex;
     align-items: center;
-    width: fit-content;
+    flex: 1;
+    min-width: 0;
     overflow-x: auto;
     overflow-y: clip;
     scrollbar-width: none;
+    cursor: text;
+  }
+
+  .date-range-separator {
+    padding: 0 var(--spacing-2);
   }
 
   .field-Button {
-    margin-left: auto;
+    margin-left: 0;
+    height: calc(100% - var(--spacing-4));
   }
 
-  [slot="start"] ~ span {
-    padding: 0 4px;
-  }
-
-  [slot="end"] {
-    margin-right: 1.75rem;
-    flex: 1;
-  }
-
+  /* Neutralize the standalone field styling — the Group is the field here. */
   .react-aria-DateInput {
-    width: unset;
-    min-width: unset;
-    padding: unset;
-    border: unset;
-    box-shadow: none;
-    background: none;
+    display: flex;
+    align-items: center;
+    width: auto;
+    min-width: 0;
     height: auto;
+    padding: 0;
     line-height: normal;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+
     &[data-focus-within] {
-      outline: unset;
+      outline: none;
     }
   }
 }

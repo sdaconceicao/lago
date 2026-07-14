@@ -65,8 +65,10 @@
   forced-color-adjust: none;
   border-radius: var(--radius-sm);
   border: none;
+  flex-shrink: 0;
+  cursor: pointer;
   margin-left: calc(-1 * var(--spacing-8) + 4px);
-  height: calc(100% - 8px);
+  height: calc(100% - var(--spacing-2));
   aspect-ratio: 1/1;
   padding: 0;
   display: flex;

@@ -65,6 +65,7 @@
   forced-color-adjust: none;
   transition: scale 200ms;
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 
   @media (min-resolution: 200dpi) {
     @container (width < 300px) {

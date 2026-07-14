@@ -52,6 +52,14 @@
           var(--button-border),
         /* border */ inset 0 var(--button-gradient-size)
           var(--button-gradient-size) -2px var(--button-gradient); /* inner gradient */
+
+      &[data-variant="quiet"] {
+        box-shadow: 0 0 0 1px transparent;
+
+        &:where([data-hovered], [data-pressed]) {
+          box-shadow: 0 0 0 1px var(--tint-200);
+        }
+      }
     }
 
     &:where([data-pressed]) {

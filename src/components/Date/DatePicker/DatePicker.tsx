@@ -1,17 +1,17 @@
 "use client";
-import { ChevronDown } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import {
   DatePicker as AriaDatePicker,
   type DatePickerProps as AriaDatePickerProps,
+  DatePickerStateContext,
   type DateValue,
-  Group,
   type ValidationResult,
 } from "react-aria-components/DatePicker";
-import { Description, FieldError, Label } from "../../Form/Form";
-import { FieldButton } from "../../Form/Form";
+import { Description, FieldButton, FieldError, Label } from "../../Form/Form";
 import { Popover } from "../../Popover/Popover";
 import { Calendar } from "../Calendar/Calendar";
 import { DateInput, DateSegment } from "../DateField/DateField";
+import { FieldGroup } from "../FieldGroup";
 import "./DatePicker.css";
 
 export interface DatePickerProps<
@@ -31,12 +31,15 @@ export function DatePicker<T extends DateValue>({
   return (
     <AriaDatePicker {...props}>
       <Label>{label}</Label>
-      <Group>
+      <FieldGroup
+        stateContext={DatePickerStateContext}
+        className="react-aria-Group inset"
+      >
         <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
         <FieldButton>
-          <ChevronDown />
+          <CalendarIcon />
         </FieldButton>
-      </Group>
+      </FieldGroup>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
       <Popover hideArrow>
