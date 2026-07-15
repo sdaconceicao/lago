@@ -1,5 +1,6 @@
 "use client";
 import type React from "react";
+import clsx from "clsx";
 import {
   TextArea as AriaTextArea,
   TextField as AriaTextField,
@@ -8,7 +9,8 @@ import {
   type ValidationResult,
 } from "react-aria-components/TextField";
 import { Description, FieldError, Label } from "../Form/Form";
-import "./TextField.css";
+import utils from "../../styles/utilities.module.css";
+import styles from "./TextField.module.css";
 
 export interface TextFieldProps<
   T = HTMLInputElement,
@@ -29,11 +31,18 @@ export function TextField({
   ...props
 }: TextFieldProps) {
   return (
-    <AriaTextField {...props}>
+    <AriaTextField
+      {...props}
+      className={clsx(
+        "react-aria-TextField",
+        styles.textField,
+        props.className
+      )}
+    >
       {label && <Label>{label}</Label>}
       <Input
         ref={inputRef}
-        className="react-aria-Input inset"
+        className={clsx("react-aria-Input", styles.input, utils.inset)}
         placeholder={placeholder}
       />
       {description && <Description>{description}</Description>}
@@ -51,11 +60,18 @@ export function TextArea({
   ...props
 }: TextFieldProps<HTMLTextAreaElement>) {
   return (
-    <AriaTextField {...props}>
+    <AriaTextField
+      {...props}
+      className={clsx(
+        "react-aria-TextField",
+        styles.textField,
+        props.className
+      )}
+    >
       <Label>{label}</Label>
       <AriaTextArea
         ref={inputRef}
-        className="react-aria-TextArea inset"
+        className={clsx("react-aria-TextArea", styles.textArea, utils.inset)}
         placeholder={placeholder}
       />
       {description && <Description>{description}</Description>}

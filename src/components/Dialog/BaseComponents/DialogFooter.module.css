@@ -1,0 +1,14 @@
+.dialogFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-8);
+  font: var(--font-size) var(--font-family);
+
+  @media (max-width: 640px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    margin-top: var(--spacing-6);
+  }
+}

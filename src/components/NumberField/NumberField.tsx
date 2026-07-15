@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { Minus, Plus } from "lucide-react";
 import {
   NumberField as AriaNumberField,
@@ -9,7 +10,9 @@ import {
 } from "react-aria-components/NumberField";
 import { Button } from "../Button/Button";
 import { Description, FieldError, Label } from "../Form/Form";
-import "./NumberField.css";
+import utils from "../../styles/utilities.module.css";
+import textFieldStyles from "../TextField/TextField.module.css";
+import styles from "./NumberField.module.css";
 
 export interface NumberFieldProps extends AriaNumberFieldProps {
   label?: string;
@@ -25,10 +28,23 @@ export function NumberField({
   ...props
 }: NumberFieldProps) {
   return (
-    <AriaNumberField {...props}>
+    <AriaNumberField
+      {...props}
+      className={clsx(
+        "react-aria-NumberField",
+        styles.numberField,
+        props.className
+      )}
+    >
       <Label>{label}</Label>
-      <Group>
-        <Input className="react-aria-Input inset" />
+      <Group className={clsx("react-aria-Group", utils.inset)}>
+        <Input
+          className={clsx(
+            "react-aria-Input",
+            textFieldStyles.input,
+            utils.inset
+          )}
+        />
         <Button slot="decrement" variant="secondary">
           <Minus />
         </Button>

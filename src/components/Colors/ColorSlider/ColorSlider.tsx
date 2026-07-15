@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   ColorSlider as AriaColorSlider,
   type ColorSliderProps as AriaColorSliderProps,
@@ -7,7 +8,7 @@ import {
 } from "react-aria-components/ColorSlider";
 import { Label } from "../../Form/Form";
 import { ColorThumb } from "../ColorThumb/ColorThumb";
-import "./ColorSlider.css";
+import styles from "./ColorSlider.module.css";
 
 export interface ColorSliderProps extends AriaColorSliderProps {
   label?: string;
@@ -15,7 +16,10 @@ export interface ColorSliderProps extends AriaColorSliderProps {
 
 export function ColorSlider({ label, ...props }: ColorSliderProps) {
   return (
-    <AriaColorSlider {...props}>
+    <AriaColorSlider
+      {...props}
+      className={clsx("react-aria-ColorSlider", styles.colorSlider)}
+    >
       <Label>{label}</Label>
       <SliderOutput />
       <SliderTrack

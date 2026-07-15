@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { ChevronRight, GripVertical } from "lucide-react";
 import {
   Tree as AriaTree,
@@ -16,10 +17,15 @@ import {
 } from "react-aria-components/Tree";
 import { Checkbox } from "../Checkbox/Checkbox";
 import { ProgressCircle } from "../ProgressCircle/ProgressCircle";
-import "./Tree.css";
+import styles from "./Tree.module.css";
 
 export function Tree<T>(props: TreeProps<T>) {
-  return <AriaTree {...props} />;
+  return (
+    <AriaTree
+      {...props}
+      className={props.className ?? clsx("react-aria-Tree", styles.tree)}
+    />
+  );
 }
 
 export function TreeItemContent(
@@ -58,7 +64,13 @@ export interface TreeItemProps extends Partial<AriaTreeItemProps> {
 export function TreeItem(props: TreeItemProps) {
   const textValue = typeof props.title === "string" ? props.title : "";
   return (
-    <AriaTreeItem textValue={textValue} {...props}>
+    <AriaTreeItem
+      textValue={textValue}
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-TreeItem", styles.treeItem)
+      }
+    >
       {props.title != null ? (
         <>
           <TreeItemContent>{props.title}</TreeItemContent>
@@ -73,7 +85,12 @@ export function TreeItem(props: TreeItemProps) {
 
 export function TreeLoadMoreItem(props: TreeLoadMoreItemProps) {
   return (
-    <AriaTreeLoadMoreItem {...props}>
+    <AriaTreeLoadMoreItem
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-TreeLoader", styles.treeLoader)
+      }
+    >
       <ProgressCircle isIndeterminate aria-label="Loading more..." />
     </AriaTreeLoadMoreItem>
   );
@@ -82,9 +99,23 @@ export function TreeLoadMoreItem(props: TreeLoadMoreItemProps) {
 export function TreeSection(
   props: React.ComponentProps<typeof AriaTreeSection>
 ) {
-  return <AriaTreeSection {...props} />;
+  return (
+    <AriaTreeSection
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-TreeSection", styles.treeSection)
+      }
+    />
+  );
 }
 
 export function TreeHeader(props: React.ComponentProps<typeof AriaTreeHeader>) {
-  return <AriaTreeHeader {...props} />;
+  return (
+    <AriaTreeHeader
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-TreeHeader", styles.treeHeader)
+      }
+    />
+  );
 }

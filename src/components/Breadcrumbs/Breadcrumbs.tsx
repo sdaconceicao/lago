@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
 import {
   type BreadcrumbProps,
@@ -8,20 +9,32 @@ import {
   Breadcrumb as RACBreadcrumb,
   Breadcrumbs as RACBreadcrumbs,
 } from "react-aria-components/Breadcrumbs";
-import "./Breadcrumbs.css";
+import styles from "./Breadcrumbs.module.css";
 
 export function Breadcrumbs<T>(props: BreadcrumbsProps<T>) {
-  return <RACBreadcrumbs {...props} />;
+  return (
+    <RACBreadcrumbs
+      {...props}
+      className={clsx(
+        "react-aria-Breadcrumbs",
+        styles.breadcrumbs,
+        props.className
+      )}
+    />
+  );
 }
 
 export function Breadcrumb(
   props: BreadcrumbProps & Omit<LinkProps, "className">
 ) {
   return (
-    <RACBreadcrumb {...props}>
+    <RACBreadcrumb
+      {...props}
+      className={clsx("react-aria-Breadcrumb", styles.breadcrumb)}
+    >
       {({ isCurrent }) => (
         <>
-          <Link {...props} />
+          <Link {...props} className={clsx("react-aria-Link", styles.link)} />
           {!isCurrent && <ChevronRight size={14} />}
         </>
       )}

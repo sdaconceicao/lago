@@ -1,0 +1,40 @@
+.textField {
+  display: flex;
+  flex-direction: column;
+}
+
+.input,
+.textArea {
+  width: 100%;
+  min-height: var(--spacing-8);
+  padding: 0 var(--spacing-3);
+  box-sizing: border-box;
+  margin: 0;
+  border: none;
+  border-radius: var(--radius);
+  font: var(--font-size) var(--font-family);
+  color: var(--field-text-color);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &::placeholder {
+    color: var(--text-color-placeholder);
+  }
+
+  &[data-focused] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -1px;
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+    &::placeholder {
+      color: var(--text-color-disabled);
+    }
+  }
+}
+
+.textArea {
+  min-height: 64px;
+  padding: var(--spacing-2) var(--spacing-3);
+}

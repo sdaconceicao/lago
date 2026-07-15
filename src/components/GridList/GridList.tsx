@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { GripVertical } from "lucide-react";
 import {
   GridList as AriaGridList,
@@ -14,7 +15,7 @@ import {
 } from "react-aria-components/GridList";
 import { Checkbox } from "../Checkbox/Checkbox";
 import { ProgressCircle } from "../ProgressCircle/ProgressCircle";
-import "./GridList.css";
+import styles from "./GridList.module.css";
 
 export function GridList<T>({
   children,
@@ -22,7 +23,13 @@ export function GridList<T>({
   ...props
 }: GridListProps<T>) {
   return (
-    <AriaGridList {...props} layout={layout}>
+    <AriaGridList
+      {...props}
+      layout={layout}
+      className={
+        props.className ?? clsx("react-aria-GridList", styles.gridList)
+      }
+    >
       {children}
     </AriaGridList>
   );
@@ -36,7 +43,13 @@ export function GridListItem({
 }) {
   const textValue = typeof children === "string" ? children : undefined;
   return (
-    <AriaGridListItem textValue={textValue} {...props}>
+    <AriaGridListItem
+      textValue={textValue}
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-GridListItem", styles.gridListItem)
+      }
+    >
       {({ selectionMode, selectionBehavior, allowsDragging }) => (
         <>
           {/* Add elements for drag and drop and selection. */}
@@ -57,7 +70,16 @@ export function GridListItem({
 
 export function GridListLoadMoreItem(props: GridListLoadMoreItemProps) {
   return (
-    <AriaGridListLoadMoreItem {...props}>
+    <AriaGridListLoadMoreItem
+      {...props}
+      className={
+        props.className ??
+        clsx(
+          "react-aria-GridListLoadingIndicator",
+          styles.gridListLoadingIndicator
+        )
+      }
+    >
       <ProgressCircle isIndeterminate aria-label="Loading more..." />
     </AriaGridListLoadMoreItem>
   );

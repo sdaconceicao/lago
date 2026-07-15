@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import clsx from "clsx";
 import { Check, ChevronRight, Dot } from "lucide-react";
 import {
   Menu as AriaMenu,
@@ -18,7 +19,7 @@ import {
 } from "react-aria-components/Menu";
 import { Text } from "../Content/Content";
 import { Popover } from "../Popover/Popover";
-import "./Menu.css";
+import styles from "./Menu.module.css";
 
 export function MenuTrigger(props: MenuTriggerProps) {
   const [trigger, menu] = React.Children.toArray(props.children) as [
@@ -34,7 +35,14 @@ export function MenuTrigger(props: MenuTriggerProps) {
 }
 
 export function Menu<T>(props: MenuProps<T>) {
-  return <AriaMenu {...props}>{props.children}</AriaMenu>;
+  return (
+    <AriaMenu
+      {...props}
+      className={clsx("react-aria-Menu", styles.menu, props.className)}
+    >
+      {props.children}
+    </AriaMenu>
+  );
 }
 
 export function MenuItem(
@@ -44,7 +52,11 @@ export function MenuItem(
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
   return (
-    <AriaMenuItem {...props} textValue={textValue}>
+    <AriaMenuItem
+      {...props}
+      textValue={textValue}
+      className={clsx("react-aria-MenuItem", styles.menuItem, props.className)}
+    >
       {({ hasSubmenu, isSelected, selectionMode }) => (
         <>
           {isSelected && selectionMode === "multiple" ? <Check /> : null}
@@ -62,7 +74,16 @@ export function MenuItem(
 }
 
 export function MenuSection<T>(props: MenuSectionProps<T>) {
-  return <AriaMenuSection {...props} />;
+  return (
+    <AriaMenuSection
+      {...props}
+      className={clsx(
+        "react-aria-MenuSection",
+        styles.menuSection,
+        props.className
+      )}
+    />
+  );
 }
 
 export function SubmenuTrigger(props: SubmenuTriggerProps) {

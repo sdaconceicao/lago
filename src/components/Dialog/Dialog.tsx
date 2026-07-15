@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   type DialogProps,
   type DialogTriggerProps,
@@ -6,19 +7,24 @@ import {
   Dialog as RACDialog,
   DialogTrigger as RACDialogTrigger,
 } from "react-aria-components/Dialog";
-import { DialogBody, type DialogBodyProps } from "./baseComponents/DialogBody";
+import { DialogBody, type DialogBodyProps } from "./BaseComponents/DialogBody";
 import {
   DialogFooter,
   type DialogFooterProps,
-} from "./baseComponents/DialogFooter";
+} from "./BaseComponents/DialogFooter";
 import {
   DialogHeader,
   type DialogHeaderProps,
-} from "./baseComponents/DialogHeader";
-import "./Dialog.css";
+} from "./BaseComponents/DialogHeader";
+import styles from "./Dialog.module.css";
 
 export function Dialog(props: DialogProps) {
-  return <RACDialog {...props} />;
+  return (
+    <RACDialog
+      {...props}
+      className={props.className ?? clsx("react-aria-Dialog", styles.dialog)}
+    />
+  );
 }
 
 Dialog.Header = DialogHeader;

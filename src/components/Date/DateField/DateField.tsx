@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   DateField as AriaDateField,
   type DateFieldProps as AriaDateFieldProps,
@@ -10,7 +11,8 @@ import {
   type ValidationResult,
 } from "react-aria-components/DateField";
 import { Description, FieldError, Label } from "../../Form/Form";
-import "./DateField.css";
+import utils from "../../../styles/utilities.module.css";
+import styles from "./DateField.module.css";
 
 export interface DateFieldProps<
   T extends DateValue,
@@ -27,7 +29,12 @@ export function DateField<T extends DateValue>({
   ...props
 }: DateFieldProps<T>) {
   return (
-    <AriaDateField {...props}>
+    <AriaDateField
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-DateField", styles.dateField)
+      }
+    >
       <Label>{label}</Label>
       <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
       {description && <Description>{description}</Description>}
@@ -37,9 +44,21 @@ export function DateField<T extends DateValue>({
 }
 
 export function DateSegment(props: DateSegmentProps) {
-  return <AriaDateSegment {...props} />;
+  return (
+    <AriaDateSegment
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-DateSegment", styles.dateSegment)
+      }
+    />
+  );
 }
 
 export function DateInput(props: DateInputProps) {
-  return <AriaDateInput {...props} className="react-aria-DateInput inset" />;
+  return (
+    <AriaDateInput
+      {...props}
+      className={clsx("react-aria-DateInput", styles.dateInput, utils.inset)}
+    />
+  );
 }

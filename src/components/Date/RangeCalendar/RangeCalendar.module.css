@@ -1,0 +1,206 @@
+.rangeCalendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  overflow: auto;
+  width: 100%;
+  max-width: fit-content;
+  font: var(--font-size) var(--font-family);
+  color: var(--text-color);
+
+  .months {
+    display: flex;
+    gap: var(--spacing-3);
+  }
+
+  .month {
+    width: calc(var(--spacing-9) * 7);
+    min-width: calc(var(--spacing-7) * 7);
+    container-type: inline-size;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    margin: 0 var(--spacing-1) var(--spacing-4) var(--spacing-1);
+    min-height: var(--spacing-8);
+
+    .calendarHeading {
+      flex: 1;
+      margin: 0;
+      text-align: center;
+      font-size: var(--font-size-lg);
+    }
+  }
+
+  .calendarGrid {
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  :global(.react-aria-CalendarHeaderCell) {
+    font-size: var(--font-size-sm);
+  }
+
+  [slot="errorMessage"] {
+    font-size: var(--font-size-sm);
+    color: var(--invalid-color);
+  }
+
+  .calendarCell {
+    width: 100%;
+    aspect-ratio: unset;
+    box-sizing: border-box;
+    margin: 2px 0;
+    padding: 0 calc(var(--gap) / 2);
+    position: relative;
+    z-index: 1;
+    outline: none;
+    cursor: pointer;
+
+    span {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1;
+      flex-shrink: 0;
+      border-radius: 9999px;
+      transition: scale 200ms;
+    }
+
+    &[data-selected] {
+      border-radius: 0;
+      background: transparent;
+      margin: 2px 0;
+
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset-block: 0;
+        inset-inline: calc(var(--gap) / -2);
+        background: var(--button-background);
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700);
+        pointer-events: none;
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight;
+        }
+      }
+
+      &[data-selection-start]:not([data-selection-end])::before {
+        inset-inline-start: calc(var(--gap) / 2);
+        border-start-start-radius: 9999px;
+        border-end-start-radius: 9999px;
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700),
+          inset 0.5px 0 0 var(--tint-700);
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight,
+            inset 0.5px 0 0 Highlight;
+        }
+      }
+
+      &[data-selection-end]:not([data-selection-start])::before {
+        inset-inline-end: calc(var(--gap) / 2);
+        border-end-end-radius: 9999px;
+        border-start-end-radius: 9999px;
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700),
+          inset -0.5px 0 0 var(--tint-700);
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight,
+            inset -0.5px 0 0 Highlight;
+        }
+      }
+
+      &[data-selected]:is(td:first-child > *, [aria-disabled] + td > *):not(
+          [data-selection-start]
+        )::before {
+        inset-inline-start: 0;
+        border-start-start-radius: 9999px;
+        border-end-start-radius: 9999px;
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700),
+          inset 0.5px 0 0 var(--tint-700);
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight,
+            inset 0.5px 0 0 Highlight;
+        }
+      }
+
+      &[data-selected]:is(td:last-child > *, td:has(+ [aria-disabled]) > *):not(
+          [data-selection-end]
+        )::before {
+        inset-inline-end: 0;
+        border-end-end-radius: 9999px;
+        border-start-end-radius: 9999px;
+        box-shadow:
+          inset 0 0.5px 0 var(--tint-700),
+          inset 0 -0.5px 0 var(--tint-700),
+          inset -0.5px 0 0 var(--tint-700);
+
+        @media (forced-colors: active) {
+          box-shadow:
+            inset 0 0.5px 0 Highlight,
+            inset 0 -0.5px 0 Highlight,
+            inset -0.5px 0 0 Highlight;
+        }
+      }
+
+      &[data-selection-start],
+      &[data-selection-end] {
+        z-index: 2;
+      }
+
+      &[data-selection-start][data-selection-end]::before {
+        display: none;
+      }
+
+      &:not([data-selection-start], [data-selection-end]) span {
+        color: var(--tint-1200);
+        @media (forced-colors: active) {
+          color: ButtonText;
+        }
+      }
+    }
+
+    &[data-pressed] {
+      scale: 1;
+      span {
+        scale: 0.9;
+      }
+    }
+
+    &[data-focus-visible] {
+      outline: none;
+      z-index: 2;
+      span {
+        outline: 2px solid var(--focus-ring-color);
+        outline-offset: 2px;
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { X } from "lucide-react";
 import {
   Tag as AriaTag,
@@ -11,7 +12,8 @@ import {
 } from "react-aria-components/TagGroup";
 import { Text } from "../Content/Content";
 import { Description, Label } from "../Form/Form";
-import "./TagGroup.css";
+import utils from "../../styles/utilities.module.css";
+import styles from "./TagGroup.module.css";
 
 export interface TagGroupProps<T>
   extends
@@ -32,9 +34,16 @@ export function TagGroup<T>({
   ...props
 }: TagGroupProps<T>) {
   return (
-    <AriaTagGroup {...props}>
+    <AriaTagGroup
+      {...props}
+      className={clsx("react-aria-TagGroup", styles.tagGroup)}
+    >
       {label && <Label>{label}</Label>}
-      <TagList items={items} renderEmptyState={renderEmptyState}>
+      <TagList
+        className={clsx("react-aria-TagList", styles.tagList)}
+        items={items}
+        renderEmptyState={renderEmptyState}
+      >
         {children}
       </TagList>
       {description && <Description>{description}</Description>}
@@ -54,13 +63,13 @@ export function Tag({
     <AriaTag
       textValue={textValue}
       {...props}
-      className="react-aria-Tag button-base"
+      className={clsx("react-aria-Tag", utils.buttonBase, styles.tag)}
     >
       {({ allowsRemoving }) => (
         <>
           {children}
           {allowsRemoving && (
-            <Button slot="remove" className="remove-button">
+            <Button slot="remove" className={styles.removeButton}>
               <X />
             </Button>
           )}

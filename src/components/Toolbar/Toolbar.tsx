@@ -1,11 +1,12 @@
 "use client";
+import clsx from "clsx";
 import { SeparatorContext } from "react-aria-components/Separator";
 import { ToggleButtonGroupContext } from "react-aria-components/ToggleButtonGroup";
 import {
   Toolbar as RACToolbar,
   type ToolbarProps,
 } from "react-aria-components/Toolbar";
-import "./Toolbar.css";
+import styles from "./Toolbar.module.css";
 
 export function Toolbar(props: ToolbarProps) {
   const { orientation = "horizontal" } = props;
@@ -16,7 +17,12 @@ export function Toolbar(props: ToolbarProps) {
           orientation: orientation === "horizontal" ? "vertical" : "horizontal",
         }}
       >
-        <RACToolbar {...props} />
+        <RACToolbar
+          {...props}
+          className={
+            props.className ?? clsx("react-aria-Toolbar", styles.toolbar)
+          }
+        />
       </SeparatorContext.Provider>
     </ToggleButtonGroupContext.Provider>
   );

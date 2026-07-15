@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { Calendar as CalendarIcon } from "lucide-react";
 import {
   DateRangePicker as AriaDateRangePicker,
@@ -12,7 +13,8 @@ import { Popover } from "../../Popover/Popover";
 import { DateInput, DateSegment } from "../DateField/DateField";
 import { FieldGroup } from "../FieldGroup";
 import { RangeCalendar } from "../RangeCalendar/RangeCalendar";
-import "./DateRangePicker.css";
+import utils from "../../../styles/utilities.module.css";
+import styles from "./DateRangePicker.module.css";
 
 export interface DateRangePickerProps<
   T extends DateValue,
@@ -29,17 +31,26 @@ export function DateRangePicker<T extends DateValue>({
   ...props
 }: DateRangePickerProps<T>) {
   return (
-    <AriaDateRangePicker {...props}>
+    <AriaDateRangePicker
+      {...props}
+      className={
+        props.className ??
+        clsx("react-aria-DateRangePicker", styles.dateRangePicker)
+      }
+    >
       <Label>{label}</Label>
       <FieldGroup
         stateContext={DateRangePickerStateContext}
-        className="react-aria-Group inset"
+        className={clsx("react-aria-Group", styles.group, utils.inset)}
       >
-        <div className="date-fields">
+        <div className={clsx("date-fields", styles.dateFields)}>
           <DateInput slot="start">
             {(segment) => <DateSegment segment={segment} />}
           </DateInput>
-          <span aria-hidden="true" className="date-range-separator">
+          <span
+            aria-hidden="true"
+            className={clsx("date-range-separator", styles.dateRangeSeparator)}
+          >
             –
           </span>
           <DateInput slot="end">

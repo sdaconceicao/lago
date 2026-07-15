@@ -1,3 +1,6 @@
+// Global design tokens (CSS custom properties) shared by all component modules
+import "./styles/theme.css";
+
 // Components
 export * from "./components/Breadcrumbs/Breadcrumbs";
 export * from "./components/Button/Button";

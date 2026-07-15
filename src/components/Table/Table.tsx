@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   ChevronDown,
   ChevronRight,
@@ -31,10 +32,16 @@ import {
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { Checkbox } from "../Checkbox/Checkbox";
 import { ProgressCircle } from "../ProgressCircle/ProgressCircle";
-import "./Table.css";
+import utils from "../../styles/utilities.module.css";
+import styles from "./Table.module.css";
 
 export function Table(props: TableProps) {
-  return <AriaTable {...props} />;
+  return (
+    <AriaTable
+      {...props}
+      className={props.className ?? clsx("react-aria-Table", styles.table)}
+    />
+  );
 }
 
 interface ColumnProps extends AriaColumnProps {
@@ -45,14 +52,24 @@ export function Column(
   props: Omit<ColumnProps, "children"> & { children?: React.ReactNode }
 ) {
   return (
-    <AriaColumn {...props} className="react-aria-Column button-base">
+    <AriaColumn
+      {...props}
+      className={clsx("react-aria-Column", utils.buttonBase, styles.column)}
+    >
       {({ allowsSorting, sortDirection }) => (
-        <div className="column-header">
-          <Group role="presentation" tabIndex={-1} className="column-name">
+        <div className={clsx("column-header", styles.columnHeader)}>
+          <Group
+            role="presentation"
+            tabIndex={-1}
+            className={clsx("column-name", styles.columnName)}
+          >
             {props.children}
           </Group>
           {allowsSorting && (
-            <span aria-hidden="true" className="sort-indicator">
+            <span
+              aria-hidden="true"
+              className={clsx("sort-indicator", styles.sortIndicator)}
+            >
               {sortDirection === "ascending" ? (
                 <ChevronUp size={16} />
               ) : (
@@ -60,7 +77,11 @@ export function Column(
               )}
             </span>
           )}
-          {props.allowsResizing && <ColumnResizer />}
+          {props.allowsResizing && (
+            <ColumnResizer
+              className={clsx("react-aria-ColumnResizer", styles.columnResizer)}
+            />
+          )}
         </div>
       )}
     </AriaColumn>
@@ -76,14 +97,20 @@ export function TableHeader<T>({
     useTableOptions();
 
   return (
-    <AriaTableHeader {...otherProps}>
+    <AriaTableHeader
+      {...otherProps}
+      className={
+        otherProps.className ??
+        clsx("react-aria-TableHeader", styles.tableHeader)
+      }
+    >
       {/* Add extra columns for drag and drop and selection. */}
       {allowsDragging && (
         <AriaColumn
           width={20}
           minWidth={20}
           style={{ width: 20 }}
-          className="react-aria-Column button-base"
+          className={clsx("react-aria-Column", utils.buttonBase, styles.column)}
         />
       )}
       {selectionBehavior === "toggle" && (
@@ -91,7 +118,7 @@ export function TableHeader<T>({
           width={32}
           minWidth={32}
           style={{ width: 32 }}
-          className="react-aria-Column button-base"
+          className={clsx("react-aria-Column", utils.buttonBase, styles.column)}
         >
           {selectionMode === "multiple" && <Checkbox slot="selection" />}
         </AriaColumn>
@@ -105,10 +132,17 @@ export function Row<T>({ id, columns, children, ...otherProps }: RowProps<T>) {
   const { selectionBehavior, allowsDragging } = useTableOptions();
 
   return (
-    <AriaRow id={id} {...otherProps}>
+    <AriaRow
+      id={id}
+      {...otherProps}
+      className={otherProps.className ?? clsx("react-aria-Row", styles.row)}
+    >
       {allowsDragging && (
         <Cell>
-          <Button slot="drag" className="drag-button">
+          <Button
+            slot="drag"
+            className={clsx("drag-button", styles.dragButton)}
+          >
             <GripVertical />
           </Button>
         </Cell>
@@ -124,22 +158,42 @@ export function Row<T>({ id, columns, children, ...otherProps }: RowProps<T>) {
 }
 
 export function TableBody<T>(props: TableBodyProps<T>) {
-  return <AriaTableBody {...props} />;
+  return (
+    <AriaTableBody
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-TableBody", styles.tableBody)
+      }
+    />
+  );
 }
 
 export function TableFooter<T>(props: TableFooterProps<T>) {
-  return <AriaTableFooter {...props} />;
+  return (
+    <AriaTableFooter
+      {...props}
+      className={
+        props.className ?? clsx("react-aria-TableFooter", styles.tableFooter)
+      }
+    />
+  );
 }
 
 export function Cell(props: CellProps) {
   return (
-    <AriaCell {...props}>
+    <AriaCell
+      {...props}
+      className={props.className ?? clsx("react-aria-Cell", styles.cell)}
+    >
       {composeRenderProps(
         props.children,
         (children, { hasChildItems, isTreeColumn }) => (
           <>
             {isTreeColumn && hasChildItems && (
-              <Button slot="chevron">
+              <Button
+                slot="chevron"
+                className={clsx("react-aria-Button", styles.chevronButton)}
+              >
                 <ChevronRight />
               </Button>
             )}
@@ -153,7 +207,13 @@ export function Cell(props: CellProps) {
 
 export function TableLoadMoreItem(props: TableLoadMoreItemProps) {
   return (
-    <AriaTableLoadMoreItem {...props}>
+    <AriaTableLoadMoreItem
+      {...props}
+      className={
+        props.className ??
+        clsx("react-aria-TableLoadingIndicator", styles.tableLoadingIndicator)
+      }
+    >
       <div
         style={{
           display: "flex",

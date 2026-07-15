@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import clsx from "clsx";
 import {
   Autocomplete as AriaAutocomplete,
   type AutocompleteProps as AriaAutocompleteProps,
@@ -10,7 +11,7 @@ import { type MenuProps as AriaMenuProps } from "react-aria-components/Menu";
 import { Menu } from "../Menu/Menu";
 import { Modal } from "../Modal/Modal";
 import { SearchField } from "../SearchField/SearchField";
-import "./CommandPalette.css";
+import styles from "./CommandPalette.module.css";
 
 export interface CommandPaletteProps<T>
   extends Omit<AriaAutocompleteProps, "children">, AriaMenuProps<T> {
@@ -40,7 +41,9 @@ export function CommandPalette<T>(props: CommandPaletteProps<T>) {
 
   return (
     <Modal isDismissable isOpen={isOpen} onOpenChange={onOpenChange}>
-      <Dialog className="command-palette-dialog">
+      <Dialog
+        className={clsx("command-palette-dialog", styles.commandPaletteDialog)}
+      >
         <AriaAutocomplete filter={contains} {...props}>
           <SearchField
             autoFocus

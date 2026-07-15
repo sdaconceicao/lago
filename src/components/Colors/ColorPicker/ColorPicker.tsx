@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import { Button } from "react-aria-components/Button";
 import {
   ColorPicker as AriaColorPicker,
@@ -10,7 +11,7 @@ import { ColorArea } from "../ColorArea/ColorArea";
 import { ColorField } from "../ColorField/ColorField";
 import { ColorSlider } from "../ColorSlider/ColorSlider";
 import { ColorSwatch } from "../ColorSwatch/ColorSwatch";
-import "./ColorPicker.css";
+import styles from "./ColorPicker.module.css";
 
 export interface ColorPickerProps extends Omit<
   AriaColorPickerProps,
@@ -24,14 +25,14 @@ export function ColorPicker({ label, children, ...props }: ColorPickerProps) {
   return (
     <AriaColorPicker {...props}>
       <DialogTrigger>
-        <Button className="color-picker">
+        <Button className={clsx("color-picker", styles.colorPicker)}>
           <ColorSwatch />
           <span>{label}</span>
         </Button>
         <Popover
           hideArrow
           placement="bottom start"
-          className="color-picker-dialog"
+          className={styles.colorPickerDialog}
         >
           {children || (
             <>

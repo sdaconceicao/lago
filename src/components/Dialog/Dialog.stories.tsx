@@ -3,6 +3,7 @@ import { CheckCircle2, Trash2, UserPlus } from "lucide-react";
 import { Button } from "../Button/Button";
 import { Dialog } from "../Dialog/Dialog";
 import { TextField } from "../TextField/TextField";
+import styles from "./Dialog.module.css";
 
 const meta: Meta<typeof Dialog> = {
   component: Dialog,
@@ -22,7 +23,7 @@ export default meta;
 type Story = StoryFn<typeof Dialog>;
 
 export const Example: Story = (args) => (
-  <div className="dialog-preview">
+  <div className={styles.dialogPreview}>
     <Dialog {...args}>
       <Dialog.Header
         icon={<CheckCircle2 size={20} />}

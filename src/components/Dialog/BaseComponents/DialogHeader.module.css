@@ -1,0 +1,60 @@
+.dialogHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+  /* Clears the absolute close button (~40px wide, 16px from the dialog edge)
+     so long titles cannot run underneath it. The spacing scale ends at 10. */
+  padding-right: calc(12 * var(--spacing));
+
+  .dialogHeaderIcon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    box-sizing: border-box;
+    width: var(--spacing-10);
+    height: var(--spacing-10);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--overlay-background);
+    box-shadow: 0 1px 2px rgba(0 0 0 / 0.05);
+    color: var(--text-color);
+  }
+
+  .dialogHeaderText {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+
+    :global(.react-aria-Heading[slot="title"]) {
+      margin: 0;
+      font: var(--font-size-lg) var(--font-family);
+
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .dialogSubtitle {
+      margin: 0;
+      font: var(--font-size) var(--font-family);
+
+      color: var(--text-color-placeholder);
+    }
+  }
+
+  :global(.react-aria-Button[slot="close"]) {
+    position: absolute;
+    top: var(--spacing-4);
+    right: var(--spacing-4);
+    z-index: 1;
+  }
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
+}
+
+.dialogHeader.dialogHeaderNoClosed {
+  padding-right: 0;
+}

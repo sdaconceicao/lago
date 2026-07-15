@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   RadioGroup as AriaRadioGroup,
   type RadioGroupProps as AriaRadioGroupProps,
@@ -9,8 +10,8 @@ import {
 } from "react-aria-components/RadioGroup";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { Description, FieldError, Label } from "../Form/Form";
-import "../../styles/utilities.css";
-import "./RadioGroup.css";
+import utils from "../../styles/utilities.module.css";
+import styles from "./RadioGroup.module.css";
 
 export interface RadioGroupProps extends Omit<AriaRadioGroupProps, "children"> {
   children?: React.ReactNode;
@@ -27,9 +28,12 @@ export function RadioGroup({
   ...props
 }: RadioGroupProps) {
   return (
-    <AriaRadioGroup {...props}>
+    <AriaRadioGroup
+      {...props}
+      className={clsx("react-aria-RadioGroup", styles.radioGroup)}
+    >
       <Label>{label}</Label>
-      <div className="radio-items">{children}</div>
+      <div className={clsx("radio-items", styles.radioItems)}>{children}</div>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
     </AriaRadioGroup>
@@ -42,11 +46,16 @@ export interface RadioProps extends RadioFieldProps {
 
 export function Radio(props: RadioProps) {
   return (
-    <RadioField {...props}>
-      <RadioButton>
+    <RadioField
+      {...props}
+      className={clsx("react-aria-RadioField", styles.radioField)}
+    >
+      <RadioButton
+        className={clsx("react-aria-RadioButton", styles.radioButton)}
+      >
         {composeRenderProps(props.children, (children) => (
           <>
-            <div className="indicator" />
+            <div className={clsx(utils.indicator, styles.indicator)} />
             {children}
           </>
         ))}

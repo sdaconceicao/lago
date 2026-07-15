@@ -1,4 +1,5 @@
 "use client";
+import clsx from "clsx";
 import {
   Tooltip as AriaTooltip,
   type TooltipProps as AriaTooltipProps,
@@ -6,7 +7,7 @@ import {
   OverlayArrow,
   type TooltipTriggerComponentProps,
 } from "react-aria-components/Tooltip";
-import "./Tooltip.css";
+import styles from "./Tooltip.module.css";
 
 export interface TooltipProps extends Omit<AriaTooltipProps, "children"> {
   children: React.ReactNode;
@@ -14,7 +15,10 @@ export interface TooltipProps extends Omit<AriaTooltipProps, "children"> {
 
 export function Tooltip({ children, ...props }: TooltipProps) {
   return (
-    <AriaTooltip {...props}>
+    <AriaTooltip
+      {...props}
+      className={clsx("react-aria-Tooltip", styles.tooltip, props.className)}
+    >
       <OverlayArrow>
         <svg width={8} height={8} viewBox="0 0 8 8">
           <path d="M0 0 L4 4 L8 0" />
