@@ -1,0 +1,50 @@
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-2);
+  box-sizing: border-box;
+  min-height: var(--spacing-8);
+  margin-inline: var(--spacing-1);
+  padding: calc((var(--spacing-8) - 1lh) / 2) var(--spacing-3);
+  border-radius: var(--radius);
+  outline: none;
+  cursor: pointer;
+  color: var(--text-color);
+  font: var(--font-size) var(--font-family);
+  -webkit-tap-highlight-color: transparent;
+
+  &:first-of-type {
+    margin-top: var(--spacing);
+  }
+
+  &:last-of-type {
+    margin-bottom: var(--spacing);
+  }
+
+  [slot="label"] {
+    font-weight: 500;
+  }
+
+  [slot="description"] {
+    font-size: var(--font-size-sm);
+  }
+
+  &[data-pressed] {
+    background: var(--highlight-hover);
+  }
+
+  &[data-focused] {
+    background: var(--highlight-background);
+    color: var(--highlight-foreground);
+
+    /* Keep the checkbox outline visible against the highlight background */
+    :global(.indicator) {
+      --indicator-drop-shadow: 0 0 0 1px rgb(255 255 255 / 0.4);
+    }
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+  }
+}

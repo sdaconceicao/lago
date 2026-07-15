@@ -19,9 +19,16 @@ export interface TagGroupProps<T>
   extends
     Omit<AriaTagGroupProps, "children">,
     Pick<TagListProps<T>, "items" | "children" | "renderEmptyState"> {
+  /** Accessible label rendered above the tags. */
   label?: string;
+  /** Helper text rendered below the tags. */
   description?: string;
+  /** Error message rendered below the tags. */
   errorMessage?: string;
+  /** The size variant of the tags. "sm" (default) renders compact chips, "md" renders field-height chips. */
+  size?: "sm" | "md";
+  /** The shape variant of the tags. "default" uses the same border radius as inputs, "round" renders fully rounded pill chips. */
+  variant?: "default" | "round";
 }
 
 export function TagGroup<T>({
@@ -31,11 +38,15 @@ export function TagGroup<T>({
   items,
   children,
   renderEmptyState,
+  size = "sm",
+  variant = "default",
   ...props
 }: TagGroupProps<T>) {
   return (
     <AriaTagGroup
       {...props}
+      data-size={size}
+      data-variant={variant}
       className={clsx("react-aria-TagGroup", styles.tagGroup)}
     >
       {label && <Label>{label}</Label>}

@@ -17,12 +17,45 @@
   gap: var(--spacing-2);
 }
 
+/* Field-height chips, e.g. inside the MultiSelect field */
+.tagGroup[data-size="md"] .tag {
+  height: var(--spacing-8);
+  padding: 0 var(--spacing-4);
+  font: var(--font-size) var(--font-family);
+
+  &:has(.removeButton) {
+    padding: 0 var(--spacing-1) 0 var(--spacing-4);
+  }
+
+  /* Slightly inset from the chip edges on all sides */
+  .removeButton {
+    height: calc(100% - var(--spacing-2));
+  }
+
+  .removeButton svg {
+    width: var(--spacing-4);
+    height: var(--spacing-4);
+  }
+}
+
+/* Fully rounded pill chips with a matching circular remove button */
+.tagGroup[data-variant="round"] {
+  .tag {
+    border-radius: 9999px;
+  }
+
+  .removeButton {
+    border-radius: 100%;
+  }
+}
+
 .tag {
   --button-color: var(--gray);
   --button-gradient-size: 4px;
   text-shadow: none;
   forced-color-adjust: none;
-  border-radius: 9999px;
+  /* Default variant matches the input border radius; "round" overrides above */
+  border-radius: var(--radius);
   height: var(--spacing-5);
   padding: 0 var(--spacing-3);
   font: var(--font-size-sm) var(--font-family);
@@ -61,9 +94,11 @@
     color: var(--gray-1000);
     transition: color 200ms;
     outline: none;
-    border-radius: 100%;
+    /* Default variant: rounded corners matching the chip; "round" overrides to a circle */
+    border-radius: var(--radius-sm);
     aspect-ratio: 1/1;
-    height: calc(100% - 4px);
+    height: calc(100% - 6px);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;

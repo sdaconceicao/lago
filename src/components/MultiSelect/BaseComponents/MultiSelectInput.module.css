@@ -1,0 +1,25 @@
+.input {
+  flex: 1;
+  min-width: calc(var(--spacing) * 15);
+  min-height: var(--spacing-8);
+  box-sizing: border-box;
+  padding: 0 0 0 var(--spacing-2);
+  margin: 0;
+  border: none;
+  background: transparent;
+  font: var(--font-size) var(--font-family);
+  color: var(--field-text-color);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &::placeholder {
+    color: var(--text-color-placeholder);
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+    &::placeholder {
+      color: var(--text-color-disabled);
+    }
+  }
+}

@@ -8,7 +8,7 @@ import {
   type ValidationResult,
 } from "react-aria-components/Checkbox";
 import { Description, FieldError } from "../Form/Form";
-import utils from "../../styles/utilities.module.css";
+import { CheckboxIndicator } from "./CheckboxIndicator";
 import styles from "./Checkbox.module.css";
 
 interface CheckboxProps extends CheckboxFieldProps {
@@ -33,21 +33,7 @@ export function Checkbox({
       >
         {({ isIndeterminate }) => (
           <>
-            <div
-              className={clsx("indicator", utils.indicator, styles.indicator)}
-            >
-              <svg
-                viewBox="0 0 18 18"
-                aria-hidden="true"
-                key={isIndeterminate ? "indeterminate" : "check"}
-              >
-                {isIndeterminate ? (
-                  <rect x={1} y={7.5} width={16} height={3} />
-                ) : (
-                  <polyline points="2 9 7 14 16 4" />
-                )}
-              </svg>
-            </div>
+            <CheckboxIndicator isIndeterminate={isIndeterminate} />
             {children}
           </>
         )}
@@ -57,3 +43,6 @@ export function Checkbox({
     </CheckboxField>
   );
 }
+
+export { CheckboxIndicator } from "./CheckboxIndicator";
+export type { CheckboxIndicatorProps } from "./CheckboxIndicator";

@@ -33,6 +33,7 @@ export * from "./components/ListBox/ListBox";
 export * from "./components/Menu/Menu";
 export * from "./components/Meter/Meter";
 export * from "./components/Modal/Modal";
+export * from "./components/MultiSelect/MultiSelect";
 export * from "./components/NumberField/NumberField";
 export * from "./components/Popover/Popover";
 export * from "./components/ProgressBar/ProgressBar";
