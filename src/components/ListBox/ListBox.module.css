@@ -273,9 +273,14 @@
   font: var(--font-size) var(--font-family);
   color: var(--text-color);
 
+  /* Empty state ("No results found.") aligned like a normal option row:
+     same left inset (item margin-inline + padding) and row height. */
   &[data-empty] {
+    display: flex;
+    align-items: center;
     min-height: var(--spacing-8);
-    padding: var(--spacing-2);
+    padding-block: var(--spacing-1);
+    padding-inline: calc(var(--spacing-3) + var(--spacing-1));
   }
 
   :global(.react-aria-Header) {

@@ -1,44 +1,131 @@
+/* Always fill the container; the parent decides the width (matches MultiSelect). */
 .select {
+  display: flex;
+  flex-direction: column;
   color: var(--text-color);
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Field, input, and chevron are identical to the MultiSelect so the two
+   controls line up exactly. */
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  box-sizing: border-box;
   position: relative;
-  width: 200px;
+  width: 100%;
+  min-height: calc(var(--spacing-10) + var(--spacing-2));
+  padding: var(--spacing-2) calc(var(--spacing-10) + var(--spacing-2))
+    var(--spacing-2) var(--spacing-2);
+  border-radius: var(--radius);
+  font: var(--font-size) var(--font-family);
+  color: var(--field-text-color);
+  cursor: text;
 
-  :global(.react-aria-Button) {
-    --button-color: var(--gray);
-    padding: 0 var(--spacing-2) 0 var(--spacing-3);
-    width: 100%;
-    min-width: 0;
-
-    &[data-pressed] {
-      scale: 1;
-    }
+  &[data-focus-within] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -1px;
   }
 
-  :global(.react-aria-SelectValue) {
-    flex: 1;
-    text-align: start;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    &[data-placeholder] {
-      color: var(--text-color-placeholder);
-      font-weight: normal;
-    }
+  &[data-disabled] {
+    color: var(--text-color-disabled);
   }
 
-  :global(.lucide-chevron-down) {
-    margin-inline-start: var(--spacing-2);
+  /* Pin the chevron toggle to the top-right corner */
+  :global(.field-Button) {
+    position: absolute;
+    top: var(--spacing-2);
+    right: var(--spacing-2);
+    margin-left: 0;
+    height: var(--spacing-8);
+  }
+}
+
+.input {
+  flex: 1;
+  min-width: calc(var(--spacing) * 15);
+  min-height: var(--spacing-8);
+  box-sizing: border-box;
+  padding: 0 0 0 var(--spacing-2);
+  margin: 0;
+  border: none;
+  background: transparent;
+  font: var(--font-size) var(--font-family);
+  color: var(--field-text-color);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &::placeholder {
+    color: var(--text-color-placeholder);
   }
 
-  :global(.react-aria-SelectValue) {
-    [slot="description"] {
-      display: none;
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+    &::placeholder {
+      color: var(--text-color-disabled);
     }
   }
 }
 
-.selectPopover[data-trigger="Select"] {
+.selectPopover[data-trigger="ComboBox"] {
   width: var(--trigger-width);
   padding: 0;
+}
+
+/* Dropdown option: label left-aligned (no reserved indent), selected check
+   pinned to the right so unselected items have no left gap. */
+.item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-2);
+  box-sizing: border-box;
+  min-height: var(--spacing-8);
+  margin-inline: var(--spacing-1);
+  padding: calc((var(--spacing-8) - 1lh) / 2) var(--spacing-3);
+  border-radius: var(--radius);
+  outline: none;
+  cursor: pointer;
+  color: var(--text-color);
+  font: var(--font-size) var(--font-family);
+  -webkit-tap-highlight-color: transparent;
+
+  &:first-of-type {
+    margin-top: var(--spacing);
+  }
+
+  &:last-of-type {
+    margin-bottom: var(--spacing);
+  }
+
+  [slot="label"] {
+    font-weight: 500;
+  }
+
+  [slot="description"] {
+    font-size: var(--font-size-sm);
+  }
+
+  &[data-pressed] {
+    background: var(--highlight-hover);
+  }
+
+  &[data-focused] {
+    background: var(--highlight-background);
+    color: var(--highlight-foreground);
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+  }
+
+  .checkIcon {
+    margin-left: auto;
+    flex-shrink: 0;
+    width: var(--spacing-4);
+    height: var(--spacing-4);
+    stroke-width: 3px;
+  }
 }

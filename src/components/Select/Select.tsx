@@ -1,52 +1,78 @@
 "use client";
 import clsx from "clsx";
-import { ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import {
-  Select as AriaSelect,
-  type SelectProps as AriaSelectProps,
+  ComboBox as AriaComboBox,
+  type ComboBoxProps as AriaComboBoxProps,
+  Input,
   type ListBoxItemProps,
   type ListBoxProps,
-  SelectValue,
   type ValidationResult,
-} from "react-aria-components/Select";
-import { Button } from "../Button/Button";
-import { Description, FieldError, Label } from "../Form/Form";
-import { DropdownItem, DropdownListBox } from "../ListBox/ListBox";
+} from "react-aria-components/ComboBox";
+import { Group } from "react-aria-components/Group";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
+import { Text } from "../Content/Content";
+import { Description, FieldButton, FieldError, Label } from "../Form/Form";
+import { DropdownListBox, ListBoxItem } from "../ListBox/ListBox";
 import { Popover } from "../Popover/Popover";
+import utils from "../../styles/utilities.module.css";
 import styles from "./Select.module.css";
 
-export interface SelectProps<T, M extends "single" | "multiple"> extends Omit<
-  AriaSelectProps<T, M>,
-  "children"
-> {
+export interface SelectProps<T> extends Omit<AriaComboBoxProps<T>, "children"> {
+  /** Accessible label rendered above the field. */
   label?: string;
+  /** Helper text rendered below the field. */
   description?: string;
+  /** Error message shown when the field is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
+  /** Placeholder text for the search input. Shown only while nothing is selected. */
+  placeholder?: string;
+  /** Options available in the dropdown. */
   items?: Iterable<T>;
+  /** The list options: static nodes or a render function for each item. */
   children: React.ReactNode | ((item: T) => React.ReactNode);
 }
 
-export function Select<T, M extends "single" | "multiple" = "single">({
+/**
+ * A single-select combobox. Typing in the field filters the list, and the
+ * chosen option fills the field. Matches the MultiSelect styling.
+ */
+export function Select<T extends object>({
   label,
   description,
   errorMessage,
   children,
   items,
+  placeholder = "Select an item",
   ...props
-}: SelectProps<T, M>) {
+}: SelectProps<T>) {
   return (
-    <AriaSelect {...props} className={clsx("react-aria-Select", styles.select)}>
+    <AriaComboBox
+      menuTrigger="focus"
+      allowsEmptyCollection
+      {...props}
+      items={items}
+      className={clsx("react-aria-ComboBox", styles.select)}
+    >
       {label && <Label>{label}</Label>}
-      <Button>
-        <SelectValue />
-        <ChevronDown />
-      </Button>
+      {/* Field, input, and chevron mirror the MultiSelect so the two align. */}
+      <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
+        <Input
+          className={clsx("react-aria-Input", styles.input)}
+          placeholder={placeholder}
+        />
+        <FieldButton>
+          <ChevronDown />
+        </FieldButton>
+      </Group>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
       <Popover hideArrow className={styles.selectPopover}>
-        <SelectListBox items={items}>{children}</SelectListBox>
+        <SelectListBox renderEmptyState={() => "No results found."}>
+          {children}
+        </SelectListBox>
       </Popover>
-    </AriaSelect>
+    </AriaComboBox>
   );
 }
 
@@ -55,5 +81,27 @@ export function SelectListBox<T>(props: ListBoxProps<T>) {
 }
 
 export function SelectItem(props: ListBoxItemProps) {
-  return <DropdownItem {...props} />;
+  const textValue =
+    props.textValue ||
+    (typeof props.children === "string" ? props.children : undefined);
+  return (
+    <ListBoxItem
+      {...props}
+      textValue={textValue}
+      className={clsx("select-item", styles.item)}
+    >
+      {composeRenderProps(props.children, (children, { isSelected }) => (
+        <>
+          {typeof children === "string" ? (
+            <Text slot="label">{children}</Text>
+          ) : (
+            children
+          )}
+          {isSelected && (
+            <Check aria-hidden="true" className={styles.checkIcon} />
+          )}
+        </>
+      ))}
+    </ListBoxItem>
+  );
 }
