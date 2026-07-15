@@ -2,6 +2,7 @@
   "name": "@code-x/lago",
   "version": "0.1.0",
   "type": "module",
+  "license": "MIT",
   "packageManager": "pnpm@10.12.1",
   "scripts": {
     "build": "vite build --config vite.build.config.ts",
@@ -34,7 +35,8 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
   "peerDependencies": {
     "react": "^19.2.4",
