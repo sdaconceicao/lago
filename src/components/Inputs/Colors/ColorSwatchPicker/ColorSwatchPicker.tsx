@@ -6,7 +6,7 @@ import {
   type ColorSwatchPickerItemProps,
   type ColorSwatchPickerProps,
 } from "react-aria-components/ColorSwatchPicker";
-import { ColorSwatch } from "../ColorSwatch/ColorSwatch";
+import { ColorSwatch } from "@/components/Inputs/Colors/ColorSwatch/ColorSwatch";
 import styles from "./ColorSwatchPicker.module.css";
 
 export function ColorSwatchPicker({

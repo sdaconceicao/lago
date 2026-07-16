@@ -1,14 +1,20 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { HelpCircle } from "lucide-react";
-import { Button } from "../Button/Button";
-import { Heading } from "../Content/Content";
-import { DialogTrigger } from "../Dialog/Dialog";
+import { Button } from "@/components/Button/Button";
+import { Heading } from "@/components/Content/Content";
+import { DialogTrigger } from "@/components/Dialog/Dialog";
 import { Popover } from "./Popover";
 
 const meta: Meta<typeof Popover> = {
   component: Popover,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A non-modal floating container that appears anchored to a trigger element, often used to surface additional content or controls. Popovers are typically opened from a DialogTrigger and can contain headings, text, or interactive elements.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

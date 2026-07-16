@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ToggleButton } from "../ToggleButton/ToggleButton";
+import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 import { ToggleButtonGroup } from "./ToggleButtonGroup";
 
 const renderGroup = (

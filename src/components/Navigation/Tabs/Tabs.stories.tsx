@@ -6,6 +6,12 @@ const meta: Meta<typeof Tabs> = {
   component: Tabs,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A set of layered sections of content, known as tab panels, that are displayed one at a time. A TabList of Tab elements lets the user switch between panels (TabPanels), with built-in keyboard navigation and roving focus.",
+      },
+    },
   },
   args: {
     onSelectionChange: fn(),

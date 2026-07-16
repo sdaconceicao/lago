@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Button } from "../Button/Button";
-import { ToggleButton } from "../Inputs/Toggle/ToggleButton/ToggleButton";
-import { ToggleButtonGroup } from "../Inputs/Toggle/ToggleButtonGroup/ToggleButtonGroup";
-import { Separator } from "../Separator/Separator";
+import { Button } from "@/components/Button/Button";
+import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
+import { ToggleButtonGroup } from "@/components/Inputs/Toggle/ToggleButtonGroup/ToggleButtonGroup";
+import { Separator } from "@/components/Separator/Separator";
 import { Toolbar } from "./Toolbar";
 
 describe("Toolbar", () => {

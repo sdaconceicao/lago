@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Checkbox } from "../Checkbox/Checkbox";
+import { Checkbox } from "@/components/Inputs/Checkbox/Checkbox";
 import { CheckboxGroup } from "./CheckboxGroup";
 
 const renderGroup = (props = {}) =>

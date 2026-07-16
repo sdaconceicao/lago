@@ -5,6 +5,12 @@ const meta: Meta<typeof NumberField> = {
   component: NumberField,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A text input that accepts numeric values, with increment and decrement steppers. NumberField supports min/max/step constraints, formatting and parsing, a label, and validation, making it ideal for quantities and ranges.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

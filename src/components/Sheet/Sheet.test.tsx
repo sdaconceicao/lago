@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Button } from "../Button/Button";
-import { DialogTrigger } from "../Dialog/Dialog";
+import { Button } from "@/components/Button/Button";
+import { DialogTrigger } from "@/components/Dialog/Dialog";
 import { Heading, Sheet } from "./Sheet";
 
 const renderSheet = () =>

@@ -8,18 +8,10 @@ const meta: Meta<typeof Select> = {
     docs: {
       description: {
         component:
-          "A single-select combobox. Typing in the field filters the options and the chosen option fills the field. Styled to match the MultiSelect.",
+          "A single-select combobox. Typing in the field filters the options and the chosen option fills the field. ",
       },
     },
   },
-  // The Select fills its container, so the decorator provides one (matches MultiSelect).
-  decorators: [
-    (Story) => (
-      <div style={{ width: "min(50vw, 480px)" }}>
-        <Story />
-      </div>
-    ),
-  ],
   tags: ["autodocs"],
   args: {
     placeholder: "Select an item",

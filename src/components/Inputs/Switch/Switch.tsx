@@ -7,8 +7,8 @@ import {
   type SwitchFieldProps,
   type ValidationResult,
 } from "react-aria-components/Switch";
-import { Description, FieldError } from "../Form/Form";
-import utils from "../../styles/utilities.module.css";
+import { Description, FieldError } from "@/components/Inputs/Form/Form";
+import utils from "@/styles/utilities.module.css";
 import styles from "./Switch.module.css";
 
 export interface SwitchProps extends Omit<SwitchFieldProps, "children"> {

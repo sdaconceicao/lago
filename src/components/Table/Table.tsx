@@ -30,9 +30,9 @@ import {
   useTableOptions,
 } from "react-aria-components/Table";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Checkbox } from "../Inputs/Checkbox/Checkbox";
-import { ProgressCircle } from "../ProgressCircle/ProgressCircle";
-import utils from "../../styles/utilities.module.css";
+import { Checkbox } from "@/components/Inputs/Checkbox/Checkbox";
+import { ProgressCircle } from "@/components/ProgressCircle/ProgressCircle";
+import utils from "@/styles/utilities.module.css";
 import styles from "./Table.module.css";
 
 export function Table(props: TableProps) {

@@ -1,17 +1,16 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import {
-  Cell,
-  Column,
-  Row,
-  Table,
-  TableBody,
-  TableHeader,
-} from "../Table/Table";
+import { Cell, Column, Row, Table, TableBody, TableHeader } from "./Table";
 
 const meta: Meta<typeof Table> = {
   component: Table,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A structured layout of columns and rows used to display and optionally select data. Tables support sortable columns, row and cell selection, and keyboard navigation. Columns, headers, and rows are composed from Column, TableHeader, Row, and Cell.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

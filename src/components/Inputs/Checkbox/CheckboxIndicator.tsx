@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import utils from "../../styles/utilities.module.css";
+import utils from "@/styles/utilities.module.css";
 import styles from "./CheckboxIndicator.module.css";
 
 export interface CheckboxIndicatorProps {

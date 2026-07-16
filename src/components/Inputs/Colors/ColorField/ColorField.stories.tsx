@@ -5,6 +5,12 @@ const meta: Meta<typeof ColorField> = {
   component: ColorField,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A text input that lets the user enter a color value in a supported format (such as hex or RGB). ColorField pairs with a color picker or swatch when available, validates the entered value, and supports a label and placeholder.",
+      },
+    },
   },
   tags: ["autodocs"],
   args: {

@@ -5,6 +5,12 @@ const meta: Meta<typeof RangeCalendar> = {
   component: RangeCalendar,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A calendar that allows the user to select a contiguous range of dates. RangeCalendar supports keyboard navigation across ranges, localization, and disabled or unavailable dates, and can be used standalone or within a DateRangePicker.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

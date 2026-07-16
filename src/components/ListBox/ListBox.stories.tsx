@@ -1,11 +1,17 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Header } from "react-aria-components/Header";
-import { ListBox, ListBoxItem, ListBoxSection } from "../ListBox/ListBox";
+import { ListBox, ListBoxItem, ListBoxSection } from "./ListBox";
 
 const meta: Meta<typeof ListBox> = {
   component: ListBox,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A list of options that allows the user to select one or more items. ListBox supports single, multiple, or no selection, and can be organized into sections with headers. Items can be disabled and the list can be made scrollable.",
+      },
+    },
   },
   tags: ["autodocs"],
 };
@@ -25,6 +31,15 @@ export const Example: Story = (args) => (
 Example.args = {
   onAction: undefined,
   selectionMode: "single",
+};
+
+Example.parameters = {
+  docs: {
+    description: {
+      story:
+        "A basic ListBox with single selection. Clicking or pressing an item selects it; the selected item is highlighted.",
+    },
+  },
 };
 
 export const Sections: Story = (_args) => (
@@ -49,3 +64,12 @@ export const Sections: Story = (_args) => (
     </ListBoxSection>
   </ListBox>
 );
+
+Sections.parameters = {
+  docs: {
+    description: {
+      story:
+        "A ListBox organized into labeled sections using ListBoxSection and Header, with multiple selection enabled so several items can be chosen at once.",
+    },
+  },
+};

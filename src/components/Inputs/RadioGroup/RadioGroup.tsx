@@ -9,8 +9,8 @@ import {
   type ValidationResult,
 } from "react-aria-components/RadioGroup";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Description, FieldError, Label } from "../Form/Form";
-import utils from "../../styles/utilities.module.css";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import utils from "@/styles/utilities.module.css";
 import styles from "./RadioGroup.module.css";
 
 export interface RadioGroupProps extends Omit<AriaRadioGroupProps, "children"> {

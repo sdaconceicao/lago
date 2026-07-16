@@ -5,7 +5,7 @@ import {
   ComboBoxStateContext,
   type Key,
 } from "react-aria-components/ComboBox";
-import { Tag, TagGroup } from "../../../TagGroup/TagGroup";
+import { Tag, TagGroup } from "@/components/TagGroup/TagGroup";
 import styles from "./MultiSelectTags.module.css";
 
 type SelectedItem = ComboBoxState<unknown, "multiple">["selectedItems"][number];

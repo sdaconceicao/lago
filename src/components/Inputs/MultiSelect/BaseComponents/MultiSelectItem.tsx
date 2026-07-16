@@ -2,9 +2,9 @@
 import clsx from "clsx";
 import type { ListBoxItemProps } from "react-aria-components/ListBox";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Text } from "../../../Content/Content";
-import { ListBoxItem } from "../../../ListBox/ListBox";
-import { CheckboxIndicator } from "../../Checkbox/Checkbox";
+import { Text } from "@/components/Content/Content";
+import { ListBoxItem } from "@/components/ListBox/ListBox";
+import { CheckboxIndicator } from "@/components/Inputs/Checkbox/Checkbox";
 import styles from "./MultiSelectItem.module.css";
 
 /**

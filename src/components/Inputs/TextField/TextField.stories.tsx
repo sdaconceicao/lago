@@ -5,6 +5,12 @@ const meta: Meta<typeof TextField> = {
   component: TextField,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A text input that allows the user to enter and edit a single line of text. TextField includes a label, optional description, placeholder, and validation states, and supports variants like email, password, and search input types.",
+      },
+    },
   },
   tags: ["autodocs"],
   args: {

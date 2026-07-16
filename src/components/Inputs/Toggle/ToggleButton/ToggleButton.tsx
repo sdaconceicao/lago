@@ -5,7 +5,7 @@ import {
   type ToggleButtonProps as RACToggleButtonProps,
 } from "react-aria-components/ToggleButton";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import utils from "../../../styles/utilities.module.css";
+import utils from "@/styles/utilities.module.css";
 import styles from "./ToggleButton.module.css";
 
 interface ToggleButtonProps extends RACToggleButtonProps {

@@ -8,12 +8,12 @@ import {
   type DateValue,
   type ValidationResult,
 } from "react-aria-components/DatePicker";
-import { Popover } from "../../../Popover/Popover";
-import { Description, FieldButton, FieldError, Label } from "../../Form/Form";
-import { Calendar } from "../Calendar/Calendar";
-import { DateInput, DateSegment } from "../DateField/DateField";
-import { FieldGroup } from "../FieldGroup";
-import utils from "../../../styles/utilities.module.css";
+import { Popover } from "@/components/Popover/Popover";
+import { Description, FieldButton, FieldError, Label } from "@/components/Inputs/Form/Form";
+import { Calendar } from "@/components/Inputs/Date/Calendar/Calendar";
+import { DateInput, DateSegment } from "@/components/Inputs/Date/DateField/DateField";
+import { FieldGroup } from "@/components/Inputs/Date/FieldGroup";
+import utils from "@/styles/utilities.module.css";
 import styles from "./DatePicker.module.css";
 
 export interface DatePickerProps<

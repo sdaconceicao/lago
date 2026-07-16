@@ -5,6 +5,12 @@ const meta: Meta<typeof ColorSwatchPicker> = {
   component: ColorSwatchPicker,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A set of selectable color swatches that lets the user pick from a predefined palette. Each ColorSwatchPickerItem represents a color, and the picker manages single or multiple selection and keyboard navigation among the swatches.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

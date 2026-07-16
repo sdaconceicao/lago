@@ -5,6 +5,12 @@ const meta: Meta<typeof Breadcrumbs> = {
   component: Breadcrumbs,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A list of links that show the current page's location within a hierarchical site structure. Each Breadcrumb is typically a link; the last item represents the current page and is not interactive.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

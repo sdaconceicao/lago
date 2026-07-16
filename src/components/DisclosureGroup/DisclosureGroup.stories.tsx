@@ -3,13 +3,19 @@ import {
   Disclosure,
   DisclosureHeader,
   DisclosurePanel,
-} from "../Disclosure/Disclosure";
-import { DisclosureGroup } from "../DisclosureGroup/DisclosureGroup";
+} from "@/components/Disclosure/Disclosure";
+import { DisclosureGroup } from "./DisclosureGroup";
 
 const meta: Meta<typeof DisclosureGroup> = {
   component: DisclosureGroup,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A group of Disclosures that can be expanded and collapsed. The group manages the expanded state of its children, optionally allowing only one Disclosure to be open at a time via the expandedKeys / defaultExpandedKeys props.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

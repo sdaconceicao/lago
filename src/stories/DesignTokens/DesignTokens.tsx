@@ -2,7 +2,7 @@ import { type ReactNode, useEffect, useState } from "react";
 // The token components import no component CSS, so ensure the token
 // definitions are present in the preview iframe even when a Design Tokens
 // story is loaded directly (before any component story has injected them).
-import "../../styles/theme.css";
+import "@/styles/theme.css";
 
 const readVar = (name: string): string =>
   getComputedStyle(document.documentElement).getPropertyValue(name).trim();

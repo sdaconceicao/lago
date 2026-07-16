@@ -8,10 +8,10 @@ import {
   Input,
   type ValidationResult,
 } from "react-aria-components/NumberField";
-import { Button } from "../../Button/Button";
-import { Description, FieldError, Label } from "../Form/Form";
-import utils from "../../styles/utilities.module.css";
-import textFieldStyles from "../TextField/TextField.module.css";
+import { Button } from "@/components/Button/Button";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import utils from "@/styles/utilities.module.css";
+import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
 import styles from "./NumberField.module.css";
 
 export interface NumberFieldProps extends AriaNumberFieldProps {

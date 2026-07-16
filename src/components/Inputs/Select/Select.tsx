@@ -7,11 +7,11 @@ import {
   type ValidationResult,
 } from "react-aria-components/ComboBox";
 import { Group } from "react-aria-components/Group";
-import { DropdownListBox } from "../../ListBox/ListBox";
-import { Popover } from "../../Popover/Popover";
-import { Description, FieldButton, FieldError, Label } from "../Form/Form";
-import { SelectInput } from "./BaseComponents/SelectInput";
-import utils from "../../styles/utilities.module.css";
+import { DropdownListBox } from "@/components/ListBox/ListBox";
+import { Popover } from "@/components/Popover/Popover";
+import { Description, FieldButton, FieldError, Label } from "@/components/Inputs/Form/Form";
+import { SelectInput } from"./BaseComponents/SelectInput";
+import utils from "@/styles/utilities.module.css";
 import styles from "./Select.module.css";
 
 export interface SelectProps<T> extends Omit<AriaComboBoxProps<T>, "children"> {
@@ -69,6 +69,6 @@ export function Select<T extends object>({
   );
 }
 
-export { SelectInput } from "./BaseComponents/SelectInput";
-export type { SelectInputProps } from "./BaseComponents/SelectInput";
-export { SelectItem } from "./BaseComponents/SelectItem";
+export { SelectInput } from"./BaseComponents/SelectInput";
+export type { SelectInputProps } from"./BaseComponents/SelectInput";
+export { SelectItem } from "@/components/Inputs/Select/BaseComponents/SelectItem";

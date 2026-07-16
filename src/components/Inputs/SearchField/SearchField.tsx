@@ -8,9 +8,9 @@ import {
   Input,
   type ValidationResult,
 } from "react-aria-components/SearchField";
-import { Description, FieldError, Label } from "../Form/Form";
-import utils from "../../styles/utilities.module.css";
-import textFieldStyles from "../TextField/TextField.module.css";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import utils from "@/styles/utilities.module.css";
+import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
 import styles from "./SearchField.module.css";
 
 export interface SearchFieldProps extends AriaSearchFieldProps {

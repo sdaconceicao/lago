@@ -5,6 +5,12 @@ const meta: Meta<typeof ColorPicker> = {
   component: ColorPicker,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A full-featured color selection control that combines a ColorArea, ColorSlider(s), a ColorSwatch, and a ColorField. ColorPicker lets the user choose a color across channels (hue, saturation, lightness, alpha) using multiple coordinated inputs.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

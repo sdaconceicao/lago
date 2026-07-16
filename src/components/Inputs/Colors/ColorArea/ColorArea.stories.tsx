@@ -5,6 +5,12 @@ const meta: Meta<typeof ColorArea> = {
   component: ColorArea,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A two-dimensional color picker that lets the user adjust two color channels simultaneously by dragging a handle within a rectangular area. The channels (e.g. saturation and value) are configurable and shown along the X and Y axes.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

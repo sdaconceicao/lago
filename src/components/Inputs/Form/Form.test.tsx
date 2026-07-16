@@ -1,7 +1,7 @@
 import type React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TextField } from "../TextField/TextField";
+import { TextField } from "@/components/Inputs/TextField/TextField";
 import { Description, FieldButton, Form, Label } from "./Form";
 
 describe("Form", () => {

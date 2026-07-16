@@ -3,8 +3,8 @@ import clsx from "clsx";
 import { Check } from "lucide-react";
 import type { ListBoxItemProps } from "react-aria-components/ListBox";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Text } from "../../../Content/Content";
-import { ListBoxItem } from "../../../ListBox/ListBox";
+import { Text } from "@/components/Content/Content";
+import { ListBoxItem } from "@/components/ListBox/ListBox";
 import styles from "./SelectItem.module.css";
 
 /**

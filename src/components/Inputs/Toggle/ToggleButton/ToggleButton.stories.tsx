@@ -5,6 +5,12 @@ const meta: Meta<typeof ToggleButton> = {
   component: ToggleButton,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A button that can be toggled between pressed and unpressed (selected and unselected) states, similar to a checkbox but styled as a button. Often used in groups for mutually exclusive or multi-select options like text formatting.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

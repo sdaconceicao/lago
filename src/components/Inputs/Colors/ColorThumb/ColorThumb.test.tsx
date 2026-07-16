@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
 import { parseColor } from "react-aria-components";
-import { ColorArea } from "../ColorArea/ColorArea";
-import { ColorSlider } from "../ColorSlider/ColorSlider";
+import { ColorArea } from "@/components/Inputs/Colors/ColorArea/ColorArea";
+import { ColorSlider } from "@/components/Inputs/Colors/ColorSlider/ColorSlider";
 
 const renderInColorArea = (defaultValue = "hsb(0, 50%, 50%)") =>
   render(

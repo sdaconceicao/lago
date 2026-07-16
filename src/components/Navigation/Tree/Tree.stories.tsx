@@ -1,10 +1,16 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { Tree, TreeItem } from "../Tree/Tree";
+import { Tree, TreeItem } from "./Tree";
 
 const meta: Meta<typeof Tree> = {
   component: Tree,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A hierarchical, expandable list of items where each TreeItem can contain nested items. Trees support selection, expansion and collapsing of branches, and keyboard navigation, making them ideal for file systems or organizational structures.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

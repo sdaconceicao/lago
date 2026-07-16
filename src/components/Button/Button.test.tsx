@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button } from "./Button";
-import utils from "../../styles/utilities.module.css";
+import utils from "@/styles/utilities.module.css";
 import styles from "./Button.module.css";
 
 describe("Button", () => {

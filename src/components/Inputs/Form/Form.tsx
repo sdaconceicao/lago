@@ -11,7 +11,7 @@ import {
   Label as RACLabel,
 } from "react-aria-components/Label";
 import { type TextProps } from "react-aria-components/Text";
-import { Text } from "../../Content/Content";
+import { Text } from "@/components/Content/Content";
 import styles from "./Form.module.css";
 
 export function Form(props: FormProps) {

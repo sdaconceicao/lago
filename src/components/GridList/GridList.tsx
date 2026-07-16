@@ -13,8 +13,8 @@ import {
   GridListSection,
   Text,
 } from "react-aria-components/GridList";
-import { Checkbox } from "../Inputs/Checkbox/Checkbox";
-import { ProgressCircle } from "../ProgressCircle/ProgressCircle";
+import { Checkbox } from "@/components/Inputs/Checkbox/Checkbox";
+import { ProgressCircle } from "@/components/ProgressCircle/ProgressCircle";
 import styles from "./GridList.module.css";
 
 export function GridList<T>({

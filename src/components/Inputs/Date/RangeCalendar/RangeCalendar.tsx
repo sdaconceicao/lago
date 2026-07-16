@@ -11,10 +11,10 @@ import {
   Text,
 } from "react-aria-components/RangeCalendar";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Button } from "../../../Button/Button";
-import { CalendarGrid } from "../Calendar/Calendar";
-import utils from "../../../styles/utilities.module.css";
-import calendarStyles from "../Calendar/Calendar.module.css";
+import { Button } from "@/components/Button/Button";
+import { CalendarGrid } from "@/components/Inputs/Date/Calendar/Calendar";
+import utils from "@/styles/utilities.module.css";
+import calendarStyles from "@/components/Inputs/Date/Calendar/Calendar.module.css";
 import styles from "./RangeCalendar.module.css";
 
 export interface RangeCalendarProps<

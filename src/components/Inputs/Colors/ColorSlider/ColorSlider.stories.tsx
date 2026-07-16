@@ -5,6 +5,12 @@ const meta: Meta<typeof ColorSlider> = {
   component: ColorSlider,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A draggable slider that adjusts a single color channel, such as hue, saturation, lightness, or alpha. ColorSlider visually previews the gradient of the channel it controls and is commonly used within a ColorPicker.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

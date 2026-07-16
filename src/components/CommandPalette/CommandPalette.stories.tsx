@@ -1,13 +1,19 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { Button } from "../Button/Button";
-import { CommandPalette } from "../CommandPalette/CommandPalette";
-import { DialogTrigger } from "../Dialog/Dialog";
-import { MenuItem } from "../Navigation/Menu/Menu";
+import { Button } from "@/components/Button/Button";
+import { DialogTrigger } from "@/components/Dialog/Dialog";
+import { MenuItem } from "@/components/Navigation/Menu/Menu";
+import { CommandPalette } from "./CommandPalette";
 
 const meta: Meta<typeof CommandPalette> = {
   component: CommandPalette,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A dialog with a searchable list of commands or actions that the user can quickly filter and run, commonly invoked with a keyboard shortcut. It typically combines an input field with a Menu of actions and is opened from a DialogTrigger.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

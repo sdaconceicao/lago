@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ModalOverlayProps } from "react-aria-components/Modal";
-import { Button } from "../Button/Button";
-import { Dialog, DialogTrigger } from "../Dialog/Dialog";
+import { Button } from "@/components/Button/Button";
+import { Dialog, DialogTrigger } from "@/components/Dialog/Dialog";
 import { Modal } from "./Modal";
 
 const renderModal = (props: Partial<ModalOverlayProps> = {}) =>

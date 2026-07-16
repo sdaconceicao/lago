@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "../Button/Button";
-import { MyToastRegion, queue } from "../Toast/Toast";
+import { Button } from "@/components/Button/Button";
+import { MyToastRegion, queue } from "./Toast";
 
 interface ToastStoryArgs {
   title: string;

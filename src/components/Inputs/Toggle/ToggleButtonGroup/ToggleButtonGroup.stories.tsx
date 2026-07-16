@@ -1,11 +1,17 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { ToggleButton } from "../ToggleButton/ToggleButton";
+import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 import { ToggleButtonGroup } from "./ToggleButtonGroup";
 
 const meta: Meta<typeof ToggleButtonGroup> = {
   component: ToggleButtonGroup,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A group of toggle buttons that can be selected independently or as a single choice, depending on the selection mode. ToggleButtonGroup manages the selected state and keyboard navigation among its ToggleButton children, often used for toolbars or option sets.",
+      },
+    },
   },
   tags: ["autodocs"],
 };

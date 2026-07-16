@@ -4,7 +4,7 @@ import {
   Disclosure,
   DisclosureHeader,
   DisclosurePanel,
-} from "../Disclosure/Disclosure";
+} from "@/components/Disclosure/Disclosure";
 import { DisclosureGroup } from "./DisclosureGroup";
 
 const renderGroup = (props = {}) =>

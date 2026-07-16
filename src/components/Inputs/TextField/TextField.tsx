@@ -8,8 +8,8 @@ import {
   Input,
   type ValidationResult,
 } from "react-aria-components/TextField";
-import { Description, FieldError, Label } from "../Form/Form";
-import utils from "../../styles/utilities.module.css";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import utils from "@/styles/utilities.module.css";
 import styles from "./TextField.module.css";
 
 export interface TextFieldProps<

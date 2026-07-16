@@ -7,7 +7,7 @@ import {
   type ModalOverlayProps,
 } from "react-aria-components/Modal";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Dialog } from "../Dialog/Dialog";
+import { Dialog } from "@/components/Dialog/Dialog";
 import styles from "./Sheet.module.css";
 
 export function Sheet(props: ModalOverlayProps) {

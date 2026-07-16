@@ -1,15 +1,21 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Group } from "react-aria-components/Group";
-import { Button } from "../Button/Button";
-import { Checkbox } from "../Inputs/Checkbox/Checkbox";
-import { ToggleButton } from "../Inputs/Toggle/ToggleButton/ToggleButton";
-import { Separator } from "../Separator/Separator";
-import { Toolbar } from "../Toolbar/Toolbar";
+import { Button } from "@/components/Button/Button";
+import { Checkbox } from "@/components/Inputs/Checkbox/Checkbox";
+import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
+import { Separator } from "@/components/Separator/Separator";
+import { Toolbar } from "./Toolbar";
 
 const meta: Meta<typeof Toolbar> = {
   component: Toolbar,
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A container for grouping a set of related interactive controls, such as buttons, toggles, and checkboxes. Toolbar manages keyboard navigation (arrow keys) and roving focus between its items, and can be divided into groups with separators.",
+      },
+    },
   },
   tags: ["autodocs"],
 };
