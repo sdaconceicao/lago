@@ -1,0 +1,15 @@
+/* Empty state ("No results found.") aligned like a normal option row:
+   same left inset (item margin-inline + padding) and row height, so the text
+   lines up with a single filtered item. */
+.listBox {
+  background-color: green;
+  height: 400px !important;
+  &[data-empty] {
+    display: flex;
+    align-items: center;
+    min-height: var(--spacing-8);
+
+    padding-block: var(--spacing-1);
+    padding-inline: calc(var(--spacing-3) + var(--spacing-1));
+  }
+}

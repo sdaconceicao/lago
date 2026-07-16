@@ -281,6 +281,7 @@
     min-height: var(--spacing-8);
     padding-block: var(--spacing-1);
     padding-inline: calc(var(--spacing-3) + var(--spacing-1));
+    padding: 10px 14px;
   }
 
   :global(.react-aria-Header) {

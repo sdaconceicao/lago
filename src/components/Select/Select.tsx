@@ -1,20 +1,17 @@
 "use client";
 import clsx from "clsx";
-import { Check, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
   ComboBox as AriaComboBox,
   type ComboBoxProps as AriaComboBoxProps,
-  Input,
-  type ListBoxItemProps,
-  type ListBoxProps,
   type ValidationResult,
 } from "react-aria-components/ComboBox";
 import { Group } from "react-aria-components/Group";
-import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Text } from "../Content/Content";
 import { Description, FieldButton, FieldError, Label } from "../Form/Form";
-import { DropdownListBox, ListBoxItem } from "../ListBox/ListBox";
 import { Popover } from "../Popover/Popover";
+import { SelectInput } from "./BaseComponents/SelectInput";
+import { SelectItem } from "./BaseComponents/SelectItem";
+import { SelectListBox } from "./BaseComponents/SelectListBox";
 import utils from "../../styles/utilities.module.css";
 import styles from "./Select.module.css";
 
@@ -57,10 +54,7 @@ export function Select<T extends object>({
       {label && <Label>{label}</Label>}
       {/* Field, input, and chevron mirror the MultiSelect so the two align. */}
       <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
-        <Input
-          className={clsx("react-aria-Input", styles.input)}
-          placeholder={placeholder}
-        />
+        <SelectInput placeholder={placeholder} />
         <FieldButton>
           <ChevronDown />
         </FieldButton>
@@ -76,32 +70,7 @@ export function Select<T extends object>({
   );
 }
 
-export function SelectListBox<T>(props: ListBoxProps<T>) {
-  return <DropdownListBox {...props} />;
-}
-
-export function SelectItem(props: ListBoxItemProps) {
-  const textValue =
-    props.textValue ||
-    (typeof props.children === "string" ? props.children : undefined);
-  return (
-    <ListBoxItem
-      {...props}
-      textValue={textValue}
-      className={clsx("select-item", styles.item)}
-    >
-      {composeRenderProps(props.children, (children, { isSelected }) => (
-        <>
-          {typeof children === "string" ? (
-            <Text slot="label">{children}</Text>
-          ) : (
-            children
-          )}
-          {isSelected && (
-            <Check aria-hidden="true" className={styles.checkIcon} />
-          )}
-        </>
-      ))}
-    </ListBoxItem>
-  );
-}
+export { SelectInput } from "./BaseComponents/SelectInput";
+export type { SelectInputProps } from "./BaseComponents/SelectInput";
+export { SelectItem } from "./BaseComponents/SelectItem";
+export { SelectListBox } from "./BaseComponents/SelectListBox";
