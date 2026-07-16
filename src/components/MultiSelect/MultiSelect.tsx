@@ -9,9 +9,9 @@ import {
 } from "react-aria-components/ComboBox";
 import { Group } from "react-aria-components/Group";
 import { Description, FieldButton, FieldError, Label } from "../Form/Form";
+import { ListBox } from "../ListBox/ListBox";
 import { Popover } from "../Popover/Popover";
 import { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
-import { MultiSelectListBox } from "./BaseComponents/MultiSelectListBox";
 import { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
 import utils from "../../styles/utilities.module.css";
 import styles from "./MultiSelect.module.css";
@@ -83,9 +83,9 @@ export function MultiSelect<T>({
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
       <Popover hideArrow className={styles.multiSelectPopover}>
-        <MultiSelectListBox renderEmptyState={() => "No results found."}>
+        <ListBox renderEmptyState={() => "No results found."}>
           {children}
-        </MultiSelectListBox>
+        </ListBox>
       </Popover>
     </AriaComboBox>
   );
@@ -94,5 +94,4 @@ export function MultiSelect<T>({
 export { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
 export type { MultiSelectInputProps } from "./BaseComponents/MultiSelectInput";
 export { MultiSelectItem } from "./BaseComponents/MultiSelectItem";
-export { MultiSelectListBox } from "./BaseComponents/MultiSelectListBox";
 export { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
