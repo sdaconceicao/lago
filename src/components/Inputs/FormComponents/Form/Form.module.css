@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+
+  :global(> .react-aria-Button) {
+    align-self: start;
+  }
+
+  :global([role="alert"]) {
+    border: 2px solid var(--invalid-color);
+    background: var(--overlay-background);
+    border-radius: 6px;
+    padding: 12px;
+    max-width: 250px;
+    outline: none;
+
+    &:focus {
+      outline: 2px solid var(--focus-ring-color);
+      outline-offset: 2px;
+    }
+
+    h3 {
+      margin-top: 0;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+}

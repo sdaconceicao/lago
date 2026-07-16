@@ -1,0 +1,14 @@
+.label {
+  display: block;
+  font: var(--font-size) var(--font-family);
+  color: var(--text-color);
+  margin-bottom: var(--spacing-2);
+  font-weight: 500;
+
+  [data-required] > &::after,
+  &[data-required]::after {
+    content: "*";
+    margin-left: var(--spacing-1);
+    color: var(--invalid-color);
+  }
+}

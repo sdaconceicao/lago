@@ -1,0 +1,7 @@
+.fieldError {
+  display: block;
+  font: var(--font-size-sm) var(--font-family);
+  color: var(--invalid-color);
+  margin-top: var(--spacing-1);
+  contain: inline-size;
+}
