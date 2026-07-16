@@ -8,10 +8,9 @@ import {
 } from "react-aria-components/ComboBox";
 import { Group } from "react-aria-components/Group";
 import { Description, FieldButton, FieldError, Label } from "../Form/Form";
+import { DropdownListBox } from "../ListBox/ListBox";
 import { Popover } from "../Popover/Popover";
 import { SelectInput } from "./BaseComponents/SelectInput";
-import { SelectItem } from "./BaseComponents/SelectItem";
-import { SelectListBox } from "./BaseComponents/SelectListBox";
 import utils from "../../styles/utilities.module.css";
 import styles from "./Select.module.css";
 
@@ -62,9 +61,9 @@ export function Select<T extends object>({
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
       <Popover hideArrow className={styles.selectPopover}>
-        <SelectListBox renderEmptyState={() => "No results found."}>
+        <DropdownListBox renderEmptyState={() => "No results found."}>
           {children}
-        </SelectListBox>
+        </DropdownListBox>
       </Popover>
     </AriaComboBox>
   );
@@ -73,4 +72,3 @@ export function Select<T extends object>({
 export { SelectInput } from "./BaseComponents/SelectInput";
 export type { SelectInputProps } from "./BaseComponents/SelectInput";
 export { SelectItem } from "./BaseComponents/SelectItem";
-export { SelectListBox } from "./BaseComponents/SelectListBox";
