@@ -10,8 +10,8 @@ import {
   type TagListProps,
   type TagProps,
 } from "react-aria-components/TagGroup";
-import { Text } from "@/components/Content/Content";
-import { Description, Label } from "@/components/Inputs/Form/Form";
+import { Description, Label } from "@/components/Inputs/Form/index";
+import { Text } from "@/components/Typography/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./TagGroup.module.css";
 

@@ -11,7 +11,7 @@ import {
   UNSTABLE_ToastQueue as ToastQueue,
   UNSTABLE_ToastRegion as ToastRegion,
 } from "react-aria-components/Toast";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import styles from "./Toast.module.css";
 
 // Define the type for your toast content. This interface defines the properties of your toast content, affecting what you

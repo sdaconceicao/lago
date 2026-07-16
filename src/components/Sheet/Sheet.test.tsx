@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import { DialogTrigger } from "@/components/Dialog/Dialog";
 import { Heading, Sheet } from "./Sheet";
 

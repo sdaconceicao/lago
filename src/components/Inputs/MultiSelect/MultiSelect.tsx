@@ -8,12 +8,17 @@ import {
   type ValidationResult,
 } from "react-aria-components/ComboBox";
 import { Group } from "react-aria-components/Group";
+import {
+  Description,
+  FieldButton,
+  FieldError,
+  Label,
+} from "@/components/Inputs/Form/index";
 import { ListBox } from "@/components/ListBox/ListBox";
 import { Popover } from "@/components/Popover/Popover";
-import { Description, FieldButton, FieldError, Label } from "@/components/Inputs/Form/Form";
-import { MultiSelectInput } from"./BaseComponents/MultiSelectInput";
-import { MultiSelectTags } from"./BaseComponents/MultiSelectTags";
 import utils from "@/styles/utilities.module.css";
+import { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
+import { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
 import styles from "./MultiSelect.module.css";
 
 /** Controls how selected items are displayed inside the field. */
@@ -60,7 +65,7 @@ export function MultiSelect<T>({
       selectionMode="multiple"
       className={clsx("react-aria-ComboBox", styles.multiSelect)}
     >
-      {label && <Label>{label}</Label>}
+      {label && <Label isRequired={props.isRequired}>{label}</Label>}
       {/* The Group is wired up by the ComboBox: the popover is positioned
           against it and it gets data-hovered/focus/disabled/invalid states. */}
       <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
@@ -91,7 +96,7 @@ export function MultiSelect<T>({
   );
 }
 
-export { MultiSelectInput } from"./BaseComponents/MultiSelectInput";
-export type { MultiSelectInputProps } from"./BaseComponents/MultiSelectInput";
+export { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
+export type { MultiSelectInputProps } from "./BaseComponents/MultiSelectInput";
 export { MultiSelectItem } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectItem";
 export { MultiSelectTags } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectTags";

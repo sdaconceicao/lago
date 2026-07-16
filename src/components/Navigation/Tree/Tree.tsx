@@ -16,7 +16,7 @@ import {
   type TreeProps,
 } from "react-aria-components/Tree";
 import { Checkbox } from "@/components/Inputs/Checkbox/Checkbox";
-import { ProgressCircle } from "@/components/ProgressCircle/ProgressCircle";
+import { ProgressCircle } from "@/components/Status/ProgressCircle/ProgressCircle";
 import styles from "./Tree.module.css";
 
 export function Tree<T>(props: TreeProps<T>) {

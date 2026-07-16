@@ -8,9 +8,9 @@ import {
 } from "react-aria-components/Autocomplete";
 import { Dialog } from "react-aria-components/Dialog";
 import { type MenuProps as AriaMenuProps } from "react-aria-components/Menu";
+import { Menu } from "@/components/Actions/Menu/Menu";
 import { SearchField } from "@/components/Inputs/SearchField/SearchField";
 import { Modal } from "@/components/Modal/Modal";
-import { Menu } from "@/components/Navigation/Menu/Menu";
 import styles from "./CommandPalette.module.css";
 
 export interface CommandPaletteProps<T>

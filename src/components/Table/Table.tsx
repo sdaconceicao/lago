@@ -31,7 +31,7 @@ import {
 } from "react-aria-components/Table";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { Checkbox } from "@/components/Inputs/Checkbox/Checkbox";
-import { ProgressCircle } from "@/components/ProgressCircle/ProgressCircle";
+import { ProgressCircle } from "@/components/Status/ProgressCircle/ProgressCircle";
 import utils from "@/styles/utilities.module.css";
 import styles from "./Table.module.css";
 

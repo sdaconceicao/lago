@@ -9,7 +9,7 @@ import {
   type DisclosureProps,
   type HeadingProps,
 } from "react-aria-components/Disclosure";
-import { Heading } from "@/components/Content/Content";
+import { Heading } from "@/components/Typography/index";
 import styles from "./Disclosure.module.css";
 
 export function Disclosure(props: DisclosureProps) {

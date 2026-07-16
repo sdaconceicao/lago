@@ -8,7 +8,7 @@ import {
   Input,
   type ValidationResult,
 } from "react-aria-components/TextField";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./TextField.module.css";
 
@@ -39,7 +39,7 @@ export function TextField({
         props.className
       )}
     >
-      {label && <Label>{label}</Label>}
+      {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <Input
         ref={inputRef}
         className={clsx("react-aria-Input", styles.input, utils.inset)}
@@ -68,7 +68,7 @@ export function TextArea({
         props.className
       )}
     >
-      <Label>{label}</Label>
+      <Label isRequired={props.isRequired}>{label}</Label>
       <AriaTextArea
         ref={inputRef}
         className={clsx("react-aria-TextArea", styles.textArea, utils.inset)}

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { Heading, Text } from "./Content";
+import { Heading, Text } from "../index";
 
 describe("Heading", () => {
   it("renders a level 3 heading by default", () => {

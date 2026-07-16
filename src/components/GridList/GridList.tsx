@@ -14,7 +14,7 @@ import {
   Text,
 } from "react-aria-components/GridList";
 import { Checkbox } from "@/components/Inputs/Checkbox/Checkbox";
-import { ProgressCircle } from "@/components/ProgressCircle/ProgressCircle";
+import { ProgressCircle } from "@/components/Status/ProgressCircle/ProgressCircle";
 import styles from "./GridList.module.css";
 
 export function GridList<T>({

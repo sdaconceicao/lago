@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import { Menu, MenuItem, MenuTrigger, SubmenuTrigger } from "./Menu";
 
 const meta: Meta<typeof Menu> = {

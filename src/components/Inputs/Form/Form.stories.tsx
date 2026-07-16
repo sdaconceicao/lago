@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import { TextField } from "@/components/Inputs/TextField/TextField";
 import { Form } from "./Form";
 

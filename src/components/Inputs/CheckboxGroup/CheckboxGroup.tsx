@@ -5,7 +5,7 @@ import {
   type CheckboxGroupProps as AriaCheckboxGroupProps,
   type ValidationResult,
 } from "react-aria-components/CheckboxGroup";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
 import styles from "./CheckboxGroup.module.css";
 
 export interface CheckboxGroupProps extends Omit<
@@ -33,7 +33,7 @@ export function CheckboxGroup({
       data-orientation={orientation}
       className={clsx("react-aria-CheckboxGroup", styles.checkboxGroup)}
     >
-      {label && <Label>{label}</Label>}
+      {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <div className={clsx("checkbox-items", styles.checkboxItems)}>
         {children}
       </div>

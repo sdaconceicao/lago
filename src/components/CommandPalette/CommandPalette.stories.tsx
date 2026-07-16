@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
+import { MenuItem } from "@/components/Actions/Menu/Menu";
 import { DialogTrigger } from "@/components/Dialog/Dialog";
-import { MenuItem } from "@/components/Navigation/Menu/Menu";
 import { CommandPalette } from "./CommandPalette";
 
 const meta: Meta<typeof CommandPalette> = {

@@ -10,7 +10,7 @@ import {
   type DateValue,
   type ValidationResult,
 } from "react-aria-components/DateField";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./DateField.module.css";
 
@@ -35,7 +35,7 @@ export function DateField<T extends DateValue>({
         props.className ?? clsx("react-aria-DateField", styles.dateField)
       }
     >
-      <Label>{label}</Label>
+      <Label isRequired={props.isRequired}>{label}</Label>
       <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>

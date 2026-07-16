@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { TooltipTriggerComponentProps } from "react-aria-components/Tooltip";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import { Tooltip, type TooltipProps, TooltipTrigger } from "./Tooltip";
 
 const renderTooltip = (

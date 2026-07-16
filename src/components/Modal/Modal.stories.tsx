@@ -1,8 +1,8 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { Button } from "@/components/Button/Button";
-import { Heading } from "@/components/Content/Content";
+import { Button } from "@/components/Actions/Button/Button";
 import { Dialog, DialogTrigger } from "@/components/Dialog/Dialog";
 import { TextField } from "@/components/Inputs/TextField/TextField";
+import { Heading } from "@/components/Typography/index";
 import { Modal } from "./Modal";
 
 const meta: Meta<typeof Modal> = {

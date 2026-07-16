@@ -3,7 +3,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 import clsx from "clsx";
 import { X } from "lucide-react";
 import { Heading } from "react-aria-components/Dialog";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import styles from "./DialogHeader.module.css";
 
 export interface DialogHeaderProps extends Omit<

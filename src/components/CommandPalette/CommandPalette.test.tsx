@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MenuItem } from "@/components/Navigation/Menu/Menu";
+import { MenuItem } from "@/components/Actions/Menu/Menu";
 import { CommandPalette } from "./CommandPalette";
 
 interface HarnessProps {

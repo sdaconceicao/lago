@@ -6,9 +6,9 @@ import {
   Input,
   type ValidationResult,
 } from "react-aria-components/ColorField";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
-import utils from "@/styles/utilities.module.css";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
+import utils from "@/styles/utilities.module.css";
 import styles from "./ColorField.module.css";
 
 export interface ColorFieldProps extends AriaColorFieldProps {
@@ -30,7 +30,7 @@ export function ColorField({
       {...props}
       className={clsx("react-aria-ColorField", styles.colorField)}
     >
-      {label && <Label>{label}</Label>}
+      {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <Input
         className={clsx("react-aria-Input", textFieldStyles.input, utils.inset)}
         placeholder={placeholder}

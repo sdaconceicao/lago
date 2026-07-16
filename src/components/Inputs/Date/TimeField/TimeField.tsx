@@ -6,8 +6,11 @@ import {
   type TimeValue,
   type ValidationResult,
 } from "react-aria-components/TimeField";
-import { DateInput, DateSegment } from "@/components/Inputs/Date/DateField/DateField";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import {
+  DateInput,
+  DateSegment,
+} from "@/components/Inputs/Date/DateField/DateField";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
 import styles from "./TimeField.module.css";
 
 export interface TimeFieldProps<
@@ -31,7 +34,7 @@ export function TimeField<T extends TimeValue>({
         props.className ?? clsx("react-aria-TimeField", styles.timeField)
       }
     >
-      <Label>{label}</Label>
+      <Label isRequired={props.isRequired}>{label}</Label>
       <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>

@@ -2,7 +2,7 @@ import type React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { TextField } from "@/components/Inputs/TextField/TextField";
-import { Description, FieldButton, Form, Label } from "./Form";
+import { Description, FieldButton, Form, Label } from "./index";
 
 describe("Form", () => {
   it("renders children inside a form element", () => {
@@ -73,6 +73,24 @@ describe("Label", () => {
 
     const label = screen.getByText("Email");
     expect(label.tagName).toBe("LABEL");
+  });
+
+  it("is not marked required by default", () => {
+    render(<Label>Email</Label>);
+
+    expect(screen.getByText("Email")).not.toHaveAttribute("data-required");
+  });
+
+  it("marks the label as required when isRequired is set", () => {
+    render(<Label isRequired>Email</Label>);
+
+    expect(screen.getByText("Email")).toHaveAttribute("data-required");
+  });
+
+  it("forwards isRequired from a field component to its label", () => {
+    render(<TextField label="Email" isRequired />);
+
+    expect(screen.getByText("Email")).toHaveAttribute("data-required");
   });
 });
 

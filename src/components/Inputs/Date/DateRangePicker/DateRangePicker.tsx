@@ -8,11 +8,19 @@ import {
   type DateValue,
   type ValidationResult,
 } from "react-aria-components/DateRangePicker";
-import { Popover } from "@/components/Popover/Popover";
-import { Description, FieldButton, FieldError, Label } from "@/components/Inputs/Form/Form";
-import { DateInput, DateSegment } from "@/components/Inputs/Date/DateField/DateField";
+import {
+  DateInput,
+  DateSegment,
+} from "@/components/Inputs/Date/DateField/DateField";
 import { FieldGroup } from "@/components/Inputs/Date/FieldGroup";
 import { RangeCalendar } from "@/components/Inputs/Date/RangeCalendar/RangeCalendar";
+import {
+  Description,
+  FieldButton,
+  FieldError,
+  Label,
+} from "@/components/Inputs/Form/index";
+import { Popover } from "@/components/Popover/Popover";
 import utils from "@/styles/utilities.module.css";
 import styles from "./DateRangePicker.module.css";
 
@@ -38,7 +46,7 @@ export function DateRangePicker<T extends DateValue>({
         clsx("react-aria-DateRangePicker", styles.dateRangePicker)
       }
     >
-      <Label>{label}</Label>
+      <Label isRequired={props.isRequired}>{label}</Label>
       <FieldGroup
         stateContext={DateRangePickerStateContext}
         className={clsx("react-aria-Group", styles.group, utils.inset)}

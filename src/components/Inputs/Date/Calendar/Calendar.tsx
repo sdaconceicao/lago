@@ -11,8 +11,8 @@ import {
   CalendarHeading,
   type DateValue,
 } from "react-aria-components/Calendar";
-import { Button } from "@/components/Button/Button";
-import { Text } from "@/components/Content/Content";
+import { Button } from "@/components/Actions/Button/Button";
+import { Text } from "@/components/Typography/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./Calendar.module.css";
 

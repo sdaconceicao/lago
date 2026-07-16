@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Group } from "react-aria-components/Group";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import { Checkbox } from "@/components/Inputs/Checkbox/Checkbox";
 import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 import { Separator } from "@/components/Separator/Separator";

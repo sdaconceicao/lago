@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Save } from "lucide-react";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import { Tooltip, TooltipTrigger } from "./Tooltip";
 
 const meta: Meta<typeof Tooltip> = {

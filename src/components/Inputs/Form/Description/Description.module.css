@@ -1,0 +1,10 @@
+.fieldDescription {
+  display: block;
+  font: var(--font-size-sm) var(--font-family);
+  margin-top: var(--spacing-1);
+  contain: inline-size;
+
+  [data-invalid] > & {
+    display: none;
+  }
+}

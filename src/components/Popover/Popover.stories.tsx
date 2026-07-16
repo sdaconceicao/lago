@@ -1,8 +1,8 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { HelpCircle } from "lucide-react";
-import { Button } from "@/components/Button/Button";
-import { Heading } from "@/components/Content/Content";
+import { Button } from "@/components/Actions/Button/Button";
 import { DialogTrigger } from "@/components/Dialog/Dialog";
+import { Heading } from "@/components/Typography/index";
 import { Popover } from "./Popover";
 
 const meta: Meta<typeof Popover> = {

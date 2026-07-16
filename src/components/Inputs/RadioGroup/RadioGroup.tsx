@@ -9,7 +9,7 @@ import {
   type ValidationResult,
 } from "react-aria-components/RadioGroup";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./RadioGroup.module.css";
 
@@ -32,7 +32,7 @@ export function RadioGroup({
       {...props}
       className={clsx("react-aria-RadioGroup", styles.radioGroup)}
     >
-      <Label>{label}</Label>
+      <Label isRequired={props.isRequired}>{label}</Label>
       <div className={clsx("radio-items", styles.radioItems)}>{children}</div>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>

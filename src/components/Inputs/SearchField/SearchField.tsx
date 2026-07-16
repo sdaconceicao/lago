@@ -8,9 +8,9 @@ import {
   Input,
   type ValidationResult,
 } from "react-aria-components/SearchField";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/Form";
-import utils from "@/styles/utilities.module.css";
+import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
+import utils from "@/styles/utilities.module.css";
 import styles from "./SearchField.module.css";
 
 export interface SearchFieldProps extends AriaSearchFieldProps {
@@ -36,7 +36,7 @@ export function SearchField({
         props.className
       )}
     >
-      {label && <Label>{label}</Label>}
+      {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <Search size={18} />
       <Input
         placeholder={placeholder}

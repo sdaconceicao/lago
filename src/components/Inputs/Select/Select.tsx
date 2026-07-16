@@ -7,11 +7,16 @@ import {
   type ValidationResult,
 } from "react-aria-components/ComboBox";
 import { Group } from "react-aria-components/Group";
+import {
+  Description,
+  FieldButton,
+  FieldError,
+  Label,
+} from "@/components/Inputs/Form/index";
 import { DropdownListBox } from "@/components/ListBox/ListBox";
 import { Popover } from "@/components/Popover/Popover";
-import { Description, FieldButton, FieldError, Label } from "@/components/Inputs/Form/Form";
-import { SelectInput } from"./BaseComponents/SelectInput";
 import utils from "@/styles/utilities.module.css";
+import { SelectInput } from "./BaseComponents/SelectInput";
 import styles from "./Select.module.css";
 
 export interface SelectProps<T> extends Omit<AriaComboBoxProps<T>, "children"> {
@@ -50,7 +55,7 @@ export function Select<T extends object>({
       items={items}
       className={clsx("react-aria-ComboBox", styles.select)}
     >
-      {label && <Label>{label}</Label>}
+      {label && <Label isRequired={props.isRequired}>{label}</Label>}
       {/* Field, input, and chevron mirror the MultiSelect so the two align. */}
       <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
         <SelectInput placeholder={placeholder} />
@@ -69,6 +74,6 @@ export function Select<T extends object>({
   );
 }
 
-export { SelectInput } from"./BaseComponents/SelectInput";
-export type { SelectInputProps } from"./BaseComponents/SelectInput";
+export { SelectInput } from "./BaseComponents/SelectInput";
+export type { SelectInputProps } from "./BaseComponents/SelectInput";
 export { SelectItem } from "@/components/Inputs/Select/BaseComponents/SelectItem";

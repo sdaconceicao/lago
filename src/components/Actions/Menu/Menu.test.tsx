@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Button } from "@/components/Button/Button";
+import { Button } from "@/components/Actions/Button/Button";
 import { Menu, MenuItem, MenuTrigger, SubmenuTrigger } from "./Menu";
 
 beforeAll(() => {
