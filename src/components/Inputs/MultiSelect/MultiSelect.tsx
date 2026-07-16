@@ -13,9 +13,9 @@ import {
   FieldButton,
   FieldError,
   Label,
-} from "@/components/Inputs/Form/index";
-import { ListBox } from "@/components/ListBox/ListBox";
-import { Popover } from "@/components/Popover/Popover";
+} from "@/components/Inputs/FormComponents/index";
+import { DropdownListBox } from "@/components/Collections/ListBox/ListBox";
+import { Popover } from "@/components/Overlays/Popover/Popover";
 import utils from "@/styles/utilities.module.css";
 import { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
 import { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
@@ -88,9 +88,9 @@ export function MultiSelect<T>({
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
       <Popover hideArrow className={styles.multiSelectPopover}>
-        <ListBox renderEmptyState={() => "No results found."}>
+        <DropdownListBox renderEmptyState={() => "No results found."}>
           {children}
-        </ListBox>
+        </DropdownListBox>
       </Popover>
     </AriaComboBox>
   );

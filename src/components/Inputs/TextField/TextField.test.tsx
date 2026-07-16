@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { TextArea, TextField } from "./TextField";
+import { FieldButton } from "@/components/Inputs/FormComponents/index";
+import { TextField } from "./TextField";
 
 describe("TextField", () => {
   it("renders an input with an accessible label", () => {
@@ -65,29 +66,52 @@ describe("TextField", () => {
 
     expect(ref.current).toBe(screen.getByRole("textbox"));
   });
-});
 
-describe("TextArea", () => {
-  it("renders a textarea with an accessible label", () => {
-    render(<TextArea label="Bio" />);
+  describe("with a trailing button", () => {
+    it("renders the button alongside the input", () => {
+      render(
+        <TextField
+          label="Search"
+          button={<FieldButton aria-label="Clear">x</FieldButton>}
+        />
+      );
 
-    const textarea = screen.getByRole("textbox", { name: "Bio" });
-    expect(textarea.tagName).toBe("TEXTAREA");
-  });
+      expect(
+        screen.getByRole("textbox", { name: "Search" })
+      ).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument();
+    });
 
-  it("calls onChange as the user types", async () => {
-    const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(<TextArea label="Bio" onChange={onChange} />);
+    it("presses the trailing button", async () => {
+      const user = userEvent.setup();
+      const onPress = vi.fn();
+      render(
+        <TextField
+          label="Search"
+          button={
+            <FieldButton aria-label="Clear" onPress={onPress}>
+              x
+            </FieldButton>
+          }
+        />
+      );
 
-    await user.type(screen.getByRole("textbox"), "hi");
+      await user.click(screen.getByRole("button", { name: "Clear" }));
 
-    expect(onChange).toHaveBeenLastCalledWith("hi");
-  });
+      expect(onPress).toHaveBeenCalledTimes(1);
+    });
 
-  it("shows the error message when invalid", () => {
-    render(<TextArea label="Bio" isInvalid errorMessage="Too long" />);
+    it("still forwards inputRef to the input element", () => {
+      const ref = { current: null as HTMLInputElement | null };
+      render(
+        <TextField
+          label="Search"
+          inputRef={ref}
+          button={<FieldButton aria-label="Clear">x</FieldButton>}
+        />
+      );
 
-    expect(screen.getByText("Too long")).toBeInTheDocument();
+      expect(ref.current).toBe(screen.getByRole("textbox"));
+    });
   });
 });

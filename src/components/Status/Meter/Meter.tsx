@@ -5,7 +5,7 @@ import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
 } from "react-aria-components/Meter";
-import { Label } from "@/components/Inputs/Form/index";
+import { Label } from "@/components/Inputs/FormComponents/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./Meter.module.css";
 

@@ -7,7 +7,10 @@ import {
   type SwitchFieldProps,
   type ValidationResult,
 } from "react-aria-components/Switch";
-import { Description, FieldError } from "@/components/Inputs/Form/index";
+import {
+  Description,
+  FieldError,
+} from "@/components/Inputs/FormComponents/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./Switch.module.css";
 

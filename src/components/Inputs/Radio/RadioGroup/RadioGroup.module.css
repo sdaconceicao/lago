@@ -1,0 +1,21 @@
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  color: var(--text-color);
+  gap: var(--spacing-1);
+
+  .radioItems {
+    display: flex;
+    gap: var(--spacing-3);
+  }
+
+  &[data-orientation="vertical"] .radioItems {
+    flex-direction: column;
+  }
+
+  &[data-orientation="horizontal"] .radioItems {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

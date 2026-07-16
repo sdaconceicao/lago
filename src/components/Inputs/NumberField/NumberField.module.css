@@ -29,7 +29,11 @@
     }
   }
 
+  /* Steppers fill the field height so they align flush with the input top and
+     bottom, matching the 48px sizing shared with TextField/Select/Date. */
   :global(.react-aria-Button) {
+    height: auto;
+    align-self: stretch;
     padding: 0;
     display: inline-flex;
     align-items: center;

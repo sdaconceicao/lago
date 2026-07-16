@@ -8,7 +8,7 @@ import {
   SliderThumb,
   SliderTrack,
 } from "react-aria-components/Slider";
-import { Label } from "@/components/Inputs/Form/index";
+import { Label } from "@/components/Inputs/FormComponents/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./Slider.module.css";
 

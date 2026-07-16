@@ -19,8 +19,8 @@ import {
   FieldButton,
   FieldError,
   Label,
-} from "@/components/Inputs/Form/index";
-import { Popover } from "@/components/Popover/Popover";
+} from "@/components/Inputs/FormComponents/index";
+import { Popover } from "@/components/Overlays/Popover/Popover";
 import utils from "@/styles/utilities.module.css";
 import styles from "./DatePicker.module.css";
 

@@ -17,7 +17,7 @@ import {
   Separator,
   type SubmenuTriggerProps,
 } from "react-aria-components/Menu";
-import { Popover } from "@/components/Popover/Popover";
+import { Popover } from "@/components/Overlays/Popover/Popover";
 import { Text } from "@/components/Typography/index";
 import styles from "./Menu.module.css";
 

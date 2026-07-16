@@ -43,7 +43,6 @@
     position: absolute;
     top: var(--spacing-2);
     right: var(--spacing-2);
-    margin-left: 0;
     height: var(--spacing-8);
   }
 }

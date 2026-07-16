@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { Button } from "@/components/Actions/Button/Button";
 import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 import { ToggleButtonGroup } from "@/components/Inputs/Toggle/ToggleButtonGroup/ToggleButtonGroup";
-import { Separator } from "@/components/Separator/Separator";
+import { Separator } from "@/components/Layout/Separator/Separator";
 import { Toolbar } from "./Toolbar";
 
 describe("Toolbar", () => {

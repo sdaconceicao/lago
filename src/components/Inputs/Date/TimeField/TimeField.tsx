@@ -10,7 +10,11 @@ import {
   DateInput,
   DateSegment,
 } from "@/components/Inputs/Date/DateField/DateField";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
+import {
+  Description,
+  FieldError,
+  Label,
+} from "@/components/Inputs/FormComponents/index";
 import styles from "./TimeField.module.css";
 
 export interface TimeFieldProps<

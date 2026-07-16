@@ -12,9 +12,9 @@ import {
   FieldButton,
   FieldError,
   Label,
-} from "@/components/Inputs/Form/index";
-import { DropdownListBox } from "@/components/ListBox/ListBox";
-import { Popover } from "@/components/Popover/Popover";
+} from "@/components/Inputs/FormComponents/index";
+import { DropdownListBox } from "@/components/Collections/ListBox/ListBox";
+import { Popover } from "@/components/Overlays/Popover/Popover";
 import utils from "@/styles/utilities.module.css";
 import { SelectInput } from "./BaseComponents/SelectInput";
 import styles from "./Select.module.css";

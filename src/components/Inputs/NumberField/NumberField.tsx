@@ -9,7 +9,11 @@ import {
   type ValidationResult,
 } from "react-aria-components/NumberField";
 import { Button } from "@/components/Actions/Button/Button";
-import { Description, FieldError, Label } from "@/components/Inputs/Form/index";
+import {
+  Description,
+  FieldError,
+  Label,
+} from "@/components/Inputs/FormComponents/index";
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
 import utils from "@/styles/utilities.module.css";
 import styles from "./NumberField.module.css";

@@ -30,7 +30,6 @@
   }
 
   :global(.field-Button) {
-    margin-left: 0;
     height: calc(100% - var(--spacing-4));
   }
 
