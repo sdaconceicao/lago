@@ -15,7 +15,7 @@ import {
   type TreeLoadMoreItemProps,
   type TreeProps,
 } from "react-aria-components/Tree";
-import { Checkbox } from "../Checkbox/Checkbox";
+import { Checkbox } from "../Inputs/Checkbox/Checkbox";
 import { ProgressCircle } from "../ProgressCircle/ProgressCircle";
 import styles from "./Tree.module.css";
 

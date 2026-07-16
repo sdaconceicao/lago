@@ -11,7 +11,7 @@ import {
   type TagProps,
 } from "react-aria-components/TagGroup";
 import { Text } from "../Content/Content";
-import { Description, Label } from "../Form/Form";
+import { Description, Label } from "../Inputs/Form/Form";
 import utils from "../../styles/utilities.module.css";
 import styles from "./TagGroup.module.css";
 

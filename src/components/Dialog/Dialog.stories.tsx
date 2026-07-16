@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from "@storybook/react";
 import { CheckCircle2, Trash2, UserPlus } from "lucide-react";
 import { Button } from "../Button/Button";
 import { Dialog } from "../Dialog/Dialog";
-import { TextField } from "../TextField/TextField";
+import { TextField } from "../Inputs/TextField/TextField";
 import styles from "./Dialog.module.css";
 
 const meta: Meta<typeof Dialog> = {

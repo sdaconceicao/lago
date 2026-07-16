@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from "@storybook/react";
 import { Button } from "../Button/Button";
 import { CommandPalette } from "../CommandPalette/CommandPalette";
 import { DialogTrigger } from "../Dialog/Dialog";
-import { MenuItem } from "../Menu/Menu";
+import { MenuItem } from "../Navigation/Menu/Menu";
 
 const meta: Meta<typeof CommandPalette> = {
   component: CommandPalette,

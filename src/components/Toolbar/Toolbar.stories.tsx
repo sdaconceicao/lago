@@ -1,9 +1,9 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Group } from "react-aria-components/Group";
 import { Button } from "../Button/Button";
-import { Checkbox } from "../Checkbox/Checkbox";
+import { Checkbox } from "../Inputs/Checkbox/Checkbox";
+import { ToggleButton } from "../Inputs/Toggle/ToggleButton/ToggleButton";
 import { Separator } from "../Separator/Separator";
-import { ToggleButton } from "../Toggle/ToggleButton/ToggleButton";
 import { Toolbar } from "../Toolbar/Toolbar";
 
 const meta: Meta<typeof Toolbar> = {

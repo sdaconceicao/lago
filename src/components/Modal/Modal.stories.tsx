@@ -2,8 +2,8 @@ import type { Meta, StoryFn } from "@storybook/react";
 import { Button } from "../Button/Button";
 import { Heading } from "../Content/Content";
 import { Dialog, DialogTrigger } from "../Dialog/Dialog";
+import { TextField } from "../Inputs/TextField/TextField";
 import { Modal } from "../Modal/Modal";
-import { TextField } from "../TextField/TextField";
 
 const meta: Meta<typeof Modal> = {
   component: Modal,

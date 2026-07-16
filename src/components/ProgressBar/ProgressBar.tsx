@@ -5,7 +5,7 @@ import {
   ProgressBar as AriaProgressBar,
   type ProgressBarProps as AriaProgressBarProps,
 } from "react-aria-components/ProgressBar";
-import { Label } from "../Form/Form";
+import { Label } from "../Inputs/Form/Form";
 import utils from "../../styles/utilities.module.css";
 import styles from "./ProgressBar.module.css";
 

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { Group, type GroupProps } from "react-aria-components/Group";
 import { InputContext } from "react-aria-components/Input";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { Label } from "../Form/Form";
+import { Label } from "../Inputs/Form/Form";
 import utils from "../../styles/utilities.module.css";
 import styles from "./InputGroup.module.css";
 
