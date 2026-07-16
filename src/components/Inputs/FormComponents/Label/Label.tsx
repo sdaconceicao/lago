@@ -1,8 +1,8 @@
 "use client";
 import clsx from "clsx";
 import {
-  type LabelProps as RACLabelProps,
   Label as RACLabel,
+  type LabelProps as RACLabelProps,
 } from "react-aria-components/Label";
 import styles from "./Label.module.css";
 

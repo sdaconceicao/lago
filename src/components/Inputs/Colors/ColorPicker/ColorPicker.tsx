@@ -5,12 +5,12 @@ import {
   ColorPicker as AriaColorPicker,
   type ColorPickerProps as AriaColorPickerProps,
 } from "react-aria-components/ColorPicker";
-import { DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
-import { Popover } from "@/components/Overlays/Popover/Popover";
 import { ColorArea } from "@/components/Inputs/Colors/ColorArea/ColorArea";
 import { ColorField } from "@/components/Inputs/Colors/ColorField/ColorField";
 import { ColorSlider } from "@/components/Inputs/Colors/ColorSlider/ColorSlider";
 import { ColorSwatch } from "@/components/Inputs/Colors/ColorSwatch/ColorSwatch";
+import { DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
+import { Popover } from "@/components/Overlays/Popover/Popover";
 import styles from "./ColorPicker.module.css";
 
 export interface ColorPickerProps extends Omit<

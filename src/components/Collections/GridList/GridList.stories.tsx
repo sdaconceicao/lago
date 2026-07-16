@@ -1,5 +1,11 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { GridList, GridListItem, GridListHeader, GridListSection, Text } from "./GridList";
+import {
+  GridList,
+  GridListHeader,
+  GridListItem,
+  GridListSection,
+  Text,
+} from "./GridList";
 
 const meta: Meta<typeof GridList> = {
   component: GridList,

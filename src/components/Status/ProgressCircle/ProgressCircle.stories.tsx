@@ -29,7 +29,9 @@ export const Indeterminate: Story = (args) => (
   <ProgressCircle {...args} aria-label="Loading…" />
 );
 
-export const CustomSize: Story = (args) => <ProgressCircle {...args} size={48} />;
+export const CustomSize: Story = (args) => (
+  <ProgressCircle {...args} size={48} />
+);
 
 CustomSize.args = {
   "aria-label": "Loading…",

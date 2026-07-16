@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Button } from "@/components/Actions/Button/Button";
-import { Dialog, DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
 import { TextField } from "@/components/Inputs/TextField/TextField";
+import { Dialog, DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
 import { Heading } from "@/components/Typography/index";
 import { Modal } from "./Modal";
 

@@ -7,15 +7,15 @@ import {
   Dialog as RACDialog,
   DialogTrigger as RACDialogTrigger,
 } from "react-aria-components/Dialog";
-import { DialogBody, type DialogBodyProps } from"./BaseComponents/DialogBody";
+import { DialogBody, type DialogBodyProps } from "./BaseComponents/DialogBody";
 import {
   DialogFooter,
   type DialogFooterProps,
-} from"./BaseComponents/DialogFooter";
+} from "./BaseComponents/DialogFooter";
 import {
   DialogHeader,
   type DialogHeaderProps,
-} from"./BaseComponents/DialogHeader";
+} from "./BaseComponents/DialogHeader";
 import styles from "./Dialog.module.css";
 
 export function Dialog(props: DialogProps) {

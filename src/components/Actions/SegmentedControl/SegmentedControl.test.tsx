@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { SegmentedControl, SegmentedControlItem } from "./SegmentedControl";
 import utils from "@/styles/utilities.module.css";
+import { SegmentedControl, SegmentedControlItem } from "./SegmentedControl";
 
 const renderControl = (
   props: React.ComponentProps<typeof SegmentedControl> = {}
