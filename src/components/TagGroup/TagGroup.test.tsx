@@ -104,6 +104,40 @@ describe("TagGroup", () => {
     expect(screen.getByText("No flavors.")).toBeInTheDocument();
   });
 
+  it("renders the sm size by default", () => {
+    renderTagGroup();
+
+    const grid = screen.getByRole("grid", { name: "Ice cream flavor" });
+    expect(grid.closest("[data-size]")).toHaveAttribute("data-size", "sm");
+  });
+
+  it("renders the md size when specified", () => {
+    renderTagGroup({ size: "md" });
+
+    const grid = screen.getByRole("grid", { name: "Ice cream flavor" });
+    expect(grid.closest("[data-size]")).toHaveAttribute("data-size", "md");
+  });
+
+  it("renders the default variant by default", () => {
+    renderTagGroup();
+
+    const grid = screen.getByRole("grid", { name: "Ice cream flavor" });
+    expect(grid.closest("[data-variant]")).toHaveAttribute(
+      "data-variant",
+      "default"
+    );
+  });
+
+  it("renders the round variant when specified", () => {
+    renderTagGroup({ variant: "round" });
+
+    const grid = screen.getByRole("grid", { name: "Ice cream flavor" });
+    expect(grid.closest("[data-variant]")).toHaveAttribute(
+      "data-variant",
+      "round"
+    );
+  });
+
   it("renders description and error message", () => {
     renderTagGroup({
       description: "Your favorite flavors",

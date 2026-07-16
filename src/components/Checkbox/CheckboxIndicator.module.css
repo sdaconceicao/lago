@@ -1,0 +1,41 @@
+.indicator {
+  --checkmark-color: var(--highlight-foreground);
+
+  width: calc(var(--spacing) * 4.5);
+  height: calc(var(--spacing) * 4.5);
+  box-sizing: border-box;
+  border-radius: var(--radius-sm);
+  transition: all 200ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+
+  svg {
+    width: calc(100% - var(--spacing-2));
+    height: calc(100% - var(--spacing-2));
+    fill: none;
+    stroke: var(--checkmark-color);
+    stroke-width: 3px;
+    stroke-dasharray: 22px;
+    stroke-dashoffset: 66;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: all 200ms;
+  }
+
+  /* Reveal the mark when the surrounding control is selected/indeterminate */
+  :where([data-selected], [data-indeterminate]) & svg {
+    stroke-dashoffset: 44;
+  }
+
+  :where([data-indeterminate]) & svg {
+    stroke: none;
+    fill: var(--checkmark-color);
+  }
+
+  :where([data-disabled]) & {
+    --checkmark-color: var(--text-color-disabled);
+  }
+}

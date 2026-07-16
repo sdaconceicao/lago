@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Select, SelectItem } from "./Select";
 
@@ -25,23 +25,41 @@ const renderSelect = (props = {}) =>
   );
 
 describe("Select", () => {
-  it("renders a labeled trigger button with a placeholder value", () => {
+  it("renders a labeled combobox input", () => {
     renderSelect();
 
-    const trigger = screen.getByRole("button", { name: /Ice cream flavor/i });
-    expect(trigger).toBeInTheDocument();
-    expect(trigger).toHaveTextContent("Select an item");
+    expect(
+      screen.getByRole("combobox", { name: "Ice cream flavor" })
+    ).toBeInTheDocument();
   });
 
-  it("opens a listbox with all options when the trigger is clicked", async () => {
+  it("renders the default placeholder on the input", () => {
+    renderSelect();
+
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "placeholder",
+      "Select an item"
+    );
+  });
+
+  it("renders a custom placeholder", () => {
+    renderSelect({ placeholder: "Choose a flavor" });
+
+    expect(screen.getByRole("combobox")).toHaveAttribute(
+      "placeholder",
+      "Choose a flavor"
+    );
+  });
+
+  it("opens the listbox with all options when the trigger is clicked", async () => {
     const user = userEvent.setup();
     renderSelect();
 
     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole("button", { name: /Ice cream flavor/i }));
+    await user.click(screen.getByRole("combobox"));
 
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    expect(await screen.findByRole("listbox")).toBeInTheDocument();
     const options = screen.getAllByRole("option");
     expect(options).toHaveLength(4);
     expect(options.map((o) => o.textContent)).toEqual([
@@ -52,28 +70,71 @@ describe("Select", () => {
     ]);
   });
 
-  it("selects an option, closes the listbox and calls onSelectionChange", async () => {
+  it("filters options as the user types", async () => {
+    const user = userEvent.setup();
+    renderSelect();
+
+    await user.type(screen.getByRole("combobox"), "str");
+
+    await waitFor(() => {
+      const options = screen.getAllByRole("option");
+      expect(options).toHaveLength(1);
+      expect(options[0]).toHaveTextContent("Strawberry");
+    });
+  });
+
+  it("shows an empty state when no options match", async () => {
+    const user = userEvent.setup();
+    renderSelect();
+
+    await user.type(screen.getByRole("combobox"), "zzz");
+
+    expect(await screen.findByText("No results found.")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("option", { name: "Chocolate" })
+    ).not.toBeInTheDocument();
+  });
+
+  it("selects an option, fills the input, closes and calls onSelectionChange", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
     renderSelect({ onSelectionChange });
 
-    await user.click(screen.getByRole("button", { name: /Ice cream flavor/i }));
-    await user.click(screen.getByRole("option", { name: "Mint" }));
+    await user.click(screen.getByRole("combobox"));
+    await user.click(await screen.findByRole("option", { name: "Mint" }));
 
     expect(onSelectionChange).toHaveBeenCalledTimes(1);
     expect(onSelectionChange).toHaveBeenCalledWith("mint");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /Ice cream flavor/i })
-    ).toHaveTextContent("Mint");
+    expect(screen.getByRole("combobox")).toHaveValue("Mint");
+    await waitFor(() => {
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
   });
 
   it("renders the selected value for defaultSelectedKey", () => {
     renderSelect({ defaultSelectedKey: "strawberry" });
 
+    expect(screen.getByRole("combobox")).toHaveValue("Strawberry");
+  });
+
+  it("marks the selected option with a check", async () => {
+    const user = userEvent.setup();
+    renderSelect();
+
+    await user.click(screen.getByRole("combobox"));
+    await user.click(await screen.findByRole("option", { name: "Mint" }));
+
+    // Reopen via the chevron toggle so all options show.
+    await user.click(screen.getByRole("button"));
+    const mint = await screen.findByRole("option", { name: "Mint" });
+    expect(mint).toHaveAttribute("aria-selected", "true");
+    // The dropdown renders in a portal, so query the option element directly.
+    expect(mint.querySelector(".lucide-check")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /Ice cream flavor/i })
-    ).toHaveTextContent("Strawberry");
+      screen
+        .getByRole("option", { name: "Chocolate" })
+        .querySelector(".lucide-check")
+    ).not.toBeInTheDocument();
   });
 
   it("marks disabled options and prevents selecting them", async () => {
@@ -81,14 +142,13 @@ describe("Select", () => {
     const onSelectionChange = vi.fn();
     renderSelect({ disabledKeys: ["mint"], onSelectionChange });
 
-    await user.click(screen.getByRole("button", { name: /Ice cream flavor/i }));
+    await user.click(screen.getByRole("combobox"));
 
-    const mint = screen.getByRole("option", { name: "Mint" });
+    const mint = await screen.findByRole("option", { name: "Mint" });
     expect(mint).toHaveAttribute("aria-disabled", "true");
 
     await user.click(mint);
     expect(onSelectionChange).not.toHaveBeenCalled();
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
   });
 
   it("supports keyboard selection", async () => {
@@ -97,15 +157,18 @@ describe("Select", () => {
     renderSelect({ onSelectionChange });
 
     await user.tab();
-    await user.keyboard("{Enter}");
-    expect(screen.getByRole("listbox")).toBeInTheDocument();
+    expect(await screen.findByRole("listbox")).toBeInTheDocument();
 
-    // Opening with the keyboard focuses the first option; ArrowDown moves
-    // to the second one.
     await user.keyboard("{ArrowDown}{Enter}");
 
-    expect(onSelectionChange).toHaveBeenCalledWith("mint");
-    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    expect(onSelectionChange).toHaveBeenCalledWith("chocolate");
+    expect(screen.getByRole("combobox")).toHaveValue("Chocolate");
+  });
+
+  it("supports a disabled state", () => {
+    renderSelect({ isDisabled: true });
+
+    expect(screen.getByRole("combobox")).toBeDisabled();
   });
 
   it("renders a description when provided", () => {

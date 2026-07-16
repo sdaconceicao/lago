@@ -1,0 +1,10 @@
+/* Collapse the wrappers so tags flow inline with the input and wrap
+   together inside the field. */
+.tags {
+  display: contents;
+
+  :global(.react-aria-TagGroup),
+  :global(.react-aria-TagList) {
+    display: contents;
+  }
+}

@@ -1,5 +1,5 @@
-/* Always fill the container; the parent decides the width (matches MultiSelect). */
-.select {
+/* Always fill the container; the parent decides the width. */
+.multiSelect {
   display: flex;
   flex-direction: column;
   color: var(--text-color);
@@ -7,16 +7,21 @@
   max-width: 100%;
 }
 
-/* Field, input, and chevron are identical to the MultiSelect so the two
-   controls line up exactly. */
+/* Field container styled like an input; tags/text, search input, and toggle
+   share one inset surface so the whole group reads as a single control.
+   Sizing and padding match the DatePicker field group. */
 .field {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--spacing-2);
   box-sizing: border-box;
   position: relative;
   width: 100%;
   min-height: calc(var(--spacing-10) + var(--spacing-2));
+  /* Left inset mirrors the toggle button's distance from the right edge;
+     the extra right padding reserves room for the absolutely positioned
+     toggle button. */
   padding: var(--spacing-2) calc(var(--spacing-10) + var(--spacing-2))
     var(--spacing-2) var(--spacing-2);
   border-radius: var(--radius);
@@ -33,7 +38,7 @@
     color: var(--text-color-disabled);
   }
 
-  /* Pin the chevron toggle to the top-right corner */
+  /* Pin the toggle to the top-right corner so it stays put when tags wrap */
   :global(.field-Button) {
     position: absolute;
     top: var(--spacing-2);
@@ -43,7 +48,22 @@
   }
 }
 
-.selectPopover[data-trigger="ComboBox"] {
+.textValue {
+  display: flex;
+  align-items: center;
+  min-height: var(--spacing-8);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 0 0 var(--spacing-2);
+
+  &[data-placeholder] {
+    display: none;
+  }
+}
+
+.multiSelectPopover[data-trigger="ComboBox"] {
   width: var(--trigger-width);
   padding: 0;
 }
