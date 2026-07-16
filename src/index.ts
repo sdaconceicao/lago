@@ -15,7 +15,6 @@ export * from "./components/Colors/ColorSwatch/ColorSwatch";
 export * from "./components/Colors/ColorSwatchPicker/ColorSwatchPicker";
 export * from "./components/Colors/ColorThumb/ColorThumb";
 export * from "./components/Colors/ColorWheel/ColorWheel";
-export * from "./components/ComboBox/ComboBox";
 export * from "./components/CommandPalette/CommandPalette";
 export * from "./components/Content/Content";
 export * from "./components/Date/DateField/DateField";
