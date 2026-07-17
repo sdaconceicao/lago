@@ -1,72 +1,27 @@
 .searchField {
-  display: grid;
-  grid-template-areas:
-    "label label label"
-    "icon input button"
-    "help help  help";
-  grid-template-columns: 0px 1fr auto;
-  align-items: center;
-  width: auto;
+  display: flex;
+  flex-direction: column;
   color: var(--text-color);
+}
 
-  :global(.lucide-search) {
-    grid-area: icon;
-    z-index: 2;
-    margin-inline-start: var(--spacing-2);
-  }
-
-  &[data-disabled] :global(.lucide-search) {
-    color: var(--text-color-disabled);
-  }
-
-  :global(.react-aria-Label) {
-    grid-area: label;
-  }
-
-  :global(.react-aria-Input) {
-    grid-area: input;
-    width: 100%;
-    border-radius: 9999px;
-    padding: 0 var(--spacing-8);
-
-    &::-webkit-search-cancel-button,
-    &::-webkit-search-decoration {
-      -webkit-appearance: none;
-    }
-  }
-
-  .clearButton {
-    all: unset;
-    grid-area: button;
-    width: var(--spacing-4);
-    height: var(--spacing-4);
-    border-radius: 9999px;
-    margin-left: calc(-1 * var(--spacing-6));
-    text-align: center;
-    background: var(--gray-700);
-    color: var(--gray-50);
-    border: none;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-
-    &[data-pressed] {
-      background: var(--gray-800);
-    }
-
-    &[data-disabled] {
-      background: var(--text-color-disabled);
-    }
-  }
-
-  &[data-empty] .clearButton {
+/* The field provides its own clear button, so hide every native affordance
+   the browser adds to type="search" inputs (WebKit shows a cancel button and
+   decorations). -webkit-appearance alone is ignored by some Safari versions,
+   so also force display:none. */
+.input {
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
     display: none;
   }
+}
 
-  :global(.react-aria-FieldError),
-  :global([slot="description"]) {
-    grid-area: help;
-  }
+/* Suggestions dropdown hugs the field and matches its width (same as the
+   Select and MultiSelect popovers). */
+.searchPopover[data-trigger="ComboBox"] {
+  width: var(--trigger-width);
+  padding: 0;
 }
