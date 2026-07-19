@@ -1,29 +1,27 @@
+import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
+import type { SearchSuggestion } from "../SearchField/SearchField.utils";
 import {
-  SearchField,
-  type SearchFieldProps,
-  type SearchSuggestion,
-} from "./SearchField";
+  SearchFieldWithSuggestions,
+  type SearchFieldWithSuggestionsProps,
+} from "./SearchFieldWithSuggestions";
 
-const meta: Meta<typeof SearchField> = {
-  component: SearchField,
+const meta: Meta<typeof SearchFieldWithSuggestions> = {
+  component: SearchFieldWithSuggestions,
   args: {
     onSearch: fn(),
     onSuggestionSelect: fn(),
     onChange: fn(),
     onClear: fn(),
     onSubmit: fn(),
-    onKeyDown: fn(),
-    onFocus: fn(),
-    onBlur: fn(),
   },
   parameters: {
     layout: "centered",
     docs: {
       description: {
         component:
-          "A search input styled to match the TextField, with a trailing search button and a clear button that appears while the field has a value. Typing fires a debounced onSearch (configurable via debounceDelay), and suggestions — static or loaded from a promise-based API — are offered in a dropdown and selectable via keyboard or pointer.",
+          "A SearchField with an attached suggestions dropdown. It composes the plain SearchField and layers a suggestions popover on top using react-aria's Autocomplete — the same primitive the CommandPalette uses. Suggestions are either static (via the suggestions prop, filtered client-side) or loaded from a promise (via loadSuggestions). Picking one fills the field and fires onSuggestionSelect; the same suggestion can be picked again after clearing.",
       },
     },
   },
@@ -32,7 +30,7 @@ const meta: Meta<typeof SearchField> = {
 
 export default meta;
 
-type Story = StoryObj<typeof SearchField>;
+type Story = StoryObj<typeof SearchFieldWithSuggestions>;
 
 const FRUITS: SearchSuggestion[] = [
   { id: "apple", label: "Apple" },
@@ -63,16 +61,9 @@ const searchFruits = (query: string): Promise<SearchSuggestion[]> =>
   );
 
 export const Default: Story = {
-  args: {
-    label: "Search",
-    placeholder: "Search documents",
-  },
-};
-
-export const WithSuggestions: Story = {
   render: (args) => (
     <div style={{ width: 320 }}>
-      <SearchField {...args} />
+      <SearchFieldWithSuggestions {...args} />
     </div>
   ),
   args: {
@@ -90,8 +81,29 @@ export const WithSuggestions: Story = {
   },
 };
 
-const AsyncSuggestionsDemo = (args: SearchFieldProps) => {
-  return <SearchField {...args} loadSuggestions={searchFruits} />;
+const AsyncSuggestionsDemo = (args: SearchFieldWithSuggestionsProps) => {
+  const [selected, setSelected] = useState<SearchSuggestion | null>(null);
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem",
+        width: 320,
+      }}
+    >
+      <SearchFieldWithSuggestions
+        {...args}
+        loadSuggestions={searchFruits}
+        onSuggestionSelect={setSelected}
+      />
+      <span>
+        {selected
+          ? `Selected: ${selected.label} (id: ${selected.id})`
+          : "Nothing selected yet."}
+      </span>
+    </div>
+  );
 };
 
 export const WithAsyncSuggestions: Story = {
@@ -122,20 +134,28 @@ export const States: Story = {
         width: 320,
       }}
     >
-      <SearchField
+      <SearchFieldWithSuggestions
         label="Default"
-        placeholder="Search documents"
-        description="Searches every folder you can access."
+        placeholder="Search fruit"
+        suggestions={FRUITS}
+        description="Pick from the list or type your own query."
       />
-      <SearchField label="Required" placeholder="Search documents" isRequired />
-      <SearchField
+      <SearchFieldWithSuggestions
+        label="Required"
+        placeholder="Search fruit"
+        suggestions={FRUITS}
+        isRequired
+      />
+      <SearchFieldWithSuggestions
         label="Disabled"
-        placeholder="Search documents"
-        defaultValue="quarterly report"
+        placeholder="Search fruit"
+        suggestions={FRUITS}
+        defaultValue="Banana"
         isDisabled
       />
-      <SearchField
+      <SearchFieldWithSuggestions
         label="Invalid"
+        suggestions={FRUITS}
         defaultValue="!!!"
         isInvalid
         errorMessage="Queries can only contain letters and numbers."
@@ -146,7 +166,7 @@ export const States: Story = {
     docs: {
       description: {
         story:
-          "SearchField supports the shared field states: a description below the field, a required label marker, a disabled field (input and buttons), and an invalid state with an error message.",
+          "SearchFieldWithSuggestions supports the shared field states: a description below the field, a required label marker, a disabled field, and an invalid state with an error message.",
       },
     },
   },

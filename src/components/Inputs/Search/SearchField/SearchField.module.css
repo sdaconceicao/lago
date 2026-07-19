@@ -20,8 +20,14 @@
 }
 
 /* Suggestions dropdown hugs the field and matches its width (same as the
-   Select and MultiSelect popovers). */
-.searchPopover[data-trigger="ComboBox"] {
+   Select and MultiSelect popovers). react-aria sets --trigger-width from the
+   anchored field group. */
+.searchPopover {
   width: var(--trigger-width);
   padding: 0;
+}
+
+/* Suggestion results are clickable, so give them a pointer cursor. */
+.searchPopover [role="option"] {
+  cursor: pointer;
 }

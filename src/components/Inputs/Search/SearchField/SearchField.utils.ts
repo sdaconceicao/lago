@@ -1,5 +1,5 @@
 /** Default debounce, in milliseconds, applied to search and suggestion loading. */
-export const DEFAULT_DEBOUNCE_DELAY = 300;
+export const DEFAULT_DEBOUNCE_DELAY = 500;
 
 /** A selectable entry shown in the SearchField suggestions dropdown. */
 export interface SearchSuggestion {

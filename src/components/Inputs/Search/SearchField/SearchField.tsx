@@ -1,4 +1,5 @@
 "use client";
+import type React from "react";
 import { useCallback, useRef, useState } from "react";
 import clsx from "clsx";
 import { Search, X } from "lucide-react";
@@ -8,6 +9,10 @@ import {
   Input,
 } from "react-aria-components/SearchField";
 import {
+  type SearchFieldProps as AriaSearchFieldProps,
+  type ValidationResult,
+} from "react-aria-components/SearchField";
+import {
   Description,
   FieldButton,
   FieldError,
@@ -15,13 +20,31 @@ import {
 } from "@/components/Inputs/FormComponents/index";
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
 import utils from "@/styles/utilities.module.css";
-import { useSearchSuggestions } from "../SearchField.hooks";
-import type { SearchFieldProps } from "../SearchField.types";
-import { DEFAULT_DEBOUNCE_DELAY } from "../SearchField.utils";
-import styles from "../SearchField.module.css";
+import { useSearchSuggestions } from "./SearchField.hooks";
+import { DEFAULT_DEBOUNCE_DELAY } from "./SearchField.utils";
+import styles from "./SearchField.module.css";
+
+export interface SearchFieldProps extends AriaSearchFieldProps {
+  /** Accessible label rendered above the field. */
+  label?: string;
+  /** Helper text rendered below the field. */
+  description?: string;
+  /** Error message shown when the field is invalid. Also accepts a function of the validation result. */
+  errorMessage?: string | ((validation: ValidationResult) => string);
+  /** Placeholder text shown while the field is empty. */
+  placeholder?: string;
+  /** Called with the query after the user stops typing for `debounceDelay` milliseconds. */
+  onSearch?: (value: string) => void;
+  /** Milliseconds to wait after the last keystroke before `onSearch` fires. Defaults to 300. */
+  debounceDelay?: number;
+  /** Ref to the inset field group. Used by SearchFieldWithSuggestions to anchor its dropdown. */
+  groupRef?: React.Ref<HTMLDivElement>;
+  /** Capture-phase key handler on the field group. Used by SearchFieldWithSuggestions to arbitrate Enter/Escape before the field's own handlers. */
+  onKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
+}
 
 // The dropdown-less search field. Built on the react-aria SearchField
-export function PlainSearchField({
+export function SearchField({
   label,
   description,
   errorMessage,
@@ -30,9 +53,8 @@ export function PlainSearchField({
   onSubmit,
   onSearch,
   debounceDelay = DEFAULT_DEBOUNCE_DELAY,
-  suggestions: _suggestions,
-  loadSuggestions: _loadSuggestions,
-  onSuggestionSelect: _onSuggestionSelect,
+  groupRef,
+  onKeyDownCapture,
   ...props
 }: SearchFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -71,6 +93,8 @@ export function PlainSearchField({
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <Group
+        ref={groupRef}
+        onKeyDownCapture={onKeyDownCapture}
         isDisabled={props.isDisabled}
         isInvalid={props.isInvalid}
         className={clsx("react-aria-Group", textFieldStyles.field, utils.inset)}
