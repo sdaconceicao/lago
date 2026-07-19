@@ -1,8 +1,15 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { DateField } from "./DateField";
 
 const meta: Meta<typeof DateField> = {
   component: DateField,
+  args: {
+    onChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

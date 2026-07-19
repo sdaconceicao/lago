@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import {
   Disclosure,
   DisclosureHeader,
@@ -8,6 +9,9 @@ import { DisclosureGroup } from "./DisclosureGroup";
 
 const meta: Meta<typeof DisclosureGroup> = {
   component: DisclosureGroup,
+  args: {
+    onExpandedChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

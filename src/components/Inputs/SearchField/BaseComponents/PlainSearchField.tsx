@@ -20,11 +20,7 @@ import type { SearchFieldProps } from "../SearchField.types";
 import { DEFAULT_DEBOUNCE_DELAY } from "../SearchField.utils";
 import styles from "../SearchField.module.css";
 
-/**
- * The dropdown-less search field. Built on the react-aria SearchField so the
- * input keeps the searchbox role, Enter submits, Escape clears, and it wires
- * up when nested in an Autocomplete (e.g. the CommandPalette).
- */
+// The dropdown-less search field. Built on the react-aria SearchField
 export function PlainSearchField({
   label,
   description,
@@ -42,9 +38,7 @@ export function PlainSearchField({
   const inputRef = useRef<HTMLInputElement>(null);
   const { search } = useSearchSuggestions({ onSearch, debounceDelay });
 
-  // Whether the field currently holds text. Drives the clear button so it
-  // renders only when there is something to clear, in every browser (rather
-  // than leaning on a CSS [data-empty] rule).
+  // Used to avoid showing the clear button when the field is empty, fixing a bug that arose from relying on a CSS [data-empty] rule.
   const [uncontrolledHasText, setUncontrolledHasText] = useState(
     Boolean(props.defaultValue)
   );
@@ -76,8 +70,6 @@ export function PlainSearchField({
       )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
-      {/* The Group is the inset field surface shared by the input and trailing
-          buttons, mirroring the TextField, Select, and DatePicker fields. */}
       <Group
         isDisabled={props.isDisabled}
         isInvalid={props.isInvalid}
@@ -92,8 +84,6 @@ export function PlainSearchField({
             styles.input
           )}
         />
-        {/* Rendered only while the field has text. With no slot override it is
-            the SearchField's context-wired clear button, clearing on press. */}
         {hasText && (
           <FieldButton aria-label="Clear search">
             <X />

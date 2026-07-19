@@ -1,8 +1,13 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { RangeCalendar } from "./RangeCalendar";
 
 const meta: Meta<typeof RangeCalendar> = {
   component: RangeCalendar,
+  args: {
+    onChange: fn(),
+    onFocusChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

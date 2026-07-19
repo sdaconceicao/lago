@@ -1,8 +1,13 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Tree, TreeItem } from "./Tree";
 
 const meta: Meta<typeof Tree> = {
   component: Tree,
+  args: {
+    onSelectionChange: fn(),
+    onExpandedChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

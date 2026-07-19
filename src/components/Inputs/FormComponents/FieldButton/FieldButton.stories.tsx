@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Meta, StoryFn } from "@storybook/react";
 import { Eye, EyeOff, X } from "lucide-react";
+import { fn } from "storybook/test";
 import { TextField } from "@/components/Inputs/TextField/TextField";
 import { FieldButton } from "./FieldButton";
 
@@ -16,6 +17,14 @@ const meta: Meta<typeof FieldButton> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onPress: fn(),
+    onPressStart: fn(),
+    onPressEnd: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onHoverChange: fn(),
+  },
   argTypes: {
     // The button holds an icon, not editable text, and wires its own onPress.
     children: { table: { disable: true } },

@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Button } from "@/components/Actions/Button/Button";
 import { TextField } from "@/components/Inputs/TextField/TextField";
 import { Form } from "./Form";
@@ -15,6 +16,11 @@ const meta: Meta<typeof Form> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onSubmit: fn(),
+    onReset: fn(),
+    onInvalid: fn(),
+  },
 };
 
 export default meta;

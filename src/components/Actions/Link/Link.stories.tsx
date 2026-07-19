@@ -1,8 +1,17 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Link } from "./Link";
 
 const meta: Meta<typeof Link> = {
   component: Link,
+  args: {
+    onPress: fn(),
+    onPressStart: fn(),
+    onPressEnd: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onHoverChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

@@ -1,9 +1,16 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { RadioGroup } from "./RadioGroup/RadioGroup";
 import { Radio } from "./RadioItem/Radio";
 
 const meta: Meta<typeof Radio> = {
   component: Radio,
+  args: {
+    onPress: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onFocusChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

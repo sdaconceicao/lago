@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { TagGroup } from "./TagGroup/TagGroup";
 import { Tag } from "./TagItem/Tag";
 
@@ -14,6 +15,15 @@ const meta: Meta<typeof Tag> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onAction: fn(),
+    onPress: fn(),
+    onPressStart: fn(),
+    onPressEnd: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onHoverChange: fn(),
+  },
 };
 
 export default meta;

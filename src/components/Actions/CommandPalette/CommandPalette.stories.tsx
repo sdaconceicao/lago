@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Button } from "@/components/Actions/Button/Button";
 import { MenuItem } from "@/components/Actions/Menu/Menu";
 import { DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
@@ -6,6 +7,13 @@ import { CommandPalette } from "./CommandPalette";
 
 const meta: Meta<typeof CommandPalette> = {
   component: CommandPalette,
+  args: {
+    onOpenChange: fn(),
+    onSelectionChange: fn(),
+    onAction: fn(),
+    onClose: fn(),
+    onInputChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

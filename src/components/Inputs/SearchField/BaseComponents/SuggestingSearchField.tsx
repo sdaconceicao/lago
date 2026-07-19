@@ -159,7 +159,6 @@ export function SuggestingSearchField({
     (event: React.KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter") {
         // Enter picks the highlighted suggestion (handled by the ComboBox);
-        // with nothing highlighted it submits the query.
         if (!event.currentTarget.getAttribute("aria-activedescendant")) {
           onSubmit?.(inputValue);
         }
@@ -193,9 +192,6 @@ export function SuggestingSearchField({
       items={items}
       inputValue={inputValue}
       onInputChange={handleInputChange}
-      // `value`/`onChange` are the non-deprecated ComboBox selection API.
-      // Pinned to null so a pick is reported but never held as a selection,
-      // which keeps the same suggestion pickable again after clearing.
       value={null}
       onChange={handleSelectionChange}
       onOpenChange={setIsOpen}
@@ -203,8 +199,6 @@ export function SuggestingSearchField({
     >
       <SuggestionsStateBridge stateRef={stateRef} />
       {label && <Label isRequired={isRequired}>{label}</Label>}
-      {/* The Group is wired up by the ComboBox: the popover is positioned
-          against it and it gets data-hovered/focus/disabled/invalid states. */}
       <Group
         className={clsx("react-aria-Group", textFieldStyles.field, utils.inset)}
       >

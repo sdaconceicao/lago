@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { TextArea } from "./TextArea";
 
 const meta: Meta<typeof TextArea> = {
@@ -15,6 +16,10 @@ const meta: Meta<typeof TextArea> = {
   tags: ["autodocs"],
   args: {
     placeholder: "Tell us a little about yourself",
+    onChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
   },
 };
 

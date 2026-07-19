@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { CheckboxGroup } from "./CheckboxGroup/CheckboxGroup";
 import { Checkbox } from "./CheckboxItem/Checkbox";
 
@@ -12,6 +13,12 @@ const meta: Meta<typeof Checkbox> = {
           "A control that lets the user select or deselect an option. A single Checkbox works standalone; wrapping several in a CheckboxGroup manages their selected values, keyboard navigation, and a shared label. Checkboxes also support an indeterminate state to represent a partially selected group.",
       },
     },
+  },
+  args: {
+    onChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
   },
   tags: ["autodocs"],
 };

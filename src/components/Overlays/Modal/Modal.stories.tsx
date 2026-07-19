@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Button } from "@/components/Actions/Button/Button";
 import { TextField } from "@/components/Inputs/TextField/TextField";
 import { Dialog, DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
@@ -7,6 +8,9 @@ import { Modal } from "./Modal";
 
 const meta: Meta<typeof Modal> = {
   component: Modal,
+  args: {
+    onOpenChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

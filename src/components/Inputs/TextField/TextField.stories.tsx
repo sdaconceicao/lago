@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { TextField } from "./TextField";
 
 const meta: Meta<typeof TextField> = {
@@ -15,6 +16,10 @@ const meta: Meta<typeof TextField> = {
   tags: ["autodocs"],
   args: {
     placeholder: "Enter your full name",
+    onChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
   },
 };
 

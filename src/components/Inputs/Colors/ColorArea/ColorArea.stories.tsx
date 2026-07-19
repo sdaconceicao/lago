@@ -1,8 +1,13 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { ColorArea } from "./ColorArea";
 
 const meta: Meta<typeof ColorArea> = {
   component: ColorArea,
+  args: {
+    onChange: fn(),
+    onChangeEnd: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

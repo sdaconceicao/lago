@@ -1,5 +1,5 @@
-import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "storybook/test";
 import {
   SearchField,
   type SearchFieldProps,
@@ -8,6 +8,16 @@ import {
 
 const meta: Meta<typeof SearchField> = {
   component: SearchField,
+  args: {
+    onSearch: fn(),
+    onSuggestionSelect: fn(),
+    onChange: fn(),
+    onClear: fn(),
+    onSubmit: fn(),
+    onKeyDown: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {
@@ -81,28 +91,7 @@ export const WithSuggestions: Story = {
 };
 
 const AsyncSuggestionsDemo = (args: SearchFieldProps) => {
-  const [selected, setSelected] = useState<SearchSuggestion | null>(null);
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "1rem",
-        width: 320,
-      }}
-    >
-      <SearchField
-        {...args}
-        loadSuggestions={searchFruits}
-        onSuggestionSelect={setSelected}
-      />
-      <span>
-        {selected
-          ? `Selected: ${selected.label} (id: ${selected.id})`
-          : "Nothing selected yet."}
-      </span>
-    </div>
-  );
+  return <SearchField {...args} loadSuggestions={searchFruits} />;
 };
 
 export const WithAsyncSuggestions: Story = {
@@ -118,52 +107,6 @@ export const WithAsyncSuggestions: Story = {
       description: {
         story:
           "A promise-based API example. loadSuggestions receives the query and returns a promise of suggestions; calls are debounced by debounceDelay, a loading state shows in the dropdown while the promise is pending, and out-of-order responses are discarded so only the latest query's results appear. Picking a suggestion fills the field and fires onSuggestionSelect.",
-      },
-    },
-  },
-};
-
-const DebouncedSearchDemo = (args: SearchFieldProps) => {
-  const [searches, setSearches] = useState<string[]>([]);
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "1rem",
-        width: 320,
-      }}
-    >
-      <SearchField
-        {...args}
-        onSearch={(value) => setSearches((prev) => [value, ...prev])}
-      />
-      <div>
-        <strong>onSearch calls (newest first):</strong>
-        <ol reversed style={{ margin: "0.5rem 0 0", paddingLeft: "1.5rem" }}>
-          {searches.map((search, index) => (
-            <li key={`${searches.length - index}-${search}`}>
-              {search || <em>(empty)</em>}
-            </li>
-          ))}
-        </ol>
-      </div>
-    </div>
-  );
-};
-
-export const DebouncedSearch: Story = {
-  render: (args) => <DebouncedSearchDemo {...args} />,
-  args: {
-    label: "Search",
-    placeholder: "Type quickly, then pause",
-    debounceDelay: 500,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "onSearch fires once the user stops typing for debounceDelay milliseconds (500 here, 300 by default), so rapid keystrokes collapse into a single search. The list below records each onSearch call — type a word quickly and only the final value appears.",
       },
     },
   },

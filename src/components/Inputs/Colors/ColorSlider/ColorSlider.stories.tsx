@@ -1,8 +1,13 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { ColorSlider } from "./ColorSlider";
 
 const meta: Meta<typeof ColorSlider> = {
   component: ColorSlider,
+  args: {
+    onChange: fn(),
+    onChangeEnd: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

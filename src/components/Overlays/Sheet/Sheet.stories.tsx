@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Button } from "@/components/Actions/Button/Button";
 import { DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
 import { Heading } from "@/components/Typography/index";
@@ -16,6 +17,9 @@ const meta: Meta<typeof Sheet> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onOpenChange: fn(),
+  },
 };
 
 export default meta;
