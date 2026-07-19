@@ -1,0 +1,33 @@
+.searchField {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+}
+
+/* The field provides its own clear button, so hide every native affordance
+   the browser adds to type="search" inputs (WebKit shows a cancel button and
+   decorations). -webkit-appearance alone is ignored by some Safari versions,
+   so also force display:none. */
+.input {
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
+}
+
+/* Suggestions dropdown hugs the field and matches its width (same as the
+   Select and MultiSelect popovers). react-aria sets --trigger-width from the
+   anchored field group. */
+.searchPopover {
+  width: var(--trigger-width);
+  padding: 0;
+}
+
+/* Suggestion results are clickable, so give them a pointer cursor. */
+.searchPopover [role="option"] {
+  cursor: pointer;
+}

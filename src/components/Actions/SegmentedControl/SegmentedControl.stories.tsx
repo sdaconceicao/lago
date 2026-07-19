@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { SegmentedControl, SegmentedControlItem } from "./SegmentedControl";
 
 const meta: Meta<typeof SegmentedControl> = {
@@ -13,6 +14,9 @@ const meta: Meta<typeof SegmentedControl> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onSelectionChange: fn(),
+  },
 };
 
 export default meta;

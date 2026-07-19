@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import {
   GridList,
   GridListHeader,
@@ -17,6 +18,10 @@ const meta: Meta<typeof GridList> = {
           "A virtualized, grid-based list of items that supports selection, actions, and keyboard navigation. GridList can be organized into sections with headers and is ideal for displaying rich content like image galleries or file browsers in a scrollable, multi-column layout.",
       },
     },
+  },
+  args: {
+    onAction: fn(),
+    onSelectionChange: fn(),
   },
   tags: ["autodocs"],
 };

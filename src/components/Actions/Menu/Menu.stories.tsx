@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Button } from "@/components/Actions/Button/Button";
 import { Menu, MenuItem, MenuTrigger, SubmenuTrigger } from "./Menu";
 
@@ -14,6 +15,11 @@ const meta: Meta<typeof Menu> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onAction: fn(),
+    onSelectionChange: fn(),
+    onClose: fn(),
+  },
 };
 
 export default meta;

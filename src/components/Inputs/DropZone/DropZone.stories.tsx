@@ -1,8 +1,19 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { DropZone, Text } from "./DropZone";
 
 const meta: Meta<typeof DropZone> = {
   component: DropZone,
+  args: {
+    onDrop: fn(),
+    onDropEnter: fn(),
+    onDropExit: fn(),
+    onDropMove: fn(),
+    onDropActivate: fn(),
+    onHoverStart: fn(),
+    onHoverEnd: fn(),
+    onHoverChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

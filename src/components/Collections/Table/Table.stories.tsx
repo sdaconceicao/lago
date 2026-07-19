@@ -1,8 +1,15 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Cell, Column, Row, Table, TableBody, TableHeader } from "./Table";
 
 const meta: Meta<typeof Table> = {
   component: Table,
+  args: {
+    onRowAction: fn(),
+    onSelectionChange: fn(),
+    onSortChange: fn(),
+    onExpandedChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

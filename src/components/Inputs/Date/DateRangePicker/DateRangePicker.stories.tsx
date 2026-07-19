@@ -1,8 +1,16 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { DateRangePicker } from "./DateRangePicker";
 
 const meta: Meta<typeof DateRangePicker> = {
   component: DateRangePicker,
+  args: {
+    onChange: fn(),
+    onOpenChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

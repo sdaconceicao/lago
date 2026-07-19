@@ -1,8 +1,18 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { ToggleButton } from "./ToggleButton";
 
 const meta: Meta<typeof ToggleButton> = {
   component: ToggleButton,
+  args: {
+    onChange: fn(),
+    onPress: fn(),
+    onPressStart: fn(),
+    onPressEnd: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onHoverChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

@@ -1,8 +1,13 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { ColorWheel } from "./ColorWheel";
 
 const meta: Meta<typeof ColorWheel> = {
   component: ColorWheel,
+  args: {
+    onChange: fn(),
+    onChangeEnd: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

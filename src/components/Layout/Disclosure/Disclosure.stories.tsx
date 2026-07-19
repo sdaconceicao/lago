@@ -1,8 +1,12 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Disclosure, DisclosureHeader, DisclosurePanel } from "./Disclosure";
 
 const meta: Meta<typeof Disclosure> = {
   component: Disclosure,
+  args: {
+    onExpandedChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

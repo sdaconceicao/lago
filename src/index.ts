@@ -39,6 +39,8 @@ export * from "./components/Status/ProgressCircle/ProgressCircle";
 export * from "./components/Inputs/Radio/RadioItem/Radio";
 export * from "./components/Inputs/Radio/RadioGroup/RadioGroup";
 export * from "./components/Inputs/Date/RangeCalendar/RangeCalendar";
+export * from "./components/Inputs/Search/SearchField/SearchField";
+export * from "./components/Inputs/Search/SearchFieldWIthSuggestions/SearchFieldWithSuggestions";
 export * from "./components/Actions/SegmentedControl/SegmentedControl";
 export * from "./components/Inputs/Select/Select";
 export * from "./components/Layout/Separator/Separator";
@@ -71,6 +73,7 @@ export {
 
 // Hooks
 export { useClipboard } from "./hooks/use-clipboard";
+export { useDebouncedCallback } from "./hooks/use-debounced-callback";
 
 // Providers
 export { ThemeProvider, useTheme } from "./providers/theme-provider";

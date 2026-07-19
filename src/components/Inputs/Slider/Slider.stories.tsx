@@ -1,8 +1,13 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Slider } from "./Slider";
 
 const meta: Meta<typeof Slider> = {
   component: Slider,
+  args: {
+    onChange: fn(),
+    onChangeEnd: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

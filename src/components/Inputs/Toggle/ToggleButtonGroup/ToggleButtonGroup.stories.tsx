@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 import { ToggleButtonGroup } from "./ToggleButtonGroup";
 
@@ -14,6 +15,9 @@ const meta: Meta<typeof ToggleButtonGroup> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onSelectionChange: fn(),
+  },
 };
 
 export default meta;

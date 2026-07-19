@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "storybook/test";
 import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 
 const fruits = [
@@ -29,6 +30,13 @@ const meta: Meta<typeof MultiSelect> = {
     label: "Fruits",
     placeholder: "Search fruits...",
     displayMode: "tags",
+    onChange: fn(),
+    onSelectionChange: fn(),
+    onOpenChange: fn(),
+    onInputChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
   },
   argTypes: {
     displayMode: {

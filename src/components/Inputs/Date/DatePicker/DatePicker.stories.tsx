@@ -1,8 +1,16 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { DatePicker } from "./DatePicker";
 
 const meta: Meta<typeof DatePicker> = {
   component: DatePicker,
+  args: {
+    onChange: fn(),
+    onOpenChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

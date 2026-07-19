@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Select, SelectItem } from "./Select";
 
 const meta: Meta<typeof Select> = {
@@ -15,6 +16,12 @@ const meta: Meta<typeof Select> = {
   tags: ["autodocs"],
   args: {
     placeholder: "Select an item",
+    onSelectionChange: fn(),
+    onInputChange: fn(),
+    onOpenChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
   },
 };
 

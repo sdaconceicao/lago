@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { ColorSwatchPicker, ColorSwatchPickerItem } from "./ColorSwatchPicker";
 
 const meta: Meta<typeof ColorSwatchPicker> = {
@@ -13,6 +14,9 @@ const meta: Meta<typeof ColorSwatchPicker> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onChange: fn(),
+  },
 };
 
 export default meta;

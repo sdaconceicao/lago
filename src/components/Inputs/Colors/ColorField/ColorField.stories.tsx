@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { ColorField } from "./ColorField";
 
 const meta: Meta<typeof ColorField> = {
@@ -15,6 +16,11 @@ const meta: Meta<typeof ColorField> = {
   tags: ["autodocs"],
   args: {
     placeholder: "Enter a color",
+    onChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
+    onKeyUp: fn(),
   },
 };
 

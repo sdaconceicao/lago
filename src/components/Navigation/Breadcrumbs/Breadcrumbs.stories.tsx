@@ -1,8 +1,12 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { Breadcrumb, Breadcrumbs } from "./Breadcrumbs";
 
 const meta: Meta<typeof Breadcrumbs> = {
   component: Breadcrumbs,
+  args: {
+    onAction: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

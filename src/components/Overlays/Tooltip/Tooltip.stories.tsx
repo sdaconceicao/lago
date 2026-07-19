@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Save } from "lucide-react";
+import { fn } from "storybook/test";
 import { Button } from "@/components/Actions/Button/Button";
 import { Tooltip, TooltipTrigger } from "./Tooltip";
 
@@ -15,6 +16,9 @@ const meta: Meta<typeof Tooltip> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onOpenChange: fn(),
+  },
 };
 
 export default meta;

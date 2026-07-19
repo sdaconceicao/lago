@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { NumberField } from "./NumberField";
 
 const meta: Meta<typeof NumberField> = {
@@ -13,6 +14,12 @@ const meta: Meta<typeof NumberField> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onChange: fn(),
+    onFocus: fn(),
+    onBlur: fn(),
+    onKeyDown: fn(),
+  },
 };
 
 export default meta;

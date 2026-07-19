@@ -1,8 +1,12 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
 import { ColorPicker } from "./ColorPicker";
 
 const meta: Meta<typeof ColorPicker> = {
   component: ColorPicker,
+  args: {
+    onChange: fn(),
+  },
   parameters: {
     layout: "centered",
     docs: {

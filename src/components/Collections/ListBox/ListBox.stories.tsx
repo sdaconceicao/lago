@@ -1,5 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Header } from "react-aria-components/Header";
+import { fn } from "storybook/test";
 import { ListBox, ListBoxItem, ListBoxSection } from "./ListBox";
 
 const meta: Meta<typeof ListBox> = {
@@ -14,6 +15,10 @@ const meta: Meta<typeof ListBox> = {
     },
   },
   tags: ["autodocs"],
+  args: {
+    onSelectionChange: fn(),
+    onAction: fn(),
+  },
 };
 
 export default meta;
