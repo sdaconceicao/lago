@@ -1,0 +1,11 @@
+.tableWithPagination {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+}
