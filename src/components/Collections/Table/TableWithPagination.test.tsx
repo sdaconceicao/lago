@@ -164,20 +164,69 @@ describe("TableWithPagination", () => {
     ).toBeInTheDocument();
   });
 
-  it("hides the pagination control when hidePagination is set", () => {
-    renderTable({ hidePagination: true });
-
-    expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
-    // Still only the first page is rendered.
-    expect(
-      screen.queryByRole("rowheader", { name: "File 11" })
-    ).not.toBeInTheDocument();
-  });
-
   it("renders an empty state when there are no items", () => {
     renderTable({ items: [] });
 
     expect(screen.getByText("No results.")).toBeInTheDocument();
+    expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
+  });
+
+  it("shows a 'Showing x to y of z results' summary in the footer", () => {
+    renderTable();
+
+    expect(
+      screen.getByText("Showing 1 to 10 of 25 results")
+    ).toBeInTheDocument();
+  });
+
+  it("updates the results summary when the page changes", async () => {
+    const user = userEvent.setup();
+    renderTable();
+
+    await user.click(screen.getByRole("button", { name: "Go to page 3" }));
+
+    expect(
+      screen.getByText("Showing 21 to 25 of 25 results")
+    ).toBeInTheDocument();
+  });
+
+  it("still shows the results summary when everything fits on one page", () => {
+    renderTable({ items: makeItems(4) });
+
+    expect(screen.getByText("Showing 1 to 4 of 4 results")).toBeInTheDocument();
+    expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
+  });
+
+  it("supports a custom results template", () => {
+    renderTable({
+      resultsTemplate: ({
+        from,
+        to,
+        total,
+      }: {
+        from: number;
+        to: number;
+        total: number;
+      }) => `${from}–${to} of ${total}`,
+    });
+
+    expect(screen.getByText("1–10 of 25")).toBeInTheDocument();
+  });
+
+  it("hides the results summary when hideResults is set", () => {
+    renderTable({ hideResults: true });
+
+    expect(
+      screen.queryByText(/Showing 1 to 10 of 25 results/)
+    ).not.toBeInTheDocument();
+    // Pagination is still present.
+    expect(screen.getByRole("navigation")).toBeInTheDocument();
+  });
+
+  it("renders no footer when both results and pagination are hidden", () => {
+    renderTable({ items: makeItems(4), hideResults: true });
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
     expect(screen.queryByRole("navigation")).not.toBeInTheDocument();
   });
 });

@@ -1,11 +1,32 @@
 .tableWithPagination {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-3);
   width: 100%;
 }
 
 .footer {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 0.5px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--overlay-background);
+}
+
+.footerStart {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Flatten the table's bottom corners so it reads as one piece with the footer. */
+.tableWithPagination:has(.footer) :global(.react-aria-Table),
+.tableWithPagination:has(.footer) :global(.react-aria-ResizableTableContainer),
+.tableWithPagination:has(.footer) .scrollArea {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }

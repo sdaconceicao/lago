@@ -4,15 +4,19 @@ import clsx from "clsx";
 import { type TableProps } from "react-aria-components/Table";
 import { Pagination } from "@/components/Actions/Pagination/Pagination";
 import { clampPage } from "@/components/Actions/Pagination/Pagination.utils";
+import {
+  ResultsCount,
+  type ResultsCountInfo,
+} from "./BaseComponents/ResultsCount/ResultsCount";
 import { Table } from "./Table";
-import { getPageCount, paginate } from "./TableWithPagination.utils";
+import {
+  getPageCount,
+  getResultsRange,
+  paginate,
+} from "./TableWithPagination.utils";
+import tableStyles from "./Table.module.css";
 import styles from "./TableWithPagination.module.css";
 
-/**
- * Props for the TableWithPagination component. Extends the underlying Table
- * props (selection, sorting, drag-and-drop, etc.) minus `children`, which is
- * replaced by a render function that receives the current page's items.
- */
 export interface TableWithPaginationProps<T> extends Omit<
   TableProps,
   "children"
@@ -41,6 +45,20 @@ export interface TableWithPaginationProps<T> extends Omit<
   hidePagination?: boolean;
   /** Accessible label for the pagination navigation landmark. @default "Table pagination" */
   paginationLabel?: string;
+  /** Hides the "Showing x to y of z results" summary in the footer. @default false */
+  hideResults?: boolean;
+  /**
+   * Templates the results summary from the `{ from, to, total }` values.
+   * Defaults to "Showing x to y of z results".
+   */
+  resultsTemplate?: (info: ResultsCountInfo) => ReactNode;
+  /**
+   * Constrains the table body's height. When set, the rows scroll within this
+   * height while the column header stays pinned to the top and the footer
+   * (results + pagination) stays fixed below. Accepts any CSS length or a
+   * number of pixels.
+   */
+  maxHeight?: number | string;
 }
 
 export function TableWithPagination<T>({
@@ -54,6 +72,9 @@ export function TableWithPagination<T>({
   boundaryCount,
   hidePagination = false,
   paginationLabel = "Table pagination",
+  hideResults = false,
+  resultsTemplate,
+  maxHeight,
   className,
   ...tableProps
 }: TableWithPaginationProps<T>) {
@@ -69,6 +90,8 @@ export function TableWithPagination<T>({
     [items, currentPage, rowsPerPage]
   );
 
+  const resultsRange = getResultsRange(currentPage, rowsPerPage, items.length);
+
   const handlePageChange = useCallback(
     (next: number) => {
       if (!isControlled) {
@@ -79,6 +102,12 @@ export function TableWithPagination<T>({
     [isControlled, onPageChange]
   );
 
+  const showResults = !hideResults && items.length > 0;
+  const showPagination = !hidePagination && totalPages > 1;
+  const showFooter = showResults || showPagination;
+
+  const table = <Table {...tableProps}>{children(pageItems)}</Table>;
+
   return (
     <div
       className={clsx(
@@ -87,18 +116,43 @@ export function TableWithPagination<T>({
         className
       )}
     >
-      <Table {...tableProps}>{children(pageItems)}</Table>
+      {maxHeight !== undefined ? (
+        <div
+          className={clsx(
+            "table-scroll",
+            tableStyles.scrollContainer,
+            styles.scrollArea
+          )}
+          style={{ maxHeight }}
+        >
+          {table}
+        </div>
+      ) : (
+        table
+      )}
 
-      {!hidePagination && totalPages > 1 && (
-        <div className={clsx("table-pagination", styles.footer)}>
-          <Pagination
-            page={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            siblingCount={siblingCount}
-            boundaryCount={boundaryCount}
-            aria-label={paginationLabel}
-          />
+      {showFooter && (
+        <div className={clsx("table-footer", styles.footer)}>
+          <div className={clsx("table-footer-start", styles.footerStart)}>
+            {showResults && (
+              <ResultsCount
+                from={resultsRange.from}
+                to={resultsRange.to}
+                total={resultsRange.total}
+                template={resultsTemplate}
+              />
+            )}
+          </div>
+          {showPagination && (
+            <Pagination
+              page={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              siblingCount={siblingCount}
+              boundaryCount={boundaryCount}
+              aria-label={paginationLabel}
+            />
+          )}
         </div>
       )}
     </div>

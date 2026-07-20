@@ -1,0 +1,8 @@
+.tableBody {
+  padding: var(--spacing-1);
+
+  &[data-empty] {
+    text-align: center;
+    font-style: italic;
+  }
+}

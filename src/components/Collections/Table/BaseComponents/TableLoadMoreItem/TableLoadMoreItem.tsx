@@ -5,7 +5,7 @@ import {
   type TableLoadMoreItemProps,
 } from "react-aria-components/Table";
 import { ProgressCircle } from "@/components/Status/ProgressCircle/ProgressCircle";
-import styles from "../Table.module.css";
+import styles from "./TableLoadMoreItem.module.css";
 
 export type { TableLoadMoreItemProps };
 

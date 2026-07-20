@@ -1,4 +1,8 @@
-import { getPageCount, paginate } from "./TableWithPagination.utils";
+import {
+  getPageCount,
+  getResultsRange,
+  paginate,
+} from "./TableWithPagination.utils";
 
 describe("getPageCount", () => {
   it("computes the number of pages for a full division", () => {
@@ -50,5 +54,35 @@ describe("paginate", () => {
     const original = [...items];
     paginate(items, 1, 3);
     expect(items).toEqual(original);
+  });
+});
+
+describe("getResultsRange", () => {
+  it("computes the range for the first page", () => {
+    expect(getResultsRange(1, 10, 25)).toEqual({ from: 1, to: 10, total: 25 });
+  });
+
+  it("computes the range for a middle page", () => {
+    expect(getResultsRange(2, 10, 25)).toEqual({ from: 11, to: 20, total: 25 });
+  });
+
+  it("caps the last page at the total", () => {
+    expect(getResultsRange(3, 10, 25)).toEqual({ from: 21, to: 25, total: 25 });
+  });
+
+  it("returns a zeroed range when there are no results", () => {
+    expect(getResultsRange(1, 10, 0)).toEqual({ from: 0, to: 0, total: 0 });
+  });
+
+  it("treats a non-positive rowsPerPage as a single page", () => {
+    expect(getResultsRange(1, 0, 7)).toEqual({ from: 1, to: 7, total: 7 });
+  });
+
+  it("clamps a page past the end to the total", () => {
+    expect(getResultsRange(99, 10, 25)).toEqual({
+      from: 25,
+      to: 25,
+      total: 25,
+    });
   });
 });

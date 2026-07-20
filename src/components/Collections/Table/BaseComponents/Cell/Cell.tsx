@@ -7,7 +7,7 @@ import {
   type CellProps,
 } from "react-aria-components/Table";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import styles from "../Table.module.css";
+import styles from "./Cell.module.css";
 
 export type { CellProps };
 

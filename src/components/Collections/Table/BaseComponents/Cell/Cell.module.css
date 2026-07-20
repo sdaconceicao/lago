@@ -1,0 +1,88 @@
+.cell {
+  /* shared cell/column base */
+  padding: var(--spacing-2);
+  text-align: left;
+  outline: none;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+
+  div& {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  &:is(:global(.react-aria-Row):last-child > :first-child) {
+    border-end-start-radius: var(--radius);
+  }
+
+  &:is(:global(.react-aria-Row):last-child > :last-child) {
+    border-end-end-radius: var(--radius);
+  }
+
+  &[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -2px;
+  }
+
+  /* cell specific */
+  transform: translateZ(0);
+  --border-color: var(--gray-300);
+
+  tr:not(:last-child) & {
+    border-bottom: 0.5px solid var(--border-color);
+  }
+
+  [data-selected]:has(+ [data-selected]) & {
+    --border-color: rgb(255 255 255 / 0.3);
+  }
+
+  @media (forced-colors: active) {
+    --border-color: ButtonBorder;
+  }
+
+  &[data-tree-column] {
+    --chevron-placeholder: var(--spacing-5);
+    padding-inline-start: calc(
+      var(--spacing-2) + (var(--table-row-level) - 1) * var(--spacing-4) +
+        var(--chevron-placeholder)
+    );
+
+    &[data-has-child-items] {
+      --chevron-placeholder: 0px;
+    }
+  }
+
+  .chevronButton[slot="chevron"] {
+    all: unset;
+    vertical-align: middle;
+    margin-inline-end: var(--spacing-1);
+
+    svg {
+      rotate: 0deg;
+      transition: rotate 200ms;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3px;
+      width: var(--spacing-4);
+      height: var(--spacing-4);
+    }
+  }
+
+  &[data-expanded] .chevronButton[slot="chevron"] svg {
+    rotate: 90deg;
+  }
+}
+
+.cell img {
+  height: 30px;
+  width: 30px;
+  object-fit: cover;
+  display: block;
+}
+
+:global(.react-aria-ResizableTableContainer) .cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

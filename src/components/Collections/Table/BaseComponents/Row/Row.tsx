@@ -9,8 +9,8 @@ import {
   useTableOptions,
 } from "react-aria-components/Table";
 import { Checkbox } from "@/components/Inputs/Checkbox/CheckboxItem/Checkbox";
-import { Cell } from "./Cell";
-import styles from "../Table.module.css";
+import { Cell } from "../Cell/Cell";
+import styles from "./Row.module.css";
 
 export type { RowProps };
 

@@ -8,7 +8,7 @@ import {
   ColumnResizer,
 } from "react-aria-components/Table";
 import utils from "@/styles/utilities.module.css";
-import styles from "../Table.module.css";
+import styles from "./Column.module.css";
 
 export interface ColumnProps extends AriaColumnProps {
   /** Enables an interactive resizer handle on the column's trailing edge. */

@@ -4,7 +4,7 @@ import {
   TableBody as AriaTableBody,
   type TableBodyProps,
 } from "react-aria-components/Table";
-import styles from "../Table.module.css";
+import styles from "./TableBody.module.css";
 
 export type { TableBodyProps };
 

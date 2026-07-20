@@ -4,7 +4,7 @@ import {
   TableFooter as AriaTableFooter,
   type TableFooterProps,
 } from "react-aria-components/Table";
-import styles from "../Table.module.css";
+import styles from "./TableFooter.module.css";
 
 export type { TableFooterProps };
 

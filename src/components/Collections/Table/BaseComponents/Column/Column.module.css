@@ -1,0 +1,117 @@
+.column {
+  /* shared cell/column base */
+  padding: var(--spacing-2);
+  text-align: left;
+  outline: none;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+
+  div& {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  &[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -2px;
+  }
+
+  /* column specific */
+  --button-color: var(--gray);
+  --button-border: transparent;
+  --button-shadow: transparent;
+  --button-border-size: 0px;
+  cursor: default;
+  border-bottom: 0.5px solid var(--border-color);
+  border-inline-end: 0.5px solid var(--border-color);
+  position: relative;
+  z-index: calc(sibling-count() - sibling-index());
+
+  &:last-child {
+    border-inline-end: none;
+  }
+
+  &[data-pressed] {
+    background: var(--gray-200);
+  }
+
+  &[data-sort-direction] {
+    --button-color: var(--tint);
+
+    &[data-pressed] {
+      background: var(--tint-200);
+    }
+  }
+
+  .columnHeader {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+  }
+
+  .columnName {
+    flex: 1;
+    font: inherit;
+    text-align: start;
+    color: inherit;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-color: transparent;
+    border-radius: var(--radius-sm);
+
+    &[data-focus-visible] {
+      outline: 2px solid var(--focus-ring-color);
+      outline-offset: 2px;
+    }
+  }
+
+  .sortIndicator {
+    padding: 0 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:not([data-sort-direction]) .sortIndicator {
+    visibility: hidden;
+  }
+}
+
+.columnResizer {
+  width: 1px;
+  border-radius: var(--radius-sm);
+  background-color: var(--gray-500);
+  padding: 0 var(--spacing-2);
+  translate: var(--spacing-4) 0;
+  height: 32px;
+  margin: -16px 0;
+  flex: 0 0 auto;
+  touch-action: none;
+  box-sizing: content-box;
+  background-clip: content-box;
+
+  &[data-resizable-direction="both"] {
+    cursor: ew-resize;
+  }
+
+  &[data-resizable-direction="left"] {
+    cursor: e-resize;
+  }
+
+  &[data-resizable-direction="right"] {
+    cursor: w-resize;
+  }
+
+  &[data-focus-visible] {
+    background-color: var(--focus-ring-color);
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -2px;
+  }
+
+  &[data-resizing] {
+    width: 2px;
+    background-color: var(--highlight-background);
+  }
+}

@@ -4,22 +4,31 @@ import {
   Table as AriaTable,
   type TableProps,
 } from "react-aria-components/Table";
-import { Cell, type CellProps } from "./BaseComponents/Cell";
-import { Column, type ColumnProps } from "./BaseComponents/Column";
-import { Row, type RowProps } from "./BaseComponents/Row";
-import { TableBody, type TableBodyProps } from "./BaseComponents/TableBody";
+import { Cell, type CellProps } from "./BaseComponents/Cell/Cell";
+import { Column, type ColumnProps } from "./BaseComponents/Column/Column";
+import {
+  ResultsCount,
+  type ResultsCountInfo,
+  type ResultsCountProps,
+  defaultResultsTemplate,
+} from "./BaseComponents/ResultsCount/ResultsCount";
+import { Row, type RowProps } from "./BaseComponents/Row/Row";
+import {
+  TableBody,
+  type TableBodyProps,
+} from "./BaseComponents/TableBody/TableBody";
 import {
   TableFooter,
   type TableFooterProps,
-} from "./BaseComponents/TableFooter";
+} from "./BaseComponents/TableFooter/TableFooter";
 import {
   TableHeader,
   type TableHeaderProps,
-} from "./BaseComponents/TableHeader";
+} from "./BaseComponents/TableHeader/TableHeader";
 import {
   TableLoadMoreItem,
   type TableLoadMoreItemProps,
-} from "./BaseComponents/TableLoadMoreItem";
+} from "./BaseComponents/TableLoadMoreItem/TableLoadMoreItem";
 import styles from "./Table.module.css";
 
 export function Table(props: TableProps) {
@@ -38,10 +47,13 @@ Table.Column = Column;
 Table.Row = Row;
 Table.Cell = Cell;
 Table.LoadMoreItem = TableLoadMoreItem;
+Table.ResultsCount = ResultsCount;
 
 export {
   Cell,
   Column,
+  defaultResultsTemplate,
+  ResultsCount,
   Row,
   TableBody,
   TableFooter,
@@ -51,6 +63,8 @@ export {
 export type {
   CellProps,
   ColumnProps,
+  ResultsCountInfo,
+  ResultsCountProps,
   RowProps,
   TableBodyProps,
   TableFooterProps,

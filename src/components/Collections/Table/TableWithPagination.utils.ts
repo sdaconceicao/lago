@@ -24,3 +24,33 @@ export const paginate = <T>(
   if (start < 0) return [];
   return items.slice(start, start + rowsPerPage);
 };
+
+/** The 1-based range of results shown on a page: `from`, `to`, and `total`. */
+export interface ResultsRange {
+  /** Index of the first visible result (1-based). 0 when there are none. */
+  from: number;
+  /** Index of the last visible result (1-based). 0 when there are none. */
+  to: number;
+  /** Total number of results across every page. */
+  total: number;
+}
+
+/**
+ * Computes the 1-based `from`/`to`/`total` range of results shown on the given
+ * page. Returns a zeroed range when there are no results. A non-positive
+ * `rowsPerPage` is treated as "everything on one page". Assumes `page` is
+ * already within range; a page past the end still clamps to `total`.
+ */
+export const getResultsRange = (
+  page: number,
+  rowsPerPage: number,
+  total: number
+): ResultsRange => {
+  if (total <= 0) return { from: 0, to: 0, total: 0 };
+  if (rowsPerPage <= 0) return { from: 1, to: total, total };
+
+  const from = (page - 1) * rowsPerPage + 1;
+  if (from > total) return { from: total, to: total, total };
+  const to = Math.min(page * rowsPerPage, total);
+  return { from, to, total };
+};

@@ -9,7 +9,8 @@ import {
 } from "react-aria-components/Table";
 import { Checkbox } from "@/components/Inputs/Checkbox/CheckboxItem/Checkbox";
 import utils from "@/styles/utilities.module.css";
-import styles from "../Table.module.css";
+import columnStyles from "../Column/Column.module.css";
+import styles from "./TableHeader.module.css";
 
 export type { TableHeaderProps };
 
@@ -35,7 +36,11 @@ export function TableHeader<T>({
           width={20}
           minWidth={20}
           style={{ width: 20 }}
-          className={clsx("react-aria-Column", utils.buttonBase, styles.column)}
+          className={clsx(
+            "react-aria-Column",
+            utils.buttonBase,
+            columnStyles.column
+          )}
         />
       )}
       {selectionBehavior === "toggle" && (
@@ -43,7 +48,11 @@ export function TableHeader<T>({
           width={32}
           minWidth={32}
           style={{ width: 32 }}
-          className={clsx("react-aria-Column", utils.buttonBase, styles.column)}
+          className={clsx(
+            "react-aria-Column",
+            utils.buttonBase,
+            columnStyles.column
+          )}
         >
           {selectionMode === "multiple" && <Checkbox slot="selection" />}
         </AriaColumn>

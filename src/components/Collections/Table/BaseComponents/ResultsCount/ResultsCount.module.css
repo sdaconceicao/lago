@@ -1,0 +1,6 @@
+.resultsCount {
+  margin: 0;
+  color: var(--gray);
+  font: var(--font-size) var(--font-family);
+  white-space: nowrap;
+}

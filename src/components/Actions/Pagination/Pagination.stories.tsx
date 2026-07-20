@@ -26,7 +26,6 @@ const ControlledPagination = ({
 };
 
 const meta: Meta<typeof Pagination> = {
-  title: "Actions/Pagination",
   component: Pagination,
   args: {
     onPageChange: fn(),

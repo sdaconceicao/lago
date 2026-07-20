@@ -20,34 +20,7 @@ const people: Person[] = Array.from({ length: 42 }, (_, i) => ({
   location: locations[i % locations.length],
 }));
 
-/**
- * Renders the header and body for the current page. The header columns and the
- * row/cell content are composed here as children — TableWithPagination only
- * supplies the current page's items and wires up the pagination control.
- */
-const renderContent = (pageItems: Person[]) => (
-  <>
-    <TableHeader>
-      <Column id="name" isRowHeader>
-        Name
-      </Column>
-      <Column id="role">Role</Column>
-      <Column id="location">Location</Column>
-    </TableHeader>
-    <TableBody items={pageItems}>
-      {(person) => (
-        <Row id={person.id}>
-          <Cell>{person.name}</Cell>
-          <Cell>{person.role}</Cell>
-          <Cell>{person.location}</Cell>
-        </Row>
-      )}
-    </TableBody>
-  </>
-);
-
 const meta: Meta<typeof TableWithPagination<Person>> = {
-  title: "Collections/TableWithPagination",
   component: TableWithPagination,
   args: {
     onPageChange: fn(),
@@ -146,7 +119,65 @@ export const SinglePage: Story = {
     docs: {
       description: {
         story:
-          "When every row fits on a single page, the Pagination control is hidden automatically.",
+          "When every row fits on a single page, the Pagination control is hidden — but the footer still shows the results summary.",
+      },
+    },
+  },
+};
+
+export const CustomResultsSummary: Story = {
+  args: {
+    "aria-label": "Team members",
+    items: people,
+    rowsPerPage: 10,
+    resultsTemplate: ({ from, to, total }) => (
+      <>
+        <strong>
+          {from}–{to}
+        </strong>{" "}
+        of {total} people
+      </>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The footer's results summary is templatable via the resultsTemplate prop, which receives the { from, to, total } values and can return any ReactNode. The default renders 'Showing x to y of z results'.",
+      },
+    },
+  },
+};
+
+export const HiddenResults: Story = {
+  args: {
+    "aria-label": "Team members",
+    items: people,
+    rowsPerPage: 10,
+    hideResults: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Set hideResults to omit the results summary from the footer, leaving only the pagination control.",
+      },
+    },
+  },
+};
+
+export const ScrollableBody: Story = {
+  args: {
+    "aria-label": "Team members",
+    items: people,
+    rowsPerPage: 25,
+    maxHeight: 300,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Set maxHeight to bound the table body. When a page has more rows than fit, the rows scroll within that height while the column header stays pinned to the top and the footer (results summary + pagination) stays fixed below — the scroll happens between the header and the footer instead of the whole table scrolling.",
       },
     },
   },
