@@ -7,8 +7,8 @@ import { clampPage } from "@/components/Actions/Pagination/Pagination.utils";
 import {
   ResultsCount,
   type ResultsCountInfo,
-} from "./BaseComponents/ResultsCount/ResultsCount";
-import { Table } from "./Table";
+} from "../BaseComponents/ResultsCount/ResultsCount";
+import { Table } from "../Table";
 import {
   getPageCount,
   getResultsRange,

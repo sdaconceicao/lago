@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
-import { Cell, Column, Row, TableBody, TableHeader } from "./Table";
+import { Cell, Column, Row, TableBody, TableHeader } from "../Table";
 import { TableWithPagination } from "./TableWithPagination";
 
 interface Person {

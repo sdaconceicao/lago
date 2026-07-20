@@ -49,7 +49,7 @@ export * from "./components/Overlays/Sheet/Sheet";
 export * from "./components/Inputs/Slider/Slider";
 export * from "./components/Inputs/Switch/Switch";
 export * from "./components/Collections/Table/Table";
-export * from "./components/Collections/Table/TableWithPagination";
+export * from "./components/Collections/Table/TableWithPagination/TableWithPagination";
 export * from "./components/Navigation/Tabs/Tabs";
 export * from "./components/Collections/Tag/TagItem/Tag";
 export * from "./components/Collections/Tag/TagGroup/TagGroup";

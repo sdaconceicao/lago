@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Cell, Column, Row, TableBody, TableHeader } from "./Table";
+import { Cell, Column, Row, TableBody, TableHeader } from "../Table";
 import { TableWithPagination } from "./TableWithPagination";
 
 beforeAll(() => {

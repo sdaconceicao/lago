@@ -88,8 +88,12 @@
 }
 
 .row :global(.react-aria-CheckboxButton) {
-  --checkmark-color: var(--highlight-background);
   &[data-selected] :global(.indicator) {
+    /* Inverse treatment on the selected (purple) row: a white box with a
+       purple checkmark. --checkmark-color must be set on the indicator itself
+       because it declares its own default, which shadows any value inherited
+       from an ancestor. */
+    --checkmark-color: var(--highlight-background);
     --indicator-color: var(--highlight-foreground);
     --indicator-shadow: transparent;
   }
