@@ -37,6 +37,7 @@
 }
 
 :global(.react-aria-ResizableTableContainer) {
+  box-sizing: border-box;
   width: 100%;
   overflow: auto;
   position: relative;
@@ -56,38 +57,140 @@
 }
 
 /*
- * Scroll container: constrain the height and scroll the body while the column
- * header stays pinned to the top and any TableFooter stays pinned to the
- * bottom. Wrap a <Table> in an element with this class and a max-height/height.
+ * Scroll container: give the wrapper a max-height (or height) and ONLY the
+ * table body scrolls. The column header is a fixed band above the scroll area
+ * and any TableFooter is a fixed band below it, so the scrollbar spans the body
+ * alone — it never runs alongside the header or footer.
  *
- * The container owns the border, radius, and clipping — the inner table must
- * not clip, otherwise sticky positioning of the header/footer breaks.
+ *   <div className={styles.scrollContainer} style={{ maxHeight: 320 }}>
+ *     <Table>…</Table>
+ *   </div>
+ *
  */
 .scrollContainer {
+  /* Width of the classic (space-taking) scrollbar reserved by the body. The
+     header/footer bands reserve the same lane via scrollbar-gutter: stable so
+     their columns line up with the scrolling rows; this value is reused to let
+     the last column stretch into that reserved lane (see the row rules below). */
+  --scrollbar-width: 15px;
+  box-sizing: border-box;
   width: 100%;
-  overflow: auto;
-  position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 0;
+  overflow: hidden;
   border: 0.5px solid var(--border-color);
   border-radius: var(--radius);
   background: var(--overlay-background);
 }
 
+/* The table itself becomes the height-bounded flex column. */
 .scrollContainer .table {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   border: none;
   border-radius: 0;
-  overflow: visible;
+  overflow: hidden;
 }
 
+/*
+ * Header / footer: fixed bands that do not scroll. Each reserves the same
+ * scrollbar gutter as the body (scrollbar-gutter: stable) so its columns line
+ * up with the scrolling rows; overflow: hidden means that reserved lane never
+ * draws a scrollbar. The band's own background and divider border span its full
+ * box — including the reserved lane — so the header/footer read as one solid
+ * band with no empty gap at the trailing edge where the body's scrollbar sits.
+ */
+.scrollContainer :global(.react-aria-TableHeader),
+.scrollContainer :global(.react-aria-TableFooter) {
+  display: block;
+  flex: 0 0 auto;
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+.scrollContainer :global(.react-aria-TableHeader) {
+  background: var(--overlay-background);
+  border-bottom: 0.5px solid var(--border-color);
+}
+
+.scrollContainer :global(.react-aria-TableFooter) {
+  background: var(--gray-200);
+  border-top: 0.5px solid var(--border-color);
+}
+
+/* Body: the only scroller. scrollbar-gutter: stable reserves the same lane as
+   the bands even when the rows don't overflow, so columns stay aligned whether
+   the platform uses overlay or classic space-taking scrollbars. overflow-x is
+   pinned to hidden so the rows (which stretch into the gutter) don't trigger a
+   horizontal scrollbar. */
+.scrollContainer :global(.react-aria-TableBody) {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  /* The body's default padding (var(--spacing-1)) insets the rows and would
+     push their columns out of line with the unpadded header/footer bands. */
+  padding: 0;
+}
+
+/*
+ * Lay every row (header, body, footer) out as its own fixed table so columns
+ * line up across the three bands. The header row has role="row" but no
+ * .react-aria-Row class, so it is targeted separately.
+ */
+/* Every row (header, body, footer) spans the full padding-box width — i.e.
+   into the scrollbar gutter the bands reserve — so the last column fills that
+   reserved lane instead of leaving an empty gap at the trailing edge. All rows
+   use the same width, so their columns stay aligned with one another; the body
+   simply draws its scrollbar on top of the lane. */
+.scrollContainer :global(.react-aria-TableHeader) tr,
+.scrollContainer :global(.react-aria-Row) {
+  display: table;
+  width: calc(100% + var(--scrollbar-width));
+  table-layout: fixed;
+}
+
+/* The divider is drawn on the header band (above), so drop the per-column
+   bottom border to avoid doubling it. Columns keep their opaque background. */
 .scrollContainer :global(.react-aria-Column) {
-  position: sticky;
-  top: 0;
-  z-index: 3;
+  background: var(--overlay-background);
+  border-bottom: none;
 }
 
 .scrollContainer :global(.react-aria-TableFooter) :global(.react-aria-Cell) {
-  position: sticky;
-  bottom: 0;
-  z-index: 3;
   background: var(--gray-200);
+}
+
+/*
+ * Match the reserved gutter to the body's scrollbar width on all three bands
+ * (WebKit/Chrome/Safari) so their columns align exactly. The body shows a
+ * styled thumb; the header/footer lanes stay empty (overflow: hidden).
+ */
+.scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar,
+.scrollContainer :global(.react-aria-TableHeader)::-webkit-scrollbar,
+.scrollContainer :global(.react-aria-TableFooter)::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+.scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 6px;
+  /* Transparent border + content-box clip insets the thumb from the lane. */
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+  background-clip: content-box;
+}
+
+.scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-track {
+  background: transparent;
 }

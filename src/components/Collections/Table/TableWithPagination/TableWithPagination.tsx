@@ -14,7 +14,7 @@ import {
   getResultsRange,
   paginate,
 } from "./TableWithPagination.utils";
-import tableStyles from "./Table.module.css";
+import tableStyles from "../Table.module.css";
 import styles from "./TableWithPagination.module.css";
 
 export interface TableWithPaginationProps<T> extends Omit<
