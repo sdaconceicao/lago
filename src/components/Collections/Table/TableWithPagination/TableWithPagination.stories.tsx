@@ -1,5 +1,7 @@
+import { useMemo, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
+import type { SortDescriptor } from "react-aria-components/Table";
 import { Cell, Column, Row, TableBody, TableHeader } from "../Table";
 import { TableWithPagination } from "./TableWithPagination";
 
@@ -9,6 +11,17 @@ interface Person {
   role: string;
   location: string;
 }
+
+const sortPeople = (
+  items: Person[],
+  sortDescriptor: SortDescriptor
+): Person[] => {
+  const column = sortDescriptor.column as keyof Person;
+  return [...items].sort((a, b) => {
+    const cmp = String(a[column]).localeCompare(String(b[column]));
+    return sortDescriptor.direction === "descending" ? -cmp : cmp;
+  });
+};
 
 const roles = ["Engineer", "Designer", "Manager", "Analyst", "Support"];
 const locations = ["Remote", "New York", "London", "Berlin", "Tokyo"];
@@ -178,6 +191,66 @@ export const ScrollableBody: Story = {
       description: {
         story:
           "Set maxHeight to bound the table body. When a page has more rows than fit, the rows scroll within that height while the column header stays pinned to the top and the footer (results summary + pagination) stays fixed below — the scroll happens between the header and the footer instead of the whole table scrolling.",
+      },
+    },
+  },
+};
+
+export const Sorting: Story = {
+  args: {
+    "aria-label": "Team members",
+    items: people,
+    rowsPerPage: 10,
+  },
+  render: (args) => {
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+      column: "name",
+      direction: "ascending",
+    });
+    const sortedItems = useMemo(
+      () => sortPeople(people, sortDescriptor),
+      [sortDescriptor]
+    );
+
+    return (
+      <TableWithPagination<Person>
+        {...args}
+        items={sortedItems}
+        sortDescriptor={sortDescriptor}
+        onSortChange={setSortDescriptor}
+      >
+        {(pageItems) => (
+          <>
+            <TableHeader>
+              <Column id="name" isRowHeader allowsSorting>
+                Name
+              </Column>
+              <Column id="role" allowsSorting>
+                Role
+              </Column>
+              <Column id="location" allowsSorting>
+                Location
+              </Column>
+            </TableHeader>
+            <TableBody items={pageItems}>
+              {(person) => (
+                <Row id={person.id}>
+                  <Cell>{person.name}</Cell>
+                  <Cell>{person.role}</Cell>
+                  <Cell>{person.location}</Cell>
+                </Row>
+              )}
+            </TableBody>
+          </>
+        )}
+      </TableWithPagination>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Sorting is controlled via sortDescriptor and onSortChange on the underlying Table. Sort the full item list first, then let TableWithPagination slice the sorted result into pages so order stays consistent across page changes.",
       },
     },
   },

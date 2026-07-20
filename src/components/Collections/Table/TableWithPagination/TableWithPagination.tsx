@@ -14,7 +14,6 @@ import {
   getResultsRange,
   paginate,
 } from "./TableWithPagination.utils";
-import tableStyles from "../Table.module.css";
 import styles from "./TableWithPagination.module.css";
 
 export interface TableWithPaginationProps<T> extends Omit<
@@ -118,11 +117,7 @@ export function TableWithPagination<T>({
     >
       {maxHeight !== undefined ? (
         <div
-          className={clsx(
-            "table-scroll",
-            tableStyles.scrollContainer,
-            styles.scrollArea
-          )}
+          className={clsx("table-scroll", styles.scrollArea)}
           style={{ maxHeight }}
         >
           {table}

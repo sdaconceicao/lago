@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Meta, StoryFn } from "@storybook/react";
 import { fn } from "storybook/test";
+import type { SortDescriptor } from "react-aria-components/Table";
 import {
   Cell,
   Column,
@@ -95,6 +96,68 @@ const makeRows = (start: number, count: number): FileRow[] =>
       date: `6/${(id % 28) + 1}/2024`,
     };
   });
+
+const sortRows = (
+  rows: FileRow[],
+  sortDescriptor: SortDescriptor
+): FileRow[] => {
+  const column = sortDescriptor.column as keyof FileRow;
+  return [...rows].sort((a, b) => {
+    const cmp = String(a[column]).localeCompare(String(b[column]));
+    return sortDescriptor.direction === "descending" ? -cmp : cmp;
+  });
+};
+
+const SortingExample = () => {
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "name",
+    direction: "ascending",
+  });
+  const rows = useMemo(
+    () => sortRows(makeRows(1, 12), sortDescriptor),
+    [sortDescriptor]
+  );
+
+  return (
+    <Table
+      aria-label="Files"
+      sortDescriptor={sortDescriptor}
+      onSortChange={setSortDescriptor}
+    >
+      <TableHeader>
+        <Column id="name" isRowHeader allowsSorting>
+          Name
+        </Column>
+        <Column id="type" allowsSorting>
+          Type
+        </Column>
+        <Column id="date" allowsSorting>
+          Date Modified
+        </Column>
+      </TableHeader>
+      <TableBody>
+        {rows.map((row) => (
+          <Row key={row.id} id={row.id}>
+            <Cell>{row.name}</Cell>
+            <Cell>{row.type}</Cell>
+            <Cell>{row.date}</Cell>
+          </Row>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
+export const Sorting: StoryFn = () => <SortingExample />;
+Sorting.parameters = {
+  layout: "centered",
+  docs: {
+    description: {
+      story:
+        "Columns with allowsSorting show a sort indicator and call onSortChange when clicked. This story keeps a controlled sortDescriptor and reorders the rows client-side by the active column and direction.",
+    },
+  },
+};
 
 const LoadMoreExample = () => {
   const [rows, setRows] = useState<FileRow[]>(() => makeRows(1, PAGE_SIZE));
