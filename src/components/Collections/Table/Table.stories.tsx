@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import type { Meta, StoryFn } from "@storybook/react";
-import { fn } from "storybook/test";
 import type { SortDescriptor } from "react-aria-components/Table";
+import { fn } from "storybook/test";
 import {
   Cell,
   Column,
