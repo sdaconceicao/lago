@@ -1,0 +1,100 @@
+.row {
+  outline: none;
+  cursor: default;
+  color: var(--text-color);
+  position: relative;
+  transform: scale(1);
+  transition-property: background, color;
+  transition-duration: 200ms;
+  -webkit-tap-highlight-color: transparent;
+
+  tr:last-child& {
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+
+  &[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -2px;
+  }
+
+  &[data-pressed] {
+    background: var(--gray-100);
+  }
+
+  &:nth-child(2n) {
+    background: var(--gray-100);
+    &[data-pressed] {
+      background: var(--gray-200);
+    }
+  }
+
+  &[data-selected] {
+    background: var(--highlight-background);
+    color: var(--highlight-foreground);
+    --focus-ring-color: var(--highlight-foreground);
+
+    &[data-focus-visible],
+    :global(.react-aria-Cell)[data-focus-visible] {
+      outline-offset: -4px;
+    }
+
+    &[data-pressed] {
+      background: var(--highlight-background-pressed);
+    }
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+  }
+
+  &[data-href] {
+    cursor: pointer;
+  }
+
+  &[data-dragging] {
+    opacity: 0.6;
+    transform: translateZ(0);
+  }
+
+  &[data-drop-target] {
+    outline: 2px solid var(--highlight-background);
+    background: var(--highlight-overlay);
+    z-index: 4;
+  }
+
+  .dragButton {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    text-align: center;
+
+    svg {
+      width: var(--spacing-4);
+      height: var(--spacing-4);
+    }
+
+    &[data-focus-visible] {
+      border-radius: 4px;
+      outline: 2px solid var(--focus-ring-color);
+    }
+  }
+
+  :global(.react-aria-DropIndicator)[data-drop-target] {
+    outline: 1px solid var(--highlight-background);
+    transform: translateZ(0);
+  }
+}
+
+.row :global(.react-aria-CheckboxButton) {
+  &[data-selected] :global(.indicator) {
+    /* Inverse treatment on the selected (purple) row: a white box with a
+       purple checkmark. --checkmark-color must be set on the indicator itself
+       because it declares its own default, which shadows any value inherited
+       from an ancestor. */
+    --checkmark-color: var(--highlight-background);
+    --indicator-color: var(--highlight-foreground);
+    --indicator-shadow: transparent;
+  }
+}

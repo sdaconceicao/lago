@@ -24,286 +24,9 @@
     background: var(--highlight-overlay);
   }
 
-  &:has(.tableBody[data-empty]) {
+  &:has(:global(.react-aria-TableBody)[data-empty]) {
     height: 100%;
     min-height: 100px;
-  }
-
-  .tableHeader {
-    color: var(--text-color);
-  }
-
-  .tableBody {
-    padding: var(--spacing-1);
-
-    &[data-empty] {
-      text-align: center;
-      font-style: italic;
-    }
-  }
-}
-
-.row {
-  outline: none;
-  cursor: default;
-  color: var(--text-color);
-  position: relative;
-  transform: scale(1);
-  transition-property: background, color;
-  transition-duration: 200ms;
-  -webkit-tap-highlight-color: transparent;
-
-  tr:last-child& {
-    border-radius: 0 0 var(--radius) var(--radius);
-  }
-
-  &[data-focus-visible] {
-    outline: 2px solid var(--focus-ring-color);
-    outline-offset: -2px;
-  }
-
-  &[data-pressed] {
-    background: var(--gray-100);
-  }
-
-  &:nth-child(2n) {
-    background: var(--gray-100);
-    &[data-pressed] {
-      background: var(--gray-200);
-    }
-  }
-
-  &[data-selected] {
-    background: var(--highlight-background);
-    color: var(--highlight-foreground);
-    --focus-ring-color: var(--highlight-foreground);
-
-    &[data-focus-visible],
-    .cell[data-focus-visible] {
-      outline-offset: -4px;
-    }
-
-    &[data-pressed] {
-      background: var(--highlight-background-pressed);
-    }
-  }
-
-  &[data-disabled] {
-    color: var(--text-color-disabled);
-  }
-
-  &[data-href] {
-    cursor: pointer;
-  }
-
-  &[data-dragging] {
-    opacity: 0.6;
-    transform: translateZ(0);
-  }
-
-  &[data-drop-target] {
-    outline: 2px solid var(--highlight-background);
-    background: var(--highlight-overlay);
-    z-index: 4;
-  }
-
-  .dragButton {
-    all: unset;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 15px;
-    text-align: center;
-
-    svg {
-      width: var(--spacing-4);
-      height: var(--spacing-4);
-    }
-
-    &[data-focus-visible] {
-      border-radius: 4px;
-      outline: 2px solid var(--focus-ring-color);
-    }
-  }
-
-  :global(.react-aria-DropIndicator)[data-drop-target] {
-    outline: 1px solid var(--highlight-background);
-    transform: translateZ(0);
-  }
-}
-
-.cell,
-.column {
-  padding: var(--spacing-2);
-  text-align: left;
-  outline: none;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-
-  div& {
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-
-  &:is(.row:last-child > :first-child) {
-    border-end-start-radius: var(--radius);
-  }
-
-  &:is(.row:last-child > :last-child) {
-    border-end-end-radius: var(--radius);
-  }
-
-  &[data-focus-visible] {
-    outline: 2px solid var(--focus-ring-color);
-    outline-offset: -2px;
-  }
-}
-
-.column {
-  --button-color: var(--gray);
-  --button-border: transparent;
-  --button-shadow: transparent;
-  --button-border-size: 0px;
-  cursor: default;
-  border-bottom: 0.5px solid var(--border-color);
-  border-inline-end: 0.5px solid var(--border-color);
-  position: relative;
-  z-index: calc(sibling-count() - sibling-index());
-
-  &:last-child {
-    border-inline-end: none;
-  }
-
-  &[data-pressed] {
-    background: var(--gray-200);
-  }
-
-  &[data-sort-direction] {
-    --button-color: var(--tint);
-
-    &[data-pressed] {
-      background: var(--tint-200);
-    }
-  }
-
-  .columnHeader {
-    display: flex;
-    align-items: center;
-    font-weight: 600;
-  }
-
-  .columnName {
-    flex: 1;
-    font: inherit;
-    text-align: start;
-    color: inherit;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    border-color: transparent;
-    border-radius: var(--radius-sm);
-
-    &[data-focus-visible] {
-      outline: 2px solid var(--focus-ring-color);
-      outline-offset: 2px;
-    }
-  }
-
-  .sortIndicator {
-    padding: 0 2px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &:not([data-sort-direction]) .sortIndicator {
-    visibility: hidden;
-  }
-}
-
-.columnResizer {
-  width: 1px;
-  border-radius: var(--radius-sm);
-  background-color: var(--gray-500);
-  padding: 0 var(--spacing-2);
-  translate: var(--spacing-4) 0;
-  height: 32px;
-  margin: -16px 0;
-  flex: 0 0 auto;
-  touch-action: none;
-  box-sizing: content-box;
-  background-clip: content-box;
-
-  &[data-resizable-direction="both"] {
-    cursor: ew-resize;
-  }
-
-  &[data-resizable-direction="left"] {
-    cursor: e-resize;
-  }
-
-  &[data-resizable-direction="right"] {
-    cursor: w-resize;
-  }
-
-  &[data-focus-visible] {
-    background-color: var(--focus-ring-color);
-    outline: 2px solid var(--focus-ring-color);
-    outline-offset: -2px;
-  }
-
-  &[data-resizing] {
-    width: 2px;
-    background-color: var(--highlight-background);
-  }
-}
-
-.cell {
-  transform: translateZ(0);
-  --border-color: var(--gray-300);
-  tr:not(:last-child) & {
-    border-bottom: 0.5px solid var(--border-color);
-  }
-
-  [data-selected]:has(+ [data-selected]) & {
-    --border-color: rgb(255 255 255 / 0.3);
-  }
-
-  @media (forced-colors: active) {
-    --border-color: ButtonBorder;
-  }
-
-  &[data-tree-column] {
-    --chevron-placeholder: var(--spacing-5);
-    padding-inline-start: calc(
-      var(--spacing-2) + (var(--table-row-level) - 1) * var(--spacing-4) +
-        var(--chevron-placeholder)
-    );
-
-    &[data-has-child-items] {
-      --chevron-placeholder: 0px;
-    }
-  }
-
-  .chevronButton[slot="chevron"] {
-    all: unset;
-    vertical-align: middle;
-    margin-inline-end: var(--spacing-1);
-
-    svg {
-      rotate: 0deg;
-      transition: rotate 200ms;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 3px;
-      width: var(--spacing-4);
-      height: var(--spacing-4);
-    }
-  }
-
-  &[data-expanded] .chevronButton[slot="chevron"] svg {
-    rotate: 90deg;
   }
 }
 
@@ -313,15 +36,8 @@
   translate: calc(68px + (var(--table-row-level) - 1) * var(--spacing-4)) 0;
 }
 
-.row :global(.react-aria-CheckboxButton) {
-  --checkmark-color: var(--highlight-background);
-  &[data-selected] :global(.indicator) {
-    --indicator-color: var(--highlight-foreground);
-    --indicator-shadow: transparent;
-  }
-}
-
 :global(.react-aria-ResizableTableContainer) {
+  box-sizing: border-box;
   width: 100%;
   overflow: auto;
   position: relative;
@@ -333,37 +49,148 @@
 :global(.react-aria-ResizableTableContainer) .table {
   border: none;
   border-radius: 0;
-
-  &:has(.tableBody[data-empty]) {
-    height: 100%;
-  }
 }
 
-:global(.react-aria-ResizableTableContainer) .tableHeader {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+:global(.react-aria-ResizableTableContainer)
+  .table:has(:global(.react-aria-TableBody)[data-empty]) {
+  height: 100%;
 }
 
-:global(.react-aria-ResizableTableContainer) .cell {
-  white-space: nowrap;
+/*
+ * Scroll container: give the wrapper a max-height (or height) and ONLY the
+ * table body scrolls. The column header is a fixed band above the scroll area
+ * and any TableFooter is a fixed band below it, so the scrollbar spans the body
+ * alone — it never runs alongside the header or footer.
+ *
+ *   <div className={styles.scrollContainer} style={{ maxHeight: 320 }}>
+ *     <Table>…</Table>
+ *   </div>
+ *
+ */
+.scrollContainer {
+  /* Width of the classic (space-taking) scrollbar reserved by the body. The
+     header/footer bands reserve the same lane via scrollbar-gutter: stable so
+     their columns line up with the scrolling rows; this value is reused to let
+     the last column stretch into that reserved lane (see the row rules below). */
+  --scrollbar-width: 15px;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
+  border: 0.5px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--overlay-background);
 }
 
-.cell img {
-  height: 30px;
-  width: 30px;
-  object-fit: cover;
+/* The table itself becomes the height-bounded flex column. */
+.scrollContainer .table {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+/*
+ * Header / footer: fixed bands that do not scroll. Each reserves the same
+ * scrollbar gutter as the body (scrollbar-gutter: stable) so its columns line
+ * up with the scrolling rows; overflow: hidden means that reserved lane never
+ * draws a scrollbar. The band's own background and divider border span its full
+ * box — including the reserved lane — so the header/footer read as one solid
+ * band with no empty gap at the trailing edge where the body's scrollbar sits.
+ */
+.scrollContainer :global(.react-aria-TableHeader),
+.scrollContainer :global(.react-aria-TableFooter) {
   display: block;
+  flex: 0 0 auto;
+  overflow: hidden;
+  scrollbar-gutter: stable;
 }
 
-.tableLoadingIndicator {
-  height: 32px;
-  position: relative;
+.scrollContainer :global(.react-aria-TableHeader) {
+  background: var(--overlay-background);
+  border-bottom: 0.5px solid var(--border-color);
 }
 
-.tableFooter {
-  font-weight: bold;
+.scrollContainer :global(.react-aria-TableFooter) {
   background: var(--gray-200);
+  border-top: 0.5px solid var(--border-color);
+}
+
+/* Body: the only scroller. scrollbar-gutter: stable reserves the same lane as
+   the bands even when the rows don't overflow, so columns stay aligned whether
+   the platform uses overlay or classic space-taking scrollbars. overflow-x is
+   pinned to hidden so the rows (which stretch into the gutter) don't trigger a
+   horizontal scrollbar. */
+.scrollContainer :global(.react-aria-TableBody) {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  /* The body's default padding (var(--spacing-1)) insets the rows and would
+     push their columns out of line with the unpadded header/footer bands. */
+  padding: 0;
+}
+
+/*
+ * Lay every row (header, body, footer) out as its own fixed table so columns
+ * line up across the three bands. The header row has role="row" but no
+ * .react-aria-Row class, so it is targeted separately.
+ */
+/* Every row (header, body, footer) spans the full padding-box width — i.e.
+   into the scrollbar gutter the bands reserve — so the last column fills that
+   reserved lane instead of leaving an empty gap at the trailing edge. All rows
+   use the same width, so their columns stay aligned with one another; the body
+   simply draws its scrollbar on top of the lane. */
+.scrollContainer :global(.react-aria-TableHeader) tr,
+.scrollContainer :global(.react-aria-Row) {
+  display: table;
+  width: calc(100% + var(--scrollbar-width));
+  table-layout: fixed;
+}
+
+/* The divider is drawn on the header band (above), so drop the per-column
+   bottom border to avoid doubling it. Columns keep their opaque background. */
+.scrollContainer :global(.react-aria-Column) {
+  background: var(--overlay-background);
+  border-bottom: none;
+}
+
+.scrollContainer :global(.react-aria-TableFooter) :global(.react-aria-Cell) {
+  background: var(--gray-200);
+}
+
+/*
+ * Match the reserved gutter to the body's scrollbar width on all three bands
+ * (WebKit/Chrome/Safari) so their columns align exactly. The body shows a
+ * styled thumb; the header/footer lanes stay empty (overflow: hidden).
+ */
+.scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar,
+.scrollContainer :global(.react-aria-TableHeader)::-webkit-scrollbar,
+.scrollContainer :global(.react-aria-TableFooter)::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+.scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-thumb {
+  background: var(--gray-400);
+  border-radius: 6px;
+  /* Transparent border + content-box clip insets the thumb from the lane. */
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-500);
+  background-clip: content-box;
+}
+
+.scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-track {
+  background: transparent;
 }

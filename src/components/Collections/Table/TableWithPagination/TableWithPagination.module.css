@@ -1,0 +1,83 @@
+.tableWithPagination {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.footer {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: 0.5px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--overlay-background);
+}
+
+.footerStart {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/*
+ * Body-only scroll: header stays pinned, tbody is the scroller. scrollbar-gutter
+ * on both keeps columns aligned without measuring scrollbar width.
+ */
+.scrollArea {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  border: 0.5px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--overlay-background);
+}
+
+.scrollArea :global(.react-aria-Table) {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.scrollArea :global(.react-aria-TableHeader) {
+  display: block;
+  flex: 0 0 auto;
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+.scrollArea :global(.react-aria-TableBody) {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  padding: 0;
+}
+
+.scrollArea :global(.react-aria-TableHeader) tr,
+.scrollArea :global(.react-aria-Row) {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* Flatten the table's bottom corners so it reads as one piece with the footer. */
+.tableWithPagination:has(.footer) :global(.react-aria-Table),
+.tableWithPagination:has(.footer) :global(.react-aria-ResizableTableContainer),
+.tableWithPagination:has(.footer) .scrollArea {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
