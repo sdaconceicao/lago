@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/sdaconceicao/lago/compare/lago-v0.2.0...lago-v0.2.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* Update peer dependencies and configuration ([#39](https://github.com/sdaconceicao/lago/issues/39)) ([bcfb4a9](https://github.com/sdaconceicao/lago/commit/bcfb4a940c18b1a6526b9e25da15c89ba435d1dd))
+
 ## [0.2.0](https://github.com/sdaconceicao/lago/compare/lago-v0.1.0...lago-v0.2.0) (2026-07-22)
 
 
