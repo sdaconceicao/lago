@@ -2,7 +2,7 @@
 import "@/styles/theme.css";
 
 // Components
-export * from "./components/Disclosure/Accordion/Accordion";
+export * from "./components/Expandable/Accordion/Accordion";
 export * from "./components/Navigation/Breadcrumbs/Breadcrumbs";
 export * from "./components/Actions/Button/Button";
 export * from "./components/Inputs/Date/Calendar/Calendar";
@@ -22,7 +22,7 @@ export * from "./components/Inputs/Date/DateField/DateField";
 export * from "./components/Inputs/Date/DatePicker/DatePicker";
 export * from "./components/Inputs/Date/DateRangePicker/DateRangePicker";
 export * from "./components/Overlays/Dialog/Dialog";
-export * from "./components/Disclosure/Disclosure/Disclosure";
+export * from "./components/Expandable/Disclosure/Disclosure";
 export * from "./components/Inputs/DropZone/DropZone";
 export * from "./components/Inputs/FormComponents/index";
 export * from "./components/Collections/GridList/GridList";
