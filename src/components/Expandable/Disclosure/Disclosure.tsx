@@ -46,7 +46,11 @@ export function DisclosurePanel(props: DisclosurePanelProps) {
   return (
     <AriaDisclosurePanel
       {...props}
-      className={clsx("react-aria-DisclosurePanel", styles.disclosurePanel)}
+      className={clsx(
+        "react-aria-DisclosurePanel",
+        styles.disclosurePanel,
+        props.className
+      )}
     >
       <div>{props.children}</div>
     </AriaDisclosurePanel>

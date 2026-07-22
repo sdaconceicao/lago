@@ -1,0 +1,37 @@
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: calc(var(--spacing) * 80);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  overflow: clip;
+
+  /* Items reuse the Disclosure primitive, which sets its own fixed width and a
+     rounded, padded trigger. Scope overrides under .accordion so they win on
+     specificity. */
+  .accordionItem {
+    width: 100%;
+  }
+
+  .accordionItem:not(:last-child) {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .accordionHeader {
+    margin: 0;
+  }
+
+  /* Let the trigger fill the entire header row so hover/focus covers it edge to
+     edge, including when the item is collapsed. */
+  .accordionHeader button {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  /* The Disclosure primitive scales the trigger down while pressed, which pulls
+     the fill in from the edges. Keep the full row highlighted on press. */
+  .accordionHeader button[data-pressed] {
+    scale: 1;
+  }
+}
