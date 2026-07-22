@@ -5,7 +5,7 @@ import {
   type ButtonProps as RACButtonProps,
 } from "react-aria-components/Button";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { ProgressCircle } from "@/components/Status/ProgressCircle/ProgressCircle";
+import { ProgressCircle } from "@/components/Feedback/ProgressCircle/ProgressCircle";
 import utils from "@/styles/utilities.module.css";
 import styles from "./Button.module.css";
 

@@ -43,3 +43,4 @@ jobs:
           projectToken: ${{ secrets.chromatic-token }}
           onlyChanged: true # Only build changed stories, to enable turbosnap
           autoAcceptChanges: "main" # Accept all changes on main branch
+          branchName: ${{ github.head_ref || github.ref_name }}
