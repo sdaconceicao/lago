@@ -1,29 +1,24 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import {
-  Disclosure,
-  DisclosureHeader,
-  DisclosurePanel,
-} from "@/components/Layout/Disclosure/Disclosure";
-import { DisclosureGroup } from "./DisclosureGroup";
+import { Accordion } from "./Accordion";
 
-const renderGroup = (props = {}) =>
+const renderAccordion = (props = {}) =>
   render(
-    <DisclosureGroup {...props}>
-      <Disclosure id="personal">
-        <DisclosureHeader>Personal Information</DisclosureHeader>
-        <DisclosurePanel>Personal information form here.</DisclosurePanel>
-      </Disclosure>
-      <Disclosure id="billing">
-        <DisclosureHeader>Billing Address</DisclosureHeader>
-        <DisclosurePanel>Billing address form here.</DisclosurePanel>
-      </Disclosure>
-    </DisclosureGroup>
+    <Accordion {...props}>
+      <Accordion.Item id="personal">
+        <Accordion.Header>Personal Information</Accordion.Header>
+        <Accordion.Panel>Personal information form here.</Accordion.Panel>
+      </Accordion.Item>
+      <Accordion.Item id="billing">
+        <Accordion.Header>Billing Address</Accordion.Header>
+        <Accordion.Panel>Billing address form here.</Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
   );
 
-describe("DisclosureGroup", () => {
-  it("renders all disclosures collapsed by default", () => {
-    renderGroup();
+describe("Accordion", () => {
+  it("renders all items collapsed by default", () => {
+    renderAccordion();
 
     const buttons = screen.getAllByRole("button");
     expect(buttons).toHaveLength(2);
@@ -32,8 +27,8 @@ describe("DisclosureGroup", () => {
     });
   });
 
-  it("expands the disclosures listed in defaultExpandedKeys", () => {
-    renderGroup({ defaultExpandedKeys: ["personal"] });
+  it("expands the items listed in defaultExpandedKeys", () => {
+    renderAccordion({ defaultExpandedKeys: ["personal"] });
 
     expect(
       screen.getByRole("button", { name: "Personal Information" })
@@ -43,9 +38,9 @@ describe("DisclosureGroup", () => {
     ).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("expands a disclosure when its trigger is clicked", async () => {
+  it("expands an item when its header is clicked", async () => {
     const user = userEvent.setup();
-    renderGroup();
+    renderAccordion();
 
     await user.click(
       screen.getByRole("button", { name: "Personal Information" })
@@ -57,9 +52,9 @@ describe("DisclosureGroup", () => {
     expect(screen.getByText("Personal information form here.")).toBeVisible();
   });
 
-  it("collapses the open disclosure when another is expanded", async () => {
+  it("collapses the open item when another is expanded (single-expand default)", async () => {
     const user = userEvent.setup();
-    renderGroup({ defaultExpandedKeys: ["personal"] });
+    renderAccordion({ defaultExpandedKeys: ["personal"] });
 
     await user.click(screen.getByRole("button", { name: "Billing Address" }));
 
@@ -71,9 +66,9 @@ describe("DisclosureGroup", () => {
     ).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("allows multiple disclosures to be expanded when allowsMultipleExpanded", async () => {
+  it("allows multiple items to be expanded when allowsMultipleExpanded", async () => {
     const user = userEvent.setup();
-    renderGroup({
+    renderAccordion({
       allowsMultipleExpanded: true,
       defaultExpandedKeys: ["personal"],
     });
@@ -91,7 +86,7 @@ describe("DisclosureGroup", () => {
   it("calls onExpandedChange with the expanded keys", async () => {
     const user = userEvent.setup();
     const onExpandedChange = vi.fn();
-    renderGroup({ onExpandedChange });
+    renderAccordion({ onExpandedChange });
 
     await user.click(
       screen.getByRole("button", { name: "Personal Information" })
@@ -102,11 +97,20 @@ describe("DisclosureGroup", () => {
     expect([...keys]).toEqual(["personal"]);
   });
 
-  it("disables all disclosures when the group is disabled", () => {
-    renderGroup({ isDisabled: true });
+  it("disables all items when the accordion is disabled", () => {
+    renderAccordion({ isDisabled: true });
 
     screen.getAllByRole("button").forEach((button) => {
       expect(button).toBeDisabled();
     });
+  });
+
+  it("applies accordion class names to each piece", () => {
+    const { container } = renderAccordion({ defaultExpandedKeys: ["personal"] });
+
+    expect(container.querySelector(".accordion")).toBeInTheDocument();
+    expect(container.querySelectorAll(".accordion-item")).toHaveLength(2);
+    expect(container.querySelector(".accordion-header")).toBeInTheDocument();
+    expect(container.querySelector(".accordion-panel")).toBeInTheDocument();
   });
 });

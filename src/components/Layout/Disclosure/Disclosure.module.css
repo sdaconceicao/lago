@@ -22,6 +22,7 @@
     border-radius: var(--radius);
     transition: all 200ms;
     outline: none;
+    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 
     &[data-hovered],
@@ -40,6 +41,7 @@
 
     &[data-disabled] {
       color: var(--text-color-disabled);
+      cursor: not-allowed;
     }
 
     svg {
