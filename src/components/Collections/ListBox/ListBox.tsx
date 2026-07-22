@@ -13,7 +13,7 @@ import {
   type ListBoxSectionProps,
 } from "react-aria-components/ListBox";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
-import { ProgressCircle } from "@/components/Status/ProgressCircle/ProgressCircle";
+import { ProgressCircle } from "@/components/Feedback/ProgressCircle/ProgressCircle";
 import { Text } from "@/components/Typography/index";
 import styles from "./ListBox.module.css";
 
