@@ -106,7 +106,9 @@ describe("Accordion", () => {
   });
 
   it("applies accordion class names to each piece", () => {
-    const { container } = renderAccordion({ defaultExpandedKeys: ["personal"] });
+    const { container } = renderAccordion({
+      defaultExpandedKeys: ["personal"],
+    });
 
     expect(container.querySelector(".accordion")).toBeInTheDocument();
     expect(container.querySelectorAll(".accordion-item")).toHaveLength(2);
