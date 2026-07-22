@@ -13,7 +13,7 @@ import {
   Disclosure,
   DisclosureHeader,
   DisclosurePanel,
-} from "@/components/Layout/Disclosure/Disclosure";
+} from "@/components/Disclosure/Disclosure/Disclosure";
 import styles from "./Accordion.module.css";
 
 /**
