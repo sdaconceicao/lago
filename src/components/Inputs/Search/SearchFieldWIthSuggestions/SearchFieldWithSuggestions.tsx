@@ -10,12 +10,12 @@ import {
 import { Popover } from "@/components/Overlays/Popover/Popover";
 import { SearchField, type SearchFieldProps } from "../SearchField/SearchField";
 import { useSearchSuggestions } from "../SearchField/SearchField.hooks";
+import styles from "../SearchField/SearchField.module.css";
 import {
   DEFAULT_DEBOUNCE_DELAY,
-  type SearchSuggestion,
   filterSuggestions,
+  type SearchSuggestion,
 } from "../SearchField/SearchField.utils";
-import styles from "../SearchField/SearchField.module.css";
 
 export type { SearchSuggestion } from "../SearchField/SearchField.utils";
 

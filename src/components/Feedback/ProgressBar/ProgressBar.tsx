@@ -1,6 +1,6 @@
 "use client";
-import type { CSSProperties } from "react";
 import clsx from "clsx";
+import type { CSSProperties } from "react";
 import {
   ProgressBar as AriaProgressBar,
   type ProgressBarProps as AriaProgressBarProps,

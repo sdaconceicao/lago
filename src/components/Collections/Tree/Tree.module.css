@@ -55,8 +55,12 @@
     &[data-drop-target] {
       outline: 1px solid var(--highlight-background);
       margin-left: calc(
-        var(--spacing-2) + var(--checkbox-width) + var(--drag-button-width) +
-          var(--spacing-5) + (var(--tree-item-level) - 1) * var(--spacing-4)
+        var(--spacing-2) +
+        var(--checkbox-width) +
+        var(--drag-button-width) +
+        var(--spacing-5) +
+        (var(--tree-item-level) - 1) *
+        var(--spacing-4)
       );
     }
   }
@@ -93,8 +97,12 @@
     position: absolute;
     bottom: 0;
     inset-inline-start: calc(
-      var(--spacing-2) + var(--checkbox-width) + var(--drag-button-width) +
-        var(--chevron-width) + (var(--tree-item-level) - 1) * var(--padding)
+      var(--spacing-2) +
+      var(--checkbox-width) +
+      var(--drag-button-width) +
+      var(--chevron-width) +
+      (var(--tree-item-level) - 1) *
+      var(--padding)
     );
     inset-inline-end: var(--spacing-2);
     border-bottom: 0.5px solid var(--border-color);

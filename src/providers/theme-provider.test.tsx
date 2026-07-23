@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { act, render, renderHook, screen } from "@testing-library/react";
+import type { ReactNode } from "react";
 import { ThemeProvider, useTheme } from "./theme-provider";
 
 const createMatchMedia = (matches: boolean) => {

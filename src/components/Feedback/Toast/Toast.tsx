@@ -1,8 +1,7 @@
 "use client";
-import { type CSSProperties } from "react";
-import { flushSync } from "react-dom";
 import clsx from "clsx";
 import { X } from "lucide-react";
+import type { CSSProperties } from "react";
 import {
   Text,
   UNSTABLE_Toast as Toast,
@@ -11,6 +10,7 @@ import {
   UNSTABLE_ToastQueue as ToastQueue,
   UNSTABLE_ToastRegion as ToastRegion,
 } from "react-aria-components/Toast";
+import { flushSync } from "react-dom";
 import { Button } from "@/components/Actions/Button/Button";
 import styles from "./Toast.module.css";
 

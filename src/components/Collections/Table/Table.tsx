@@ -7,10 +7,10 @@ import {
 import { Cell, type CellProps } from "./BaseComponents/Cell/Cell";
 import { Column, type ColumnProps } from "./BaseComponents/Column/Column";
 import {
+  defaultResultsTemplate,
   ResultsCount,
   type ResultsCountInfo,
   type ResultsCountProps,
-  defaultResultsTemplate,
 } from "./BaseComponents/ResultsCount/ResultsCount";
 import { Row, type RowProps } from "./BaseComponents/Row/Row";
 import {
@@ -49,17 +49,6 @@ Table.Cell = Cell;
 Table.LoadMoreItem = TableLoadMoreItem;
 Table.ResultsCount = ResultsCount;
 
-export {
-  Cell,
-  Column,
-  defaultResultsTemplate,
-  ResultsCount,
-  Row,
-  TableBody,
-  TableFooter,
-  TableHeader,
-  TableLoadMoreItem,
-};
 export type {
   CellProps,
   ColumnProps,
@@ -71,4 +60,15 @@ export type {
   TableHeaderProps,
   TableLoadMoreItemProps,
   TableProps,
+};
+export {
+  Cell,
+  Column,
+  defaultResultsTemplate,
+  ResultsCount,
+  Row,
+  TableBody,
+  TableFooter,
+  TableHeader,
+  TableLoadMoreItem,
 };

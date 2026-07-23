@@ -11,8 +11,7 @@ import { Text } from "@/components/Typography/index";
 import styles from "./TagGroup.module.css";
 
 export interface TagGroupProps<T>
-  extends
-    Omit<AriaTagGroupProps, "children">,
+  extends Omit<AriaTagGroupProps, "children">,
     Pick<TagListProps<T>, "items" | "children" | "renderEmptyState"> {
   /** Accessible label rendered above the tags. */
   label?: string;

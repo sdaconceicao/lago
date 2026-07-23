@@ -1,5 +1,5 @@
-import type { HTMLAttributes } from "react";
 import clsx from "clsx";
+import type { HTMLAttributes } from "react";
 import styles from "./DialogFooter.module.css";
 
 export type DialogFooterProps = HTMLAttributes<HTMLElement>;

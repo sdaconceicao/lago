@@ -1,6 +1,6 @@
 "use client";
-import type { CSSProperties } from "react";
 import clsx from "clsx";
+import type { CSSProperties } from "react";
 import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,

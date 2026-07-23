@@ -1,6 +1,6 @@
+import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react-swc";
 import { readFileSync } from "fs";
-import { fileURLToPath } from "node:url";
 import path from "path";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";

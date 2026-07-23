@@ -1,6 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { Check } from "lucide-react";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   ListBox as AriaListBox,
   ListBoxItem as AriaListBoxItem,
@@ -12,7 +13,6 @@ import {
   type ListBoxProps,
   type ListBoxSectionProps,
 } from "react-aria-components/ListBox";
-import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { ProgressCircle } from "@/components/Feedback/ProgressCircle/ProgressCircle";
 import { Text } from "@/components/Typography/index";
 import styles from "./ListBox.module.css";
@@ -113,4 +113,4 @@ export function DropdownItem(props: ListBoxItemProps) {
   );
 }
 
-export { Text, Header };
+export { Header, Text };

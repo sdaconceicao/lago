@@ -18,9 +18,8 @@ import {
 import utils from "@/styles/utilities.module.css";
 import styles from "./DateField.module.css";
 
-export interface DateFieldProps<
-  T extends DateValue,
-> extends AriaDateFieldProps<T> {
+export interface DateFieldProps<T extends DateValue>
+  extends AriaDateFieldProps<T> {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);

@@ -12,10 +12,8 @@ import {
 } from "@/components/Inputs/FormComponents/index";
 import styles from "./CheckboxGroup.module.css";
 
-export interface CheckboxGroupProps extends Omit<
-  AriaCheckboxGroupProps,
-  "children"
-> {
+export interface CheckboxGroupProps
+  extends Omit<AriaCheckboxGroupProps, "children"> {
   children?: React.ReactNode;
   label?: string;
   description?: string;

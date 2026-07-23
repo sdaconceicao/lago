@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
-import type { ListBoxItemProps } from "react-aria-components/ListBox";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
+import type { ListBoxItemProps } from "react-aria-components/ListBox";
 import { ListBoxItem } from "@/components/Collections/ListBox/ListBox";
 import { CheckboxIndicator } from "@/components/Inputs/Checkbox/CheckboxItem/Checkbox";
 import { Text } from "@/components/Typography/index";

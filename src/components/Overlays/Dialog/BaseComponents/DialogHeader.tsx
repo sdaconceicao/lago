@@ -1,15 +1,13 @@
 "use client";
-import type { HTMLAttributes, ReactNode } from "react";
 import clsx from "clsx";
 import { X } from "lucide-react";
+import type { HTMLAttributes, ReactNode } from "react";
 import { Heading } from "react-aria-components/Dialog";
 import { Button } from "@/components/Actions/Button/Button";
 import styles from "./DialogHeader.module.css";
 
-export interface DialogHeaderProps extends Omit<
-  HTMLAttributes<HTMLElement>,
-  "title"
-> {
+export interface DialogHeaderProps
+  extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /** Featured icon rendered in a bordered tile to the left of the title. */
   icon?: ReactNode;
   /** Rendered as the slotted title heading, labelling the dialog. */

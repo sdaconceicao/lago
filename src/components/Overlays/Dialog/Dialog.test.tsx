@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import type { DialogProps } from "react-aria-components/Dialog";
-import type { DialogTriggerProps } from "react-aria-components/Dialog";
+import type {
+  DialogProps,
+  DialogTriggerProps,
+} from "react-aria-components/Dialog";
 import { Button } from "@/components/Actions/Button/Button";
 import { Modal } from "@/components/Overlays/Modal/Modal";
 import { Dialog, DialogTrigger, Heading } from "./Dialog";

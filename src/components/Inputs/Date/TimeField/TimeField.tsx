@@ -17,9 +17,8 @@ import {
 } from "@/components/Inputs/FormComponents/index";
 import styles from "./TimeField.module.css";
 
-export interface TimeFieldProps<
-  T extends TimeValue,
-> extends AriaTimeFieldProps<T> {
+export interface TimeFieldProps<T extends TimeValue>
+  extends AriaTimeFieldProps<T> {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);

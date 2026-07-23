@@ -16,9 +16,8 @@ import { Text } from "@/components/Typography/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./Calendar.module.css";
 
-export interface CalendarProps<
-  T extends DateValue,
-> extends AriaCalendarProps<T> {
+export interface CalendarProps<T extends DateValue>
+  extends AriaCalendarProps<T> {
   errorMessage?: string;
 }
 

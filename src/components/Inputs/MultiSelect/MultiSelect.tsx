@@ -24,10 +24,8 @@ import styles from "./MultiSelect.module.css";
 /** Controls how selected items are displayed inside the field. */
 export type MultiSelectDisplayMode = "tags" | "text";
 
-export interface MultiSelectProps<T> extends Omit<
-  AriaComboBoxProps<T, "multiple">,
-  "children" | "selectionMode"
-> {
+export interface MultiSelectProps<T>
+  extends Omit<AriaComboBoxProps<T, "multiple">, "children" | "selectionMode"> {
   /** Accessible label rendered above the field. */
   label?: string;
   /** Helper text rendered below the field. Provides additional context or instructions. */
@@ -96,7 +94,7 @@ export function MultiSelect<T>({
   );
 }
 
-export { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
-export type { MultiSelectInputProps } from "./BaseComponents/MultiSelectInput";
 export { MultiSelectItem } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectItem";
 export { MultiSelectTags } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectTags";
+export type { MultiSelectInputProps } from "./BaseComponents/MultiSelectInput";
+export { MultiSelectInput } from "./BaseComponents/MultiSelectInput";

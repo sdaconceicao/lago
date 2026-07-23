@@ -1,5 +1,5 @@
-import { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { useState } from "react";
 import { fn } from "storybook/test";
 import type { SearchSuggestion } from "../SearchField/SearchField.utils";
 import {

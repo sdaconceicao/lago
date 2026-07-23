@@ -45,7 +45,7 @@
     outline: none;
     /* Default variant: rounded corners matching the chip; "round" overrides to a circle */
     border-radius: var(--radius-sm);
-    aspect-ratio: 1/1;
+    aspect-ratio: 1 / 1;
     height: calc(100% - 6px);
     cursor: pointer;
     display: flex;

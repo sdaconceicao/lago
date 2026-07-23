@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
 import clsx from "clsx";
 import { Check, ChevronRight, Dot } from "lucide-react";
+import React from "react";
 import {
   Menu as AriaMenu,
   MenuItem as AriaMenuItem,
@@ -101,4 +101,4 @@ export function SubmenuTrigger(props: SubmenuTriggerProps) {
   );
 }
 
-export { Text, Header, Separator, Keyboard };
+export { Header, Keyboard, Separator, Text };

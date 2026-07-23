@@ -1,6 +1,6 @@
+import type { Preview } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { createElement, useEffect } from "react";
-import type { Preview } from "@storybook/react-vite";
 import {
   type Theme,
   ThemeProvider,

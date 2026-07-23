@@ -13,10 +13,8 @@ import { DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
 import { Popover } from "@/components/Overlays/Popover/Popover";
 import styles from "./ColorPicker.module.css";
 
-export interface ColorPickerProps extends Omit<
-  AriaColorPickerProps,
-  "children"
-> {
+export interface ColorPickerProps
+  extends Omit<AriaColorPickerProps, "children"> {
   label?: string;
   children?: React.ReactNode;
 }

@@ -1,6 +1,6 @@
 "use client";
-import { useCallback, useContext } from "react";
 import clsx from "clsx";
+import { useCallback, useContext } from "react";
 import { ComboBoxStateContext, Input } from "react-aria-components/ComboBox";
 import styles from "./MultiSelectInput.module.css";
 

@@ -1,11 +1,11 @@
 "use client";
-import { useMemo } from "react";
 import clsx from "clsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useMemo } from "react";
 import { Button } from "react-aria-components/Button";
 import utils from "@/styles/utilities.module.css";
-import { getPaginationRange } from "./Pagination.utils";
 import styles from "./Pagination.module.css";
+import { getPaginationRange } from "./Pagination.utils";
 
 /**
  * Props for the Pagination component.

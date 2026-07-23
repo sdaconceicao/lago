@@ -26,17 +26,17 @@
 
     &:not([data-orientation="horizontal"]) {
       grid-template-columns: repeat(
-        auto-fit,
-        minmax(100px, var(--grid-item-size))
-      );
+          auto-fit,
+          minmax(100px, var(--grid-item-size))
+        );
     }
   }
 
   &[data-layout="grid"] > :global(.react-aria-GridListSection) {
     grid-template-columns: repeat(
-      auto-fit,
-      minmax(100px, var(--grid-item-size))
-    );
+        auto-fit,
+        minmax(100px, var(--grid-item-size))
+      );
     grid-auto-rows: min-content;
   }
 

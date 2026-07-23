@@ -1,7 +1,7 @@
 "use client";
-import { type ReactNode, useCallback, useMemo, useState } from "react";
 import clsx from "clsx";
-import { type TableProps } from "react-aria-components/Table";
+import { type ReactNode, useCallback, useMemo, useState } from "react";
+import type { TableProps } from "react-aria-components/Table";
 import { Pagination } from "@/components/Actions/Pagination/Pagination";
 import { clampPage } from "@/components/Actions/Pagination/Pagination.utils";
 import {
@@ -9,17 +9,15 @@ import {
   type ResultsCountInfo,
 } from "../BaseComponents/ResultsCount/ResultsCount";
 import { Table } from "../Table";
+import styles from "./TableWithPagination.module.css";
 import {
   getPageCount,
   getResultsRange,
   paginate,
 } from "./TableWithPagination.utils";
-import styles from "./TableWithPagination.module.css";
 
-export interface TableWithPaginationProps<T> extends Omit<
-  TableProps,
-  "children"
-> {
+export interface TableWithPaginationProps<T>
+  extends Omit<TableProps, "children"> {
   /** The full, unpaginated set of rows. Slicing is handled internally. */
   items: T[];
   /**
