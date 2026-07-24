@@ -1,6 +1,6 @@
 "use client";
-import type { ReactNode } from "react";
 import clsx from "clsx";
+import type { ReactNode } from "react";
 import {
   CheckboxButton,
   CheckboxField,
@@ -11,8 +11,8 @@ import {
   Description,
   FieldError,
 } from "@/components/Inputs/FormComponents/index";
-import { CheckboxIndicator } from "./CheckboxIndicator";
 import styles from "./Checkbox.module.css";
+import { CheckboxIndicator } from "./CheckboxIndicator";
 
 interface CheckboxProps extends CheckboxFieldProps {
   children?: ReactNode;
@@ -47,5 +47,5 @@ export function Checkbox({
   );
 }
 
-export { CheckboxIndicator } from "./CheckboxIndicator";
 export type { CheckboxIndicatorProps } from "./CheckboxIndicator";
+export { CheckboxIndicator } from "./CheckboxIndicator";

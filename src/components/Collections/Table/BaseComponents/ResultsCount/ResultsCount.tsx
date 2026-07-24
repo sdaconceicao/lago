@@ -1,6 +1,6 @@
 "use client";
-import { type HTMLAttributes, type ReactNode } from "react";
 import clsx from "clsx";
+import type { HTMLAttributes, ReactNode } from "react";
 import styles from "./ResultsCount.module.css";
 
 /** The values passed to a results template: the visible range and the total. */
@@ -27,10 +27,8 @@ export const defaultResultsTemplate = ({
   return `Showing ${format(from)} to ${format(to)} of ${format(total)} results`;
 };
 
-export interface ResultsCountProps extends Omit<
-  HTMLAttributes<HTMLElement>,
-  "children"
-> {
+export interface ResultsCountProps
+  extends Omit<HTMLAttributes<HTMLElement>, "children"> {
   /** Index of the first visible result (1-based). */
   from: number;
   /** Index of the last visible result (1-based). */

@@ -14,6 +14,7 @@
   }
 
   &[data-disabled] {
+    /* biome-ignore lint: React Aria sets inline styles; !important required to override in disabled state */
     background: gray !important;
     opacity: 0.5;
   }

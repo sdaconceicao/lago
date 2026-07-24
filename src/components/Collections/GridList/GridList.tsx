@@ -85,4 +85,4 @@ export function GridListLoadMoreItem(props: GridListLoadMoreItemProps) {
   );
 }
 
-export { GridListSection, GridListHeader, Text };
+export { GridListHeader, GridListSection, Text };

@@ -35,11 +35,8 @@ jobs:
         id: playwright-setup
         uses: ./.github/actions/setup-playwright
 
-      - name: Run linting
-        run: pnpm lint
-
-      - name: Run formatting
-        run: pnpm format:check
+      - name: Run Biome (lint + format + import checks)
+        run: pnpm exec biome ci --error-on-warnings .
 
       - name: Run type checking - frontend
         run: pnpm exec tsc --noEmit

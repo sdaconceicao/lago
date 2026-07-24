@@ -1,12 +1,12 @@
 "use client";
 import clsx from "clsx";
 import { ChevronRight } from "lucide-react";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   Cell as AriaCell,
   Button,
   type CellProps,
 } from "react-aria-components/Table";
-import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import styles from "./Cell.module.css";
 
 export type { CellProps };

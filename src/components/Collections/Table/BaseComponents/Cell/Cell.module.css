@@ -44,8 +44,10 @@
   &[data-tree-column] {
     --chevron-placeholder: var(--spacing-5);
     padding-inline-start: calc(
-      var(--spacing-2) + (var(--table-row-level) - 1) * var(--spacing-4) +
-        var(--chevron-placeholder)
+      var(--spacing-2) +
+      (var(--table-row-level) - 1) *
+      var(--spacing-4) +
+      var(--chevron-placeholder)
     );
 
     &[data-has-child-items] {

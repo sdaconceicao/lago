@@ -74,6 +74,6 @@ export function Select<T extends object>({
   );
 }
 
-export { SelectInput } from "./BaseComponents/SelectInput";
-export type { SelectInputProps } from "./BaseComponents/SelectInput";
 export { SelectItem } from "@/components/Inputs/Select/BaseComponents/SelectItem";
+export type { SelectInputProps } from "./BaseComponents/SelectInput";
+export { SelectInput } from "./BaseComponents/SelectInput";

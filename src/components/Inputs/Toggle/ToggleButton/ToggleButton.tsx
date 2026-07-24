@@ -1,10 +1,10 @@
 "use client";
 import clsx from "clsx";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   ToggleButton as RACToggleButton,
   type ToggleButtonProps as RACToggleButtonProps,
 } from "react-aria-components/ToggleButton";
-import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import utils from "@/styles/utilities.module.css";
 import styles from "./ToggleButton.module.css";
 

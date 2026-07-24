@@ -24,9 +24,8 @@ import { Popover } from "@/components/Overlays/Popover/Popover";
 import utils from "@/styles/utilities.module.css";
 import styles from "./DateRangePicker.module.css";
 
-export interface DateRangePickerProps<
-  T extends DateValue,
-> extends AriaDateRangePickerProps<T> {
+export interface DateRangePickerProps<T extends DateValue>
+  extends AriaDateRangePickerProps<T> {
   label?: string;
   description?: string;
   errorMessage?: string | ((validation: ValidationResult) => string);

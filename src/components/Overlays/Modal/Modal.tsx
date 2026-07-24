@@ -1,11 +1,11 @@
 "use client";
 import clsx from "clsx";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   ModalOverlay,
   type ModalOverlayProps,
   Modal as RACModal,
 } from "react-aria-components/Modal";
-import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import styles from "./Modal.module.css";
 
 export function Modal(props: ModalOverlayProps) {

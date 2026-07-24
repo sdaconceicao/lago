@@ -1,6 +1,6 @@
 "use client";
-import type React from "react";
 import clsx from "clsx";
+import type React from "react";
 import { Group } from "react-aria-components/Group";
 import {
   TextField as AriaTextField,
@@ -16,9 +16,8 @@ import {
 import utils from "@/styles/utilities.module.css";
 import styles from "./TextField.module.css";
 
-export interface TextFieldProps<
-  T = HTMLInputElement,
-> extends AriaTextFieldProps {
+export interface TextFieldProps<T = HTMLInputElement>
+  extends AriaTextFieldProps {
   /** Accessible label rendered above the field. */
   label?: string;
   /** Helper text rendered below the field. */

@@ -1,20 +1,21 @@
 "use client";
-import { useEffect } from "react";
 import clsx from "clsx";
+import { useEffect } from "react";
 import {
   Autocomplete as AriaAutocomplete,
   type AutocompleteProps as AriaAutocompleteProps,
   useFilter,
 } from "react-aria-components/Autocomplete";
 import { Dialog } from "react-aria-components/Dialog";
-import { type MenuProps as AriaMenuProps } from "react-aria-components/Menu";
+import type { MenuProps as AriaMenuProps } from "react-aria-components/Menu";
 import { Menu } from "@/components/Actions/Menu/Menu";
 import { SearchField } from "@/components/Inputs/Search/SearchField/SearchField";
 import { Modal } from "@/components/Overlays/Modal/Modal";
 import styles from "./CommandPalette.module.css";
 
 export interface CommandPaletteProps<T>
-  extends Omit<AriaAutocompleteProps, "children">, AriaMenuProps<T> {
+  extends Omit<AriaAutocompleteProps, "children">,
+    AriaMenuProps<T> {
   isOpen: boolean;
   onOpenChange: (isOpen?: boolean) => void;
 }

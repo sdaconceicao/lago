@@ -4,7 +4,6 @@
   box-sizing: border-box;
   overflow: auto;
   min-width: 150px;
-  box-sizing: border-box;
   outline: none;
   border-radius: inherit;
   display: grid;
@@ -24,6 +23,24 @@
     justify-content: center;
     font-style: italic;
     min-height: var(--spacing-8);
+  }
+
+  :global(.react-aria-Separator) {
+    grid-column-start: 1;
+    grid-column-end: -1;
+    margin: 0 var(--spacing-2);
+    border: 0;
+    border-top: 0.5px solid var(--border-color);
+    height: auto;
+    width: auto;
+
+    .menuItem + & {
+      margin-block-start: var(--spacing-1);
+    }
+
+    &:has(+ .menuItem) {
+      margin-block-end: var(--spacing-1);
+    }
   }
 }
 
@@ -172,23 +189,5 @@
 
   &:first-child :global(.react-aria-Header) {
     margin-top: -0.5px;
-  }
-}
-
-.menu :global(.react-aria-Separator) {
-  grid-column-start: 1;
-  grid-column-end: -1;
-  margin: 0 var(--spacing-2);
-  border: 0;
-  border-top: 0.5px solid var(--border-color);
-  height: auto;
-  width: auto;
-
-  .menuItem + & {
-    margin-block-start: var(--spacing-1);
-  }
-
-  &:has(+ .menuItem) {
-    margin-block-end: var(--spacing-1);
   }
 }

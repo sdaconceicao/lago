@@ -1,6 +1,6 @@
 "use client";
-import type { CSSProperties } from "react";
 import clsx from "clsx";
+import type { CSSProperties } from "react";
 import {
   ProgressBar as AriaProgressBar,
   type ProgressBarProps as AriaProgressBarProps,
@@ -28,7 +28,7 @@ export function ProgressBar({ label, ...props }: ProgressBarProps) {
               className={clsx("fill", styles.fill)}
               style={
                 {
-                  "--percent": (isIndeterminate ? 100 : percentage) + "%",
+                  "--percent": `${isIndeterminate ? 100 : percentage}%`,
                 } as CSSProperties
               }
             />

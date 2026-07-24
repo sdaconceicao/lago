@@ -1,5 +1,6 @@
 "use client";
 import clsx from "clsx";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   Tab as RACTab,
   TabList as RACTabList,
@@ -13,7 +14,6 @@ import {
   type TabProps,
   type TabsProps,
 } from "react-aria-components/Tabs";
-import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import styles from "./Tabs.module.css";
 
 export function Tabs(props: TabsProps) {

@@ -1,6 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   CalendarCell as AriaCalendarCell,
   RangeCalendar as AriaRangeCalendar,
@@ -10,16 +11,14 @@ import {
   type DateValue,
   Text,
 } from "react-aria-components/RangeCalendar";
-import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { Button } from "@/components/Actions/Button/Button";
 import { CalendarGrid } from "@/components/Inputs/Date/Calendar/Calendar";
 import calendarStyles from "@/components/Inputs/Date/Calendar/Calendar.module.css";
 import utils from "@/styles/utilities.module.css";
 import styles from "./RangeCalendar.module.css";
 
-export interface RangeCalendarProps<
-  T extends DateValue,
-> extends AriaRangeCalendarProps<T> {
+export interface RangeCalendarProps<T extends DateValue>
+  extends AriaRangeCalendarProps<T> {
   errorMessage?: string;
 }
 
@@ -28,6 +27,11 @@ export function RangeCalendar<T extends DateValue>({
   ...props
 }: RangeCalendarProps<T>) {
   const months = props.visibleDuration?.months || 1;
+  const monthKeys = Array.from(
+    { length: months },
+    (_, monthOffset) => `month-${monthOffset}`
+  );
+
   return (
     <AriaRangeCalendar
       {...props}
@@ -37,29 +41,29 @@ export function RangeCalendar<T extends DateValue>({
       }
     >
       <div className={clsx("months", styles.months)}>
-        {Array.from({ length: months }, (_, i) => (
-          <div key={i} className={clsx("month", styles.month)}>
+        {monthKeys.map((monthKey, monthOffset) => (
+          <div key={monthKey} className={clsx("month", styles.month)}>
             <header>
-              {i === 0 && (
+              {monthOffset === 0 && (
                 <Button slot="previous" variant="quiet">
                   <ChevronLeft />
                 </Button>
               )}
               <CalendarHeading
-                offset={{ months: i }}
+                offset={{ months: monthOffset }}
                 className={clsx(
                   "react-aria-CalendarHeading",
                   styles.calendarHeading
                 )}
               />
-              {i === months - 1 && (
+              {monthOffset === months - 1 && (
                 <Button slot="next" variant="quiet">
                   <ChevronRight />
                 </Button>
               )}
             </header>
             <CalendarGrid
-              offset={{ months: i }}
+              offset={{ months: monthOffset }}
               className={clsx("react-aria-CalendarGrid", styles.calendarGrid)}
             >
               {(date) => <CalendarCell date={date} />}

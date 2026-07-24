@@ -1,15 +1,13 @@
 "use client";
-import type React from "react";
-import { useCallback, useRef, useState } from "react";
 import clsx from "clsx";
 import { Search, X } from "lucide-react";
+import type React from "react";
+import { useCallback, useRef, useState } from "react";
 import { Group } from "react-aria-components/Group";
 import {
   SearchField as AriaSearchField,
-  Input,
-} from "react-aria-components/SearchField";
-import {
   type SearchFieldProps as AriaSearchFieldProps,
+  Input,
   type ValidationResult,
 } from "react-aria-components/SearchField";
 import {
@@ -21,8 +19,8 @@ import {
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
 import utils from "@/styles/utilities.module.css";
 import { useSearchSuggestions } from "./SearchField.hooks";
-import { DEFAULT_DEBOUNCE_DELAY } from "./SearchField.utils";
 import styles from "./SearchField.module.css";
+import { DEFAULT_DEBOUNCE_DELAY } from "./SearchField.utils";
 
 export interface SearchFieldProps extends AriaSearchFieldProps {
   /** Accessible label rendered above the field. */

@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { renderHook } from "@testing-library/react";
+import type { ReactNode } from "react";
 import { ThemeProvider } from "../providers/theme-provider";
 import { useDarkMode } from "./use-dark-mode";
 

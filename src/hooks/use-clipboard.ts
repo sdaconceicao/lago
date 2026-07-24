@@ -33,7 +33,7 @@ export const useClipboard = (): UseClipboardReturnType => {
   const [copied, setCopied] = useState<string | boolean>(false);
 
   // Fallback function for older browsers
-  const fallback = (text: string, id?: string) => {
+  const fallback = useCallback((text: string, id?: string) => {
     try {
       // Textarea to copy the text to the clipboard
       const textArea = document.createElement("textarea");
@@ -59,24 +59,27 @@ export const useClipboard = (): UseClipboardReturnType => {
         error: err instanceof Error ? err : new Error("Fallback copy failed"),
       };
     }
-  };
-
-  const copy = useCallback(async (text: string, id?: string) => {
-    if (navigator.clipboard && window.isSecureContext) {
-      try {
-        await navigator.clipboard.writeText(text);
-
-        setCopied(id || true);
-        setTimeout(() => setCopied(false), DEFAULT_TIMEOUT);
-
-        return { success: true };
-      } catch {
-        // If modern method fails, try fallback
-        return fallback(text, id);
-      }
-    }
-    return fallback(text);
   }, []);
+
+  const copy = useCallback(
+    async (text: string, id?: string) => {
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+
+          setCopied(id || true);
+          setTimeout(() => setCopied(false), DEFAULT_TIMEOUT);
+
+          return { success: true };
+        } catch {
+          // If modern method fails, try fallback
+          return fallback(text, id);
+        }
+      }
+      return fallback(text);
+    },
+    [fallback]
+  );
 
   return { copied, copy };
 };

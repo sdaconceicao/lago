@@ -38,6 +38,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Desert Sunset">
       <img
         src="https://images.unsplash.com/photo-1705034598432-1694e203cdf3?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Desert Sunset"
         width={600}
         height={400}
       />
@@ -47,6 +48,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Hiking Trail">
       <img
         src="https://images.unsplash.com/photo-1722233987129-61dc344db8b6?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Hiking Trail"
         width={600}
         height={900}
       />
@@ -56,6 +58,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Lion">
       <img
         src="https://images.unsplash.com/photo-1629812456605-4a044aa38fbc?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Lion"
         width={600}
         height={899}
       />
@@ -65,6 +68,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Mountain Sunrise">
       <img
         src="https://images.unsplash.com/photo-1722172118908-1a97c312ce8c?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Mountain Sunrise"
         width={600}
         height={900}
       />
@@ -74,6 +78,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Giraffe tongue">
       <img
         src="https://images.unsplash.com/photo-1574870111867-089730e5a72b?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Giraffe tongue"
         width={600}
         height={900}
       />
@@ -83,6 +88,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Golden Hour">
       <img
         src="https://images.unsplash.com/photo-1718378037953-ab21bf2cf771?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Golden Hour"
         width={600}
         height={402}
       />
@@ -92,6 +98,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Architecture">
       <img
         src="https://images.unsplash.com/photo-1721661657253-6621d52db753?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDYxfE04alZiTGJUUndzfHxlbnwwfHx8fHw%3D"
+        alt="Architecture"
         width={600}
         height={900}
       />
@@ -101,6 +108,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Peeking leopard">
       <img
         src="https://images.unsplash.com/photo-1456926631375-92c8ce872def?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Peeking leopard"
         width={600}
         height={400}
       />
@@ -110,6 +118,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Roofs">
       <img
         src="https://images.unsplash.com/photo-1721598359121-363311b3b263?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDc0fE04alZiTGJUUndzfHxlbnwwfHx8fHw%3D"
+        alt="Roofs"
         width={600}
         height={900}
       />
@@ -119,6 +128,7 @@ export const Example: Story = (args) => (
     <GridListItem textValue="Half Dome Deer">
       <img
         src="https://images.unsplash.com/photo-1472396961693-142e6e269027?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Half Dome Deer"
         width={600}
         height={990}
       />
@@ -145,6 +155,7 @@ export const Sections: Story = (args) => (
       <GridListItem textValue="Desert Sunset">
         <img
           src="https://images.unsplash.com/photo-1705034598432-1694e203cdf3?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Desert Sunset"
           width={600}
           height={400}
         />
@@ -154,6 +165,7 @@ export const Sections: Story = (args) => (
       <GridListItem textValue="Hiking Trail">
         <img
           src="https://images.unsplash.com/photo-1722233987129-61dc344db8b6?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Hiking Trail"
           width={600}
           height={900}
         />
@@ -166,6 +178,7 @@ export const Sections: Story = (args) => (
       <GridListItem textValue="Lion">
         <img
           src="https://images.unsplash.com/photo-1629812456605-4a044aa38fbc?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Lion"
           width={600}
           height={899}
         />
@@ -175,6 +188,7 @@ export const Sections: Story = (args) => (
       <GridListItem textValue="Giraffe tongue">
         <img
           src="https://images.unsplash.com/photo-1574870111867-089730e5a72b?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          alt="Giraffe tongue"
           width={600}
           height={900}
         />

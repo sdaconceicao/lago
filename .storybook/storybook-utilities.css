@@ -6,8 +6,8 @@ body.sb-theme-dark .sbdocs,
 body.sb-theme-dark .sbdocs-wrapper,
 body.sb-theme-dark .sbdocs-content,
 body.sb-theme-dark #storybook-docs {
-  background-color: #000 !important;
-  color: #fff !important;
+  background-color: #000;
+  color: #fff;
 }
 
 body.sb-theme-dark .sbdocs h1,
@@ -22,72 +22,72 @@ body.sb-theme-dark .sbdocs span,
 body.sb-theme-dark .sbdocs code,
 body.sb-theme-dark .sbdocs pre,
 body.sb-theme-dark .sbdocs a {
-  color: #fff !important;
+  color: #fff;
 }
 
 /* Dark mode args tables + code/source blocks */
 body.sb-theme-dark .sbdocs table,
 body.sb-theme-dark .sbdocs .docblock-argstable,
 body.sb-theme-dark .sbdocs .docblock-argstable table {
-  background-color: #000 !important;
-  color: #fff !important;
-  border-color: #4a4a4a !important;
+  background-color: #000;
+  color: #fff;
+  border-color: #4a4a4a;
 }
 
 body.sb-theme-dark .sbdocs th,
 body.sb-theme-dark .sbdocs td,
 body.sb-theme-dark .sbdocs .docblock-argstable-head th,
 body.sb-theme-dark .sbdocs .docblock-argstable-body td {
-  background-color: #111 !important;
-  color: #fff !important;
-  border-color: #4a4a4a !important;
+  background-color: #111;
+  color: #fff;
+  border-color: #4a4a4a;
 }
 
 body.sb-theme-dark .sbdocs .docblock-code-toggle,
 body.sb-theme-dark .sbdocs .docblock-source,
 body.sb-theme-dark .sbdocs .docblock-source pre,
 body.sb-theme-dark .sbdocs .docblock-source code {
-  background-color: #000 !important;
-  color: #fff !important;
-  border-color: #6b6b6b !important;
+  background-color: #000;
+  color: #fff;
+  border-color: #6b6b6b;
 }
 
 body.sb-theme-dark .sbdocs .docblock-source,
 body.sb-theme-dark .sbdocs .docblock-code-toggle {
-  border: 1px solid #6b6b6b !important;
+  border: 1px solid #6b6b6b;
 }
 
 /* Dark mode docs preview surface + icons */
 body.sb-theme-dark .sbdocs .sbdocs-preview,
 body.sb-theme-dark .sbdocs .sbdocs-preview.sb-unstyled,
 body.sb-theme-dark .sbdocs .sbdocs-preview.sb-unstyled.css-1esgs33 {
-  background-color: #111 !important;
-  border-color: #6b6b6b !important;
+  background-color: #111;
+  border-color: #6b6b6b;
 }
 
 body.sb-theme-dark .sbdocs .sbdocs-preview .docs-story > div:first-child,
 body.sb-theme-dark .sbdocs-preview [role="toolbar"],
 body.sb-theme-dark .sbdocs .sbdocs-preview .docs-story div[class*="bar"] {
-  background-color: #111 !important;
-  border-color: #6b6b6b !important;
+  background-color: #111;
+  border-color: #6b6b6b;
 }
 
 body.sb-theme-dark .sbdocs .sbdocs-preview .docs-story button,
 body.sb-theme-dark .sbdocs .sbdocs-preview .docs-story [role="button"] {
-  color: #fff !important;
-  border-color: #6b6b6b !important;
+  color: #fff;
+  border-color: #6b6b6b;
 }
 
 body.sb-theme-dark .sbdocs .sbdocs-preview [role="img"],
 body.sb-theme-dark .sbdocs .sbdocs-preview .docblock-code-toggle svg {
-  color: #fff !important;
-  fill: #fff !important;
-  stroke: #fff !important;
+  color: #fff;
+  fill: #fff;
+  stroke: #fff;
 }
 body.sb-theme-dark code {
-  background-color: #111 !important;
-  color: #fff !important;
-  border-color: #6b6b6b !important;
+  background-color: #111;
+  color: #fff;
+  border-color: #6b6b6b;
 }
 /* Flexbox utilities */
 .flex {

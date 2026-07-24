@@ -1,6 +1,6 @@
 "use client";
-import type { CSSProperties } from "react";
 import clsx from "clsx";
+import type { CSSProperties } from "react";
 import {
   Meter as AriaMeter,
   type MeterProps as AriaMeterProps,
@@ -25,7 +25,7 @@ export function Meter({ label, ...props }: MeterProps) {
               className={clsx("fill", styles.fill)}
               style={
                 {
-                  width: percentage + "%",
+                  width: `${percentage}%`,
                   "--fill-color":
                     percentage < 70
                       ? "var(--green)"

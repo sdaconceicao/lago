@@ -35,5 +35,5 @@ export function DialogTrigger(props: DialogTriggerProps) {
   return <RACDialogTrigger {...props} />;
 }
 
-export { DialogBody, DialogFooter, DialogHeader, Heading };
 export type { DialogBodyProps, DialogFooterProps, DialogHeaderProps };
+export { DialogBody, DialogFooter, DialogHeader, Heading };

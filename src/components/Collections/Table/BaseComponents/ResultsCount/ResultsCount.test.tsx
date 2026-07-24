@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { ResultsCount, defaultResultsTemplate } from "./ResultsCount";
+import { defaultResultsTemplate, ResultsCount } from "./ResultsCount";
 
 describe("defaultResultsTemplate", () => {
   it("formats a populated range", () => {

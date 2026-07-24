@@ -1,9 +1,9 @@
 "use client";
 import clsx from "clsx";
-import {
-  type DisclosurePanelProps,
-  type DisclosureProps,
-  type HeadingProps,
+import type {
+  DisclosurePanelProps,
+  DisclosureProps,
+  HeadingProps,
 } from "react-aria-components/Disclosure";
 import {
   type DisclosureGroupProps,

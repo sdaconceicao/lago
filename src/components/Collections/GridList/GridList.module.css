@@ -4,7 +4,6 @@
   padding: var(--spacing-2);
   scroll-padding: var(--spacing-2);
   border-radius: var(--radius);
-  max-height: inherit;
   overflow: auto;
   forced-color-adjust: none;
   outline: none;
@@ -26,17 +25,17 @@
 
     &:not([data-orientation="horizontal"]) {
       grid-template-columns: repeat(
-        auto-fit,
-        minmax(100px, var(--grid-item-size))
-      );
+          auto-fit,
+          minmax(100px, var(--grid-item-size))
+        );
     }
   }
 
   &[data-layout="grid"] > :global(.react-aria-GridListSection) {
     grid-template-columns: repeat(
-      auto-fit,
-      minmax(100px, var(--grid-item-size))
-    );
+        auto-fit,
+        minmax(100px, var(--grid-item-size))
+      );
     grid-auto-rows: min-content;
   }
 
@@ -114,6 +113,39 @@
       outline-offset: -1px;
       background: var(--highlight-overlay);
       border-radius: var(--radius);
+    }
+  }
+
+  :global(.react-aria-GridListSection) {
+    display: grid;
+    justify-content: center;
+    gap: var(--spacing-4);
+    color: var(--text-color);
+    width: 100%;
+
+    > :global(.react-aria-GridListHeader) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  :global(.react-aria-GridListHeader) {
+    position: sticky;
+    z-index: 2;
+    top: calc(var(--spacing-2) * -1);
+    font-size: var(--font-size-lg);
+    font-weight: 500;
+    background: var(--gray-100);
+    border: 0.5px solid var(--gray-400);
+    cursor: default;
+    user-select: none;
+    box-shadow:
+      inset 0px 1px 0px white,
+      inset 0px -4px 8px var(--gray-200);
+    border-radius: var(--radius);
+    padding: var(--spacing-1) var(--spacing-4);
+
+    :global(:root.dark-mode) & {
+      box-shadow: inset 0px 4px 8px var(--gray-200);
     }
   }
 }
@@ -284,41 +316,4 @@
   justify-content: center;
   height: 24px;
   width: 100%;
-}
-
-.gridList {
-  :global(.react-aria-GridListSection) {
-    display: grid;
-    justify-content: center;
-    gap: var(--spacing-4);
-    color: var(--text-color);
-    width: 100%;
-
-    > :global(.react-aria-GridListHeader) {
-      grid-column: 1 / -1;
-    }
-  }
-}
-
-.gridList {
-  :global(.react-aria-GridListHeader) {
-    position: sticky;
-    z-index: 2;
-    top: calc(var(--spacing-2) * -1);
-    font-size: var(--font-size-lg);
-    font-weight: 500;
-    background: var(--gray-100);
-    border: 0.5px solid var(--gray-400);
-    cursor: default;
-    user-select: none;
-    box-shadow:
-      inset 0px 1px 0px white,
-      inset 0px -4px 8px var(--gray-200);
-    border-radius: var(--radius);
-    padding: var(--spacing-1) var(--spacing-4);
-
-    :global(:root.dark-mode) & {
-      box-shadow: inset 0px 4px 8px var(--gray-200);
-    }
-  }
 }

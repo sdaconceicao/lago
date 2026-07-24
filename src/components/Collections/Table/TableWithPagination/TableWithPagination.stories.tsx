@@ -1,5 +1,5 @@
-import { useMemo, useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
+import { useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components/Table";
 import { fn } from "storybook/test";
 import { Cell, Column, Row, TableBody, TableHeader } from "../Table";

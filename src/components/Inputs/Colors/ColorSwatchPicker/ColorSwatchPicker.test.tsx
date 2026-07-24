@@ -3,10 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { ColorSwatchPicker, ColorSwatchPickerItem } from "./ColorSwatchPicker";
 
 const renderPicker = (
-  props: {
-    defaultValue?: string;
-    onChange?: (value: unknown) => void;
-  } = {}
+  props: { defaultValue?: string; onChange?: (value: unknown) => void } = {}
 ) =>
   render(
     <ColorSwatchPicker aria-label="Colors" {...props}>

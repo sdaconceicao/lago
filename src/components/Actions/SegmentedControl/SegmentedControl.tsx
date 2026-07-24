@@ -1,5 +1,6 @@
 "use client";
 import clsx from "clsx";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   ToggleButtonGroup as RACToggleButtonGroup,
   SelectionIndicator,
@@ -7,7 +8,6 @@ import {
   type ToggleButtonGroupProps,
   type ToggleButtonProps,
 } from "react-aria-components/ToggleButtonGroup";
-import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import utils from "@/styles/utilities.module.css";
 import styles from "./SegmentedControl.module.css";
 
