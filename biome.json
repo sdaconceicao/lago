@@ -39,7 +39,7 @@
       "react": "recommended"
     },
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "suspicious": {
         "noExplicitAny": "warn",
         "noConsole": {
@@ -75,6 +75,21 @@
     }
   },
   "overrides": [
+    {
+      "includes": ["**/*.module.css"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnknownPseudoClass": {
+              "level": "warn",
+              "options": {
+                "ignore": ["global"]
+              }
+            }
+          }
+        }
+      }
+    },
     {
       "includes": ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
       "linter": {
