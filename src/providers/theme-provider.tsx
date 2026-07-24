@@ -86,9 +86,7 @@ export const ThemeProvider = ({
 
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
-    // TODO This is intentional to only update the theme state when the component mounts. Consider refactoring
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme]);
+  }, [theme, darkModeClass, storageKey]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>

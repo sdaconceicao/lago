@@ -28,7 +28,7 @@ export function ProgressBar({ label, ...props }: ProgressBarProps) {
               className={clsx("fill", styles.fill)}
               style={
                 {
-                  "--percent": (isIndeterminate ? 100 : percentage) + "%",
+                  "--percent": `${isIndeterminate ? 100 : percentage}%`,
                 } as CSSProperties
               }
             />

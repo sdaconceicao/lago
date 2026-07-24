@@ -24,7 +24,12 @@ export function Popover({ children, hideArrow, ...props }: PopoverProps) {
             trigger !== "MenuTrigger" &&
             trigger !== "SubmenuTrigger" && (
               <OverlayArrow>
-                <svg width={12} height={12} viewBox="0 0 12 12">
+                <svg
+                  aria-hidden="true"
+                  width={12}
+                  height={12}
+                  viewBox="0 0 12 12"
+                >
                   <path d="M0 0 L6 6 L12 0" />
                 </svg>
               </OverlayArrow>

@@ -51,11 +51,11 @@ export function Slider<T extends number | number[]>({
                 className={clsx("react-aria-SliderFill", styles.sliderFill)}
               />
             </div>
-            {state.values.map((_, i) => (
+            {state.values.map((value, thumbIndex) => (
               <SliderThumb
-                key={i}
-                index={i}
-                aria-label={thumbLabels?.[i]}
+                key={thumbLabels?.[thumbIndex] ?? `thumb-${value}`}
+                index={thumbIndex}
+                aria-label={thumbLabels?.[thumbIndex]}
                 className={clsx(
                   "react-aria-SliderThumb",
                   styles.sliderThumb,

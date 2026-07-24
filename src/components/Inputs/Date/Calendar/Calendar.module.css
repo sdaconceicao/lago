@@ -58,11 +58,10 @@
   font-size: var(--font-size);
   text-align: center;
   border-radius: 9999px;
-  cursor: default;
+  cursor: pointer;
   forced-color-adjust: none;
   transition: scale 200ms;
   -webkit-tap-highlight-color: transparent;
-  cursor: pointer;
 
   @media (min-resolution: 200dpi) {
     @container (width < 300px) {

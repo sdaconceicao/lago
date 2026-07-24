@@ -72,13 +72,15 @@ const preview: Preview = {
         document.body.style.color = isDarkMode ? "#fff" : "";
       }
 
-      return createElement(ThemeProvider, {
-        defaultTheme: "system",
-        children: createElement(StorybookThemeSync, {
-          theme: storybookTheme,
-          children: createElement(Story),
-        }),
-      });
+      return createElement(
+        ThemeProvider,
+        { defaultTheme: "system" },
+        createElement(
+          StorybookThemeSync,
+          { theme: storybookTheme },
+          createElement(Story)
+        )
+      );
     },
   ],
   parameters: {

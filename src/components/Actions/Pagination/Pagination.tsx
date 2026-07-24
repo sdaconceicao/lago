@@ -73,34 +73,43 @@ export function Pagination({
           </li>
         )}
 
-        {items.map((item, index) =>
-          item === "ellipsis" ? (
-            <li
-              key={`ellipsis-${index}`}
-              aria-hidden="true"
-              className={clsx("pagination-ellipsis", styles.ellipsis)}
-            >
-              &#8230;
-            </li>
-          ) : (
-            <li key={item}>
-              <Button
-                className={clsx(
-                  "react-aria-Button",
-                  utils.buttonBase,
-                  styles.page
-                )}
-                data-variant="quiet"
-                data-selected={item === page || undefined}
-                aria-label={`Go to page ${item}`}
-                aria-current={item === page ? "page" : undefined}
-                onPress={() => onPageChange(item)}
-              >
-                {item}
-              </Button>
-            </li>
-          )
-        )}
+        {(() => {
+          let ellipsisCount = 0;
+
+          return items.map((item) => {
+            if (item === "ellipsis") {
+              ellipsisCount += 1;
+              return (
+                <li
+                  key={`ellipsis-${ellipsisCount}`}
+                  aria-hidden="true"
+                  className={clsx("pagination-ellipsis", styles.ellipsis)}
+                >
+                  &#8230;
+                </li>
+              );
+            }
+
+            return (
+              <li key={item}>
+                <Button
+                  className={clsx(
+                    "react-aria-Button",
+                    utils.buttonBase,
+                    styles.page
+                  )}
+                  data-variant="quiet"
+                  data-selected={item === page || undefined}
+                  aria-label={`Go to page ${item}`}
+                  aria-current={item === page ? "page" : undefined}
+                  onPress={() => onPageChange(item)}
+                >
+                  {item}
+                </Button>
+              </li>
+            );
+          });
+        })()}
 
         {!hidePrevNext && (
           <li>

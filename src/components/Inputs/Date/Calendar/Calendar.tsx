@@ -26,6 +26,11 @@ export function Calendar<T extends DateValue>({
   ...props
 }: CalendarProps<T>) {
   const months = props.visibleDuration?.months || 1;
+  const monthKeys = Array.from(
+    { length: months },
+    (_, monthOffset) => `month-${monthOffset}`
+  );
+
   return (
     <AriaCalendar
       {...props}
@@ -34,28 +39,28 @@ export function Calendar<T extends DateValue>({
       }
     >
       <div className={clsx("months", styles.months)}>
-        {Array.from({ length: months }, (_, i) => (
-          <div key={i} className={clsx("month", styles.month)}>
+        {monthKeys.map((monthKey, monthOffset) => (
+          <div key={monthKey} className={clsx("month", styles.month)}>
             <header>
-              {i === 0 && (
+              {monthOffset === 0 && (
                 <Button slot="previous" variant="quiet">
                   <ChevronLeft />
                 </Button>
               )}
               <CalendarHeading
-                offset={{ months: i }}
+                offset={{ months: monthOffset }}
                 className={clsx(
                   "react-aria-CalendarHeading",
                   styles.calendarHeading
                 )}
               />
-              {i === months - 1 && (
+              {monthOffset === months - 1 && (
                 <Button slot="next" variant="quiet">
                   <ChevronRight />
                 </Button>
               )}
             </header>
-            <CalendarGrid offset={{ months: i }}>
+            <CalendarGrid offset={{ months: monthOffset }}>
               {(date) => <CalendarCell date={date} />}
             </CalendarGrid>
           </div>

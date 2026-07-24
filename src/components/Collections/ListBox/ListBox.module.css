@@ -35,120 +35,7 @@
     z-index: 3;
     outline: 1px solid var(--highlight-background);
   }
-}
 
-.listBoxSection {
-  :global(.react-aria-Header) {
-    position: sticky;
-    top: -0.5px;
-    z-index: 2;
-    font-size: var(--font-size-sm);
-    font-weight: 600;
-    font-variation-settings: initial;
-    padding: var(--spacing-1) var(--spacing-4);
-    background: var(--gray-100);
-    border-block: 0.5px solid var(--gray-400);
-    cursor: default;
-    user-select: none;
-    box-shadow:
-      inset 0px 1px 0px white,
-      inset 0px -4px 8px var(--gray-200);
-
-    :global(:root.dark-mode) & {
-      box-shadow: inset 0px 4px 8px var(--gray-200);
-    }
-  }
-
-  &:first-child :global(.react-aria-Header) {
-    margin-top: -0.5px;
-  }
-}
-
-.listBoxItem {
-  padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--radius);
-  outline: none;
-  cursor: default;
-  color: var(--text-color);
-  font: var(--font-size) var(--font-family);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: var(--spacing-8);
-  box-sizing: border-box;
-  position: relative;
-  transition-property: background, color, border-radius;
-  transition-duration: 200ms;
-  -webkit-tap-highlight-color: transparent;
-
-  --border-color: var(--gray-300);
-  &:not(:last-child)::after {
-    content: "";
-    display: block;
-    position: absolute;
-  }
-
-  &[data-pressed] {
-    background: var(--highlight-hover);
-    border-radius: var(--radius);
-  }
-
-  &[data-focus-visible] {
-    outline: 2px solid var(--focus-ring-color);
-    outline-offset: -2px;
-    z-index: 2;
-  }
-
-  &[data-selected] {
-    background: var(--highlight-background);
-    color: var(--highlight-foreground);
-    --border-color: transparent;
-
-    &[data-focus-visible] {
-      outline-color: var(--highlight-foreground);
-      outline-offset: -4px;
-    }
-
-    &[data-pressed] {
-      background: var(--highlight-background-pressed);
-    }
-
-    &:has(+ [data-selected]),
-    &:has(+ :global(.react-aria-DropIndicator) + [data-selected]) {
-      --border-color: rgb(255 255 255 / 0.3);
-    }
-  }
-
-  [slot="label"] {
-    font-weight: 500;
-  }
-
-  [slot="description"] {
-    font-size: var(--font-size-sm);
-  }
-
-  &[href] {
-    text-decoration: none;
-    cursor: pointer;
-    -webkit-touch-callout: none;
-  }
-
-  &[data-disabled] {
-    color: var(--text-color-disabled);
-  }
-
-  &[data-dragging] {
-    opacity: 0.6;
-  }
-
-  &[data-drop-target] {
-    outline: 2px solid var(--highlight-background);
-    background: var(--highlight-overlay);
-  }
-}
-
-.listBox {
   &[data-layout="stack"] {
     display: flex;
 
@@ -251,6 +138,116 @@
       grid-template-columns: none;
       grid-auto-columns: 160px;
     }
+  }
+}
+
+.listBoxSection {
+  :global(.react-aria-Header) {
+    position: sticky;
+    top: -0.5px;
+    z-index: 2;
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    font-variation-settings: initial;
+    padding: var(--spacing-1) var(--spacing-4);
+    background: var(--gray-100);
+    border-block: 0.5px solid var(--gray-400);
+    cursor: default;
+    user-select: none;
+    box-shadow:
+      inset 0px 1px 0px white,
+      inset 0px -4px 8px var(--gray-200);
+
+    :global(:root.dark-mode) & {
+      box-shadow: inset 0px 4px 8px var(--gray-200);
+    }
+  }
+
+  &:first-child :global(.react-aria-Header) {
+    margin-top: -0.5px;
+  }
+}
+
+.listBoxItem {
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius);
+  outline: none;
+  cursor: default;
+  color: var(--text-color);
+  font: var(--font-size) var(--font-family);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: var(--spacing-8);
+  box-sizing: border-box;
+  transition-property: background, color, border-radius;
+  transition-duration: 200ms;
+  -webkit-tap-highlight-color: transparent;
+
+  --border-color: var(--gray-300);
+  &:not(:last-child)::after {
+    content: "";
+    display: block;
+    position: absolute;
+  }
+
+  &[data-pressed] {
+    background: var(--highlight-hover);
+    border-radius: var(--radius);
+  }
+
+  &[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -2px;
+    z-index: 2;
+  }
+
+  &[data-selected] {
+    background: var(--highlight-background);
+    color: var(--highlight-foreground);
+    --border-color: transparent;
+
+    &[data-focus-visible] {
+      outline-color: var(--highlight-foreground);
+      outline-offset: -4px;
+    }
+
+    &[data-pressed] {
+      background: var(--highlight-background-pressed);
+    }
+
+    &:has(+ [data-selected]),
+    &:has(+ :global(.react-aria-DropIndicator) + [data-selected]) {
+      --border-color: rgb(255 255 255 / 0.3);
+    }
+  }
+
+  [slot="label"] {
+    font-weight: 500;
+  }
+
+  [slot="description"] {
+    font-size: var(--font-size-sm);
+  }
+
+  &[href] {
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+  }
+
+  &[data-dragging] {
+    opacity: 0.6;
+  }
+
+  &[data-drop-target] {
+    outline: 2px solid var(--highlight-background);
+    background: var(--highlight-overlay);
   }
 }
 

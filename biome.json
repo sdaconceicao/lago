@@ -54,6 +54,9 @@
       },
       "complexity": {
         "noBannedTypes": "off"
+      },
+      "style": {
+        "noDescendingSpecificity": "off"
       }
     }
   },
@@ -66,13 +69,19 @@
       "bracketSpacing": true
     }
   },
+  "css": {
+    "parser": {
+      "cssModules": true
+    }
+  },
   "overrides": [
     {
       "includes": ["**/*.test.{ts,tsx}", "**/*.spec.{ts,tsx}"],
       "linter": {
         "rules": {
           "suspicious": {
-            "noExplicitAny": "off"
+            "noExplicitAny": "off",
+            "useIterableCallbackReturn": "off"
           }
         }
       }
