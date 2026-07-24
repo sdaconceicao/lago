@@ -1,6 +1,7 @@
 .colorWheel {
   &[data-disabled] {
     :global(.react-aria-ColorWheelTrack) {
+      /* biome-ignore lint: React Aria sets inline styles; !important required to override in disabled state */
       background: gray !important;
     }
   }
