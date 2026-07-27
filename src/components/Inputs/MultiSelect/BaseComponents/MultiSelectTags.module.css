@@ -1,10 +1,42 @@
-/* Collapse the wrappers so tags flow inline with the input and wrap
-   together inside the field. */
+/* A single-line row of tags plus the overflow indicator. Shrinks (but never
+   wraps) so the input keeps its minimum width; JS keeps only as many tags
+   as fit and swaps the rest for the indicator before paint. */
 .tags {
-  display: contents;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+  position: relative;
 
-  :global(.react-aria-TagGroup),
-  :global(.react-aria-TagList) {
+  :global(.react-aria-TagGroup) {
     display: contents;
   }
+
+  :global(.react-aria-TagList) {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: var(--spacing-2);
+    min-width: 0;
+    overflow: hidden;
+  }
+}
+
+.moreIndicator {
+  flex: none;
+  white-space: nowrap;
+  font: var(--font-size) var(--font-family);
+  color: var(--text-color-placeholder);
+}
+
+/* Off-screen clone used only to measure natural tag/indicator widths;
+   never painted or reachable. */
+.measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  top: 0;
+  left: 0;
 }

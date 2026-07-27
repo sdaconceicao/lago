@@ -38,6 +38,13 @@ export interface MultiSelectProps<T>
   placeholder?: string;
   /** How selected items are displayed: "tags" (default) shows removable tag chips, "text" shows a comma-separated list. Defaults to "tags". */
   displayMode?: MultiSelectDisplayMode;
+  /**
+   * In "tags" display mode, templates the indicator shown for selected tags
+   * that don't fit on the single line, e.g. selecting five fruits might
+   * render the first two tags followed by "+3 more". Receives the number of
+   * hidden tags. Defaults to "+{count} more".
+   */
+  moreItemsTemplate?: (count: number) => string;
 }
 
 /**
@@ -53,6 +60,7 @@ export function MultiSelect<T>({
   children,
   placeholder,
   displayMode = "tags",
+  moreItemsTemplate,
   ...props
 }: MultiSelectProps<T>) {
   return (
@@ -68,14 +76,16 @@ export function MultiSelect<T>({
           against it and it gets data-hovered/focus/disabled/invalid states. */}
       <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
         {displayMode === "tags" ? (
-          <MultiSelectTags />
+          <MultiSelectTags moreItemsTemplate={moreItemsTemplate} />
         ) : (
           <ComboBoxValue
             className={clsx("react-aria-ComboBoxValue", styles.textValue)}
           >
-            {({ state }) =>
-              state.selectedItems.map((item) => item.textValue).join(", ")
-            }
+            {({ state }) => (
+              <span className={styles.textValueContent}>
+                {state.selectedItems.map((item) => item.textValue).join(", ")}
+              </span>
+            )}
           </ComboBoxValue>
         )}
         <MultiSelectInput placeholder={placeholder} />
@@ -95,6 +105,7 @@ export function MultiSelect<T>({
 }
 
 export { MultiSelectItem } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectItem";
+export type { MultiSelectTagsProps } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectTags";
 export { MultiSelectTags } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectTags";
 export type { MultiSelectInputProps } from "./BaseComponents/MultiSelectInput";
 export { MultiSelectInput } from "./BaseComponents/MultiSelectInput";

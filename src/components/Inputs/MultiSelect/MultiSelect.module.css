@@ -13,12 +13,12 @@
 .field {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--spacing-2);
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  min-height: calc(var(--spacing-10) + var(--spacing-2));
+  height: calc(var(--spacing-10) + var(--spacing-2));
   /* Left inset mirrors the toggle button's distance from the right edge;
      the extra right padding reserves room for the absolutely positioned
      toggle button. */
@@ -38,7 +38,7 @@
     color: var(--text-color-disabled);
   }
 
-  /* Pin the toggle to the top-right corner so it stays put when tags wrap */
+  /* Pin the toggle to the top-right corner of the single-line field */
   :global(.field-Button) {
     position: absolute;
     top: var(--spacing-2);
@@ -50,16 +50,23 @@
 .textValue {
   display: flex;
   align-items: center;
+  min-width: 0;
   min-height: var(--spacing-8);
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   padding: 0 0 0 var(--spacing-2);
 
   &[data-placeholder] {
     display: none;
   }
+}
+
+/* text-overflow only renders the ellipsis on a block-level box; setting it
+   directly on the flex container above hard-clips with no "…" instead. */
+.textValueContent {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .multiSelectPopover[data-trigger="ComboBox"] {

@@ -73,15 +73,19 @@ export const DisplayModes: Story = {
       >
         {(item) => <MultiSelectItem id={item.id}>{item.name}</MultiSelectItem>}
       </MultiSelect>
-      <MultiSelect<Fruit>
-        label="Text display"
-        placeholder="Search fruits..."
-        displayMode="text"
-        defaultItems={fruits}
-        defaultValue={["apple", "carrot"]}
-      >
-        {(item) => <MultiSelectItem id={item.id}>{item.name}</MultiSelectItem>}
-      </MultiSelect>
+      <div style={{ width: 220 }}>
+        <MultiSelect<Fruit>
+          label="Text display"
+          placeholder="Search fruits..."
+          displayMode="text"
+          defaultItems={fruits}
+          defaultValue={["apple", "banana", "carrot", "date", "eggplant"]}
+        >
+          {(item) => (
+            <MultiSelectItem id={item.id}>{item.name}</MultiSelectItem>
+          )}
+        </MultiSelect>
+      </div>
     </div>
   ),
   parameters: {
