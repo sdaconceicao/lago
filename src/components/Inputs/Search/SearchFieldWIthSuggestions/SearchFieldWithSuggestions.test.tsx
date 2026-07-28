@@ -255,6 +255,35 @@ describe("SearchFieldWithSuggestions", () => {
       );
     });
 
+    it("renders suggestions with a custom renderer while keeping the label as the accessible name", async () => {
+      const user = userEvent.setup();
+      const onSuggestionSelect = vi.fn();
+      render(
+        <SearchFieldWithSuggestions
+          label="Search"
+          suggestions={fruits}
+          onSuggestionSelect={onSuggestionSelect}
+          renderSuggestion={(suggestion) => (
+            <span>Custom: {suggestion.label}</span>
+          )}
+        />
+      );
+
+      await user.type(screen.getByRole("searchbox"), "ban");
+      const option = await screen.findByRole("option", {
+        name: "Custom: Banana",
+      });
+      expect(option).toHaveTextContent("Custom: Banana");
+
+      await user.click(option);
+
+      expect(screen.getByRole("searchbox")).toHaveValue("Banana");
+      expect(onSuggestionSelect).toHaveBeenCalledWith({
+        id: "banana",
+        label: "Banana",
+      });
+    });
+
     it("shows the error message when invalid", () => {
       render(
         <SearchFieldWithSuggestions
