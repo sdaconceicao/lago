@@ -1,6 +1,6 @@
 .segmentedControl {
   display: flex;
-  width: fit-content;
+  width: 100%;
   border-radius: 9999px;
 
   :global(.react-aria-SelectionIndicator) {
@@ -21,8 +21,12 @@
 
   .segmentedControlItem {
     all: unset;
-    display: block;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
     color: var(--gray-1200);
+    cursor: pointer;
     font: var(--font-size) var(--font-family);
     font-weight: 500;
     height: var(--spacing-8);
@@ -50,6 +54,10 @@
     &[data-focus-visible] {
       outline: 2px solid var(--focus-ring-color);
       outline-offset: 4px;
+    }
+
+    &[data-disabled] {
+      cursor: not-allowed;
     }
   }
 }
