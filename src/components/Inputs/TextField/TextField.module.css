@@ -7,13 +7,13 @@
    the controls align when stacked. Also reused by ColorField and NumberField. */
 .input {
   width: 100%;
-  min-height: calc(var(--spacing-10) + var(--spacing-2));
-  padding: 0 var(--spacing-4);
+  min-height: var(--field-height);
+  padding: 0 var(--field-padding-x);
   box-sizing: border-box;
   margin: 0;
   border: none;
-  border-radius: var(--radius);
-  font: var(--font-size) var(--font-family);
+  border-radius: var(--field-radius);
+  font: var(--field-font-size) var(--font-family);
   color: var(--field-text-color);
   outline: none;
   -webkit-tap-highlight-color: transparent;
@@ -41,13 +41,13 @@
 .field {
   display: flex;
   align-items: center;
-  gap: var(--spacing-2);
+  gap: var(--field-gap);
   box-sizing: border-box;
   width: 100%;
-  min-height: calc(var(--spacing-10) + var(--spacing-2));
-  padding: 0 var(--spacing-2) 0 var(--spacing-4);
-  border-radius: var(--radius);
-  font: var(--font-size) var(--font-family);
+  min-height: var(--field-height);
+  padding: 0 var(--field-inner-inset) 0 var(--field-padding-x);
+  border-radius: var(--field-radius);
+  font: var(--field-font-size) var(--font-family);
   color: var(--field-text-color);
   cursor: text;
 
@@ -58,12 +58,6 @@
 
   &[data-disabled] {
     color: var(--text-color-disabled);
-  }
-
-  /* Fixed height (matches Select/MultiSelect) so it doesn't depend on the
-     group resolving a definite height; sits 32px tall in the 48px field. */
-  :global(.field-Button) {
-    height: var(--spacing-8);
   }
 }
 

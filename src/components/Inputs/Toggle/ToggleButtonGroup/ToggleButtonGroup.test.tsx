@@ -113,6 +113,43 @@ describe("ToggleButtonGroup", () => {
     expect(left).toHaveAttribute("aria-checked", "true");
   });
 
+  it("renders the md size by default", () => {
+    renderGroup();
+
+    expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", "md");
+  });
+
+  it.each(["sm", "lg"] as const)(
+    "reflects the %s size as a data attribute",
+    (size) => {
+      renderGroup({ size });
+
+      expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", size);
+    }
+  );
+
+  it("does not forward size as a DOM attribute to its buttons", () => {
+    renderGroup({ size: "sm" });
+
+    screen
+      .getAllByRole("radio")
+      .forEach((radio) => expect(radio).not.toHaveAttribute("size"));
+  });
+
+  it("keeps its own size when a child requests a different one", () => {
+    render(
+      <ToggleButtonGroup aria-label="Alignment" size="sm">
+        <ToggleButton id="left" size="lg">
+          Left
+        </ToggleButton>
+      </ToggleButtonGroup>
+    );
+
+    // The group's `data-size` is what the stylesheet keys off; its selector
+    // outranks the button's own, so the group's size is the one that renders.
+    expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", "sm");
+  });
+
   it("disables every button when the group is disabled", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();

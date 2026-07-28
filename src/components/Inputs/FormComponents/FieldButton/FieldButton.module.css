@@ -6,7 +6,10 @@
   border: none;
   flex-shrink: 0;
   cursor: pointer;
-  height: calc(100% - var(--spacing-2));
+  /* The single source of truth for the trigger size inside every field —
+     consumers must not override this, they set --field-inner-height via their
+     `size` prop instead. */
+  height: var(--field-inner-height);
   aspect-ratio: 1 / 1;
   padding: 0;
   display: flex;
@@ -17,8 +20,8 @@
   -webkit-tap-highlight-color: transparent;
 
   svg {
-    width: var(--spacing-4);
-    height: var(--spacing-4);
+    width: var(--field-icon-size);
+    height: var(--field-icon-size);
   }
 
   &:where([data-hovered], [data-pressed]) {

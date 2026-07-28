@@ -87,4 +87,63 @@ describe("ColorPicker", () => {
     const color = onChange.mock.calls.at(-1)?.[0];
     expect(color.getChannelValue("hue")).toBe(1);
   });
+
+  describe("size", () => {
+    it("renders at the md size by default", () => {
+      const { container } = render(<ColorPicker label="Fill color" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it("renders at the sm size when specified", () => {
+      const { container } = render(
+        <ColorPicker label="Fill color" size="sm" />
+      );
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the DOM", () => {
+      render(<ColorPicker label="Fill color" size="sm" />);
+
+      expect(screen.getByRole("button")).not.toHaveAttribute("size");
+    });
+
+    it("scopes the portaled popover to the same size", async () => {
+      const user = userEvent.setup();
+      render(
+        <ColorPicker label="Fill color" size="sm">
+          <div data-testid="custom-content">Custom controls</div>
+        </ColorPicker>
+      );
+
+      await user.click(screen.getByRole("button"));
+      const content = await screen.findByTestId("custom-content");
+
+      expect(content.closest("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("forwards the size to the hex field in the popover", async () => {
+      const user = userEvent.setup();
+      render(<ColorPicker label="Fill color" size="sm" />);
+
+      await user.click(screen.getByRole("button"));
+      const hexField = await screen.findByRole("textbox", { name: "Hex" });
+
+      expect(hexField).not.toHaveAttribute("size");
+      expect(hexField.closest("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+  });
 });

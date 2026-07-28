@@ -29,3 +29,20 @@
     background: var(--highlight-overlay);
   }
 }
+
+/* Compact variant.
+ *
+ * Unlike Button or ToggleButton, a DropZone is a field-ish surface: it keys off
+ * `data-field-size` so it follows the size of the `Form` or field group it sits
+ * in.
+ *
+ * The `md` declarations above are literal on purpose. The 24px/12px padding, the
+ * 96px minimum height, and the 1rem font predate the token scale and do not map
+ * onto it cleanly, so they are left exactly as they were and `md` renders
+ * unchanged. Only the compact values below are tokenised. */
+.dropZone[data-field-size="sm"] {
+  border-radius: var(--field-radius);
+  font-size: var(--field-font-size);
+  padding: var(--spacing-2) var(--spacing-3);
+  min-height: calc(var(--spacing) * 12); /* 48px */
+}

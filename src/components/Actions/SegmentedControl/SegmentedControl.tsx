@@ -11,7 +11,22 @@ import {
 import utils from "@/styles/utilities.module.css";
 import styles from "./SegmentedControl.module.css";
 
-export function SegmentedControl(props: ToggleButtonGroupProps) {
+export interface SegmentedControlProps extends ToggleButtonGroupProps {
+  /**
+   * The size of the control. `"sm"` renders a 28px-tall control with 12px text
+   * and `"md"` (the default) a 32px-tall one with 14px text. The control carries
+   * its own scale rather than inheriting the field scale, so one placed inside a
+   * compact field never shrinks on its own.
+   *
+   * @default 'md'
+   */
+  size?: "sm" | "md";
+}
+
+export function SegmentedControl({
+  size = "md",
+  ...props
+}: SegmentedControlProps) {
   return (
     <RACToggleButtonGroup
       {...props}
@@ -20,6 +35,7 @@ export function SegmentedControl(props: ToggleButtonGroupProps) {
         styles.segmentedControl,
         utils.buttonBase
       )}
+      data-size={size}
       data-variant="secondary"
     />
   );

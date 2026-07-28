@@ -86,6 +86,26 @@ describe("SegmentedControl", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders the md size by default", () => {
+    renderControl();
+
+    expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", "md");
+  });
+
+  it("renders the sm size when specified", () => {
+    renderControl({ size: "sm" });
+
+    expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", "sm");
+  });
+
+  it("does not forward size as a DOM attribute to its items", () => {
+    renderControl({ size: "sm" });
+
+    screen
+      .getAllByRole("radio")
+      .forEach((item) => expect(item).not.toHaveAttribute("size"));
+  });
+
   it("disables all items when the control is disabled", async () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();

@@ -8,8 +8,10 @@ import {
   type ValidationResult,
 } from "react-aria-components/TextField";
 import {
+  DEFAULT_FIELD_SIZE,
   Description,
   FieldError,
+  type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import utils from "@/styles/utilities.module.css";
@@ -26,6 +28,13 @@ export interface TextAreaProps extends AriaTextFieldProps {
   placeholder?: string;
   /** Ref forwarded to the underlying `textarea` element. */
   inputRef?: React.Ref<HTMLTextAreaElement>;
+  /**
+   * The size of the field. `"sm"` renders a compact control and `"md"` (the
+   * default) the standard one. A TextArea is multi-line, so its height never
+   * matches a single-line field, but at a given size it shares the border
+   * radius, horizontal padding, and font size of the other fields.
+   */
+  size?: FieldSize;
 }
 
 /**
@@ -39,11 +48,13 @@ export function TextArea({
   errorMessage,
   placeholder,
   inputRef,
+  size = DEFAULT_FIELD_SIZE,
   ...props
 }: TextAreaProps) {
   return (
     <AriaTextField
       {...props}
+      data-field-size={size}
       className={clsx("react-aria-TextField", styles.textArea, props.className)}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}

@@ -88,4 +88,59 @@ describe("CheckboxGroup", () => {
 
     expect(screen.getByText("Pick at least one")).toBeInTheDocument();
   });
+
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      renderGroup();
+
+      expect(screen.getByRole("group")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      renderGroup({ size: "sm" });
+
+      expect(screen.getByRole("group")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the group or its inputs", () => {
+      renderGroup({ size: "sm" });
+
+      expect(screen.getByRole("group")).not.toHaveAttribute("size");
+      screen.getAllByRole("checkbox").forEach((checkbox) => {
+        expect(checkbox).not.toHaveAttribute("size");
+      });
+    });
+
+    it("keeps its size scope for children that do not set their own", () => {
+      const { container } = renderGroup({ size: "sm" });
+
+      const scopes = container.querySelectorAll("[data-field-size]");
+      expect(scopes).toHaveLength(1);
+      expect(scopes[0]).toBe(screen.getByRole("group"));
+      expect(scopes[0]).toHaveAttribute("data-field-size", "sm");
+    });
+
+    it("lets a child override the group size", () => {
+      const { container } = render(
+        <CheckboxGroup label="Sports" size="sm">
+          <Checkbox value="soccer">Soccer</Checkbox>
+          <Checkbox value="baseball" size="md">
+            Baseball
+          </Checkbox>
+        </CheckboxGroup>
+      );
+
+      expect(
+        [...container.querySelectorAll("[data-field-size]")].map((el) =>
+          el.getAttribute("data-field-size")
+        )
+      ).toEqual(["sm", "md"]);
+    });
+  });
 });

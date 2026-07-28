@@ -29,3 +29,27 @@ export const Example: Story = (args) => (
     <SegmentedControlItem id="month">Month</SegmentedControlItem>
   </SegmentedControl>
 );
+
+export const Sizes: Story = (args) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <SegmentedControl {...args} size="sm" aria-label="View (small)">
+      <SegmentedControlItem id="day">Day</SegmentedControlItem>
+      <SegmentedControlItem id="week">Week</SegmentedControlItem>
+      <SegmentedControlItem id="month">Month</SegmentedControlItem>
+    </SegmentedControl>
+    <SegmentedControl {...args} size="md" aria-label="View (medium)">
+      <SegmentedControlItem id="day">Day</SegmentedControlItem>
+      <SegmentedControlItem id="week">Week</SegmentedControlItem>
+      <SegmentedControlItem id="month">Month</SegmentedControlItem>
+    </SegmentedControl>
+  </div>
+);
+
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        'SegmentedControl supports two sizes: "sm" is 28px tall with 12px text, and "md" (the default) is 32px tall with 14px text. Setting the size on the control sizes every item inside it. The pill radius is fully rounded at both sizes. Like Button and ToggleButton, the control renders `data-size` rather than `data-field-size`, so it keeps the size you asked for even inside a compact field or form.',
+    },
+  },
+};

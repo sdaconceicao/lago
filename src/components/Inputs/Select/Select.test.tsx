@@ -182,4 +182,43 @@ describe("Select", () => {
 
     expect(screen.getByText("Flavor is required")).toBeInTheDocument();
   });
+
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = renderSelect();
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = renderSelect({ size: "sm" });
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the DOM input", () => {
+      renderSelect({ size: "sm" });
+
+      expect(screen.getByRole("combobox")).not.toHaveAttribute("size");
+    });
+
+    it("forwards the size to the portaled popover", async () => {
+      const user = userEvent.setup();
+      renderSelect({ size: "sm" });
+
+      await user.click(screen.getByRole("combobox"));
+
+      const listbox = await screen.findByRole("listbox");
+      expect(listbox.closest("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+  });
 });

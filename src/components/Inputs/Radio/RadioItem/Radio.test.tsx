@@ -53,4 +53,44 @@ describe("Radio", () => {
     expect(screen.getByRole("radio", { name: "Baseball" })).toBeDisabled();
     expect(screen.getByRole("radio", { name: "Soccer" })).toBeEnabled();
   });
+
+  describe("size", () => {
+    it("does not render data-field-size by default so it inherits its group", () => {
+      const { container } = render(
+        <RadioGroup label="Favorite sport">
+          <Radio value="soccer">Soccer</Radio>
+        </RadioGroup>
+      );
+
+      expect(
+        container.querySelectorAll(".react-aria-RadioField[data-field-size]")
+      ).toHaveLength(0);
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(
+        <RadioGroup label="Favorite sport">
+          <Radio value="soccer" size="sm">
+            Soccer
+          </Radio>
+        </RadioGroup>
+      );
+
+      expect(
+        container.querySelector(".react-aria-RadioField[data-field-size]")
+      ).toHaveAttribute("data-field-size", "sm");
+    });
+
+    it("does not forward size to the DOM input", () => {
+      render(
+        <RadioGroup label="Favorite sport">
+          <Radio value="soccer" size="sm">
+            Soccer
+          </Radio>
+        </RadioGroup>
+      );
+
+      expect(screen.getByRole("radio")).not.toHaveAttribute("size");
+    });
+  });
 });

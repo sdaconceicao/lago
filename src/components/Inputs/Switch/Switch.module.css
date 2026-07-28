@@ -13,8 +13,8 @@
   /* This is needed so the HiddenInput is positioned correctly */
   position: relative;
   align-items: center;
-  gap: var(--spacing-2);
-  font: var(--font-size) var(--font-family);
+  gap: var(--field-gap);
+  font: var(--field-font-size) var(--font-family);
   color: var(--text-color);
   forced-color-adjust: none;
   -webkit-tap-highlight-color: transparent;
@@ -89,5 +89,24 @@
       background: var(--gray-200);
       box-shadow: none;
     }
+  }
+}
+
+/* The track is a switch-specific shape with no shared `--field-*` token, so sm
+   is an explicit override that preserves the md relationships:
+   width − height === the selected translate (md 38 − 22 = 16, sm 28 − 16 = 12),
+   and the pressed transform-origin sits 2px inside the track's trailing edge
+   (md 36 of 38, sm 26 of 28) so the squashed handle grows inward.
+   Keyed on this switch's own root rather than any `sm` ancestor, so a switch
+   that opts back into md inside a compact form keeps the md track. */
+.switchField[data-field-size="sm"] {
+  .track {
+    --height: var(--spacing-4); /* 16px */
+    width: calc(var(--spacing) * 7); /* 28px */
+  }
+
+  .switchButton[data-selected] .handle {
+    transform: translateX(var(--spacing-3)); /* 12px = 28px − 16px */
+    transform-origin: calc(var(--spacing) * 6.5) 50%; /* 26px */
   }
 }

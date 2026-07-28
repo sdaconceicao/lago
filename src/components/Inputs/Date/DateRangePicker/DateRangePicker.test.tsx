@@ -133,4 +133,51 @@ describe("DateRangePicker", () => {
 
     expect(screen.getByRole("button")).toBeDisabled();
   });
+
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = render(<DateRangePicker label="Event dates" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(
+        <DateRangePicker label="Event dates" size="sm" />
+      );
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the DOM", () => {
+      const { container } = render(
+        <DateRangePicker label="Event dates" size="sm" />
+      );
+
+      expect(container.querySelector("[data-field-size]")).not.toHaveAttribute(
+        "size"
+      );
+      expect(container.querySelector(".react-aria-Group")).not.toHaveAttribute(
+        "size"
+      );
+    });
+
+    it("leaves the range calendar popover unsized", async () => {
+      const user = userEvent.setup();
+      render(
+        <DateRangePicker label="Event dates" defaultValue={RANGE} size="sm" />
+      );
+
+      await user.click(screen.getByRole("button"));
+
+      const grid = await screen.findByRole("grid");
+      expect(grid.closest("[data-field-size]")).toBeNull();
+    });
+  });
 });

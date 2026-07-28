@@ -15,9 +15,11 @@ import {
 import { FieldGroup } from "@/components/Inputs/Date/FieldGroup";
 import { RangeCalendar } from "@/components/Inputs/Date/RangeCalendar/RangeCalendar";
 import {
+  DEFAULT_FIELD_SIZE,
   Description,
   FieldButton,
   FieldError,
+  type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
@@ -26,20 +28,39 @@ import styles from "./DateRangePicker.module.css";
 
 export interface DateRangePickerProps<T extends DateValue>
   extends AriaDateRangePickerProps<T> {
+  /** Accessible label rendered above the field. */
   label?: string;
+  /** Helper text rendered below the field. */
   description?: string;
+  /** Error message shown when the field is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
+  /**
+   * The size of the field. `"sm"` renders a compact 28px-tall control and
+   * `"md"` (the default) a 48px-tall one. Fields of the same size share their
+   * height, border radius, horizontal padding, and font size, so they line up
+   * when placed in a row. The calendar popover keeps its default size at every
+   * field size so its day cells stay comfortable pointer targets.
+   */
+  size?: FieldSize;
 }
 
+/**
+ * A pair of date fields combined with a range calendar popover, so a start and
+ * end date can be typed or picked visually. Its field sizing and padding match
+ * the TextField and Select fields so the controls align when placed side by
+ * side.
+ */
 export function DateRangePicker<T extends DateValue>({
   label,
   description,
   errorMessage,
+  size = DEFAULT_FIELD_SIZE,
   ...props
 }: DateRangePickerProps<T>) {
   return (
     <AriaDateRangePicker
       {...props}
+      data-field-size={size}
       className={
         props.className ??
         clsx("react-aria-DateRangePicker", styles.dateRangePicker)

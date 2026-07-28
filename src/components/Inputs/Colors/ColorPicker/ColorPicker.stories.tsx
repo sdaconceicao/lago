@@ -28,3 +28,23 @@ Example.args = {
   label: "Fill color",
   defaultValue: "#f00",
 };
+
+export const Sizes: Story = (args) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <ColorPicker {...args} size="sm" label="Small" />
+    <ColorPicker {...args} size="md" label="Medium (default)" />
+  </div>
+);
+
+Sizes.args = {
+  defaultValue: "#f00",
+};
+
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        'The size prop scales the trigger swatch and label and is passed on to the popover, so the hex ColorField inside is compact too: "sm" pairs a 20px swatch with 12px text, "md" (the default) a 32px swatch with 14px text, matching the inner controls of same-size fields.',
+    },
+  },
+};

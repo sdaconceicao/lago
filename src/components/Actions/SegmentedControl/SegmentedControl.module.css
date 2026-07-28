@@ -61,3 +61,25 @@
     }
   }
 }
+
+/* Control size scale.
+ *
+ * A SegmentedControl is a control, not a field: it keys off its own `data-size`
+ * attribute and never reads the inherited `--field-*` custom properties, so one
+ * rendered inside a compact field's subtree keeps its own height.
+ *
+ * `md` is the base rule above, left exactly as it was, so every existing
+ * control renders identically.
+ *
+ * The root adds no vertical padding around its items — the items are the only
+ * thing setting the control's block size — so the item height *is* the control's
+ * outer height: 32px at `md` and 28px at `sm`. Only `font-size` is overridden
+ * (never the `font` shorthand) so the base `font-weight: 500` survives, and the
+ * root's `9999px` radius is left alone at every size. */
+.segmentedControl[data-size="sm"] {
+  .segmentedControlItem {
+    font-size: var(--font-size-sm);
+    height: calc(var(--spacing) * 7); /* 28px, the control's full height */
+    padding: 0 var(--spacing-2);
+  }
+}

@@ -10,9 +10,11 @@ import {
 import { Group } from "react-aria-components/Group";
 import { DropdownListBox } from "@/components/Collections/ListBox/ListBox";
 import {
+  DEFAULT_FIELD_SIZE,
   Description,
   FieldButton,
   FieldError,
+  type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
@@ -38,6 +40,14 @@ export interface MultiSelectProps<T>
   placeholder?: string;
   /** How selected items are displayed: "tags" (default) shows removable tag chips, "text" shows a comma-separated list. Defaults to "tags". */
   displayMode?: MultiSelectDisplayMode;
+  /**
+   * The size of the field. `"sm"` renders a compact 28px-tall control and
+   * `"md"` (the default) a 48px-tall one. Fields of the same size share their
+   * height, border radius, horizontal padding, and font size, so they line up
+   * when placed in a row. At `"sm"` the field keeps a fixed height and scrolls
+   * its tags horizontally instead of wrapping onto a second row.
+   */
+  size?: FieldSize;
 }
 
 /**
@@ -53,6 +63,7 @@ export function MultiSelect<T>({
   children,
   placeholder,
   displayMode = "tags",
+  size = DEFAULT_FIELD_SIZE,
   ...props
 }: MultiSelectProps<T>) {
   return (
@@ -61,6 +72,7 @@ export function MultiSelect<T>({
       allowsEmptyCollection
       {...props}
       selectionMode="multiple"
+      data-field-size={size}
       className={clsx("react-aria-ComboBox", styles.multiSelect)}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
@@ -85,7 +97,13 @@ export function MultiSelect<T>({
       </Group>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
-      <Popover hideArrow className={styles.multiSelectPopover}>
+      {/* The popover is portaled to the document body, so it cannot inherit
+          the --field-* scope from the field: carry the size across explicitly. */}
+      <Popover
+        hideArrow
+        data-field-size={size}
+        className={styles.multiSelectPopover}
+      >
         <DropdownListBox renderEmptyState={() => "No results found."}>
           {children}
         </DropdownListBox>

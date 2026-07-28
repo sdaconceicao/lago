@@ -236,6 +236,66 @@
   --spacing-10: calc(10 * var(--spacing));
 }
 
+/* field size scale
+ *
+ * Metrics shared by every field-like control (TextField, Select, MultiSelect,
+ * DatePicker, ...). Components opt in with a `size` prop that renders a
+ * `data-field-size` attribute on their root; these custom properties are
+ * inherited, so descendants — including base components several levels down —
+ * pick up the right values without prop drilling.
+ *
+ * The `md` values are also declared on `:root` so a control rendered outside
+ * any sized subtree keeps its historical appearance.
+ *
+ * Derived values are repeated in both blocks on purpose: a `var()` inside a
+ * custom property is substituted where the *declaration* applies, so a value
+ * computed once on `:root` would bake in the `md` inputs and leak into nested
+ * `sm` subtrees.
+ *
+ * Every value derives from --spacing / --font-size / --radius so the hi-dpi
+ * scaling below applies to fields too. Never hardcode px here. */
+:root,
+[data-field-size="md"] {
+  --field-height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+  --field-radius: var(--radius); /* 8px */
+  --field-font-size: var(--font-size); /* 14px */
+  --field-padding-x: var(--spacing-4); /* 16px text inset */
+  --field-gap: var(--spacing-2); /* 8px */
+  --field-inner-height: var(--spacing-8); /* 32px buttons and chips */
+  --field-inner-inset: var(--spacing-2); /* 8px = (height - inner) / 2 */
+  --field-icon-size: var(--spacing-4); /* 16px */
+  --field-label-gap: var(--spacing-2); /* label to field */
+  --field-group-gap: var(--spacing-3); /* between checkboxes/radios */
+  --field-indicator-size: calc(var(--spacing) * 4.5); /* 18px */
+  /* Room reserved at the inline end for an absolutely positioned trigger. */
+  --field-reserved-inline-end: calc(
+    var(--field-inner-height) +
+    2 *
+    var(--field-inner-inset)
+  ); /* 48px */
+}
+
+/* Compact variant. Must come after the block above: both selectors have the
+ * same specificity, so source order decides. */
+[data-field-size="sm"] {
+  --field-height: calc(var(--spacing) * 7); /* 28px */
+  --field-radius: var(--radius-sm); /* 6px */
+  --field-font-size: var(--font-size-sm); /* 12px */
+  --field-padding-x: var(--spacing-2); /* 8px text inset */
+  --field-gap: var(--spacing-1); /* 4px */
+  --field-inner-height: var(--spacing-5); /* 20px buttons and chips */
+  --field-inner-inset: var(--spacing-1); /* 4px = (height - inner) / 2 */
+  --field-icon-size: var(--spacing-3); /* 12px */
+  --field-label-gap: var(--spacing-1);
+  --field-group-gap: var(--spacing-2);
+  --field-indicator-size: var(--spacing-4); /* 16px */
+  --field-reserved-inline-end: calc(
+    var(--field-inner-height) +
+    2 *
+    var(--field-inner-inset)
+  ); /* 28px */
+}
+
 /* Scale up hit targets on high resolution mobile devices. */
 @media (min-resolution: 200dpi) {
   :root {

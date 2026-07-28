@@ -12,15 +12,18 @@
 .field {
   display: flex;
   align-items: center;
-  gap: var(--spacing-2);
+  gap: var(--field-gap);
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  min-height: calc(var(--spacing-10) + var(--spacing-2));
-  padding: var(--spacing-2) calc(var(--spacing-10) + var(--spacing-2))
-    var(--spacing-2) var(--spacing-2);
-  border-radius: var(--radius);
-  font: var(--font-size) var(--font-family);
+  min-height: var(--field-height);
+  /* Left inset mirrors the toggle button's distance from the right edge;
+     the extra right padding reserves room for the absolutely positioned
+     toggle button. */
+  padding: var(--field-inner-inset) var(--field-reserved-inline-end)
+    var(--field-inner-inset) var(--field-inner-inset);
+  border-radius: var(--field-radius);
+  font: var(--field-font-size) var(--font-family);
   color: var(--field-text-color);
   cursor: text;
 
@@ -33,12 +36,12 @@
     color: var(--text-color-disabled);
   }
 
-  /* Pin the chevron toggle to the top-right corner */
+  /* Pin the chevron toggle to the top-right corner. FieldButton owns its own
+     height — do not override it here. */
   :global(.field-Button) {
     position: absolute;
-    top: var(--spacing-2);
-    right: var(--spacing-2);
-    height: var(--spacing-8);
+    top: var(--field-inner-inset);
+    right: var(--field-inner-inset);
   }
 }
 

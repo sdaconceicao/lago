@@ -100,4 +100,27 @@ describe("Checkbox", () => {
 
     expect(screen.getByText("This is required")).toBeInTheDocument();
   });
+
+  describe("size", () => {
+    it("does not render data-field-size by default so it inherits its group", () => {
+      const { container } = render(<Checkbox>Accept terms</Checkbox>);
+
+      expect(container.querySelector("[data-field-size]")).toBeNull();
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(<Checkbox size="sm">Accept terms</Checkbox>);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the DOM input", () => {
+      render(<Checkbox size="sm">Accept terms</Checkbox>);
+
+      expect(screen.getByRole("checkbox")).not.toHaveAttribute("size");
+    });
+  });
 });

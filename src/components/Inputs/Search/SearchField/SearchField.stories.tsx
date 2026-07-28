@@ -36,6 +36,40 @@ export const Default: Story = {
   },
 };
 
+export const Sizes: Story = {
+  render: () => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1.5rem",
+        width: 320,
+      }}
+    >
+      <SearchField
+        size="sm"
+        label="Small"
+        placeholder="Search documents"
+        defaultValue="quarterly report"
+      />
+      <SearchField
+        size="md"
+        label="Medium (default)"
+        placeholder="Search documents"
+        defaultValue="quarterly report"
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The size prop scales the whole field: "sm" is a compact 28px-tall control with a 12px label and 20px clear and search buttons, "md" (the default) is the 48px-tall control. Both sizes keep the clear and search buttons, and match the TextField, Select, and Date fields at the same size so controls line up in a row.',
+      },
+    },
+  },
+};
+
 export const States: Story = {
   render: () => (
     <div

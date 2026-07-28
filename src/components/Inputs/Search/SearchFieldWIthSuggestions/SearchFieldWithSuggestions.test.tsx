@@ -298,6 +298,65 @@ describe("SearchFieldWithSuggestions", () => {
     });
   });
 
+  describe("size", () => {
+    it("renders at the md size by default", () => {
+      const { container } = render(
+        <SearchFieldWithSuggestions label="Search" suggestions={fruits} />
+      );
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it("renders at the sm size when specified", () => {
+      const { container } = render(
+        <SearchFieldWithSuggestions
+          label="Search"
+          suggestions={fruits}
+          size="sm"
+        />
+      );
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the input", () => {
+      render(
+        <SearchFieldWithSuggestions
+          label="Search"
+          suggestions={fruits}
+          size="sm"
+        />
+      );
+
+      expect(screen.getByRole("searchbox")).not.toHaveAttribute("size");
+    });
+
+    it("scopes the portaled suggestions popover to the same size", async () => {
+      const user = userEvent.setup();
+      render(
+        <SearchFieldWithSuggestions
+          label="Search"
+          suggestions={fruits}
+          size="sm"
+        />
+      );
+
+      await user.type(screen.getByRole("searchbox"), "ap");
+      const listbox = await screen.findByRole("listbox");
+
+      expect(listbox.closest("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+  });
+
   describe("with promise-based suggestions", () => {
     it("loads suggestions for the query and shows them in the dropdown", async () => {
       const user = userEvent.setup();

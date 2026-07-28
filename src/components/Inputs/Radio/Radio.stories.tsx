@@ -54,3 +54,29 @@ RadioGroupUsage.parameters = {
     },
   },
 };
+
+export const Sizes: Story = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+    <RadioGroup label="Small" size="sm" defaultValue="pro">
+      <Radio value="free">Free</Radio>
+      <Radio value="pro" description="Best for growing teams">
+        Pro
+      </Radio>
+    </RadioGroup>
+    <RadioGroup label="Medium (default)" size="md" defaultValue="pro">
+      <Radio value="free">Free</Radio>
+      <Radio value="pro" description="Best for growing teams">
+        Pro
+      </Radio>
+    </RadioGroup>
+  </div>
+);
+
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        'Radio supports two sizes: "sm" scales the indicator, label text, and spacing down so the control sits comfortably beside 28px-tall fields, and "md" (the default) is the standard control. Setting `size` on the RadioGroup scopes every item inside it, as shown here; an individual Radio may override it. A Radio is not a field box, so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them — matching the size only keeps the type and control weight consistent across a compact form.',
+    },
+  },
+};

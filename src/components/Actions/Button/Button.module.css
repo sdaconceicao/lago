@@ -45,3 +45,54 @@
     margin-inline-start: var(--spacing-3);
   }
 }
+
+/* Control size scale.
+ *
+ * A Button is a control, not a field: it keys off its own `data-size`
+ * attribute and never reads the inherited `--field-*` custom properties. That
+ * isolation is deliberate — a Button rendered inside a `sm` field's subtree
+ * (a Dialog footer, a Toolbar, a Form) must keep its own height instead of
+ * silently shrinking with the field around it.
+ *
+ * `md` is the base rule above, left exactly as it was, so every existing
+ * Button renders identically. Only `font-size` (never the `font` shorthand) is
+ * overridden below, so the base `font-weight: 500` survives.
+ *
+ * `sm` (28px) lines up with a row of `sm` fields and `lg` (48px) with a row of
+ * `md` fields. The default 32px button matches neither. */
+.button[data-size="sm"] {
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  height: calc(var(--spacing) * 7); /* 28px */
+  padding: 0 var(--spacing-2);
+
+  > svg {
+    width: var(--spacing-3); /* 12px */
+    height: var(--spacing-3);
+  }
+}
+
+.button[data-size="lg"] {
+  font-size: var(--font-size);
+  height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+  padding: 0 var(--spacing-4);
+  gap: var(--spacing-2);
+
+  > svg {
+    width: var(--spacing-4); /* 16px */
+    height: var(--spacing-4);
+  }
+}
+
+/* The icon-only rule in the base block is `.button:has(> svg:only-child)` at
+ * (0,2,1), which outranks a plain `.button[data-size]` at (0,2,0). Repeating
+ * the `:has()` here lifts these to (0,3,1) so the circular icon-only button
+ * tracks its size. Padding and the pill radius stay inherited from the base
+ * icon-only rule. */
+.button[data-size="sm"]:has(> svg:only-child) {
+  width: calc(var(--spacing) * 7); /* 28px */
+}
+
+.button[data-size="lg"]:has(> svg:only-child) {
+  width: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+}

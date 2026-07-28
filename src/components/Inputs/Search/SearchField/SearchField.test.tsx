@@ -93,6 +93,46 @@ describe("SearchField", () => {
     expect(screen.getByText("Bad query")).toBeInTheDocument();
   });
 
+  describe("size", () => {
+    it("renders at the md size by default", () => {
+      const { container } = render(<SearchField label="Search" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it("renders at the sm size when specified", () => {
+      const { container } = render(<SearchField label="Search" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the input", () => {
+      render(<SearchField label="Search" size="sm" />);
+
+      expect(screen.getByRole("searchbox")).not.toHaveAttribute("size");
+    });
+
+    it("keeps both trailing buttons at the sm size", async () => {
+      const user = userEvent.setup();
+      render(<SearchField label="Search" size="sm" />);
+
+      await user.type(screen.getByRole("searchbox"), "abc");
+
+      expect(
+        screen.getByRole("button", { name: /clear/i })
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Search" })
+      ).toBeInTheDocument();
+    });
+  });
+
   describe("debounced search", () => {
     beforeEach(() => {
       vi.useFakeTimers();

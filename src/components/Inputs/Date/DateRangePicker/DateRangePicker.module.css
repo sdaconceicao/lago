@@ -8,14 +8,16 @@
   .group {
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--field-gap);
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    height: calc(var(--spacing-10) + var(--spacing-2));
-    padding: 0 var(--spacing-2) 0 var(--spacing-4);
-    border-radius: var(--radius);
-    font-size: var(--font-size);
+    height: var(--field-height);
+    /* Roomy text inset on the leading edge; on the trailing edge only the
+       inset that centers the trigger button in the field. */
+    padding: 0 var(--field-inner-inset) 0 var(--field-padding-x);
+    border-radius: var(--field-radius);
+    font-size: var(--field-font-size);
     color: var(--field-text-color);
     white-space: nowrap;
     overflow: clip;
@@ -43,11 +45,7 @@
   }
 
   .dateRangeSeparator {
-    padding: 0 var(--spacing-2);
-  }
-
-  :global(.field-Button) {
-    height: calc(100% - var(--spacing-4));
+    padding: 0 var(--field-gap);
   }
 
   /* Neutralize the standalone field styling — the Group is the field here. */

@@ -67,4 +67,30 @@ describe("TextArea", () => {
 
     expect(ref.current).toBe(screen.getByRole("textbox"));
   });
+
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = render(<TextArea label="Bio" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(<TextArea label="Bio" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the DOM textarea", () => {
+      render(<TextArea label="Bio" size="sm" />);
+
+      expect(screen.getByRole("textbox")).not.toHaveAttribute("size");
+    });
+  });
 });

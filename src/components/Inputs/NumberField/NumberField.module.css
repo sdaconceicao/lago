@@ -4,9 +4,14 @@
   :global(.react-aria-Group) {
     display: flex;
     width: fit-content;
-    border-radius: var(--radius);
+    border-radius: var(--field-radius);
     position: relative;
     box-shadow: 0 1px 0 var(--gray-50);
+    /* The field box carries the field font, as it does in every other control.
+       Without this the group inherited the page font size while the input
+       declared its own, so the group and its contents disagreed. At md this
+       resolves to the 14px the input was already using. */
+    font: var(--field-font-size) var(--font-family);
 
     &[data-invalid]::after {
       content: "";
@@ -29,8 +34,8 @@
     }
   }
 
-  /* Steppers fill the field height so they align flush with the input top and
-     bottom, matching the 48px sizing shared with TextField/Select/Date. */
+  /* Steppers stretch to the field height so they align flush with the input top
+     and bottom, following --field-height (48px at md, 28px at sm). */
   :global(.react-aria-Button) {
     height: auto;
     align-self: stretch;
@@ -40,12 +45,21 @@
     justify-content: center;
     margin-inline-start: -1px;
 
+    /* Button.module.css sizes an icon-only button with
+       `.button:has(> svg:only-child) { width: var(--spacing-8) }`, which is
+       (0,2,1) and outranks a plain `.numberField :global(.react-aria-Button)`
+       at (0,2,0). Repeating the `:has()` here makes this (0,3,1) so the stepper
+       width follows the field size — still 32px at md, 20px at sm. */
+    &:has(> svg:only-child) {
+      width: var(--field-inner-height);
+    }
+
     &[slot="decrement"] {
       border-radius: 0;
     }
 
     &[slot="increment"] {
-      border-radius: var(--radius);
+      border-radius: var(--field-radius);
       border-start-start-radius: 0;
       border-end-start-radius: 0;
     }
@@ -65,6 +79,22 @@
   }
 
   [slot="description"] {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
+  }
+
+  /* sm-only adjustments. Both properties keep their md value above: the input
+     stays at its historical 5.25rem, and the stepper icons stay at the 18px
+     that Button.module.css gives every icon-only button. */
+  &[data-field-size="sm"] {
+    :global(.react-aria-Input) {
+      width: calc(var(--spacing) * 16); /* 64px */
+    }
+
+    /* An 18px icon overflows the 20px-wide sm stepper, so fall back to the
+       shared field icon size. (0,3,1) beats `.button > svg` at (0,1,1). */
+    :global(.react-aria-Button) > svg {
+      width: var(--field-icon-size);
+      height: var(--field-icon-size);
+    }
   }
 }

@@ -48,3 +48,29 @@ CheckboxGroupUsage.parameters = {
     },
   },
 };
+
+export const Sizes: Story = () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+    <CheckboxGroup label="Small" size="sm" defaultValue={["soccer"]}>
+      <Checkbox value="soccer">Soccer</Checkbox>
+      <Checkbox value="baseball" description="Spring and summer">
+        Baseball
+      </Checkbox>
+    </CheckboxGroup>
+    <CheckboxGroup label="Medium (default)" size="md" defaultValue={["soccer"]}>
+      <Checkbox value="soccer">Soccer</Checkbox>
+      <Checkbox value="baseball" description="Spring and summer">
+        Baseball
+      </Checkbox>
+    </CheckboxGroup>
+  </div>
+);
+
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        'Checkbox supports two sizes: "sm" scales the box, label text, and spacing down so the control sits comfortably beside 28px-tall fields, and "md" (the default) is the standard control. Setting `size` on the CheckboxGroup scopes every item inside it, as shown here; a standalone Checkbox takes its own `size`, and an item may override the group. A Checkbox is not a field box, so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them — matching the size only keeps the type and control weight consistent across a compact form.',
+    },
+  },
+};

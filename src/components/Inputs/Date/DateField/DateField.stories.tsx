@@ -30,3 +30,19 @@ export const Example: Story = (args) => <DateField {...args} />;
 Example.args = {
   label: "Event date",
 };
+
+export const Sizes: Story = (args) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <DateField {...args} size="sm" label="Small" />
+    <DateField {...args} size="md" label="Medium (default)" />
+  </div>
+);
+
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        'DateField supports two sizes: "sm" renders a compact 28px-tall field with 12px segments, and "md" (the default) renders a 48px-tall field with 14px segments. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a DateField lines up with a TextField, Select, or DatePicker placed beside it in a row.',
+    },
+  },
+};

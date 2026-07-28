@@ -8,16 +8,26 @@ import {
 import utils from "@/styles/utilities.module.css";
 import styles from "./ToggleButton.module.css";
 
-interface ToggleButtonProps extends RACToggleButtonProps {
+export interface ToggleButtonProps extends RACToggleButtonProps {
   /**
    * The visual style of the button (Vanilla CSS implementation specific).
    *
    * @default 'primary'
    */
   variant?: "primary" | "secondary" | "quiet";
+  /**
+   * The size of the button. `"sm"` is 28px tall, `"md"` (the default) is 32px
+   * tall, and `"lg"` is 48px tall. Toggle buttons carry their own scale rather
+   * than inheriting the field scale, so one placed inside a compact field never
+   * shrinks on its own. Inside a ToggleButtonGroup the group's own `size` wins
+   * over this prop, because a group of mismatched toggles is never wanted.
+   *
+   * @default 'md'
+   */
+  size?: "sm" | "md" | "lg";
 }
 
-export function ToggleButton(props: ToggleButtonProps) {
+export function ToggleButton({ size = "md", ...props }: ToggleButtonProps) {
   return (
     <RACToggleButton
       {...props}
@@ -26,6 +36,7 @@ export function ToggleButton(props: ToggleButtonProps) {
         styles.toggleButton,
         utils.buttonBase
       )}
+      data-size={size}
       data-variant={props.variant || "primary"}
     >
       {composeRenderProps(props.children, (children) => (

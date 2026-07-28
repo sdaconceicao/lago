@@ -78,4 +78,30 @@ describe("ColorField", () => {
     expect(screen.getByText("Bad color")).toBeInTheDocument();
     expect(screen.getByRole("textbox")).toHaveAttribute("aria-invalid", "true");
   });
+
+  describe("size", () => {
+    it("renders at the md size by default", () => {
+      const { container } = render(<ColorField label="Color" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it("renders at the sm size when specified", () => {
+      const { container } = render(<ColorField label="Color" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it("does not forward size to the input", () => {
+      render(<ColorField label="Color" size="sm" />);
+
+      expect(screen.getByRole("textbox")).not.toHaveAttribute("size");
+    });
+  });
 });

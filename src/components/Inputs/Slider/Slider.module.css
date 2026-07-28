@@ -5,7 +5,7 @@
     "track track";
   grid-template-columns: 1fr auto;
   max-width: min(calc(100% - 12px), 300px);
-  font: var(--font-size) var(--font-family);
+  font: var(--field-font-size) var(--font-family);
   color: var(--text-color);
 
   :global(.react-aria-Label) {
@@ -14,7 +14,7 @@
 
   .sliderOutput {
     grid-area: output;
-    font-size: var(--font-size);
+    font-size: var(--field-font-size);
   }
 
   .sliderTrack {
@@ -148,6 +148,33 @@
       .sliderFill {
         background: var(--border-color-disabled);
         box-shadow: none;
+      }
+    }
+  }
+
+  /* The thumb, its hit area, and the rail are slider-specific shapes with no
+     shared `--field-*` token, so sm is an explicit override. The two-row grid
+     (label/output above the track) means the control has no single field
+     height to match, so only these three metrics scale. */
+  &[data-field-size="sm"] {
+    .sliderThumb {
+      width: var(--spacing-4); /* 16px */
+      height: var(--spacing-4);
+    }
+
+    &[data-orientation="horizontal"] .sliderTrack {
+      height: var(--spacing-4); /* 16px hit area */
+
+      .track {
+        height: var(--spacing-1); /* 4px rail */
+      }
+    }
+
+    &[data-orientation="vertical"] .sliderTrack {
+      width: var(--spacing-4);
+
+      .track {
+        width: var(--spacing-1);
       }
     }
   }

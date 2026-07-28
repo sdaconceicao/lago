@@ -6,17 +6,29 @@ import {
   type ValidationResult,
 } from "react-aria-components/RadioGroup";
 import {
+  DEFAULT_FIELD_SIZE,
   Description,
   FieldError,
+  type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import styles from "./RadioGroup.module.css";
 
 export interface RadioGroupProps extends Omit<AriaRadioGroupProps, "children"> {
+  /** The Radio items belonging to the group. */
   children?: React.ReactNode;
+  /** Accessible label rendered above the group. */
   label?: string;
+  /** Helper text rendered below the group. */
   description?: string;
+  /** Error message shown when the group is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
+  /**
+   * The size of the control. `"sm"` renders a compact variant matching 28px
+   * fields and `"md"` (the default) the standard one. Every Radio inside the
+   * group inherits this size unless it sets its own.
+   */
+  size?: FieldSize;
 }
 
 export function RadioGroup({
@@ -24,11 +36,13 @@ export function RadioGroup({
   description,
   errorMessage,
   children,
+  size = DEFAULT_FIELD_SIZE,
   ...props
 }: RadioGroupProps) {
   return (
     <AriaRadioGroup
       {...props}
+      data-field-size={size}
       className={clsx("react-aria-RadioGroup", styles.radioGroup)}
     >
       <Label isRequired={props.isRequired}>{label}</Label>

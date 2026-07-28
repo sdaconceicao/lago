@@ -5,7 +5,7 @@
 
   .checkboxItems {
     display: flex;
-    gap: var(--spacing-3);
+    gap: var(--field-group-gap);
     flex-direction: column;
   }
 

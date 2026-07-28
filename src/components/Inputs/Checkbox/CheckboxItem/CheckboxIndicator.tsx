@@ -13,7 +13,8 @@ export interface CheckboxIndicatorProps {
  * indeterminate, and disabled state of its nearest ancestor carrying the
  * matching `data-*` attribute (e.g. a `CheckboxButton` or a selectable
  * `ListBoxItem`), so the same checkbox visual can be reused anywhere without
- * an interactive input of its own.
+ * an interactive input of its own. It has no `size` prop: its box scales from
+ * the `data-field-size` scope it is rendered in.
  */
 export function CheckboxIndicator({ isIndeterminate }: CheckboxIndicatorProps) {
   return (

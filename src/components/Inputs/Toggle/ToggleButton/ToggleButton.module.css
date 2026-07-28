@@ -38,3 +38,48 @@
     scale: 0.95;
   }
 }
+
+/* Control size scale.
+ *
+ * Like Button, a ToggleButton is a control rather than a field: it keys off its
+ * own `data-size` attribute and never reads the inherited `--field-*` custom
+ * properties, so one sitting inside a compact field's subtree keeps its own
+ * height.
+ *
+ * `md` is the base rule above, left exactly as it was, so every existing
+ * ToggleButton renders identically. Only `font-size` is overridden (never the
+ * `font` shorthand) so the base `font-weight: 500` survives. */
+.toggleButton[data-size="sm"] {
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  height: calc(var(--spacing) * 7); /* 28px */
+  padding: 0 var(--spacing-2);
+
+  > span > svg {
+    width: var(--spacing-3); /* 12px */
+    height: var(--spacing-3);
+  }
+}
+
+.toggleButton[data-size="lg"] {
+  font-size: var(--font-size);
+  height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+  padding: 0 var(--spacing-4);
+
+  > span > svg {
+    width: var(--spacing-4); /* 16px */
+    height: var(--spacing-4);
+  }
+}
+
+/* The icon-only rule in the base block is
+ * `.toggleButton:has(> span > svg:only-child)` at (0,2,1), which outranks a
+ * plain `.toggleButton[data-size]` at (0,2,0). Repeating the `:has()` lifts
+ * these to (0,3,1) so the circular icon-only button tracks its size. */
+.toggleButton[data-size="sm"]:has(> span > svg:only-child) {
+  width: calc(var(--spacing) * 7); /* 28px */
+}
+
+.toggleButton[data-size="lg"]:has(> span > svg:only-child) {
+  width: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+}

@@ -6,13 +6,22 @@ import {
   RadioField,
   type RadioFieldProps,
 } from "react-aria-components/RadioGroup";
-import { Description } from "@/components/Inputs/FormComponents/index";
+import {
+  Description,
+  type FieldSize,
+} from "@/components/Inputs/FormComponents/index";
 import utils from "@/styles/utilities.module.css";
 import styles from "./Radio.module.css";
 
 export interface RadioProps extends RadioFieldProps {
   /** Helper text rendered below the option. */
   description?: string;
+  /**
+   * The size of the control. `"sm"` renders a compact variant matching 28px
+   * fields and `"md"` the standard one. Left unset, the radio inherits the size
+   * of its RadioGroup, defaulting to `"md"` when it stands alone.
+   */
+  size?: FieldSize;
 }
 
 /**
@@ -20,10 +29,14 @@ export interface RadioProps extends RadioFieldProps {
  * its label and must be placed inside a RadioGroup, which manages selection,
  * keyboard navigation, and accessibility labeling.
  */
-export function Radio(props: RadioProps) {
+export function Radio({ size, ...props }: RadioProps) {
   return (
     <RadioField
       {...props}
+      // Deliberately undefined unless `size` was passed: a standalone radio
+      // inherits `md` from `:root`, and one inside a group must not stamp its
+      // own size over the group's scope.
+      data-field-size={size}
       className={clsx("react-aria-RadioField", styles.radioField)}
     >
       <RadioButton

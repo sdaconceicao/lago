@@ -8,3 +8,10 @@
     display: contents;
   }
 }
+
+/* Inside a compact field the row scrolls instead of wrapping (see
+   MultiSelect.module.css), so the chips have to keep their natural width
+   instead of shrinking and ellipsising to fit. */
+:where([data-field-size="sm"]) .tags :global(.react-aria-Tag) {
+  flex: none;
+}
