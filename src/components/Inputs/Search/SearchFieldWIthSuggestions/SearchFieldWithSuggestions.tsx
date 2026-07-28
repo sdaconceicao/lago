@@ -26,6 +26,8 @@ export interface SearchFieldWithSuggestionsProps extends SearchFieldProps {
   loadSuggestions?: (query: string) => Promise<SearchSuggestion[]>;
   /** Called when the user picks a suggestion from the dropdown. */
   onSuggestionSelect?: (suggestion: SearchSuggestion) => void;
+  /** Customizes how each suggestion is rendered in the dropdown. Defaults to the suggestion's label. */
+  renderSuggestion?: (suggestion: SearchSuggestion) => React.ReactNode;
 }
 
 /**
@@ -35,6 +37,7 @@ export function SearchFieldWithSuggestions({
   suggestions,
   loadSuggestions,
   onSuggestionSelect,
+  renderSuggestion,
   value: controlledValue,
   defaultValue,
   onChange,
@@ -166,7 +169,11 @@ export function SearchFieldWithSuggestions({
             isLoading ? "Searching…" : "No results found."
           }
         >
-          {(item) => <DropdownItem id={item.id}>{item.label}</DropdownItem>}
+          {(item) => (
+            <DropdownItem id={item.id} textValue={item.label}>
+              {renderSuggestion ? renderSuggestion(item) : item.label}
+            </DropdownItem>
+          )}
         </DropdownListBox>
       </Popover>
     </AriaAutocomplete>

@@ -124,6 +124,35 @@ export const WithAsyncSuggestions: Story = {
   },
 };
 
+export const CustomSuggestionRenderer: Story = {
+  render: (args) => (
+    <div style={{ width: 320 }}>
+      <SearchFieldWithSuggestions {...args} />
+    </div>
+  ),
+  args: {
+    label: "Search fruit",
+    placeholder: "Start typing…",
+    suggestions: FRUITS,
+    renderSuggestion: (suggestion) => (
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <strong>{suggestion.label}</strong>
+        <span style={{ fontSize: "0.75rem", opacity: 0.7 }}>
+          id: {suggestion.id}
+        </span>
+      </div>
+    ),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "renderSuggestion overrides how each suggestion is displayed in the dropdown, receiving the suggestion and returning any ReactNode. The suggestion's label is still used for typeahead, and is still what fills the field on selection.",
+      },
+    },
+  },
+};
+
 export const States: Story = {
   render: () => (
     <div
