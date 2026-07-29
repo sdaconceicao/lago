@@ -1,0 +1,171 @@
+/* Each hued variant swaps only `--alert-color`; every surface, border and text
+ * colour is derived from it through the shared lightness and chroma scales, so
+ * the whole set inverts correctly in dark mode without a second palette. The
+ * `default` variant is the exception — see the note on it below. */
+.alert {
+  /* Matches the `default` variant, so the derivations below stay honest in
+     devtools even though that variant overrides the values they produce. */
+  --alert-color: var(--gray);
+  --alert-background: oklch(
+    from var(--alert-color) var(--lightness-100) var(--chroma-100) h
+  );
+  --alert-border: oklch(
+    from var(--alert-color) var(--lightness-300) var(--chroma-300) h
+  );
+  --alert-accent: oklch(
+    from var(--alert-color) var(--lightness-1000) var(--chroma-1000) h
+  );
+  --alert-title-color: oklch(
+    from var(--alert-color) var(--lightness-1500) var(--chroma-1500) h
+  );
+  --alert-text-color: oklch(
+    from var(--alert-color) var(--lightness-1300) var(--chroma-1300) h
+  );
+
+  /* Shared by the header (icon box, header gap) and the body and footer, which
+   * indent by the same amount so their text lines up under the title. */
+  --alert-icon-size: var(--spacing-5); /* 20px */
+  --alert-gap: var(--spacing-3); /* 12px */
+  --alert-content-inset: 0px;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  background: var(--alert-background);
+  color: var(--alert-text-color);
+  font: var(--font-size) var(--font-family);
+  forced-color-adjust: none;
+}
+
+/* An icon pushes the header text along by its own width plus the header gap.
+ * Matching that inset keeps the body and footer aligned under the title rather
+ * than under the icon. Matched on the header's `data-has-icon` flag — a bare
+ * child combinator so a nested alert cannot indent its parent's content. */
+.alert:has(> [data-has-icon]) {
+  --alert-content-inset: calc(var(--alert-icon-size) + var(--alert-gap));
+}
+
+/* The default: a message that reports no status of its own, so it carries no
+ * hue either. It takes the library's own surface and text tokens — the same set
+ * Dialog and Popover use — which is what makes it white on the light page and a
+ * raised grey on the dark one. It cannot come from the scale like the hued
+ * variants do: grey at `--lightness-100` lands within a percent of the light
+ * page background, so a derived grey would simply disappear against it. */
+.alert[data-variant="default"] {
+  --alert-color: var(--gray);
+  --alert-background: var(--overlay-background);
+  --alert-border: var(--border-color);
+  --alert-accent: var(--text-color);
+  --alert-title-color: var(--text-color);
+  --alert-text-color: var(--text-color-placeholder);
+}
+
+.alert[data-variant="info"] {
+  --alert-color: var(--blue);
+}
+
+.alert[data-variant="success"] {
+  --alert-color: var(--green);
+}
+
+.alert[data-variant="warning"] {
+  --alert-color: var(--yellow);
+}
+
+.alert[data-variant="error"] {
+  --alert-color: var(--red);
+}
+
+/* Sits inside content: rounded, fully bordered, reads as its own card. */
+.alert[data-type="module"] {
+  padding: var(--spacing-4);
+  border: 1px solid var(--alert-border);
+  border-radius: var(--radius-lg);
+}
+
+/* Page-level band: fills its container, square corners, hairlines on the block
+ * edges only so it reads as a strip rather than a card. Roomier inline padding
+ * keeps the text off the viewport edge. */
+.alert[data-type="fullWidth"] {
+  width: 100%;
+  padding: var(--spacing-4) var(--spacing-6);
+  border: none;
+  border-block: 1px solid var(--alert-border);
+  border-radius: 0;
+  /* Anchor for the dismiss button, which is lifted out of the header flow in
+     the two-column layout below. */
+  position: relative;
+
+  @media (max-width: 640px) {
+    padding-inline: var(--spacing-4);
+  }
+}
+
+/* Above the mobile breakpoint a band has the width to put its actions beside
+ * the message rather than beneath it, which keeps a page-level banner one line
+ * tall. Grid rather than a flex row because the header and body have to share
+ * the first column while the footer spans both of them.
+ *
+ * Below the breakpoint nothing here applies and the band falls back to the base
+ * column layout, which is what stacks the footer under the message. */
+@media (min-width: 641px) {
+  .alert[data-type="fullWidth"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "message actions"
+      "detail  actions";
+    align-items: center;
+    column-gap: var(--spacing-6);
+    /* The rows carry their own spacing instead: a band with no body would
+       otherwise pay a row gap for the empty track. */
+    row-gap: 0;
+
+    > :global(.alert-header) {
+      grid-area: message;
+    }
+
+    > :global(.alert-body) {
+      grid-area: detail;
+
+      &:not(:first-child) {
+        margin-block-start: var(--spacing-2);
+      }
+    }
+
+    /* Hugs the inline end, vertically centred against the message however many
+       lines it runs to. */
+    > :global(.alert-footer) {
+      grid-area: actions;
+      margin-top: 0;
+      padding-inline-start: 0;
+    }
+  }
+
+  /* The dismiss button belongs to the header, so in two columns it would land
+   * between the message and the actions. Pin it to the band's inline end
+   * instead — the same treatment Dialog gives its close button — and reserve
+   * the corner so the actions cannot run underneath it. */
+  .alert[data-type="fullWidth"] :global(.alert-dismiss) {
+    position: absolute;
+    inset-inline-end: var(--spacing-4);
+    inset-block-start: 50%;
+    margin-inline-start: 0;
+    translate: 0 -50%;
+  }
+
+  .alert[data-type="fullWidth"]:has(> [data-has-dismiss]) {
+    padding-inline-end: calc(var(--spacing-6) + var(--spacing-9));
+  }
+}
+
+@media (forced-colors: active) {
+  .alert {
+    --alert-background: Canvas;
+    --alert-border: ButtonBorder;
+    --alert-accent: CanvasText;
+    --alert-title-color: CanvasText;
+    --alert-text-color: CanvasText;
+  }
+}

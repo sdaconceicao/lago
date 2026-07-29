@@ -1,0 +1,20 @@
+.alertFooter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-1);
+  /* Lines the actions up under the title, past the header's icon gutter. */
+  padding-inline-start: var(--alert-content-inset);
+  font: var(--font-size) var(--font-family);
+
+  @media (max-width: 640px) {
+    /* Narrow screens need the width more than the alignment, so the actions
+       stack and take the full measure — a row of them either overflows or
+       leaves each one too small to hit reliably. Icon-only buttons set their own
+       width, so they stay square rather than stretching. */
+    flex-direction: column;
+    align-items: stretch;
+    padding-inline-start: 0;
+  }
+}
