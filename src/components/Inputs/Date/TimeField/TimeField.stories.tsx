@@ -44,7 +44,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'TimeField supports three sizes: "sm" renders a compact 28px-tall field with 12px segments, "md" (the default) a 36px-tall field with 14px segments, and "lg" a roomy 48px-tall field, also with 14px segments — "md" and "lg" differ in height and text inset rather than type size. TimeField shares the DateField surface, including its minimum width, so the two are interchangeable in a row: every field-like control at the same size shares its height, border radius, horizontal padding, and font size.',
+        'TimeField supports three sizes: "sm" renders a compact 28px-tall field with 12px segments, "md" (the default) a 36px-tall field with 14px segments, and "lg" a roomy 48px-tall field with 16px segments. TimeField shares the DateField surface, including its minimum width, so the two are interchangeable in a row: every field-like control at the same size shares its height, border radius, horizontal padding, and font size.',
     },
   },
 };

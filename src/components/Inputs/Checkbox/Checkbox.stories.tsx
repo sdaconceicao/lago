@@ -128,7 +128,7 @@ Sizes.play = async ({ canvasElement }) => {
       box: 18,
       gap: "8px",
       groupGap: "12px",
-      fontSize: "14px",
+      fontSize: "16px",
       indent: "26px",
     },
   ]);
@@ -138,7 +138,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'Checkbox supports three sizes: "sm" is a 16px box with 12px text, a 4px gap, and 8px between items; "md" (the default) an 18px box with 14px text, a 6px gap, and 10px between items; and "lg" an 18px box with 14px text, an 8px gap, and 12px between items. The box steps only once, from `sm` to `md` — 18px already reads small and there is no legible size between 16 and 18 — so the difference between `md` and `lg` is in the type spacing rather than the box, and a default checkbox is unchanged at 18px. Setting `size` on the CheckboxGroup scopes every item inside it, as shown here; a standalone Checkbox takes its own `size`, and an item may override the group. A Checkbox is not a field box, so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them — matching the size only keeps the type and control weight consistent across a form.',
+        'Checkbox supports three sizes: "sm" is a 16px box with 12px text, a 4px gap, and 8px between items; "md" (the default) an 18px box with 14px text, a 6px gap, and 10px between items; and "lg" an 18px box with 16px text, an 8px gap, and 12px between items. The box steps only once, from `sm` to `md` — 18px already reads small and there is no legible size between 16 and 18 — so the difference between `md` and `lg` is in the type spacing rather than the box, and a default checkbox is unchanged at 18px. Setting `size` on the CheckboxGroup scopes every item inside it, as shown here; a standalone Checkbox takes its own `size`, and an item may override the group. A Checkbox is not a field box, so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them — matching the size only keeps the type and control weight consistent across a form.',
     },
   },
 };

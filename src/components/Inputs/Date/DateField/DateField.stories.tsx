@@ -43,7 +43,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'DateField supports three sizes: "sm" renders a compact 28px-tall field with 12px segments, "md" (the default) a 36px-tall field with 14px segments, and "lg" a roomy 48px-tall field, also with 14px segments — "md" and "lg" differ in height and text inset rather than type size. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a DateField lines up with a TextField, Select, or DatePicker placed beside it in a row. The field is only as wide as its segments need, down to a minimum that keeps the box from looking half empty: 112px at "sm" and 150px at "md" and "lg", which share the same 14px segments.',
+        'DateField supports three sizes: "sm" renders a compact 28px-tall field with 12px segments, "md" (the default) a 36px-tall field with 14px segments, and "lg" a roomy 48px-tall field with 16px segments. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a DateField lines up with a TextField, Select, or DatePicker placed beside it in a row. The field is only as wide as its segments need, down to a minimum that keeps the box from looking half empty: 112px at "sm" and 150px at "md" and "lg".',
     },
   },
 };

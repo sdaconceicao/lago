@@ -36,10 +36,7 @@
 }
 
 .dropZone[data-field-size="lg"] {
-  /* The label is a block of instruction rather than field text, so `lg` keeps
-     the larger 1rem type instead of the 14px `--field-font-size` it shares
-     with `md`. */
-  font-size: var(--font-size-lg); /* 16px */
+  /* Type comes from --field-font-size, which is already 1rem at lg. */
   padding: var(--spacing-6) var(--spacing-3); /* 24px 12px */
   min-height: calc(var(--spacing) * 24); /* 96px */
 }

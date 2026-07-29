@@ -134,7 +134,7 @@ Sizes.play = async ({ canvasElement }) => {
       indicator: 18,
       gap: "8px",
       groupGap: "12px",
-      fontSize: "14px",
+      fontSize: "16px",
       indent: "26px",
     },
   ]);
@@ -144,7 +144,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'Radio supports three sizes: "sm" is a 16px indicator with 12px text, a 4px gap, and 8px between options; "md" (the default) an 18px indicator with 14px text, a 6px gap, and 10px between options; and "lg" an 18px indicator with 14px text, an 8px gap, and 12px between options. The indicator steps only once, from `sm` to `md` — 18px already reads small and there is no legible size between 16 and 18 — so the difference between `md` and `lg` is in the type spacing rather than the indicator, and a default radio is unchanged at 18px. Setting `size` on the RadioGroup scopes every item inside it, as shown here; an individual Radio may override it. A Radio is not a field box, so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them — matching the size only keeps the type and control weight consistent across a form.',
+        'Radio supports three sizes: "sm" is a 16px indicator with 12px text, a 4px gap, and 8px between options; "md" (the default) an 18px indicator with 14px text, a 6px gap, and 10px between options; and "lg" an 18px indicator with 16px text, an 8px gap, and 12px between options. The indicator steps only once, from `sm` to `md` — 18px already reads small and there is no legible size between 16 and 18 — so the difference between `md` and `lg` is in the type spacing rather than the indicator, and a default radio is unchanged at 18px. Setting `size` on the RadioGroup scopes every item inside it, as shown here; an individual Radio may override it. A Radio is not a field box, so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them — matching the size only keeps the type and control weight consistent across a form.',
     },
   },
 };

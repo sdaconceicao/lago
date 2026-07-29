@@ -62,7 +62,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'ToggleButtonGroup supports three sizes: "sm" renders 28px-tall buttons with 12px text and a 6px outer radius, "md" (the default) renders 36px-tall buttons with 14px text, and "lg" renders 48px-tall buttons with 16px horizontal padding. The control scale mirrors the field scale numerically, so the steps line up step for step and a `size="md"` group is exactly as tall as a default 36px field. The size is set on the group and applies to every button inside it — the group\'s style rules outrank a child ToggleButton\'s own `size` prop on purpose, since a group of mismatched toggles is never wanted. Set `size` on the group, not on the individual buttons.',
+        'ToggleButtonGroup supports three sizes: "sm" renders 28px-tall buttons with 12px text and a 6px outer radius, "md" (the default) renders 36px-tall buttons with 14px text, and "lg" renders 48px-tall buttons with 16px text and 16px horizontal padding. The control scale mirrors the field scale numerically, so the steps line up step for step and a `size="md"` group is exactly as tall as a default 36px field. The size is set on the group and applies to every button inside it — the group\'s style rules outrank a child ToggleButton\'s own `size` prop on purpose, since a group of mismatched toggles is never wanted. Set `size` on the group, not on the individual buttons.',
     },
   },
 };

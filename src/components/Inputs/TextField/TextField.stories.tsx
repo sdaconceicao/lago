@@ -45,7 +45,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'TextField supports three sizes: "sm" renders a compact 28px-tall field with 12px text and an 8px text inset, "md" (the default) a 36px-tall field with 14px text and a 12px inset, and "lg" a roomy 48px-tall field with 14px text and a 16px inset. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a TextField lines up with a Select, DatePicker, or NumberField placed beside it in a row.',
+        'TextField supports three sizes: "sm" renders a compact 28px-tall field with 12px text and an 8px text inset, "md" (the default) a 36px-tall field with 14px text and a 12px inset, and "lg" a roomy 48px-tall field with 16px text and a 16px inset. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a TextField lines up with a Select, DatePicker, or NumberField placed beside it in a row.',
     },
   },
 };

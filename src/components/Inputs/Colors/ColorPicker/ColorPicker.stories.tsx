@@ -45,7 +45,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'The size prop scales the trigger swatch and label and is passed on to the popover, so the hex ColorField inside matches: "sm" pairs a 20px swatch with 12px text, "md" (the default) a 24px swatch with 14px text, and "lg" a 32px swatch with 14px text. Those are the same 20 / 24 / 32px steps the buttons and chips inside a same-size field use. The trigger is a bare swatch-and-label button rather than a field box, so it does not take on the 28 / 36 / 48px field heights.',
+        'The size prop scales the trigger swatch and label and is passed on to the popover, so the hex ColorField inside matches: "sm" pairs a 20px swatch with 12px text, "md" (the default) a 24px swatch with 14px text, and "lg" a 32px swatch with 16px text. Those are the same 20 / 24 / 32px steps the buttons and chips inside a same-size field use. The trigger is a bare swatch-and-label button rather than a field box, so it does not take on the 28 / 36 / 48px field heights.',
     },
   },
 };

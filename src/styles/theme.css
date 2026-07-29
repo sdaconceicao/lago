@@ -310,7 +310,7 @@
 [data-field-size="lg"] {
   --field-height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
   --field-radius: var(--radius); /* 8px */
-  --field-font-size: var(--font-size); /* 14px */
+  --field-font-size: var(--font-size-lg); /* 16px, matching an lg Button */
   --field-padding-x: var(--spacing-4); /* 16px text inset */
   --field-gap: var(--spacing-2); /* 8px */
   --field-inner-height: var(--spacing-8); /* 32px buttons and chips */

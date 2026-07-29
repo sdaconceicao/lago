@@ -69,7 +69,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'Select supports three sizes: "sm" renders a compact 28px-tall field with 12px text and a 20px chevron toggle, "md" (the default) a 36px-tall field with 14px text and a 24px toggle, and "lg" a roomy 48px-tall field with 14px text and a 32px toggle. The size also travels to the dropdown, so its options and check marks scale with the field. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a Select lines up with a TextField, MultiSelect, or DatePicker placed beside it in a row.',
+        'Select supports three sizes: "sm" renders a compact 28px-tall field with 12px text and a 20px chevron toggle, "md" (the default) a 36px-tall field with 14px text and a 24px toggle, and "lg" a roomy 48px-tall field with 16px text and a 32px toggle. The size also travels to the dropdown, so its options and check marks scale with the field. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a Select lines up with a TextField, MultiSelect, or DatePicker placed beside it in a row.',
     },
   },
 };

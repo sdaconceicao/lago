@@ -83,7 +83,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'Switch supports three sizes, which scale the track, the label text, and the gap between them: "sm" is a 28x16px track with 12px text, "md" (the default) is 34x20px with 14px text, and "lg" is 38x22px with 14px text. The track deliberately grows more slowly than the fields it accompanies — 22px is about as tall as a switch reads before it stops looking like a switch, so the scale tops out there instead of following the 28/36/48px field heights. A Switch is not a field box, so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them — matching the size only keeps the type and control weight consistent across a form.',
+        'Switch supports three sizes, which scale the track, the label text, and the gap between them: "sm" is a 28x16px track with 12px text, "md" (the default) is 34x20px with 14px text, and "lg" is 38x22px with 16px text. The track deliberately grows more slowly than the fields it accompanies — 22px is about as tall as a switch reads before it stops looking like a switch, so the scale tops out there instead of following the 28/36/48px field heights. A Switch is not a field box, so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them — matching the size only keeps the type and control weight consistent across a form.',
     },
   },
 };

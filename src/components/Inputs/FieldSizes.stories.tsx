@@ -229,7 +229,7 @@ Alignment.parameters = {
   docs: {
     description: {
       story:
-        "Each row mixes every single-line control at one size. The assertions check that height, border radius, font size, text inset, and trailing-trigger placement are identical across the row: 28px/6px/12px/8px at `sm`, 36px/8px/14px/12px at `md`, and 48px/8px/14px/16px at `lg`.",
+        "Each row mixes every single-line control at one size. The assertions check that height, border radius, font size, text inset, and trailing-trigger placement are identical across the row: 28px/6px/12px/8px at `sm`, 36px/8px/14px/12px at `md`, and 48px/8px/16px/16px at `lg`.",
     },
   },
 };
@@ -364,24 +364,26 @@ export const ButtonPairing: StoryObj = {
     </div>
   ),
   play: async ({ canvasElement }) => {
-    for (const [testId, height, buttonFont] of [
+    for (const [testId, height, font] of [
       ["pair-sm", 28, "12px"],
       ["pair-md", 36, "14px"],
       ["pair-lg", 48, "16px"],
     ] as const) {
       const row = canvasElement.querySelector(`[data-testid="${testId}"]`);
+      const input = row?.querySelector(".react-aria-Input");
       const button = row?.querySelector("button");
-      const measured = [row?.querySelector(".react-aria-Input"), button].map(
-        (el) => Math.round(el?.getBoundingClientRect().height ?? 0)
+      const measured = [input, button].map((el) =>
+        Math.round(el?.getBoundingClientRect().height ?? 0)
       );
       expect(measured, testId).toEqual([height, height]);
 
-      // A button's label steps 12 / 14 / 16 across the scale. Without this,
-      // `lg` silently shared `md`'s 14px and read small on a 48px control.
+      // Type steps 12 / 14 / 16 across the scale, and a field's text matches
+      // the button beside it. Without this, `lg` silently shared `md`'s 14px
+      // and read small on a 48px control.
       expect(
-        button && getComputedStyle(button).fontSize,
-        `${testId} button label`
-      ).toBe(buttonFont);
+        [input, button].map((el) => el && getComputedStyle(el).fontSize),
+        `${testId} type size`
+      ).toEqual([font, font]);
     }
   },
 };

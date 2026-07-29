@@ -124,7 +124,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'Slider supports three sizes, which scale the thumb, the rail and its hit area, and the label and output text: "sm" is a 16px thumb on a 4px rail with 12px text, "md" (the default) is a 22px thumb on an 8px rail with 14px text, and "lg" is a 24px thumb on a 10px rail with 14px text. `md` keeps the same thumb it has always had rather than taking a new middle value — 22px is already under the 24x24 minimum target size in WCAG 2.5.8, so the scale grows upward from the default instead, and `lg` is the step that clears the minimum. A Slider is not a field box — its label and output sit on their own row above the track — so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them; matching the size only keeps the type and control weight consistent across a form.',
+        'Slider supports three sizes, which scale the thumb, the rail and its hit area, and the label and output text: "sm" is a 16px thumb on a 4px rail with 12px text, "md" (the default) is a 22px thumb on an 8px rail with 14px text, and "lg" is a 24px thumb on a 10px rail with 16px text. `md` keeps the same thumb it has always had rather than taking a new middle value — 22px is already under the 24x24 minimum target size in WCAG 2.5.8, so the scale grows upward from the default instead, and `lg` is the step that clears the minimum. A Slider is not a field box — its label and output sit on their own row above the track — so it does not share the height of a TextField, Select, or DatePicker and will not row-align with them; matching the size only keeps the type and control weight consistent across a form.',
     },
   },
 };

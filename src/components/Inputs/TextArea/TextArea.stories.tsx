@@ -45,7 +45,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'TextArea supports three sizes: "sm" renders a compact field with 12px text, 8px horizontal padding, and a 44px minimum height, "md" (the default) renders 14px text, 12px horizontal padding, and a 52px minimum height, and "lg" renders 14px text, 16px horizontal padding, and a 64px minimum height. Each minimum height is one single-line field of that size plus a second row of text, so a TextArea always reads as multi-line. Because a TextArea is multi-line and resizable, its height can never match a single-line control, so it does not row-align with a TextField or Select the way those fields align with each other — at a given size it only shares their border radius, horizontal padding, and font size.',
+        'TextArea supports three sizes: "sm" renders a compact field with 12px text, 8px horizontal padding, and a 44px minimum height, "md" (the default) renders 14px text, 12px horizontal padding, and a 52px minimum height, and "lg" renders 16px text, 16px horizontal padding, and a 64px minimum height. Each minimum height is one single-line field of that size plus a second row of text, so a TextArea always reads as multi-line. Because a TextArea is multi-line and resizable, its height can never match a single-line control, so it does not row-align with a TextField or Select the way those fields align with each other — at a given size it only shares their border radius, horizontal padding, and font size.',
     },
   },
 };

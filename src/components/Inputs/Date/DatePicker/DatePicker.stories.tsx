@@ -44,7 +44,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'DatePicker supports three sizes: "sm" renders a compact 28px-tall field with 12px segments and a 20px calendar trigger, "md" (the default) a 36px-tall field with 14px segments and a 24px trigger, and "lg" a roomy 48px-tall field with 14px segments and a 32px trigger. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a DatePicker lines up with a TextField or Select placed beside it in a row. The calendar popover is the same size at all three, so its day cells stay comfortable pointer targets.',
+        'DatePicker supports three sizes: "sm" renders a compact 28px-tall field with 12px segments and a 20px calendar trigger, "md" (the default) a 36px-tall field with 14px segments and a 24px trigger, and "lg" a roomy 48px-tall field with 16px segments and a 32px trigger. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a DatePicker lines up with a TextField or Select placed beside it in a row. The calendar popover is the same size at all three, so its day cells stay comfortable pointer targets.',
     },
   },
 };

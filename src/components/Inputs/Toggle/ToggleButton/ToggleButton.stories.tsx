@@ -51,7 +51,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'ToggleButton supports three sizes: "sm" is 28px tall with 12px text and a 6px radius, "md" (the default) is 36px tall with 14px text, and "lg" is 48px tall with 16px horizontal padding. The control scale mirrors the field scale numerically, so the steps line up step for step — `size="md"` is exactly as tall as a default 36px field, and a Button and a ToggleButton of the same `size` sit at the same height in a toolbar. Like Button, a ToggleButton renders `data-size` rather than `data-field-size` and ignores the field custom properties, so it keeps its own height inside a compact field. Inside a ToggleButtonGroup the group\'s `size` wins over this prop.',
+        'ToggleButton supports three sizes: "sm" is 28px tall with 12px text and a 6px radius, "md" (the default) is 36px tall with 14px text, and "lg" is 48px tall with 16px text and 16px horizontal padding. The control scale mirrors the field scale numerically, so the steps line up step for step — `size="md"` is exactly as tall as a default 36px field, and a Button and a ToggleButton of the same `size` sit at the same height in a toolbar. Like Button, a ToggleButton renders `data-size` rather than `data-field-size` and ignores the field custom properties, so it keeps its own height inside a compact field. Inside a ToggleButtonGroup the group\'s `size` wins over this prop.',
     },
   },
 };

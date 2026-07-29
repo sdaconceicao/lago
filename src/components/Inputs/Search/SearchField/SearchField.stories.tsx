@@ -70,7 +70,7 @@ export const Sizes: Story = {
     docs: {
       description: {
         story:
-          'The size prop scales the whole field: "sm" is a compact 28px-tall control with a 12px label and 20px clear and search buttons, "md" (the default) is 36px tall with 14px text and 24px buttons, and "lg" is 48px tall with 14px text and 32px buttons. All three keep both trailing buttons inside the field, and match the TextField, Select, and Date fields at the same size so controls line up in a row.',
+          'The size prop scales the whole field: "sm" is a compact 28px-tall control with a 12px label and 20px clear and search buttons, "md" (the default) is 36px tall with 14px text and 24px buttons, and "lg" is 48px tall with 16px text and 32px buttons. All three keep both trailing buttons inside the field, and match the TextField, Select, and Date fields at the same size so controls line up in a row.',
       },
     },
   },
