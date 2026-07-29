@@ -31,12 +31,7 @@ export interface CheckboxGroupProps
    */
   orientation?: "horizontal" | "vertical";
   /**
-   * The size of the control, scaling the label text and the spacing between
-   * items: `"sm"` pairs 12px text with a 16px box and 8px between items, `"md"`
-   * (the default) 14px text with an 18px box and 10px between items, and `"lg"`
-   * 14px text with an 18px box and 12px between items. The box itself steps only
-   * once, from `sm` to `md`, because 18px already reads small. Every Checkbox
-   * inside the group inherits this size unless it sets its own.
+   * Size of the group and the checkboxes inside it.
    *
    * @default 'md'
    */

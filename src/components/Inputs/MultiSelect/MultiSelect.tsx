@@ -41,18 +41,9 @@ export interface MultiSelectProps<T>
   /** How selected items are displayed: "tags" (default) shows removable tag chips, "text" shows a comma-separated list. Defaults to "tags". */
   displayMode?: MultiSelectDisplayMode;
   /**
-   * The size of the field. `"sm"` is a compact 28px-tall control, `"md"` (the
-   * default) is 36px, and `"lg"` is a roomy 48px. Fields of the same size share
-   * their height, border radius, horizontal padding, and font size, so they
-   * line up when placed in a row. The size also travels to the dropdown and to
-   * the tag chips, which are 20px, 24px, and 32px tall respectively.
-   *
-   * `"sm"` and `"md"` keep a fixed height: their tags never wrap, the row
-   * scrolls horizontally instead, and the field stays exactly 28px or 36px tall
-   * however many items are selected — so it keeps lining up with the controls
-   * beside it. At `"lg"` the tags wrap onto further rows and the field grows to
-   * fit them, which shows a whole selection at once but means it no longer
-   * matches the height of its neighbours.
+   * Field size: 28px, 36px (default), or 48px tall. Also scales the dropdown
+   * and the tag chips. At `"sm"` and `"md"` the tags scroll rather than wrap,
+   * so the field holds its height; at `"lg"` they wrap and it grows.
    */
   size?: FieldSize;
 }

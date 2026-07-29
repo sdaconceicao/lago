@@ -28,14 +28,7 @@ export interface TextAreaProps extends AriaTextFieldProps {
   placeholder?: string;
   /** Ref forwarded to the underlying `textarea` element. */
   inputRef?: React.Ref<HTMLTextAreaElement>;
-  /**
-   * The size of the field. `"sm"` is compact, `"md"` (the default) is the
-   * standard size, and `"lg"` is roomy. A TextArea is multi-line, so its height
-   * never matches a single-line field — it starts one field height plus a
-   * second row of text tall (44 / 52 / 64px) and the user can drag it taller —
-   * but at a given size it shares the border radius, horizontal padding, and
-   * font size of the other fields.
-   */
+  /** Field size: 44px, 52px (default), or 64px minimum height. */
   size?: FieldSize;
 }
 

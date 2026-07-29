@@ -24,13 +24,7 @@ export interface RadioGroupProps extends Omit<AriaRadioGroupProps, "children"> {
   /** Error message shown when the group is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
   /**
-   * The size of the control, scaling the label text and the spacing between
-   * options: `"sm"` pairs 12px text with a 16px indicator and 8px between
-   * options, `"md"` (the default) 14px text with an 18px indicator and 10px
-   * between options, and `"lg"` 14px text with an 18px indicator and 12px
-   * between options. The indicator itself steps only once, from `sm` to `md`,
-   * because 18px already reads small. Every Radio inside the group inherits this
-   * size unless it sets its own.
+   * Size of the group and the radios inside it.
    *
    * @default 'md'
    */

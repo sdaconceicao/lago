@@ -16,19 +16,7 @@ import styles from "./Radio.module.css";
 export interface RadioProps extends RadioFieldProps {
   /** Helper text rendered below the option. */
   description?: string;
-  /**
-   * The size of the control, scaling the indicator, the label text, and the gap
-   * between them: `"sm"` is a 16px indicator with 12px text and a 4px gap,
-   * `"md"` an 18px indicator with 14px text and a 6px gap, and `"lg"` an 18px
-   * indicator with 14px text and an 8px gap. The indicator steps only once, from
-   * `sm` to `md` — 18px already reads small and there is no legible size between
-   * 16 and 18 — so `md` and `lg` differ in type spacing rather than in the
-   * indicator. A Radio is not a field box, so it never takes on a field's height
-   * and will not row-align with a TextField or Select.
-   *
-   * Left unset, the radio inherits the size of its RadioGroup, defaulting to
-   * `"md"` when it stands alone.
-   */
+  /** Control size. Inherits its RadioGroup's size unless set; `"md"` alone. */
   size?: FieldSize;
 }
 

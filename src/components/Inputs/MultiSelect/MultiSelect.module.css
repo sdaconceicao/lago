@@ -7,9 +7,6 @@
   max-width: 100%;
 }
 
-/* Field container styled like an input; tags/text, search input, and toggle
-   share one inset surface so the whole group reads as a single control.
-   Sizing and padding match the DatePicker field group. */
 .field {
   display: flex;
   align-items: center;
@@ -66,15 +63,6 @@
      be reserved for it at the inline end. */
   padding-inline-end: var(--field-inner-inset);
 
-  /* Absolutely positioned boxes scroll along with a scroll container's
-     content, so the toggle becomes a sticky flex item instead and stays pinned
-     to the inline end while the tags scroll underneath it.
-
-     `right: 0`, not --field-inner-inset: a sticky inset is measured from the
-     scrollport's content box, which already excludes the field's inline-end
-     padding. Insetting again would sit the toggle 2x --field-inner-inset from
-     the field's edge and break its alignment with the Select and DatePicker
-     toggles. z-index keeps the tags scrolling underneath it. */
   :global(.field-Button) {
     position: sticky;
     top: auto;

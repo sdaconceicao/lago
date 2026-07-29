@@ -39,22 +39,6 @@
   }
 }
 
-/* Control size scale: `sm` 28px, `md` 36px (the default), `lg` 48px.
- *
- * Like Button, a ToggleButton is a control rather than a field: it keys off its
- * own `data-size` attribute and never reads the inherited `--field-*` custom
- * properties, so one sitting inside a compact field's subtree keeps its own
- * height. The steps mirror the field scale numerically, so `size="md"` is as
- * tall as a default field and a Button and a ToggleButton of the same `size`
- * agree.
- *
- * `md` is produced by the base rule above; there is deliberately no
- * `.toggleButton[data-size="md"]` block. As with Button, an icon-only
- * `[data-size="md"]:has(...)` rule here would land at (0,3,1) and risk an
- * exact specificity tie with a consumer stylesheet that sizes a nested
- * `.react-aria-ToggleButton` through its own `:has()` — order-dependent and
- * fragile. Leave `md` to the base rule. Only `font-size` is overridden below
- * (never the `font` shorthand) so the base `font-weight: 500` survives. */
 .toggleButton[data-size="sm"] {
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
@@ -78,10 +62,6 @@
   }
 }
 
-/* The icon-only rule in the base block is
- * `.toggleButton:has(> span > svg:only-child)` at (0,2,1), which outranks a
- * plain `.toggleButton[data-size]` at (0,2,0). Repeating the `:has()` lifts
- * these to (0,3,1) so the circular icon-only button tracks its size. */
 .toggleButton[data-size="sm"]:has(> span > svg:only-child) {
   width: calc(var(--spacing) * 7); /* 28px */
 }

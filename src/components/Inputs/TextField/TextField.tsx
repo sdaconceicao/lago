@@ -36,13 +36,7 @@ export interface TextFieldProps<T = HTMLInputElement>
    * a single inset surface that matches the Select and DatePicker fields.
    */
   button?: React.ReactNode;
-  /**
-   * The size of the field. `"sm"` is a compact 28px-tall control, `"md"` (the
-   * default) is 36px, and `"lg"` is a roomy 48px. A trailing `button` scales
-   * with the field (20 / 24 / 32px). Fields of the same size share their
-   * height, border radius, horizontal padding, and font size, so they line up
-   * when placed in a row.
-   */
+  /** Field size: 28px, 36px (default), or 48px tall. A trailing `button` scales with it. */
   size?: FieldSize;
 }
 

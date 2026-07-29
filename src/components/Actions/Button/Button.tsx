@@ -17,13 +17,7 @@ export interface ButtonProps extends RACButtonProps {
    */
   variant?: "primary" | "secondary" | "quiet";
   /**
-   * The size of the button. `"sm"` is 28px tall, `"md"` (the default) is 36px
-   * tall, and `"lg"` is 48px tall. Buttons carry their own scale rather than
-   * inheriting the field scale, so a button placed inside a compact field never
-   * shrinks on its own. The control scale mirrors the field scale, so the sizes
-   * line up step for step: `size="md"` matches a default (36px) field, `"sm"`
-   * matches a `sm` field and `"lg"` a `lg` field. Give the button the same
-   * `size` as the fields it shares a row with.
+   * Button size: 28px, 36px, or 48px tall, matching the field of the same size.
    *
    * @default 'md'
    */

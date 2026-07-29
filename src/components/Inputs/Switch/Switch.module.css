@@ -92,25 +92,6 @@
   }
 }
 
-/* Track size scale.
- *
- * The track is a switch-specific shape with no shared `--field-*` token, so
- * every step is an explicit block. `md` is the base rule above; `sm` and `lg`
- * override it here. All three keep the same two relationships:
- *
- *   - width − height === the selected translate, so the handle lands flush
- *     against the trailing edge (sm 28 − 16 = 12, md 34 − 20 = 14,
- *     lg 38 − 22 = 16);
- *   - the pressed transform-origin sits 2px inside the trailing edge
- *     (sm 26 of 28, md 32 of 34, lg 36 of 38) so the squashed handle grows
- *     inward rather than spilling out of the track.
- *
- * The track grows more slowly than the field height it accompanies: 22px is
- * about as tall as a switch can read before it stops looking like a switch, so
- * 16 → 20 → 22 tops out at `lg` rather than tracking 28 → 36 → 48 linearly.
- *
- * Keyed on this switch's own root rather than any sized ancestor, so a switch
- * that opts back into `md` inside a compact form keeps the `md` track. */
 .switchField[data-field-size="sm"] {
   .track {
     --height: var(--spacing-4); /* 16px */

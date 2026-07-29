@@ -34,19 +34,7 @@ export interface DateRangePickerProps<T extends DateValue>
   description?: string;
   /** Error message shown when the field is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
-  /**
-   * The size of the field. `"sm"` is a compact 28px-tall control, `"md"` (the
-   * default) is 36px, and `"lg"` is a roomy 48px. Fields of the same size share
-   * their height, border radius, horizontal padding, and font size, so they line
-   * up when placed in a row. The calendar trigger scales with the field — 20px,
-   * 24px, then 32px — but the calendar popover keeps its default size at every
-   * field size so its day cells stay comfortable pointer targets.
-   *
-   * Two date inputs and a separator share one field here, so the larger sizes
-   * need more room: a `"lg"` range picker wants roughly 280px of width for a
-   * US-format range (more for longer locale formats), below which the dates
-   * scroll horizontally inside the field instead of all being visible at once.
-   */
+  /** Field size: 28px, 36px (default), or 48px tall. The calendar popover does not scale. */
   size?: FieldSize;
 }
 

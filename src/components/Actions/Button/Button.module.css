@@ -46,27 +46,6 @@
   }
 }
 
-/* Control size scale: `sm` 28px, `md` 36px (the default), `lg` 48px.
- *
- * A Button is a control, not a field: it keys off its own `data-size`
- * attribute and never reads the inherited `--field-*` custom properties. That
- * isolation is deliberate — a Button rendered inside a `sm` field's subtree
- * (a Dialog footer, a Toolbar, a Form) must keep its own height instead of
- * silently shrinking with the field around it.
- *
- * The control scale mirrors the field scale numerically, so `size` lines up
- * step for step: `size="sm"` matches a `sm` field, `size="md"` a default field,
- * `size="lg"` a `lg` field. No pairing table to remember.
- *
- * `md` is produced by the base rule above — there is deliberately no
- * `.button[data-size="md"]` block, and adding one would be a bug. NumberField
- * sizes its steppers with
- * `.numberField :global(.react-aria-Button):has(> svg:only-child)` at (0,3,1);
- * a `.button[data-size="md"]:has(> svg:only-child)` rule would tie it exactly
- * and be resolved only by stylesheet order. Keeping the icon-only rule as the
- * base `.button:has(> svg:only-child)` at (0,2,1) leaves NumberField's rule the
- * clear winner. Only `font-size` (never the `font` shorthand) is overridden
- * below, so the base `font-weight: 500` survives. */
 .button[data-size="sm"] {
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
@@ -91,11 +70,6 @@
   }
 }
 
-/* The icon-only rule in the base block is `.button:has(> svg:only-child)` at
- * (0,2,1), which outranks a plain `.button[data-size]` at (0,2,0). Repeating
- * the `:has()` here lifts these to (0,3,1) so the circular icon-only button
- * tracks its size. Padding and the pill radius stay inherited from the base
- * icon-only rule. */
 .button[data-size="sm"]:has(> svg:only-child) {
   width: calc(var(--spacing) * 7); /* 28px */
 }

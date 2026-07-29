@@ -62,22 +62,6 @@
   }
 }
 
-/* Control size scale: `sm` 28px, `md` 36px (the default), `lg` 48px.
- *
- * A SegmentedControl is a control, not a field: it keys off its own `data-size`
- * attribute and never reads the inherited `--field-*` custom properties, so one
- * rendered inside a compact field's subtree keeps its own height. The steps
- * mirror the field scale numerically, so `size="md"` is as tall as a default
- * field and matches a `md` Button.
- *
- * `md` is produced by the base rule above; there is deliberately no
- * `[data-size="md"]` block, matching Button and ToggleButton.
- *
- * The root adds no vertical padding around its items — the items are the only
- * thing setting the control's block size — so the item height *is* the control's
- * outer height at every step. Only `font-size` is overridden (never the `font`
- * shorthand) so the base `font-weight: 500` survives, and the root's `9999px`
- * pill radius is left alone at every size. */
 .segmentedControl[data-size="sm"] {
   .segmentedControlItem {
     font-size: var(--font-size-sm);

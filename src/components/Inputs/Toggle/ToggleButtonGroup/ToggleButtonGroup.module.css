@@ -64,24 +64,6 @@
   }
 }
 
-/* Control size scale: `sm` 28px, `md` 36px (the default), `lg` 48px, mirroring
- * the field scale so a `md` group is as tall as a default field.
- *
- * The group's size deliberately overrides each child's own `size` prop: a group
- * of mismatched toggles is never wanted.
- * `.toggleButtonGroup[data-size] > :global(.react-aria-ToggleButton)` is
- * (0,3,0), which outranks the `.toggleButton[data-size]` rule (0,2,0) in
- * ToggleButton.module.css as well as its (0,1,0) base rule, so the group wins
- * regardless of source order between the two stylesheets.
- *
- * The `md` block repeats the values the base ToggleButton rule already
- * produces, so an existing group renders identically — it exists only so that a
- * `md` group also flattens a `sm` or `lg` child.
- *
- * Corner radii are intentionally absent here: they belong to the
- * `[data-orientation]` rules above, which would otherwise tie with these on
- * specificity and re-round the seams between buttons. The size-specific radii
- * are scoped to the orientation instead, further down. */
 .toggleButtonGroup[data-size="md"] > :global(.react-aria-ToggleButton) {
   font-size: var(--font-size);
   height: var(--spacing-9); /* 36px */
@@ -115,11 +97,8 @@
   }
 }
 
-/* Icon-only buttons stay square and unpadded. These are (0,4,1), so they
- * outrank both the horizontal padding set above (0,3,0) and the button's own
- * `.toggleButton[data-size]:has(...)` rule (0,3,1). */
 .toggleButtonGroup[data-size="md"]
-> :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
+  > :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
   width: var(--spacing-9); /* 36px */
   padding: 0;
 }
@@ -136,11 +115,8 @@
   padding: 0;
 }
 
-/* Outer corners at `sm` use the compact radius. (0,5,0) on the `:first-child` /
- * `:last-child` selectors, above the (0,4,0) orientation rules they replace.
- * `md` and `lg` already use `--radius`, so they need no override. */
 .toggleButtonGroup[data-size="sm"][data-orientation="horizontal"]
-> :global(.react-aria-ToggleButton) {
+  > :global(.react-aria-ToggleButton) {
   &:first-child {
     border-radius: var(--radius-sm) 0 0 var(--radius-sm);
   }

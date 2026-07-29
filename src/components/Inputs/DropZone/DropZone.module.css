@@ -30,23 +30,6 @@
   }
 }
 
-/* Box size scale.
- *
- * Unlike Button or ToggleButton, a DropZone is a field-ish surface: it keys off
- * `data-field-size` so it follows the size of the `Form` or field group it sits
- * in.
- *
- * Radius and type come straight from the inherited `--field-*` tokens in the
- * base rule, so they need no per-step block. Only the block padding and the
- * minimum height do: a drop target's height is its own shape rather than a
- * field height, and it steps in even 8px/24px increments across the scale —
- * 8/48px at `sm`, 16/72px at `md`, 24/96px at `lg`. The inline padding is a
- * gutter for centred, balanced text rather than a text inset, so it stays at
- * 12px throughout instead of tracking `--field-padding-x`.
- *
- * `lg` restores exactly the padding, minimum height, and 1rem type this
- * component had when the scale had a single roomy step, so a DropZone moved
- * from the old `md` to `lg` is pixel-identical. */
 .dropZone[data-field-size="sm"] {
   padding: var(--spacing-2) var(--spacing-3); /* 8px 12px */
   min-height: calc(var(--spacing) * 12); /* 48px */

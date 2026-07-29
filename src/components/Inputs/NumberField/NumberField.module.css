@@ -46,11 +46,6 @@
     justify-content: center;
     margin-inline-start: -1px;
 
-    /* Button.module.css sizes an icon-only button with
-       `.button:has(> svg:only-child) { width: var(--spacing-8) }`, which is
-       (0,2,1) and outranks a plain `.numberField :global(.react-aria-Button)`
-       at (0,2,0). Repeating the `:has()` here makes this (0,3,1) so the stepper
-       width follows the field size — 20px at sm, 24px at md, 32px at lg. */
     &:has(> svg:only-child) {
       width: var(--field-inner-height);
     }
@@ -83,19 +78,6 @@
     font-size: var(--font-size-sm);
   }
 
-  /* The input keeps the base 5.25rem above at md and lg. It was tuned when md
-     was the 48px field — now lg — and still reads comfortably at 36px, where it
-     leaves the same room for digits with a slightly shorter box. Only sm needs a
-     narrower input.
-
-     The stepper icons are the one thing Button does not scale for us: a Button
-     keys off its own `data-size` and never reads the `--field-*` tokens, so an
-     icon-only stepper keeps Button's base icon size at every field size. That
-     base is Button's md step, so it is right at md and wrong at the two ends —
-     too big for the sm stepper, too small beside the larger icons of other lg
-     fields. Both ends pull it back onto the shared --field-icon-size; md is left
-     to the base. Each selector is (0,3,1), which beats `.button > svg` at
-     (0,1,1). */
   &[data-field-size="sm"] {
     :global(.react-aria-Input) {
       width: calc(var(--spacing) * 16); /* 64px */

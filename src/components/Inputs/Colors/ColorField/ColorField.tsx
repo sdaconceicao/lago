@@ -26,12 +26,7 @@ export interface ColorFieldProps extends AriaColorFieldProps {
   errorMessage?: string | ((validation: ValidationResult) => string);
   /** Placeholder text shown while the field is empty. */
   placeholder?: string;
-  /**
-   * The size of the field. `"sm"` is a compact 28px-tall control, `"md"` (the
-   * default) is 36px, and `"lg"` is a roomy 48px. Fields of the same size share
-   * their height, border radius, horizontal padding, and font size, so they
-   * line up when placed in a row.
-   */
+  /** Field size: 28px, 36px (default), or 48px tall. */
   size?: FieldSize;
 }
 
