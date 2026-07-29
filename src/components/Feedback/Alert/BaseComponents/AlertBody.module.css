@@ -1,0 +1,16 @@
+.alertBody {
+  /* Indents to clear the header's icon gutter so prose starts under the title.
+     Resolves to 0 when the header has no icon, or when the body is used alone. */
+  padding-inline-start: var(--alert-content-inset);
+  font: var(--font-size) var(--font-family);
+
+  color: var(--alert-text-color);
+
+  p {
+    margin: 0;
+  }
+
+  p + p {
+    margin-top: var(--spacing-2);
+  }
+}
