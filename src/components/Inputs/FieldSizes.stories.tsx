@@ -32,9 +32,10 @@ import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButt
  * lines up when placed in a row.
  *
  * The metrics come from the `--field-*` custom properties in `styles/theme.css`,
- * scoped by a `data-field-size` attribute on each component's root. Because
- * custom properties inherit, a wrapper — most usefully a `Form` — can set the
- * size for everything inside it.
+ * scoped by a `data-field-size` attribute on each component's root. Those
+ * properties inherit, so every part of a control — its inner input, trigger
+ * button, tag chips, label, and dropdown — picks up the field's size without
+ * anything being passed down to it.
  */
 const meta: Meta = {
   parameters: {
@@ -122,6 +123,23 @@ const ROOTS = [
   .map((name) => `.react-aria-${name}`)
   .join(", ");
 
+/**
+ * Where a control's trailing trigger sits, measured from the field box's own
+ * edges. Every control that has one must place it identically, whatever
+ * mechanism positions it.
+ */
+const triggerBox = (field: Element) => {
+  const button = field.querySelector(".field-Button");
+  if (!button) return null;
+  const fieldRect = field.getBoundingClientRect();
+  const buttonRect = button.getBoundingClientRect();
+  return {
+    size: `${Math.round(buttonRect.width)}x${Math.round(buttonRect.height)}`,
+    fromEnd: Math.round(fieldRect.right - buttonRect.right),
+    fromTop: Math.round(buttonRect.top - fieldRect.top),
+  };
+};
+
 const measureRow = (row: HTMLElement) =>
   [...row.querySelectorAll(ROOTS)].map((control) => {
     const field = control.querySelector(FIELD_BOX);
@@ -135,6 +153,7 @@ const measureRow = (row: HTMLElement) =>
       radius: style.borderTopLeftRadius,
       fontSize: style.fontSize,
       inset: textInset(field),
+      trigger: triggerBox(field),
     };
   });
 
@@ -177,6 +196,17 @@ export const Alignment: StoryObj = {
           fontSize: first.fontSize,
           inset: expected[size].inset,
         });
+      }
+
+      // Trailing triggers must sit in the same place in every control that has
+      // one, regardless of how each stylesheet positions it.
+      const triggers = measured.filter((control) => control.trigger);
+      const [firstTrigger] = triggers;
+      for (const control of triggers) {
+        expect(
+          control.trigger,
+          `${size}: ${control.name} trigger must match ${firstTrigger.name}`
+        ).toEqual(firstTrigger.trigger);
       }
     }
   },
@@ -329,6 +359,65 @@ ButtonPairing.parameters = {
     description: {
       story:
         'A row of `md` fields (48px) pairs with `<Button size="lg">`; a row of `sm` fields (28px) pairs with `<Button size="sm">`. The default 32px button matches neither field height on purpose — it is the right size for toolbars and dialog footers.',
+    },
+  },
+};
+
+/**
+ * A MultiSelect holding selections, beside the controls it has to line up with.
+ * This is where a compact field is most likely to drift: the chips are real
+ * layout, so if they wrapped they would push the field past its size.
+ */
+export const PopulatedMultiSelect: StoryObj = {
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+      {(["md", "sm"] as const).map((size) => (
+        <div
+          key={size}
+          style={{ display: "flex", alignItems: "flex-start", gap: 12 }}
+          data-testid={`populated-${size}`}
+        >
+          <Select aria-label="Select" size={size}>
+            <SelectItem id="a">Apple</SelectItem>
+          </Select>
+          <MultiSelect
+            aria-label="Multi"
+            size={size}
+            defaultValue={["apple", "banana", "cherry"]}
+          >
+            <MultiSelectItem id="apple">Apple</MultiSelectItem>
+            <MultiSelectItem id="banana">Banana</MultiSelectItem>
+            <MultiSelectItem id="cherry">Cherry</MultiSelectItem>
+          </MultiSelect>
+          <DatePicker aria-label="Date picker" size={size} />
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const row = canvasElement.querySelector<HTMLElement>(
+      '[data-testid="populated-sm"]'
+    );
+    if (!row) throw new Error("missing sm row");
+
+    const measured = measureRow(row);
+    expect(measured, "sm: every control measured").toHaveLength(3);
+
+    // A populated compact field must not grow, and its toggle must stay put.
+    for (const control of measured) {
+      expect(control, `sm: ${control.name}`).toMatchObject({
+        height: 28,
+        trigger: { size: "20x20", fromEnd: 4, fromTop: 4 },
+      });
+    }
+  },
+};
+
+PopulatedMultiSelect.parameters = {
+  docs: {
+    description: {
+      story:
+        "At `sm` the tags never wrap — the row scrolls horizontally — so the field stays exactly 28px tall and its toggle stays aligned with the Select and DatePicker beside it. At `md` the tags do wrap and the field grows to fit them, which is why these rows align to the top rather than the bottom.",
     },
   },
 };
