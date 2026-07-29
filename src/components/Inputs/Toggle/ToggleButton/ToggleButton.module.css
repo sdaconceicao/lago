@@ -8,8 +8,8 @@
   font-weight: 500;
   text-align: center;
   margin: 0;
-  height: var(--spacing-8);
-  padding: 0 var(--spacing-3);
+  height: var(--spacing-9); /* 36px — the md step, see the note below */
+  padding: 0 var(--spacing-3); /* 12px */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -29,7 +29,7 @@
   }
 
   &:has(> span > svg:only-child) {
-    width: var(--spacing-8);
+    width: var(--spacing-9); /* 36px */
     padding: 0;
     border-radius: 9999px;
   }
@@ -39,16 +39,22 @@
   }
 }
 
-/* Control size scale.
+/* Control size scale: `sm` 28px, `md` 36px (the default), `lg` 48px.
  *
  * Like Button, a ToggleButton is a control rather than a field: it keys off its
  * own `data-size` attribute and never reads the inherited `--field-*` custom
  * properties, so one sitting inside a compact field's subtree keeps its own
- * height.
+ * height. The steps mirror the field scale numerically, so `size="md"` is as
+ * tall as a default field and a Button and a ToggleButton of the same `size`
+ * agree.
  *
- * `md` is the base rule above, left exactly as it was, so every existing
- * ToggleButton renders identically. Only `font-size` is overridden (never the
- * `font` shorthand) so the base `font-weight: 500` survives. */
+ * `md` is produced by the base rule above; there is deliberately no
+ * `.toggleButton[data-size="md"]` block. As with Button, an icon-only
+ * `[data-size="md"]:has(...)` rule here would land at (0,3,1) and risk an
+ * exact specificity tie with a consumer stylesheet that sizes a nested
+ * `.react-aria-ToggleButton` through its own `:has()` — order-dependent and
+ * fragile. Leave `md` to the base rule. Only `font-size` is overridden below
+ * (never the `font` shorthand) so the base `font-weight: 500` survives. */
 .toggleButton[data-size="sm"] {
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
@@ -62,7 +68,7 @@
 }
 
 .toggleButton[data-size="lg"] {
-  font-size: var(--font-size);
+  font-size: var(--font-size-lg);
   height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
   padding: 0 var(--spacing-4);
 

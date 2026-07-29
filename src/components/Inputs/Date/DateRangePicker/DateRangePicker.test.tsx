@@ -155,6 +155,17 @@ describe("DateRangePicker", () => {
       );
     });
 
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(
+        <DateRangePicker label="Event dates" size="lg" />
+      );
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
     it("does not forward size to the DOM", () => {
       const { container } = render(
         <DateRangePicker label="Event dates" size="sm" />

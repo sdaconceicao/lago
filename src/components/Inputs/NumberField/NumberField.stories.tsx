@@ -36,6 +36,7 @@ export const Sizes: Story = (args) => (
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
     <NumberField {...args} size="sm" label="Small" />
     <NumberField {...args} size="md" label="Medium (default)" />
+    <NumberField {...args} size="lg" label="Large" />
   </div>
 );
 
@@ -43,7 +44,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'NumberField supports two sizes: "sm" renders a compact 28px-tall field with 12px text and 20px steppers, and "md" (the default) renders a 48px-tall field with 14px text and 32px steppers. The height, border radius, and font size match the other fields at the same size, so a NumberField lines up with a TextField or Select beside it — but note its group is sized to fit its content rather than stretching to fill the row.',
+        'NumberField supports three sizes: "sm" renders a compact 28px-tall field with 12px text and 20px-wide steppers, "md" (the default) a 36px-tall field with 14px text and 24px-wide steppers, and "lg" a 48px-tall field with 14px text and 32px-wide steppers. The steppers always stretch to the full field height so they sit flush with the input. The height, border radius, and font size match the other fields at the same size, so a NumberField lines up with a TextField or Select beside it — but note its group is sized to fit its content rather than stretching to fill the row.',
     },
   },
 };

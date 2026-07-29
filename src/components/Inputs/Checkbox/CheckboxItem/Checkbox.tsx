@@ -23,9 +23,17 @@ export interface CheckboxProps extends CheckboxFieldProps {
   /** Error message shown when the checkbox is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
   /**
-   * The size of the control. `"sm"` renders a compact variant matching 28px
-   * fields and `"md"` the standard one. Left unset, the checkbox inherits the
-   * size of its CheckboxGroup, defaulting to `"md"` when it stands alone.
+   * The size of the control, scaling the box, the label text, and the gap
+   * between them: `"sm"` is a 16px box with 12px text and a 4px gap, `"md"` an
+   * 18px box with 14px text and a 6px gap, and `"lg"` an 18px box with 14px text
+   * and an 8px gap. The box steps only once, from `sm` to `md` — 18px already
+   * reads small and there is no legible size between 16 and 18 — so `md` and
+   * `lg` differ in type spacing rather than in the box. A Checkbox is not a
+   * field box, so it never takes on a field's height and will not row-align
+   * with a TextField or Select.
+   *
+   * Left unset, the checkbox inherits the size of its CheckboxGroup, defaulting
+   * to `"md"` when it stands alone.
    */
   size?: FieldSize;
 }

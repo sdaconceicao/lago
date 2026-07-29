@@ -24,8 +24,15 @@ export interface SwitchProps extends Omit<SwitchFieldProps, "children"> {
   /** Error message shown when the switch is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
   /**
-   * The size of the control. `"sm"` renders a compact variant matching 28px
-   * fields and `"md"` (the default) the standard one.
+   * The size of the control, scaling the track, the label text, and the gap
+   * between them: `"sm"` is a 28x16px track with 12px text, `"md"` (the
+   * default) a 34x20px track with 14px text, and `"lg"` a 38x22px track with
+   * 14px text. A Switch is a track-and-handle control rather than a field box,
+   * so it never takes on a field's height and will not row-align with a
+   * TextField or Select — matching sizes only keeps the type and control weight
+   * consistent.
+   *
+   * @default 'md'
    */
   size?: FieldSize;
 }

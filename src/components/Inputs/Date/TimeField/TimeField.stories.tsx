@@ -36,6 +36,7 @@ export const Sizes: Story = (args) => (
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
     <TimeField {...args} size="sm" label="Small" />
     <TimeField {...args} size="md" label="Medium (default)" />
+    <TimeField {...args} size="lg" label="Large" />
   </div>
 );
 
@@ -43,7 +44,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'TimeField supports two sizes: "sm" renders a compact 28px-tall field with 12px segments, and "md" (the default) renders a 48px-tall field with 14px segments. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a TimeField lines up with a DateField, TextField, or Select placed beside it in a row.',
+        'TimeField supports three sizes: "sm" renders a compact 28px-tall field with 12px segments, "md" (the default) a 36px-tall field with 14px segments, and "lg" a roomy 48px-tall field, also with 14px segments — "md" and "lg" differ in height and text inset rather than type size. TimeField shares the DateField surface, including its minimum width, so the two are interchangeable in a row: every field-like control at the same size shares its height, border radius, horizontal padding, and font size.',
     },
   },
 };

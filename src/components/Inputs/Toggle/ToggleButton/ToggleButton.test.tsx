@@ -93,7 +93,7 @@ describe("ToggleButton", () => {
     expect(screen.getByRole("button")).toHaveAttribute("data-size", "md");
   });
 
-  it.each(["sm", "lg"] as const)(
+  it.each(["sm", "md", "lg"] as const)(
     "reflects the %s size as a data attribute",
     (size) => {
       render(<ToggleButton size={size}>Pin</ToggleButton>);
@@ -102,9 +102,12 @@ describe("ToggleButton", () => {
     }
   );
 
-  it("does not forward size as a DOM attribute", () => {
-    render(<ToggleButton size="sm">Pin</ToggleButton>);
+  it.each(["sm", "md", "lg"] as const)(
+    "does not forward the %s size as a DOM attribute",
+    (size) => {
+      render(<ToggleButton size={size}>Pin</ToggleButton>);
 
-    expect(screen.getByRole("button")).not.toHaveAttribute("size");
-  });
+      expect(screen.getByRole("button")).not.toHaveAttribute("size");
+    }
+  );
 });

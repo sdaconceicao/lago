@@ -64,7 +64,8 @@
   }
 }
 
-/* Control size scale.
+/* Control size scale: `sm` 28px, `md` 36px (the default), `lg` 48px, mirroring
+ * the field scale so a `md` group is as tall as a default field.
  *
  * The group's size deliberately overrides each child's own `size` prop: a group
  * of mismatched toggles is never wanted.
@@ -83,7 +84,7 @@
  * are scoped to the orientation instead, further down. */
 .toggleButtonGroup[data-size="md"] > :global(.react-aria-ToggleButton) {
   font-size: var(--font-size);
-  height: var(--spacing-8); /* 32px */
+  height: var(--spacing-9); /* 36px */
   padding: 0 var(--spacing-3);
 
   > span > svg {
@@ -104,7 +105,7 @@
 }
 
 .toggleButtonGroup[data-size="lg"] > :global(.react-aria-ToggleButton) {
-  font-size: var(--font-size);
+  font-size: var(--font-size-lg);
   height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
   padding: 0 var(--spacing-4);
 
@@ -119,7 +120,7 @@
  * `.toggleButton[data-size]:has(...)` rule (0,3,1). */
 .toggleButtonGroup[data-size="md"]
 > :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
-  width: var(--spacing-8); /* 32px */
+  width: var(--spacing-9); /* 36px */
   padding: 0;
 }
 

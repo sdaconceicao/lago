@@ -35,6 +35,7 @@ export const Sizes: Story = (args) => (
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
     <DateField {...args} size="sm" label="Small" />
     <DateField {...args} size="md" label="Medium (default)" />
+    <DateField {...args} size="lg" label="Large" />
   </div>
 );
 
@@ -42,7 +43,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'DateField supports two sizes: "sm" renders a compact 28px-tall field with 12px segments, and "md" (the default) renders a 48px-tall field with 14px segments. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a DateField lines up with a TextField, Select, or DatePicker placed beside it in a row.',
+        'DateField supports three sizes: "sm" renders a compact 28px-tall field with 12px segments, "md" (the default) a 36px-tall field with 14px segments, and "lg" a roomy 48px-tall field, also with 14px segments — "md" and "lg" differ in height and text inset rather than type size. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a DateField lines up with a TextField, Select, or DatePicker placed beside it in a row. The field is only as wide as its segments need, down to a minimum that keeps the box from looking half empty: 112px at "sm" and 150px at "md" and "lg", which share the same 14px segments.',
     },
   },
 };

@@ -47,11 +47,18 @@
   }
 }
 
-/* A compact field is only one row tall, so its contents must not wrap: a second
-   row would grow the field past --field-height and break its alignment with the
-   controls beside it. The row scrolls horizontally instead, which keeps every
-   selected tag reachable at a fixed 28px height. */
-:where([data-field-size="sm"]) .field {
+/* sm and md are one row tall, so their contents must not wrap: a second row
+   would grow the field past --field-height and break its alignment with the
+   controls beside it. Measured, a wrapping md field reaches 66px on two chips in
+   any column narrower than ~270px, which is most form columns — and md is the
+   default, so that has to hold without the caller thinking about it. The row
+   scrolls horizontally instead, keeping every selected tag reachable at a fixed
+   28 or 36px.
+
+   lg deliberately still wraps and grows: at 48px with 32px chips there is room
+   to show a whole selection at once, and a field that prominent is usually
+   alone on its row rather than lined up beside other controls. */
+:where([data-field-size="sm"], [data-field-size="md"]) .field {
   flex-wrap: nowrap;
   overflow-x: auto;
   scrollbar-width: none;

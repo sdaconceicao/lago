@@ -29,10 +29,10 @@ export interface DateFieldProps<T extends DateValue>
   /** Error message shown when the field is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
   /**
-   * The size of the field. `"sm"` renders a compact 28px-tall control and
-   * `"md"` (the default) a 48px-tall one. Fields of the same size share their
-   * height, border radius, horizontal padding, and font size, so they line up
-   * when placed in a row.
+   * The size of the field. `"sm"` is a compact 28px-tall control, `"md"` (the
+   * default) is 36px, and `"lg"` is a roomy 48px. Fields of the same size share
+   * their height, border radius, horizontal padding, and font size, so they
+   * line up when placed in a row.
    */
   size?: FieldSize;
 }
@@ -58,7 +58,7 @@ export function DateField<T extends DateValue>({
         props.className ?? clsx("react-aria-DateField", styles.dateField)
       }
     >
-      <Label isRequired={props.isRequired}>{label}</Label>
+      {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>

@@ -19,11 +19,12 @@
 }
 
 /* The trigger swatch tracks the field's inner control size, so it matches the
-   FieldButtons and chips inside same-size fields. At md this resolves to the
-   same var(--spacing-8) the standalone ColorSwatch uses, so the trigger is
-   unchanged. Scoped to the trigger on purpose: ColorSwatch is also used on its
-   own and inside ColorSwatchPicker grids, which keep their own sizing. The
-   two-class selector outranks ColorSwatch's own single-class rule. */
+   FieldButtons and chips inside same-size fields: 20px at sm, 24px at md, 32px
+   at lg. At lg this resolves to the same var(--spacing-8) the standalone
+   ColorSwatch uses, so an lg trigger is the unscoped swatch size. Scoped to the
+   trigger on purpose: ColorSwatch is also used on its own and inside
+   ColorSwatchPicker grids, which keep their own sizing. The two-class selector
+   outranks ColorSwatch's own single-class rule. */
 .colorPicker :global(.react-aria-ColorSwatch) {
   width: var(--field-inner-height);
   height: var(--field-inner-height);

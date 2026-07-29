@@ -35,10 +35,11 @@ export interface SelectProps<T> extends Omit<AriaComboBoxProps<T>, "children"> {
   /** The list options: static nodes or a render function for each item. */
   children: React.ReactNode | ((item: T) => React.ReactNode);
   /**
-   * The size of the field. `"sm"` renders a compact 28px-tall control and
-   * `"md"` (the default) a 48px-tall one. Fields of the same size share their
-   * height, border radius, horizontal padding, and font size, so they line up
-   * when placed in a row.
+   * The size of the field. `"sm"` is a compact 28px-tall control, `"md"` (the
+   * default) is 36px, and `"lg"` is a roomy 48px. Fields of the same size share
+   * their height, border radius, horizontal padding, and font size, so they
+   * line up when placed in a row. The size also travels to the dropdown, so its
+   * options and check marks scale with the field.
    */
   size?: FieldSize;
 }

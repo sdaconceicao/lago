@@ -30,10 +30,12 @@ export interface NumberFieldProps extends AriaNumberFieldProps {
   /** Placeholder text shown while the field is empty. */
   placeholder?: string;
   /**
-   * The size of the field. `"sm"` renders a compact 28px-tall control and
-   * `"md"` (the default) a 48px-tall one. Fields of the same size share their
-   * height, border radius, horizontal padding, and font size, so they line up
-   * when placed in a row.
+   * The size of the field. `"sm"` is a compact 28px-tall control, `"md"` (the
+   * default) is 36px, and `"lg"` is a roomy 48px. The steppers stretch to the
+   * full field height and follow the same scale in width (20 / 24 / 32px).
+   * Fields of the same size share their height, border radius, horizontal
+   * padding, and font size, so they line up when placed in a row — though the
+   * NumberField group is sized to fit its content rather than filling the row.
    */
   size?: FieldSize;
 }
@@ -60,7 +62,7 @@ export function NumberField({
         props.className
       )}
     >
-      <Label isRequired={props.isRequired}>{label}</Label>
+      {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <Group className={clsx("react-aria-Group", utils.inset)}>
         <Input
           className={clsx(

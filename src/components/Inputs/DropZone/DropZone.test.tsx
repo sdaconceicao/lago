@@ -119,6 +119,15 @@ describe("DropZone", () => {
     );
   });
 
+  it("renders the lg size when specified", () => {
+    const { container } = renderDropZone({ size: "lg" });
+
+    expect(container.querySelector(".react-aria-DropZone")).toHaveAttribute(
+      "data-field-size",
+      "lg"
+    );
+  });
+
   it("does not forward size as a DOM attribute", () => {
     const { container } = renderDropZone({ size: "sm" });
 

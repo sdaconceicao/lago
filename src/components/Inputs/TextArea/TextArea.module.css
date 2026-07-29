@@ -6,7 +6,7 @@
 /* Horizontal padding matches the TextField/Select/Date field left inset so a
    stacked TextArea lines up with the single-line fields. The min-height is one
    single-line field plus a second row of text, so it always reads as
-   multi-line: 64px at md, 44px at sm. */
+   multi-line: 44px at sm, 52px at md, 64px at lg. */
 .input {
   width: 100%;
   min-height: calc(var(--field-height) + var(--spacing-4));

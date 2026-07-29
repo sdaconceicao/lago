@@ -24,10 +24,13 @@ export interface ColorPickerProps
   /** Controls rendered inside the popover. Defaults to a ColorArea, a hue ColorSlider, and a hex ColorField. */
   children?: React.ReactNode;
   /**
-   * The size of the field. `"sm"` renders a compact 28px-tall control and
-   * `"md"` (the default) a 48px-tall one. Fields of the same size share their
-   * height, border radius, horizontal padding, and font size, so they line up
-   * when placed in a row.
+   * The size of the control. The trigger swatch follows the same scale as the
+   * buttons and chips inside a field of that size: `"sm"` pairs a 20px swatch
+   * with 12px text, `"md"` (the default) a 24px swatch with 14px text, and
+   * `"lg"` a 32px swatch with 14px text. The size is also applied to the
+   * popover and to the hex ColorField inside it, so the whole control stays in
+   * step. The trigger is a bare swatch-and-label button rather than a field
+   * box, so it does not take on the 28 / 36 / 48px field heights.
    */
   size?: FieldSize;
 }

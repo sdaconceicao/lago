@@ -87,6 +87,15 @@ describe("TextArea", () => {
       );
     });
 
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(<TextArea label="Bio" size="lg" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
     it("does not forward size to the DOM textarea", () => {
       render(<TextArea label="Bio" size="sm" />);
 

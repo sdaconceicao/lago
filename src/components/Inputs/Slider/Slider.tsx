@@ -28,8 +28,14 @@ export interface SliderProps<T> extends AriaSliderProps<T> {
    */
   fillOffset?: number;
   /**
-   * The size of the control. `"sm"` renders a compact variant matching 28px
-   * fields and `"md"` (the default) the standard one.
+   * The size of the control, scaling the thumb, the rail and its hit area, and
+   * the label and output text: `"sm"` is a 16px thumb on a 4px rail with 12px
+   * text, `"md"` (the default) a 22px thumb on an 8px rail with 14px text, and
+   * `"lg"` a 24px thumb — the WCAG 2.5.8 target minimum — on a 10px rail with
+   * 14px text. A Slider stacks its label and output above the track, so it has
+   * no single field height and will not row-align with a TextField or Select.
+   *
+   * @default 'md'
    */
   size?: FieldSize;
 }

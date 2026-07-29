@@ -108,6 +108,15 @@ describe("CheckboxGroup", () => {
       );
     });
 
+    it('renders data-field-size="lg" when specified', () => {
+      renderGroup({ size: "lg" });
+
+      expect(screen.getByRole("group")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
     it("does not forward size to the group or its inputs", () => {
       renderGroup({ size: "sm" });
 
@@ -117,30 +126,40 @@ describe("CheckboxGroup", () => {
       });
     });
 
-    it("keeps its size scope for children that do not set their own", () => {
-      const { container } = renderGroup({ size: "sm" });
+    // An item only stamps `data-field-size` when it was given one, so the
+    // group's scope is the single source of truth for plain children. Were an
+    // item to emit its own default, that declaration would beat the inherited
+    // one and silently reset every child to md.
+    it.each(["sm", "md", "lg"] as const)(
+      "keeps its %s scope for children that do not set their own",
+      (size) => {
+        const { container } = renderGroup({ size });
 
-      const scopes = container.querySelectorAll("[data-field-size]");
-      expect(scopes).toHaveLength(1);
-      expect(scopes[0]).toBe(screen.getByRole("group"));
-      expect(scopes[0]).toHaveAttribute("data-field-size", "sm");
-    });
+        const scopes = container.querySelectorAll("[data-field-size]");
+        expect(scopes).toHaveLength(1);
+        expect(scopes[0]).toBe(screen.getByRole("group"));
+        expect(scopes[0]).toHaveAttribute("data-field-size", size);
+      }
+    );
 
-    it("lets a child override the group size", () => {
-      const { container } = render(
-        <CheckboxGroup label="Sports" size="sm">
-          <Checkbox value="soccer">Soccer</Checkbox>
-          <Checkbox value="baseball" size="md">
-            Baseball
-          </Checkbox>
-        </CheckboxGroup>
-      );
+    it.each(["md", "lg"] as const)(
+      "lets a child override the group size with %s",
+      (size) => {
+        const { container } = render(
+          <CheckboxGroup label="Sports" size="sm">
+            <Checkbox value="soccer">Soccer</Checkbox>
+            <Checkbox value="baseball" size={size}>
+              Baseball
+            </Checkbox>
+          </CheckboxGroup>
+        );
 
-      expect(
-        [...container.querySelectorAll("[data-field-size]")].map((el) =>
-          el.getAttribute("data-field-size")
-        )
-      ).toEqual(["sm", "md"]);
-    });
+        expect(
+          [...container.querySelectorAll("[data-field-size]")].map((el) =>
+            el.getAttribute("data-field-size")
+          )
+        ).toEqual(["sm", size]);
+      }
+    );
   });
 });

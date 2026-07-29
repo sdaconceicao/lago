@@ -107,6 +107,17 @@ describe("Slider", () => {
       );
     });
 
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(
+        <Slider label="Volume" defaultValue={30} size="lg" />
+      );
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
     it("does not forward size to the DOM input", () => {
       render(<Slider label="Volume" defaultValue={30} size="sm" />);
 

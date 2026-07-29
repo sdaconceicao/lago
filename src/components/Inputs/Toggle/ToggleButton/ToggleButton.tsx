@@ -16,11 +16,13 @@ export interface ToggleButtonProps extends RACToggleButtonProps {
    */
   variant?: "primary" | "secondary" | "quiet";
   /**
-   * The size of the button. `"sm"` is 28px tall, `"md"` (the default) is 32px
+   * The size of the button. `"sm"` is 28px tall, `"md"` (the default) is 36px
    * tall, and `"lg"` is 48px tall. Toggle buttons carry their own scale rather
    * than inheriting the field scale, so one placed inside a compact field never
-   * shrinks on its own. Inside a ToggleButtonGroup the group's own `size` wins
-   * over this prop, because a group of mismatched toggles is never wanted.
+   * shrinks on its own. The scale mirrors both Button and the field scale, so
+   * `size="md"` lines up with a default (36px) field and with a `md` Button.
+   * Inside a ToggleButtonGroup the group's own `size` wins over this prop,
+   * because a group of mismatched toggles is never wanted.
    *
    * @default 'md'
    */

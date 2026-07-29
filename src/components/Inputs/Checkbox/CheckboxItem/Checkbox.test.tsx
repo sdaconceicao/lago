@@ -108,14 +108,19 @@ describe("Checkbox", () => {
       expect(container.querySelector("[data-field-size]")).toBeNull();
     });
 
-    it('renders data-field-size="sm" when specified', () => {
-      const { container } = render(<Checkbox size="sm">Accept terms</Checkbox>);
+    it.each(["sm", "md", "lg"] as const)(
+      'renders data-field-size="%s" when specified',
+      (size) => {
+        const { container } = render(
+          <Checkbox size={size}>Accept terms</Checkbox>
+        );
 
-      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
-        "data-field-size",
-        "sm"
-      );
-    });
+        expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+          "data-field-size",
+          size
+        );
+      }
+    );
 
     it("does not forward size to the DOM input", () => {
       render(<Checkbox size="sm">Accept terms</Checkbox>);

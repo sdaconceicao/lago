@@ -83,13 +83,22 @@ export const Sizes: Story = {
       >
         {(item) => <MultiSelectItem id={item.id}>{item.name}</MultiSelectItem>}
       </MultiSelect>
+      <MultiSelect<Fruit>
+        label="Large"
+        size="lg"
+        placeholder="Search fruits..."
+        defaultItems={fruits}
+        defaultValue={["apple", "banana", "carrot"]}
+      >
+        {(item) => <MultiSelectItem id={item.id}>{item.name}</MultiSelectItem>}
+      </MultiSelect>
     </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          'MultiSelect supports two sizes: "sm" renders a compact 28px-tall field with 12px text and 20px tag chips, and "md" (the default) renders a 48px-tall field with 14px text and 32px chips. The size also travels to the dropdown, so its options and checkboxes shrink with the field. Because a compact field is only one row tall, its tags never wrap: the row scrolls horizontally instead, which keeps the field exactly 28px tall so it stays aligned with the controls beside it. At "md" the tags still wrap onto further rows and the field grows to fit them.',
+          'MultiSelect supports three sizes: "sm" renders a compact 28px-tall field with 12px text and 20px tag chips, "md" (the default) a 36px-tall field with 14px text and 24px chips, and "lg" a roomy 48px-tall field with 14px text and 32px chips. The size also travels to the dropdown, so its options and checkboxes scale with the field. "sm" and "md" keep a fixed height: their tags never wrap — the row scrolls horizontally instead — so the field stays exactly 28px or 36px tall however many items are selected and keeps lining up with the controls beside it. That matters most at "md", the default: measured, a wrapping 36px field reaches 66px on two chips in any column narrower than about 270px, which is most form columns. At "lg" the tags do wrap and the field grows to fit them, showing a whole selection at once at the cost of no longer matching the height of its neighbours.',
       },
     },
   },

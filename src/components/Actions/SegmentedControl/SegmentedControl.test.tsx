@@ -92,19 +92,25 @@ describe("SegmentedControl", () => {
     expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", "md");
   });
 
-  it("renders the sm size when specified", () => {
-    renderControl({ size: "sm" });
+  it.each(["sm", "md", "lg"] as const)(
+    "reflects the %s size as a data attribute",
+    (size) => {
+      renderControl({ size });
 
-    expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", "sm");
-  });
+      expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", size);
+    }
+  );
 
-  it("does not forward size as a DOM attribute to its items", () => {
-    renderControl({ size: "sm" });
+  it.each(["sm", "md", "lg"] as const)(
+    "does not forward the %s size as a DOM attribute to its items",
+    (size) => {
+      renderControl({ size });
 
-    screen
-      .getAllByRole("radio")
-      .forEach((item) => expect(item).not.toHaveAttribute("size"));
-  });
+      screen
+        .getAllByRole("radio")
+        .forEach((item) => expect(item).not.toHaveAttribute("size"));
+    }
+  );
 
   it("disables all items when the control is disabled", async () => {
     const user = userEvent.setup();

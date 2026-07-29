@@ -13,14 +13,17 @@
   list-style: none;
 }
 
+/* Square controls at the shared md control height (36px), so a pager lines up
+   with a default Button, ToggleButton, or SegmentedControl beside it. These
+   don't take a `size` prop — a pager is always the default size. */
 .page,
 .control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  min-width: var(--spacing-8);
-  height: var(--spacing-8);
+  min-width: var(--spacing-9);
+  height: var(--spacing-9);
   padding: 0 var(--spacing-2);
   border: none;
   border-radius: var(--radius-sm);
@@ -41,8 +44,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--spacing-8);
-  height: var(--spacing-8);
+  min-width: var(--spacing-9);
+  height: var(--spacing-9);
   color: var(--gray);
   user-select: none;
 }

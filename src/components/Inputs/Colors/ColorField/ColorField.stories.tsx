@@ -44,6 +44,7 @@ export const Sizes: Story = (args) => (
   >
     <ColorField {...args} size="sm" label="Small" />
     <ColorField {...args} size="md" label="Medium (default)" />
+    <ColorField {...args} size="lg" label="Large" />
   </div>
 );
 
@@ -55,7 +56,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'The size prop scales the field: "sm" is a compact 28px-tall input with 12px text, "md" (the default) is the 48px-tall input. Both match the TextField and the other field controls at the same size, so they line up when placed in a row.',
+        'The size prop scales the field: "sm" is a compact 28px-tall input with 12px text, "md" (the default) is 36px tall with 14px text, and "lg" is a roomy 48px with 14px text. All three match the TextField and the other field controls at the same size, so they line up when placed in a row.',
     },
   },
 };

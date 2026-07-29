@@ -109,6 +109,17 @@ describe("ColorPicker", () => {
       );
     });
 
+    it("renders at the lg size when specified", () => {
+      const { container } = render(
+        <ColorPicker label="Fill color" size="lg" />
+      );
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
     it("does not forward size to the DOM", () => {
       render(<ColorPicker label="Fill color" size="sm" />);
 

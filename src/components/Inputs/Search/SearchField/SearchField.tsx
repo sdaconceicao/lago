@@ -42,10 +42,11 @@ export interface SearchFieldProps extends AriaSearchFieldProps {
   /** Capture-phase key handler on the field group. Used by SearchFieldWithSuggestions to arbitrate Enter/Escape before the field's own handlers. */
   onKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
   /**
-   * The size of the field. `"sm"` renders a compact 28px-tall control and
-   * `"md"` (the default) a 48px-tall one. Fields of the same size share their
-   * height, border radius, horizontal padding, and font size, so they line up
-   * when placed in a row.
+   * The size of the field. `"sm"` is a compact 28px-tall control, `"md"` (the
+   * default) is 36px, and `"lg"` is a roomy 48px. The trailing clear and search
+   * buttons scale with the field (20 / 24 / 32px) and both stay inside it at
+   * every size. Fields of the same size share their height, border radius,
+   * horizontal padding, and font size, so they line up when placed in a row.
    */
   size?: FieldSize;
 }

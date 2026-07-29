@@ -175,13 +175,19 @@ export const Sizes: Story = {
         placeholder="Search fruit"
         suggestions={FRUITS}
       />
+      <SearchFieldWithSuggestions
+        size="lg"
+        label="Large"
+        placeholder="Search fruit"
+        suggestions={FRUITS}
+      />
     </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          'The size prop scales the field and its suggestions dropdown together: "sm" is a compact 28px-tall field with a compact suggestion list, "md" (the default) is the 48px-tall field. The dropdown is portaled, so the size is applied to the popover as well to keep the two in step.',
+          'The size prop scales the field and its suggestions dropdown together: "sm" is a compact 28px-tall field with a compact suggestion list, "md" (the default) is 36px tall, and "lg" is a roomy 48px. The dropdown is portaled out of the field, so it does not inherit the field\'s size — the size is applied to the popover as well to keep the two in step.',
       },
     },
   },

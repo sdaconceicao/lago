@@ -56,6 +56,12 @@ export const Sizes: Story = (args) => (
       <SelectItem id="strawberry">Strawberry</SelectItem>
       <SelectItem id="vanilla">Vanilla</SelectItem>
     </Select>
+    <Select {...args} size="lg" label="Large">
+      <SelectItem id="chocolate">Chocolate</SelectItem>
+      <SelectItem id="mint">Mint</SelectItem>
+      <SelectItem id="strawberry">Strawberry</SelectItem>
+      <SelectItem id="vanilla">Vanilla</SelectItem>
+    </Select>
   </div>
 );
 
@@ -63,7 +69,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'Select supports two sizes: "sm" renders a compact 28px-tall field with 12px text, and "md" (the default) renders a 48px-tall field with 14px text. The size also travels to the dropdown, so its options, check marks, and text shrink with the field. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a Select lines up with a TextField, MultiSelect, or DatePicker placed beside it in a row.',
+        'Select supports three sizes: "sm" renders a compact 28px-tall field with 12px text and a 20px chevron toggle, "md" (the default) a 36px-tall field with 14px text and a 24px toggle, and "lg" a roomy 48px-tall field with 14px text and a 32px toggle. The size also travels to the dropdown, so its options and check marks scale with the field. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a Select lines up with a TextField, MultiSelect, or DatePicker placed beside it in a row.',
     },
   },
 };

@@ -86,6 +86,15 @@ describe("TextField", () => {
       );
     });
 
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(<TextField label="Email" size="lg" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
     it("does not forward size to the DOM input", () => {
       render(<TextField label="Email" size="sm" />);
 

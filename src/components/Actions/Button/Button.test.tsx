@@ -50,7 +50,7 @@ describe("Button", () => {
     expect(screen.getByRole("button")).toHaveAttribute("data-size", "md");
   });
 
-  it.each(["sm", "lg"] as const)(
+  it.each(["sm", "md", "lg"] as const)(
     "reflects the %s size as a data attribute",
     (size) => {
       render(<Button size={size}>Press me</Button>);
@@ -59,11 +59,14 @@ describe("Button", () => {
     }
   );
 
-  it("does not forward size as a DOM attribute", () => {
-    render(<Button size="sm">Press me</Button>);
+  it.each(["sm", "md", "lg"] as const)(
+    "does not forward the %s size as a DOM attribute",
+    (size) => {
+      render(<Button size={size}>Press me</Button>);
 
-    expect(screen.getByRole("button")).not.toHaveAttribute("size");
-  });
+      expect(screen.getByRole("button")).not.toHaveAttribute("size");
+    }
+  );
 
   it("calls onPress when clicked", async () => {
     const user = userEvent.setup();

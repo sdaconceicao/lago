@@ -119,7 +119,7 @@ describe("ToggleButtonGroup", () => {
     expect(screen.getByRole("radiogroup")).toHaveAttribute("data-size", "md");
   });
 
-  it.each(["sm", "lg"] as const)(
+  it.each(["sm", "md", "lg"] as const)(
     "reflects the %s size as a data attribute",
     (size) => {
       renderGroup({ size });
@@ -128,13 +128,16 @@ describe("ToggleButtonGroup", () => {
     }
   );
 
-  it("does not forward size as a DOM attribute to its buttons", () => {
-    renderGroup({ size: "sm" });
+  it.each(["sm", "md", "lg"] as const)(
+    "does not forward the %s size as a DOM attribute to its buttons",
+    (size) => {
+      renderGroup({ size });
 
-    screen
-      .getAllByRole("radio")
-      .forEach((radio) => expect(radio).not.toHaveAttribute("size"));
-  });
+      screen
+        .getAllByRole("radio")
+        .forEach((radio) => expect(radio).not.toHaveAttribute("size"));
+    }
+  );
 
   it("keeps its own size when a child requests a different one", () => {
     render(

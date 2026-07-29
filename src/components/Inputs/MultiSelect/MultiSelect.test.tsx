@@ -104,24 +104,36 @@ describe("MultiSelect", () => {
       );
     });
 
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = renderMultiSelect({ size: "lg" });
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
     it("does not forward size to the DOM input", () => {
       renderMultiSelect({ size: "sm" });
 
       expect(screen.getByRole("combobox")).not.toHaveAttribute("size");
     });
 
-    it("forwards the size to the portaled popover", async () => {
-      const user = userEvent.setup();
-      renderMultiSelect({ size: "sm" });
+    it.each(["sm", "lg"] as const)(
+      "forwards size %s to the portaled popover",
+      async (size) => {
+        const user = userEvent.setup();
+        renderMultiSelect({ size });
 
-      await user.click(screen.getByRole("combobox"));
+        await user.click(screen.getByRole("combobox"));
 
-      const listbox = await screen.findByRole("listbox");
-      expect(listbox.closest("[data-field-size]")).toHaveAttribute(
-        "data-field-size",
-        "sm"
-      );
-    });
+        const listbox = await screen.findByRole("listbox");
+        expect(listbox.closest("[data-field-size]")).toHaveAttribute(
+          "data-field-size",
+          size
+        );
+      }
+    );
   });
 
   describe("dropdown", () => {

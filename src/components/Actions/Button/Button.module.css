@@ -5,8 +5,8 @@
   font: var(--font-size) var(--font-family);
   font-weight: 500;
   margin: 0;
-  height: var(--spacing-8);
-  padding: 0 var(--spacing-3);
+  height: var(--spacing-9); /* 36px — the md step, see the note below */
+  padding: 0 var(--spacing-3); /* 12px */
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -15,12 +15,12 @@
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
   > svg {
-    width: calc(var(--spacing) * 4.5);
-    height: calc(var(--spacing) * 4.5);
+    width: calc(var(--spacing) * 3.5); /* 14px */
+    height: calc(var(--spacing) * 3.5);
   }
 
   &:has(> svg:only-child) {
-    width: var(--spacing-8);
+    width: var(--spacing-9); /* 36px */
     flex-shrink: 0;
     padding: 0;
     border-radius: 9999px;
@@ -46,7 +46,7 @@
   }
 }
 
-/* Control size scale.
+/* Control size scale: `sm` 28px, `md` 36px (the default), `lg` 48px.
  *
  * A Button is a control, not a field: it keys off its own `data-size`
  * attribute and never reads the inherited `--field-*` custom properties. That
@@ -54,12 +54,19 @@
  * (a Dialog footer, a Toolbar, a Form) must keep its own height instead of
  * silently shrinking with the field around it.
  *
- * `md` is the base rule above, left exactly as it was, so every existing
- * Button renders identically. Only `font-size` (never the `font` shorthand) is
- * overridden below, so the base `font-weight: 500` survives.
+ * The control scale mirrors the field scale numerically, so `size` lines up
+ * step for step: `size="sm"` matches a `sm` field, `size="md"` a default field,
+ * `size="lg"` a `lg` field. No pairing table to remember.
  *
- * `sm` (28px) lines up with a row of `sm` fields and `lg` (48px) with a row of
- * `md` fields. The default 32px button matches neither. */
+ * `md` is produced by the base rule above — there is deliberately no
+ * `.button[data-size="md"]` block, and adding one would be a bug. NumberField
+ * sizes its steppers with
+ * `.numberField :global(.react-aria-Button):has(> svg:only-child)` at (0,3,1);
+ * a `.button[data-size="md"]:has(> svg:only-child)` rule would tie it exactly
+ * and be resolved only by stylesheet order. Keeping the icon-only rule as the
+ * base `.button:has(> svg:only-child)` at (0,2,1) leaves NumberField's rule the
+ * clear winner. Only `font-size` (never the `font` shorthand) is overridden
+ * below, so the base `font-weight: 500` survives. */
 .button[data-size="sm"] {
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
@@ -73,7 +80,7 @@
 }
 
 .button[data-size="lg"] {
-  font-size: var(--font-size);
+  font-size: var(--font-size-lg);
   height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
   padding: 0 var(--spacing-4);
   gap: var(--spacing-2);

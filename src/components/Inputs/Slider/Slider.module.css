@@ -38,7 +38,7 @@
   }
 
   .sliderThumb {
-    width: calc(var(--spacing) * 5.5);
+    width: calc(var(--spacing) * 5.5); /* 22px */
     height: calc(var(--spacing) * 5.5);
     border-radius: 50%;
     forced-color-adjust: none;
@@ -152,10 +152,22 @@
     }
   }
 
-  /* The thumb, its hit area, and the rail are slider-specific shapes with no
-     shared `--field-*` token, so sm is an explicit override. The two-row grid
-     (label/output above the track) means the control has no single field
-     height to match, so only these three metrics scale. */
+  /* Thumb, hit area, and rail scale.
+   *
+   * All three are slider-specific shapes with no shared `--field-*` token, so
+   * every step is an explicit block: `md` is the base rule above, `sm` and `lg`
+   * override it here. The two-row grid (label and output above the track) means
+   * the control has no single field height to match, so only these three
+   * metrics scale.
+   *
+   * `md` is deliberately left at the base 22px thumb rather than being given a
+   * new middle value. 22px is already under the 24x24 CSS-pixel minimum in WCAG
+   * 2.5.8, so the middle of the scale is the wrong place to take pixels away
+   * from a drag target; the scale grows upward from `md` instead. `lg` — the
+   * touch-oriented step — is the one that reaches 24px and clears it.
+   *
+   * `sm` stays below the minimum for the same reason every compact control
+   * does: it is opt-in for dense, pointer-driven UI. */
   &[data-field-size="sm"] {
     .sliderThumb {
       width: var(--spacing-4); /* 16px */
@@ -175,6 +187,29 @@
 
       .track {
         width: var(--spacing-1);
+      }
+    }
+  }
+
+  &[data-field-size="lg"] {
+    .sliderThumb {
+      width: var(--spacing-6); /* 24px, the WCAG 2.5.8 target minimum */
+      height: var(--spacing-6);
+    }
+
+    &[data-orientation="horizontal"] .sliderTrack {
+      height: var(--spacing-6); /* 24px hit area, matching the thumb */
+
+      .track {
+        height: calc(var(--spacing) * 2.5); /* 10px rail */
+      }
+    }
+
+    &[data-orientation="vertical"] .sliderTrack {
+      width: var(--spacing-6);
+
+      .track {
+        width: calc(var(--spacing) * 2.5);
       }
     }
   }

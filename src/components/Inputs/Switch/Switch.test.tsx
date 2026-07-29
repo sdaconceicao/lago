@@ -102,6 +102,15 @@ describe("Switch", () => {
       );
     });
 
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(<Switch size="lg">Wi-Fi</Switch>);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
     it("does not forward size to the DOM input", () => {
       render(<Switch size="sm">Wi-Fi</Switch>);
 

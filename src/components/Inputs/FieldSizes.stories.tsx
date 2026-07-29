@@ -26,10 +26,10 @@ import { TextField } from "@/components/Inputs/TextField/TextField";
 import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 
 /**
- * Every field-like input takes a `size` prop. `md` (the default) is a 48px-tall
- * control and `sm` is a compact 28px one. Controls of the same size share their
- * outer height, border radius, font size, and text inset, so any mix of them
- * lines up when placed in a row.
+ * Every field-like input takes a `size` prop: `sm` is a compact 28px control,
+ * `md` (the default) is 36px, and `lg` is a roomy 48px. Controls of the same
+ * size share their outer height, border radius, font size, and text inset, so
+ * any mix of them lines up when placed in a row.
  *
  * The metrics come from the `--field-*` custom properties in `styles/theme.css`,
  * scoped by a `data-field-size` attribute on each component's root. Those
@@ -154,28 +154,38 @@ const measureRow = (row: HTMLElement) =>
       fontSize: style.fontSize,
       inset: textInset(field),
       trigger: triggerBox(field),
+      // How far the field box sits below the top of its own control. Equal
+      // heights are not enough to line up: anything rendered above the field
+      // (a label, even an empty one) shifts it down inside its own root. This
+      // is measured per control rather than against the row so it survives the
+      // row wrapping onto a second line.
+      offsetTop: Math.round(
+        field.getBoundingClientRect().top - control.getBoundingClientRect().top
+      ),
     };
   });
 
 /**
- * Every field-like control at both sizes. The `play` function is the actual
- * contract: within a row, every control must report the same height, border
- * radius, font size, and text inset.
+ * Every field-like control at all three sizes. The `play` function is the
+ * actual contract: within a row, every control must report the same height,
+ * border radius, font size, text inset, and trailing-trigger placement.
  */
 export const Alignment: StoryObj = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-      <FieldRow size="md" />
       <FieldRow size="sm" />
+      <FieldRow size="md" />
+      <FieldRow size="lg" />
     </div>
   ),
   play: async ({ canvasElement }) => {
     const expected = {
-      md: { height: 48, inset: 16 },
       sm: { height: 28, inset: 8 },
+      md: { height: 36, inset: 12 },
+      lg: { height: 48, inset: 16 },
     };
 
-    for (const size of ["md", "sm"] as const) {
+    for (const size of ["sm", "md", "lg"] as const) {
       const row = canvasElement.querySelector<HTMLElement>(
         `[data-testid="row-${size}"]`
       );
@@ -195,6 +205,9 @@ export const Alignment: StoryObj = {
           radius: first.radius,
           fontSize: first.fontSize,
           inset: expected[size].inset,
+          // None of these controls is given a label, so every field box must
+          // start flush with the top of its own root.
+          offsetTop: 0,
         });
       }
 
@@ -216,7 +229,7 @@ Alignment.parameters = {
   docs: {
     description: {
       story:
-        "Each row mixes every single-line control at one size. The assertions check that height, border radius, font size, and text inset are identical across the row — 48px/8px/14px/16px at `md` and 28px/6px/12px/8px at `sm`.",
+        "Each row mixes every single-line control at one size. The assertions check that height, border radius, font size, text inset, and trailing-trigger placement are identical across the row: 28px/6px/12px/8px at `sm`, 36px/8px/14px/12px at `md`, and 48px/8px/14px/16px at `lg`.",
     },
   },
 };
@@ -230,7 +243,11 @@ export const InAForm: StoryObj = {
   render: () => (
     <div style={{ display: "flex", gap: 48 }}>
       <Form style={{ width: 240 }}>
-        <TextField label="Name" placeholder="Text" description="md fields" />
+        <TextField
+          label="Name"
+          placeholder="Text"
+          description="md fields (default)"
+        />
         <Select label="Fruit">
           <SelectItem id="a">Apple</SelectItem>
         </Select>
@@ -258,7 +275,7 @@ export const InAForm: StoryObj = {
           ?.getBoundingClientRect().height ?? 0
       )
     );
-    expect(heights).toEqual([48, 28]);
+    expect(heights).toEqual([36, 28]);
   },
 };
 
@@ -279,7 +296,7 @@ InAForm.parameters = {
 export const NonRowControls: StoryObj = {
   render: () => (
     <div style={{ display: "flex", gap: 48 }}>
-      {(["md", "sm"] as const).map((size) => (
+      {(["sm", "md", "lg"] as const).map((size) => (
         <div
           key={size}
           style={{
@@ -325,31 +342,46 @@ export const ButtonPairing: StoryObj = {
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div
         style={{ display: "flex", alignItems: "flex-end", gap: 12 }}
-        data-testid="pair-md"
+        data-testid="pair-sm"
       >
-        <TextField aria-label="Text" placeholder="md field" />
-        <Button size="lg">Submit</Button>
+        <TextField aria-label="Text" size="sm" placeholder="sm field (28px)" />
+        <Button size="sm">Submit</Button>
       </div>
       <div
         style={{ display: "flex", alignItems: "flex-end", gap: 12 }}
-        data-testid="pair-sm"
+        data-testid="pair-md"
       >
-        <TextField aria-label="Text" size="sm" placeholder="sm field" />
-        <Button size="sm">Submit</Button>
+        <TextField aria-label="Text" placeholder="md field (36px)" />
+        <Button>Submit</Button>
+      </div>
+      <div
+        style={{ display: "flex", alignItems: "flex-end", gap: 12 }}
+        data-testid="pair-lg"
+      >
+        <TextField aria-label="Text" size="lg" placeholder="lg field (48px)" />
+        <Button size="lg">Submit</Button>
       </div>
     </div>
   ),
   play: async ({ canvasElement }) => {
-    for (const [testId, height] of [
-      ["pair-md", 48],
-      ["pair-sm", 28],
+    for (const [testId, height, buttonFont] of [
+      ["pair-sm", 28, "12px"],
+      ["pair-md", 36, "14px"],
+      ["pair-lg", 48, "16px"],
     ] as const) {
       const row = canvasElement.querySelector(`[data-testid="${testId}"]`);
-      const measured = [
-        row?.querySelector(".react-aria-Input"),
-        row?.querySelector("button"),
-      ].map((el) => Math.round(el?.getBoundingClientRect().height ?? 0));
+      const button = row?.querySelector("button");
+      const measured = [row?.querySelector(".react-aria-Input"), button].map(
+        (el) => Math.round(el?.getBoundingClientRect().height ?? 0)
+      );
       expect(measured, testId).toEqual([height, height]);
+
+      // A button's label steps 12 / 14 / 16 across the scale. Without this,
+      // `lg` silently shared `md`'s 14px and read small on a 48px control.
+      expect(
+        button && getComputedStyle(button).fontSize,
+        `${testId} button label`
+      ).toBe(buttonFont);
     }
   },
 };
@@ -358,7 +390,7 @@ ButtonPairing.parameters = {
   docs: {
     description: {
       story:
-        'A row of `md` fields (48px) pairs with `<Button size="lg">`; a row of `sm` fields (28px) pairs with `<Button size="sm">`. The default 32px button matches neither field height on purpose — it is the right size for toolbars and dialog footers.',
+        'Buttons, ToggleButtons, and SegmentedControls carry their own `data-size` attribute rather than reading the `--field-*` tokens, so one placed inside a compact field\'s subtree never shrinks on its own. Their scale mirrors the field scale numerically — 28 / 36 / 48 — so `size="md"` lines up everywhere and every row here is an exact match, asserted in the `play` function.',
     },
   },
 };
@@ -371,7 +403,7 @@ ButtonPairing.parameters = {
 export const PopulatedMultiSelect: StoryObj = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-      {(["md", "sm"] as const).map((size) => (
+      {(["sm", "md", "lg"] as const).map((size) => (
         <div
           key={size}
           style={{ display: "flex", alignItems: "flex-start", gap: 12 }}
@@ -395,20 +427,33 @@ export const PopulatedMultiSelect: StoryObj = {
     </div>
   ),
   play: async ({ canvasElement }) => {
-    const row = canvasElement.querySelector<HTMLElement>(
-      '[data-testid="populated-sm"]'
-    );
-    if (!row) throw new Error("missing sm row");
+    // sm and md hold their height however many chips are selected; lg wraps and
+    // grows on purpose, so it is not asserted here.
+    const fixed = [
+      { size: "sm", height: 28, trigger: { size: "20x20", fromEnd: 4 } },
+      { size: "md", height: 36, trigger: { size: "24x24", fromEnd: 6 } },
+    ] as const;
 
-    const measured = measureRow(row);
-    expect(measured, "sm: every control measured").toHaveLength(3);
+    for (const { size, height, trigger } of fixed) {
+      const row = canvasElement.querySelector<HTMLElement>(
+        `[data-testid="populated-${size}"]`
+      );
+      if (!row) throw new Error(`missing ${size} row`);
 
-    // A populated compact field must not grow, and its toggle must stay put.
-    for (const control of measured) {
-      expect(control, `sm: ${control.name}`).toMatchObject({
-        height: 28,
-        trigger: { size: "20x20", fromEnd: 4, fromTop: 4 },
-      });
+      const measured = measureRow(row);
+      expect(measured, `${size}: every control measured`).toHaveLength(3);
+
+      // A populated fixed-height field must not grow, and its toggle must stay
+      // exactly where the Select's and DatePicker's toggles are.
+      for (const control of measured) {
+        expect(control, `${size}: ${control.name}`).toMatchObject({
+          height,
+          trigger: { ...trigger, fromTop: trigger.fromEnd },
+          // The row is top-aligned, so an unequal offset here is exactly the
+          // "not lined up" a reader sees, even with identical heights.
+          offsetTop: 0,
+        });
+      }
     }
   },
 };
@@ -417,7 +462,7 @@ PopulatedMultiSelect.parameters = {
   docs: {
     description: {
       story:
-        "At `sm` the tags never wrap — the row scrolls horizontally — so the field stays exactly 28px tall and its toggle stays aligned with the Select and DatePicker beside it. At `md` the tags do wrap and the field grows to fit them, which is why these rows align to the top rather than the bottom.",
+        "At `sm` and `md` the tags never wrap — the row scrolls horizontally — so the field holds its 28px or 36px height however many items are selected, and its toggle stays aligned with the Select and DatePicker beside it. At `lg` the tags do wrap and the field grows to fit them, which is why these rows align to the top rather than the bottom.",
     },
   },
 };
