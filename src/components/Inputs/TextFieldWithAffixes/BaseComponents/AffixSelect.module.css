@@ -1,0 +1,70 @@
+/* Cancels the affix segment's text inset so the trigger reaches the separators
+   on both sides; the trigger re-applies it as padding. That way its hover
+   background fills the segment edge to edge instead of floating inside it. */
+.select {
+  display: flex;
+  align-self: stretch;
+  margin-inline: calc(-1 * var(--field-padding-x));
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--field-gap);
+  padding-block: 0;
+  padding-inline: var(--field-padding-x);
+  border: none;
+  background: none;
+  font: inherit;
+  /* The affix segment mutes its text; a dropdown carries a real value, so it
+     opts back into the full-contrast field color. */
+  color: var(--field-text-color);
+  cursor: pointer;
+  white-space: nowrap;
+  outline: none;
+  transition: background 200ms;
+  -webkit-tap-highlight-color: transparent;
+  forced-color-adjust: none;
+
+  &:where([data-hovered], [data-pressed], [data-open]) {
+    background: var(--tint-200);
+    color: var(--tint-1400);
+  }
+
+  &[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -2px;
+  }
+
+  &[data-disabled] {
+    background: none;
+    color: var(--text-color-disabled);
+    cursor: default;
+  }
+
+  @media (forced-colors: active) {
+    &:where([data-hovered], [data-pressed], [data-open]) {
+      background: Highlight;
+      color: HighlightText;
+    }
+  }
+}
+
+.value {
+  &[data-placeholder] {
+    color: var(--text-color-placeholder);
+  }
+}
+
+.chevron {
+  width: var(--field-icon-size);
+  height: var(--field-icon-size);
+  flex-shrink: 0;
+}
+
+/* Wide enough to show the trigger's options in full, but never narrower than
+   the trigger itself. */
+.popover[data-trigger="Select"] {
+  min-width: var(--trigger-width);
+  padding: 0;
+}

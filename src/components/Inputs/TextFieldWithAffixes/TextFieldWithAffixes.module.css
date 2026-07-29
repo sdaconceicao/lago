@@ -1,0 +1,108 @@
+.textField {
+  display: flex;
+  flex-direction: column;
+}
+
+/* The single inset field surface shared by the prefix, input, and suffix
+   segments. Height, radius, and font size mirror the TextField field group, so
+   this field lines up with a TextField, Select, or DatePicker beside it. */
+.group {
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--field-height);
+  border-radius: var(--field-radius);
+  font: var(--field-font-size) var(--font-family);
+  color: var(--field-text-color);
+  cursor: text;
+  /* Keeps the separators and any segment hover background inside the rounded
+     corners. Safe for dropdown affixes: their popovers portal to the body. */
+  overflow: hidden;
+
+  &[data-focus-within] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -1px;
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+    /* The inset utility swaps the border inside its box-shadow when disabled
+       and leaves --inset-border alone, so point the separators at the same
+       color to keep them in step. */
+    --inset-border: var(--border-color-disabled);
+  }
+}
+
+/* Every segment after the first is separated by a hairline in the field's own
+   border color — the inset utility maintains --inset-border on the group and
+   the segments inherit it, so hover and invalid states come along for free. */
+.segment {
+  display: flex;
+  align-items: center;
+  gap: var(--field-gap);
+  box-sizing: border-box;
+  min-width: 0;
+
+  & + .segment {
+    border-inline-start: 1px solid var(--inset-border, var(--border-color));
+  }
+}
+
+/* Affix segments hug their content and leave the remaining width to the input. */
+.affix {
+  flex-shrink: 0;
+  padding-inline: var(--field-padding-x);
+  white-space: nowrap;
+  /* Muted, so the value the user types stays the most prominent text. A
+     dropdown affix opts back into the full-contrast field color. */
+  color: var(--text-color-placeholder);
+
+  svg {
+    width: var(--field-icon-size);
+    height: var(--field-icon-size);
+    flex-shrink: 0;
+  }
+
+  .group[data-disabled] & {
+    color: var(--text-color-disabled);
+  }
+}
+
+.inputSegment {
+  flex: 1;
+  padding-inline: var(--field-padding-x);
+
+  /* A trailing button sits tighter to the edge than text does, matching the
+     TextField field group. */
+  &.hasButton {
+    padding-inline-end: var(--field-inner-inset);
+  }
+}
+
+/* The input is transparent; the group carries the inset surface and the focus
+   ring. */
+.input {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--field-text-color);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &::placeholder {
+    color: var(--text-color-placeholder);
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+    &::placeholder {
+      color: var(--text-color-disabled);
+    }
+  }
+}

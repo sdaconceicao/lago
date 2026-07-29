@@ -54,6 +54,7 @@ export * from "./components/Inputs/Slider/Slider";
 export * from "./components/Inputs/Switch/Switch";
 export * from "./components/Inputs/TextArea/TextArea";
 export * from "./components/Inputs/TextField/TextField";
+export * from "./components/Inputs/TextFieldWithAffixes/TextFieldWithAffixes";
 export * from "./components/Inputs/Toggle/ToggleButton/ToggleButton";
 export * from "./components/Inputs/Toggle/ToggleButtonGroup/ToggleButtonGroup";
 export * from "./components/Layout/Separator/Separator";
