@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/sdaconceicao/lago/compare/lago-v0.2.1...lago-v0.3.0) (2026-07-29)
+
+
+### Features
+
+* Input sizes added ([#55](https://github.com/sdaconceicao/lago/issues/55)) ([104ef9e](https://github.com/sdaconceicao/lago/commit/104ef9eff22f2401e6fad3e60eb207695e61fa2c))
+* SearchFieldWithSuggestions adds custom suggestions render  ([#45](https://github.com/sdaconceicao/lago/issues/45)) ([d2ceee0](https://github.com/sdaconceicao/lago/commit/d2ceee054d3909683faba40943ac4d20519025dc))
+
+
+### Bug Fixes
+
+* Updated segmented control UX ([#47](https://github.com/sdaconceicao/lago/issues/47)) ([5550a6f](https://github.com/sdaconceicao/lago/commit/5550a6f4306ad14a0968d6772d12fa89fba47b02))
+
 ## [0.2.1](https://github.com/sdaconceicao/lago/compare/lago-v0.2.0...lago-v0.2.1) (2026-07-22)
 
 
