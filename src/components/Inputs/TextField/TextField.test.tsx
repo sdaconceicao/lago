@@ -67,6 +67,41 @@ describe("TextField", () => {
     expect(ref.current).toBe(screen.getByRole("textbox"));
   });
 
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = render(<TextField label="Email" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(<TextField label="Email" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(<TextField label="Email" size="lg" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
+    it("does not forward size to the DOM input", () => {
+      render(<TextField label="Email" size="sm" />);
+
+      expect(screen.getByRole("textbox")).not.toHaveAttribute("size");
+    });
+  });
+
   describe("with a trailing button", () => {
     it("renders the button alongside the input", () => {
       render(

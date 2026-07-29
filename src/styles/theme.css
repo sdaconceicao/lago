@@ -236,6 +236,96 @@
   --spacing-10: calc(10 * var(--spacing));
 }
 
+/* field size scale
+ *
+ * Metrics shared by every field-like control (TextField, Select, MultiSelect,
+ * DatePicker, ...). Components opt in with a `size` prop that renders a
+ * `data-field-size` attribute on their root; these custom properties are
+ * inherited, so descendants — including base components several levels down —
+ * pick up the right values without prop drilling.
+ *
+ * Three steps: `sm` 28px, `md` 36px, `lg` 48px. The `md` values are also
+ * declared on `:root` so a control rendered outside any sized subtree gets the
+ * default size.
+ *
+ * Two invariants hold at every step, and any new step must keep them:
+ *   - the text inset is twice the inner inset, which optically balances the
+ *     leading text against a trailing trigger;
+ *   - inner height + 2 x inner inset == the field height, so the reserved
+ *     inline-end gutter is exactly square.
+ *
+ * Derived values are repeated in every block on purpose: a `var()` inside a
+ * custom property is substituted where the *declaration* applies, so a value
+ * computed once on `:root` would bake in the `md` inputs and leak into nested
+ * `sm` and `lg` subtrees.
+ *
+ * Every value derives from --spacing / --font-size / --radius so the hi-dpi
+ * scaling below applies to fields too. Never hardcode px here. */
+:root,
+[data-field-size="md"] {
+  --field-height: var(--spacing-9); /* 36px */
+  --field-radius: var(--radius); /* 8px */
+  --field-font-size: var(--font-size); /* 14px */
+  --field-padding-x: var(--spacing-3); /* 12px text inset */
+  --field-gap: calc(var(--spacing) * 1.5); /* 6px */
+  --field-inner-height: var(--spacing-6); /* 24px buttons and chips */
+  --field-inner-inset: calc(var(--spacing) * 1.5); /* 6px */
+  --field-icon-size: calc(var(--spacing) * 3.5); /* 14px */
+  --field-label-gap: calc(var(--spacing) * 1.5); /* label to field */
+  --field-group-gap: calc(var(--spacing) * 2.5); /* between checkbox/radio */
+  --field-indicator-size: calc(var(--spacing) * 4.5); /* 18px */
+  /* Room reserved at the inline end for an absolutely positioned trigger. */
+  --field-reserved-inline-end: calc(
+    var(--field-inner-height) +
+    2 *
+    var(--field-inner-inset)
+  ); /* 36px */
+}
+
+/* Compact variant. Must come after the block above: `:root` and this selector
+ * have the same specificity, so source order decides when a size is set on the
+ * root element itself. */
+[data-field-size="sm"] {
+  --field-height: calc(var(--spacing) * 7); /* 28px */
+  --field-radius: var(--radius-sm); /* 6px */
+  --field-font-size: var(--font-size-sm); /* 12px */
+  --field-padding-x: var(--spacing-2); /* 8px text inset */
+  --field-gap: var(--spacing-1); /* 4px */
+  --field-inner-height: var(--spacing-5); /* 20px buttons and chips */
+  --field-inner-inset: var(--spacing-1); /* 4px */
+  --field-icon-size: var(--spacing-3); /* 12px */
+  --field-label-gap: var(--spacing-1);
+  --field-group-gap: var(--spacing-2);
+  /* Checkbox and radio indicators step twice, not three times: 18px already
+     reads as small, and there is no legible size between 16 and 18. */
+  --field-indicator-size: var(--spacing-4); /* 16px */
+  --field-reserved-inline-end: calc(
+    var(--field-inner-height) +
+    2 *
+    var(--field-inner-inset)
+  ); /* 28px */
+}
+
+/* Roomy variant, for prominent single-field forms and touch targets. */
+[data-field-size="lg"] {
+  --field-height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+  --field-radius: var(--radius); /* 8px */
+  --field-font-size: var(--font-size-lg); /* 16px, matching an lg Button */
+  --field-padding-x: var(--spacing-4); /* 16px text inset */
+  --field-gap: var(--spacing-2); /* 8px */
+  --field-inner-height: var(--spacing-8); /* 32px buttons and chips */
+  --field-inner-inset: var(--spacing-2); /* 8px */
+  --field-icon-size: var(--spacing-4); /* 16px */
+  --field-label-gap: var(--spacing-2);
+  --field-group-gap: var(--spacing-3);
+  --field-indicator-size: calc(var(--spacing) * 4.5); /* 18px */
+  --field-reserved-inline-end: calc(
+    var(--field-inner-height) +
+    2 *
+    var(--field-inner-inset)
+  ); /* 48px */
+}
+
 /* Scale up hit targets on high resolution mobile devices. */
 @media (min-resolution: 200dpi) {
   :root {

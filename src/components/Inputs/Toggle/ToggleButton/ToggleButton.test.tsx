@@ -86,4 +86,28 @@ describe("ToggleButton", () => {
 
     expect(screen.getByRole("button")).toHaveAttribute("data-variant", "quiet");
   });
+
+  it("renders the md size by default", () => {
+    render(<ToggleButton>Pin</ToggleButton>);
+
+    expect(screen.getByRole("button")).toHaveAttribute("data-size", "md");
+  });
+
+  it.each(["sm", "md", "lg"] as const)(
+    "reflects the %s size as a data attribute",
+    (size) => {
+      render(<ToggleButton size={size}>Pin</ToggleButton>);
+
+      expect(screen.getByRole("button")).toHaveAttribute("data-size", size);
+    }
+  );
+
+  it.each(["sm", "md", "lg"] as const)(
+    "does not forward the %s size as a DOM attribute",
+    (size) => {
+      render(<ToggleButton size={size}>Pin</ToggleButton>);
+
+      expect(screen.getByRole("button")).not.toHaveAttribute("size");
+    }
+  );
 });

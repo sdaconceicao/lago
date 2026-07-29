@@ -20,7 +20,7 @@ export function ColorSlider({ label, ...props }: ColorSliderProps) {
       {...props}
       className={clsx("react-aria-ColorSlider", styles.colorSlider)}
     >
-      <Label>{label}</Label>
+      {label && <Label>{label}</Label>}
       <SliderOutput />
       <SliderTrack
         style={({ defaultStyle }) => ({

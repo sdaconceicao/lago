@@ -85,6 +85,57 @@ describe("MultiSelect", () => {
     });
   });
 
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = renderMultiSelect();
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = renderMultiSelect({ size: "sm" });
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = renderMultiSelect({ size: "lg" });
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
+    it("does not forward size to the DOM input", () => {
+      renderMultiSelect({ size: "sm" });
+
+      expect(screen.getByRole("combobox")).not.toHaveAttribute("size");
+    });
+
+    it.each(["sm", "lg"] as const)(
+      "forwards size %s to the portaled popover",
+      async (size) => {
+        const user = userEvent.setup();
+        renderMultiSelect({ size });
+
+        await user.click(screen.getByRole("combobox"));
+
+        const listbox = await screen.findByRole("listbox");
+        expect(listbox.closest("[data-field-size]")).toHaveAttribute(
+          "data-field-size",
+          size
+        );
+      }
+    );
+  });
+
   describe("dropdown", () => {
     it("opens a multi-selectable listbox with all options on focus", async () => {
       const user = userEvent.setup();

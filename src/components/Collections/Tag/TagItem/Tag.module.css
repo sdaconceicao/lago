@@ -89,23 +89,25 @@
   }
 
   /* Field-height chips, e.g. inside the MultiSelect field. Driven by the
-     parent TagGroup's data-size attribute. */
+     parent TagGroup's data-size attribute. Metrics come from the --field-*
+     scope so the chips shrink with the field they sit in; outside a field they
+     resolve the md values from :root and render as they always have. */
   :global(.react-aria-TagGroup[data-size="md"]) & {
-    height: var(--spacing-8);
-    padding: 0 var(--spacing-4);
-    font: var(--font-size) var(--font-family);
+    height: var(--field-inner-height);
+    padding: 0 var(--field-padding-x);
+    font: var(--field-font-size) var(--font-family);
 
     &:has(.removeButton) {
-      padding: 0 var(--spacing-1) 0 var(--spacing-4);
+      padding: 0 var(--spacing-1) 0 var(--field-padding-x);
     }
 
     /* Slightly inset from the chip edges on all sides */
     .removeButton {
-      height: calc(100% - var(--spacing-2));
+      height: calc(100% - var(--field-inner-inset));
 
       svg {
-        width: var(--spacing-4);
-        height: var(--spacing-4);
+        width: var(--field-icon-size);
+        height: var(--field-icon-size);
       }
     }
   }

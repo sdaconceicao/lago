@@ -9,20 +9,27 @@ import { ProgressCircle } from "@/components/Feedback/ProgressCircle/ProgressCir
 import utils from "@/styles/utilities.module.css";
 import styles from "./Button.module.css";
 
-interface ButtonProps extends RACButtonProps {
+export interface ButtonProps extends RACButtonProps {
   /**
    * The visual style of the button (Vanilla CSS implementation specific).
    *
    * @default 'primary'
    */
   variant?: "primary" | "secondary" | "quiet";
+  /**
+   * Button size: 28px, 36px, or 48px tall, matching the field of the same size.
+   *
+   * @default 'md'
+   */
+  size?: "sm" | "md" | "lg";
 }
 
-export function Button(props: ButtonProps) {
+export function Button({ size = "md", ...props }: ButtonProps) {
   return (
     <RACButton
       {...props}
       className={clsx("react-aria-Button", styles.button, utils.buttonBase)}
+      data-size={size}
       data-variant={props.variant || "primary"}
     >
       {composeRenderProps(props.children, (children, { isPending }) => (

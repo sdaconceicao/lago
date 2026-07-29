@@ -97,4 +97,39 @@ describe("NumberField", () => {
 
     expect(screen.getByText("Too many cookies")).toBeInTheDocument();
   });
+
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = render(<NumberField label="Cookies" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(<NumberField label="Cookies" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(<NumberField label="Cookies" size="lg" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
+    it("does not forward size to the DOM input", () => {
+      render(<NumberField label="Cookies" size="sm" />);
+
+      expect(screen.getByRole("textbox")).not.toHaveAttribute("size");
+    });
+  });
 });

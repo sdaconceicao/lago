@@ -5,7 +5,7 @@
     "track track";
   grid-template-columns: 1fr auto;
   max-width: min(calc(100% - 12px), 300px);
-  font: var(--font-size) var(--font-family);
+  font: var(--field-font-size) var(--font-family);
   color: var(--text-color);
 
   :global(.react-aria-Label) {
@@ -14,7 +14,7 @@
 
   .sliderOutput {
     grid-area: output;
-    font-size: var(--font-size);
+    font-size: var(--field-font-size);
   }
 
   .sliderTrack {
@@ -38,7 +38,7 @@
   }
 
   .sliderThumb {
-    width: calc(var(--spacing) * 5.5);
+    width: calc(var(--spacing) * 5.5); /* 22px */
     height: calc(var(--spacing) * 5.5);
     border-radius: 50%;
     forced-color-adjust: none;
@@ -148,6 +148,52 @@
       .sliderFill {
         background: var(--border-color-disabled);
         box-shadow: none;
+      }
+    }
+  }
+
+  &[data-field-size="sm"] {
+    .sliderThumb {
+      width: var(--spacing-4); /* 16px */
+      height: var(--spacing-4);
+    }
+
+    &[data-orientation="horizontal"] .sliderTrack {
+      height: var(--spacing-4); /* 16px hit area */
+
+      .track {
+        height: var(--spacing-1); /* 4px rail */
+      }
+    }
+
+    &[data-orientation="vertical"] .sliderTrack {
+      width: var(--spacing-4);
+
+      .track {
+        width: var(--spacing-1);
+      }
+    }
+  }
+
+  &[data-field-size="lg"] {
+    .sliderThumb {
+      width: var(--spacing-6); /* 24px, the WCAG 2.5.8 target minimum */
+      height: var(--spacing-6);
+    }
+
+    &[data-orientation="horizontal"] .sliderTrack {
+      height: var(--spacing-6); /* 24px hit area, matching the thumb */
+
+      .track {
+        height: calc(var(--spacing) * 2.5); /* 10px rail */
+      }
+    }
+
+    &[data-orientation="vertical"] .sliderTrack {
+      width: var(--spacing-6);
+
+      .track {
+        width: calc(var(--spacing) * 2.5);
       }
     }
   }

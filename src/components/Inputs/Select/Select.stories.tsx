@@ -41,3 +41,35 @@ export const Example: Story = (args) => (
 Example.args = {
   label: "Ice cream flavor",
 };
+
+export const Sizes: Story = (args) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <Select {...args} size="sm" label="Small">
+      <SelectItem id="chocolate">Chocolate</SelectItem>
+      <SelectItem id="mint">Mint</SelectItem>
+      <SelectItem id="strawberry">Strawberry</SelectItem>
+      <SelectItem id="vanilla">Vanilla</SelectItem>
+    </Select>
+    <Select {...args} size="md" label="Medium (default)">
+      <SelectItem id="chocolate">Chocolate</SelectItem>
+      <SelectItem id="mint">Mint</SelectItem>
+      <SelectItem id="strawberry">Strawberry</SelectItem>
+      <SelectItem id="vanilla">Vanilla</SelectItem>
+    </Select>
+    <Select {...args} size="lg" label="Large">
+      <SelectItem id="chocolate">Chocolate</SelectItem>
+      <SelectItem id="mint">Mint</SelectItem>
+      <SelectItem id="strawberry">Strawberry</SelectItem>
+      <SelectItem id="vanilla">Vanilla</SelectItem>
+    </Select>
+  </div>
+);
+
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        'Select supports three sizes: "sm" renders a compact 28px-tall field with 12px text and a 20px chevron toggle, "md" (the default) a 36px-tall field with 14px text and a 24px toggle, and "lg" a roomy 48px-tall field with 16px text and a 32px toggle. The size also travels to the dropdown, so its options and check marks scale with the field. Every field-like control at the same size shares its height, border radius, horizontal padding, and font size, so a Select lines up with a TextField, MultiSelect, or DatePicker placed beside it in a row.',
+    },
+  },
+};

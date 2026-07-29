@@ -101,6 +101,42 @@ describe("DropZone", () => {
     );
   });
 
+  it("renders the md size by default", () => {
+    const { container } = renderDropZone();
+
+    expect(container.querySelector(".react-aria-DropZone")).toHaveAttribute(
+      "data-field-size",
+      "md"
+    );
+  });
+
+  it("renders the sm size when specified", () => {
+    const { container } = renderDropZone({ size: "sm" });
+
+    expect(container.querySelector(".react-aria-DropZone")).toHaveAttribute(
+      "data-field-size",
+      "sm"
+    );
+  });
+
+  it("renders the lg size when specified", () => {
+    const { container } = renderDropZone({ size: "lg" });
+
+    expect(container.querySelector(".react-aria-DropZone")).toHaveAttribute(
+      "data-field-size",
+      "lg"
+    );
+  });
+
+  it("does not forward size as a DOM attribute", () => {
+    const { container } = renderDropZone({ size: "sm" });
+
+    expect(container.querySelector(".react-aria-DropZone")).not.toHaveAttribute(
+      "size"
+    );
+    expect(screen.getByRole("button")).not.toHaveAttribute("size");
+  });
+
   it("marks the drop zone as disabled when isDisabled", () => {
     const { container } = renderDropZone({ isDisabled: true });
 

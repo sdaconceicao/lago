@@ -93,4 +93,44 @@ describe("DateField", () => {
       expect(segment).toHaveAttribute("aria-readonly", "true");
     }
   });
+
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = render(<DateField label="Event date" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(<DateField label="Event date" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(<DateField label="Event date" size="lg" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
+    it("does not forward size to the DOM", () => {
+      const { container } = render(<DateField label="Event date" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).not.toHaveAttribute(
+        "size"
+      );
+      expect(
+        screen.getByRole("group", { name: "Event date" })
+      ).not.toHaveAttribute("size");
+    });
+  });
 });

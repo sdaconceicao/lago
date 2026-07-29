@@ -63,3 +63,76 @@
     }
   }
 }
+
+.toggleButtonGroup[data-size="md"] > :global(.react-aria-ToggleButton) {
+  font-size: var(--font-size);
+  height: var(--spacing-9); /* 36px */
+  padding: 0 var(--spacing-3);
+
+  > span > svg {
+    width: var(--spacing-4); /* 16px */
+    height: var(--spacing-4);
+  }
+}
+
+.toggleButtonGroup[data-size="sm"] > :global(.react-aria-ToggleButton) {
+  font-size: var(--font-size-sm);
+  height: calc(var(--spacing) * 7); /* 28px */
+  padding: 0 var(--spacing-2);
+
+  > span > svg {
+    width: var(--spacing-3); /* 12px */
+    height: var(--spacing-3);
+  }
+}
+
+.toggleButtonGroup[data-size="lg"] > :global(.react-aria-ToggleButton) {
+  font-size: var(--font-size-lg);
+  height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+  padding: 0 var(--spacing-4);
+
+  > span > svg {
+    width: var(--spacing-4); /* 16px */
+    height: var(--spacing-4);
+  }
+}
+
+.toggleButtonGroup[data-size="md"]
+  > :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
+  width: var(--spacing-9); /* 36px */
+  padding: 0;
+}
+
+.toggleButtonGroup[data-size="sm"]
+  > :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
+  width: calc(var(--spacing) * 7); /* 28px */
+  padding: 0;
+}
+
+.toggleButtonGroup[data-size="lg"]
+  > :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
+  width: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+  padding: 0;
+}
+
+.toggleButtonGroup[data-size="sm"][data-orientation="horizontal"]
+  > :global(.react-aria-ToggleButton) {
+  &:first-child {
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  }
+
+  &:last-child {
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+}
+
+.toggleButtonGroup[data-size="sm"][data-orientation="vertical"]
+  > :global(.react-aria-ToggleButton) {
+  &:first-child {
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  }
+}

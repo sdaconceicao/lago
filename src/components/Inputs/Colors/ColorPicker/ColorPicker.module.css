@@ -4,11 +4,11 @@
   padding: 0;
   display: flex;
   align-items: center;
-  gap: var(--spacing-2);
+  gap: var(--field-gap);
   outline: none;
   appearance: none;
   vertical-align: middle;
-  font: var(--font-size) var(--font-family);
+  font: var(--field-font-size) var(--font-family);
   color: var(--text-color);
   -webkit-tap-highlight-color: transparent;
 
@@ -16,6 +16,11 @@
     outline: 2px solid var(--focus-ring-color);
     outline-offset: 2px;
   }
+}
+
+.colorPicker :global(.react-aria-ColorSwatch) {
+  width: var(--field-inner-height);
+  height: var(--field-inner-height);
 }
 
 .colorPickerDialog {

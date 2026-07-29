@@ -1,13 +1,15 @@
 .input {
   flex: 1;
   min-width: calc(var(--spacing) * 15);
-  min-height: var(--spacing-8);
+  min-height: var(--field-inner-height);
   box-sizing: border-box;
-  padding: 0 0 0 var(--spacing-2);
+  /* Together with the field's own left inset this lands the text at
+     --field-padding-x from the field's edge, matching the TextField. */
+  padding: 0 0 0 calc(var(--field-padding-x) - var(--field-inner-inset));
   margin: 0;
   border: none;
   background: transparent;
-  font: var(--font-size) var(--font-family);
+  font: var(--field-font-size) var(--font-family);
   color: var(--field-text-color);
   outline: none;
   -webkit-tap-highlight-color: transparent;

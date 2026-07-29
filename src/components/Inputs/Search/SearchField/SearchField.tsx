@@ -11,9 +11,11 @@ import {
   type ValidationResult,
 } from "react-aria-components/SearchField";
 import {
+  DEFAULT_FIELD_SIZE,
   Description,
   FieldButton,
   FieldError,
+  type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
@@ -39,6 +41,8 @@ export interface SearchFieldProps extends AriaSearchFieldProps {
   groupRef?: React.Ref<HTMLDivElement>;
   /** Capture-phase key handler on the field group. Used by SearchFieldWithSuggestions to arbitrate Enter/Escape before the field's own handlers. */
   onKeyDownCapture?: React.KeyboardEventHandler<HTMLDivElement>;
+  /** Field size: 28px, 36px (default), or 48px tall. */
+  size?: FieldSize;
 }
 
 // The dropdown-less search field. Built on the react-aria SearchField
@@ -53,6 +57,7 @@ export function SearchField({
   debounceDelay = DEFAULT_DEBOUNCE_DELAY,
   groupRef,
   onKeyDownCapture,
+  size = DEFAULT_FIELD_SIZE,
   ...props
 }: SearchFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -81,6 +86,7 @@ export function SearchField({
   return (
     <AriaSearchField
       {...props}
+      data-field-size={size}
       onChange={handleChange}
       onSubmit={onSubmit}
       className={clsx(

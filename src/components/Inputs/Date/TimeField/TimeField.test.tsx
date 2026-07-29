@@ -97,4 +97,44 @@ describe("TimeField", () => {
 
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = render(<TimeField label="Event time" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(<TimeField label="Event time" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(<TimeField label="Event time" size="lg" />);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
+    it("does not forward size to the DOM", () => {
+      const { container } = render(<TimeField label="Event time" size="sm" />);
+
+      expect(container.querySelector("[data-field-size]")).not.toHaveAttribute(
+        "size"
+      );
+      expect(
+        screen.getByRole("group", { name: "Event time" })
+      ).not.toHaveAttribute("size");
+    });
+  });
 });

@@ -8,8 +8,10 @@ import {
   type ValidationResult,
 } from "react-aria-components/TextField";
 import {
+  DEFAULT_FIELD_SIZE,
   Description,
   FieldError,
+  type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import utils from "@/styles/utilities.module.css";
@@ -26,6 +28,8 @@ export interface TextAreaProps extends AriaTextFieldProps {
   placeholder?: string;
   /** Ref forwarded to the underlying `textarea` element. */
   inputRef?: React.Ref<HTMLTextAreaElement>;
+  /** Field size: 44px, 52px (default), or 64px minimum height. */
+  size?: FieldSize;
 }
 
 /**
@@ -39,11 +43,13 @@ export function TextArea({
   errorMessage,
   placeholder,
   inputRef,
+  size = DEFAULT_FIELD_SIZE,
   ...props
 }: TextAreaProps) {
   return (
     <AriaTextField
       {...props}
+      data-field-size={size}
       className={clsx("react-aria-TextField", styles.textArea, props.className)}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}

@@ -7,7 +7,7 @@
 
   .radioItems {
     display: flex;
-    gap: var(--spacing-3);
+    gap: var(--field-group-gap);
   }
 
   &[data-orientation="vertical"] .radioItems {

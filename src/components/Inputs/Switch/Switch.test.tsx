@@ -82,4 +82,39 @@ describe("Switch", () => {
 
     expect(screen.getByText("Connect to networks")).toBeInTheDocument();
   });
+
+  describe("size", () => {
+    it('renders data-field-size="md" by default', () => {
+      const { container } = render(<Switch>Wi-Fi</Switch>);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "md"
+      );
+    });
+
+    it('renders data-field-size="sm" when specified', () => {
+      const { container } = render(<Switch size="sm">Wi-Fi</Switch>);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "sm"
+      );
+    });
+
+    it('renders data-field-size="lg" when specified', () => {
+      const { container } = render(<Switch size="lg">Wi-Fi</Switch>);
+
+      expect(container.querySelector("[data-field-size]")).toHaveAttribute(
+        "data-field-size",
+        "lg"
+      );
+    });
+
+    it("does not forward size to the DOM input", () => {
+      render(<Switch size="sm">Wi-Fi</Switch>);
+
+      expect(screen.getByRole("switch")).not.toHaveAttribute("size");
+    });
+  });
 });

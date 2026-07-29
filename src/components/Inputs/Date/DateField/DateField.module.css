@@ -3,15 +3,19 @@
   flex-direction: column;
 }
 
+/* Standalone date/time field surface, shared with TimeField. `inline-flex`
+   rather than `inline` so `height` actually applies — an inline box sizes its
+   background from font metrics, which left this field shorter than every other
+   control and impossible to line up in a row. */
 .dateInput {
-  display: inline;
-  padding: 0 var(--spacing-3);
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--field-padding-x);
   box-sizing: border-box;
-  border-radius: var(--radius);
-  font: var(--font-size) var(--font-family);
+  border-radius: var(--field-radius);
+  font: var(--field-font-size) var(--font-family);
   color: var(--field-text-color);
-  height: var(--spacing-8);
-  line-height: var(--spacing-8);
+  height: var(--field-height);
   width: fit-content;
   min-width: 150px;
   white-space: nowrap;
@@ -29,9 +33,15 @@
   }
 }
 
+/* The 150px minimum is sized for 14px segments; at sm they are 12px, so the
+   field would otherwise sit half empty. */
+:where([data-field-size="sm"]) .dateInput {
+  min-width: calc(var(--spacing) * 28); /* 112px */
+}
+
 .dateSegment {
   padding: 2px;
-  font-size: var(--font-size);
+  font-size: var(--field-font-size);
   font-variant-numeric: tabular-nums;
   text-align: end;
   color: var(--field-text-color);

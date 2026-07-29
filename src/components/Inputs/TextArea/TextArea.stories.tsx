@@ -32,3 +32,20 @@ export const Example: Story = (args) => <TextArea {...args} />;
 Example.args = {
   label: "Bio",
 };
+
+export const Sizes: Story = (args) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <TextArea {...args} size="sm" label="Small" />
+    <TextArea {...args} size="md" label="Medium (default)" />
+    <TextArea {...args} size="lg" label="Large" />
+  </div>
+);
+
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        'TextArea supports three sizes: "sm" renders a compact field with 12px text, 8px horizontal padding, and a 44px minimum height, "md" (the default) renders 14px text, 12px horizontal padding, and a 52px minimum height, and "lg" renders 16px text, 16px horizontal padding, and a 64px minimum height. Each minimum height is one single-line field of that size plus a second row of text, so a TextArea always reads as multi-line. Because a TextArea is multi-line and resizable, its height can never match a single-line control, so it does not row-align with a TextField or Select the way those fields align with each other — at a given size it only shares their border radius, horizontal padding, and font size.',
+    },
+  },
+};

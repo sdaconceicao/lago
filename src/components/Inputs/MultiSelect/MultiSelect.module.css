@@ -7,25 +7,22 @@
   max-width: 100%;
 }
 
-/* Field container styled like an input; tags/text, search input, and toggle
-   share one inset surface so the whole group reads as a single control.
-   Sizing and padding match the DatePicker field group. */
 .field {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--spacing-2);
+  gap: var(--field-gap);
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  min-height: calc(var(--spacing-10) + var(--spacing-2));
+  min-height: var(--field-height);
   /* Left inset mirrors the toggle button's distance from the right edge;
      the extra right padding reserves room for the absolutely positioned
      toggle button. */
-  padding: var(--spacing-2) calc(var(--spacing-10) + var(--spacing-2))
-    var(--spacing-2) var(--spacing-2);
-  border-radius: var(--radius);
-  font: var(--font-size) var(--font-family);
+  padding: var(--field-inner-inset) var(--field-reserved-inline-end)
+    var(--field-inner-inset) var(--field-inner-inset);
+  border-radius: var(--field-radius);
+  font: var(--field-font-size) var(--font-family);
   color: var(--field-text-color);
   cursor: text;
 
@@ -38,24 +35,53 @@
     color: var(--text-color-disabled);
   }
 
-  /* Pin the toggle to the top-right corner so it stays put when tags wrap */
+  /* Pin the toggle to the top-right corner so it stays put when tags wrap.
+     FieldButton owns its own height — do not override it here. */
   :global(.field-Button) {
     position: absolute;
-    top: var(--spacing-2);
-    right: var(--spacing-2);
-    height: var(--spacing-8);
+    top: var(--field-inner-inset);
+    right: var(--field-inner-inset);
+  }
+}
+
+/* sm and md are one row tall, so their contents must not wrap: a second row
+   would grow the field past --field-height and break its alignment with the
+   controls beside it. Measured, a wrapping md field reaches 66px on two chips in
+   any column narrower than ~270px, which is most form columns — and md is the
+   default, so that has to hold without the caller thinking about it. The row
+   scrolls horizontally instead, keeping every selected tag reachable at a fixed
+   28 or 36px.
+
+   lg deliberately still wraps and grows: at 48px with 32px chips there is room
+   to show a whole selection at once, and a field that prominent is usually
+   alone on its row rather than lined up beside other controls. */
+:where([data-field-size="sm"], [data-field-size="md"]) .field {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* The toggle joins the flex row at this size (see below), so no room has to
+     be reserved for it at the inline end. */
+  padding-inline-end: var(--field-inner-inset);
+
+  :global(.field-Button) {
+    position: sticky;
+    top: auto;
+    right: 0;
+    z-index: 1;
   }
 }
 
 .textValue {
   display: flex;
   align-items: center;
-  min-height: var(--spacing-8);
+  min-height: var(--field-inner-height);
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 0 0 0 var(--spacing-2);
+  /* Together with the field's own left inset this lands the text at
+     --field-padding-x from the field's edge, matching the TextField. */
+  padding: 0 0 0 calc(var(--field-padding-x) - var(--field-inner-inset));
 
   &[data-placeholder] {
     display: none;

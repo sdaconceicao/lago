@@ -1,8 +1,8 @@
 .label {
   display: block;
-  font: var(--font-size) var(--font-family);
+  font: var(--field-font-size) var(--font-family);
   color: var(--text-color);
-  margin-bottom: var(--spacing-2);
+  margin-bottom: var(--field-label-gap);
   font-weight: 500;
 
   [data-required] > &::after,

@@ -9,8 +9,10 @@ import {
   type ValidationResult,
 } from "react-aria-components/TextField";
 import {
+  DEFAULT_FIELD_SIZE,
   Description,
   FieldError,
+  type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import utils from "@/styles/utilities.module.css";
@@ -34,6 +36,8 @@ export interface TextFieldProps<T = HTMLInputElement>
    * a single inset surface that matches the Select and DatePicker fields.
    */
   button?: React.ReactNode;
+  /** Field size: 28px, 36px (default), or 48px tall. A trailing `button` scales with it. */
+  size?: FieldSize;
 }
 
 /**
@@ -48,11 +52,13 @@ export function TextField({
   placeholder,
   inputRef,
   button,
+  size = DEFAULT_FIELD_SIZE,
   ...props
 }: TextFieldProps) {
   return (
     <AriaTextField
       {...props}
+      data-field-size={size}
       className={clsx(
         "react-aria-TextField",
         styles.textField,

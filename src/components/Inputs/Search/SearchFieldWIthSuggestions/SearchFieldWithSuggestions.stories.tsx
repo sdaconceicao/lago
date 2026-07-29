@@ -153,6 +153,46 @@ export const CustomSuggestionRenderer: Story = {
   },
 };
 
+export const Sizes: Story = {
+  render: () => (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1.5rem",
+        width: 320,
+      }}
+    >
+      <SearchFieldWithSuggestions
+        size="sm"
+        label="Small"
+        placeholder="Search fruit"
+        suggestions={FRUITS}
+      />
+      <SearchFieldWithSuggestions
+        size="md"
+        label="Medium (default)"
+        placeholder="Search fruit"
+        suggestions={FRUITS}
+      />
+      <SearchFieldWithSuggestions
+        size="lg"
+        label="Large"
+        placeholder="Search fruit"
+        suggestions={FRUITS}
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The size prop scales the field and its suggestions dropdown together: "sm" is a compact 28px-tall field with a compact suggestion list, "md" (the default) is 36px tall, and "lg" is a roomy 48px. The dropdown is portaled out of the field, so it does not inherit the field\'s size — the size is applied to the popover as well to keep the two in step.',
+      },
+    },
+  },
+};
+
 export const States: Story = {
   render: () => (
     <div

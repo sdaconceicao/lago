@@ -4,16 +4,16 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--spacing-2);
+  gap: var(--field-gap);
   box-sizing: border-box;
-  min-height: var(--spacing-8);
+  min-height: var(--field-inner-height);
   margin-inline: var(--spacing-1);
-  padding: calc((var(--spacing-8) - 1lh) / 2) var(--spacing-3);
-  border-radius: var(--radius);
+  padding: calc((var(--field-inner-height) - 1lh) / 2) var(--spacing-3);
+  border-radius: var(--field-radius);
   outline: none;
   cursor: pointer;
   color: var(--text-color);
-  font: var(--font-size) var(--font-family);
+  font: var(--field-font-size) var(--font-family);
   -webkit-tap-highlight-color: transparent;
 
   &:first-of-type {
@@ -48,8 +48,8 @@
   .checkIcon {
     margin-left: auto;
     flex-shrink: 0;
-    width: var(--spacing-4);
-    height: var(--spacing-4);
+    width: var(--field-icon-size);
+    height: var(--field-icon-size);
     stroke-width: 3px;
   }
 }

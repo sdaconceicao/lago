@@ -8,16 +8,22 @@ import {
 import utils from "@/styles/utilities.module.css";
 import styles from "./ToggleButton.module.css";
 
-interface ToggleButtonProps extends RACToggleButtonProps {
+export interface ToggleButtonProps extends RACToggleButtonProps {
   /**
    * The visual style of the button (Vanilla CSS implementation specific).
    *
    * @default 'primary'
    */
   variant?: "primary" | "secondary" | "quiet";
+  /**
+   * Button size: 28px, 36px, or 48px tall. A ToggleButtonGroup's size wins.
+   *
+   * @default 'md'
+   */
+  size?: "sm" | "md" | "lg";
 }
 
-export function ToggleButton(props: ToggleButtonProps) {
+export function ToggleButton({ size = "md", ...props }: ToggleButtonProps) {
   return (
     <RACToggleButton
       {...props}
@@ -26,6 +32,7 @@ export function ToggleButton(props: ToggleButtonProps) {
         styles.toggleButton,
         utils.buttonBase
       )}
+      data-size={size}
       data-variant={props.variant || "primary"}
     >
       {composeRenderProps(props.children, (children) => (

@@ -7,6 +7,7 @@ import {
   DropdownItem,
   DropdownListBox,
 } from "@/components/Collections/ListBox/ListBox";
+import { DEFAULT_FIELD_SIZE } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
 import { SearchField, type SearchFieldProps } from "../SearchField/SearchField";
 import { useSearchSuggestions } from "../SearchField/SearchField.hooks";
@@ -45,6 +46,7 @@ export function SearchFieldWithSuggestions({
   onClear,
   onSearch,
   debounceDelay = DEFAULT_DEBOUNCE_DELAY,
+  size = DEFAULT_FIELD_SIZE,
   ...fieldProps
 }: SearchFieldWithSuggestionsProps) {
   const groupRef = useRef<HTMLDivElement>(null);
@@ -146,6 +148,7 @@ export function SearchFieldWithSuggestions({
     >
       <SearchField
         {...fieldProps}
+        size={size}
         groupRef={groupRef}
         onClear={handleClear}
         onSubmit={(v) => {
@@ -160,6 +163,10 @@ export function SearchFieldWithSuggestions({
         triggerRef={groupRef}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
+        // The popover is portaled out of the field, so it does not inherit the
+        // field's --field-* custom properties; it needs its own size scope for
+        // the suggestion list to match the field.
+        data-field-size={size}
         className={styles.searchPopover}
       >
         <DropdownListBox<SearchSuggestion>

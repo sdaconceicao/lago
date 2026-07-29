@@ -9,9 +9,11 @@ import {
 import { Group } from "react-aria-components/Group";
 import { DropdownListBox } from "@/components/Collections/ListBox/ListBox";
 import {
+  DEFAULT_FIELD_SIZE,
   Description,
   FieldButton,
   FieldError,
+  type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
@@ -32,6 +34,8 @@ export interface SelectProps<T> extends Omit<AriaComboBoxProps<T>, "children"> {
   items?: Iterable<T>;
   /** The list options: static nodes or a render function for each item. */
   children: React.ReactNode | ((item: T) => React.ReactNode);
+  /** Field size: 28px, 36px (default), or 48px tall. Also scales the dropdown. */
+  size?: FieldSize;
 }
 
 /**
@@ -45,6 +49,7 @@ export function Select<T extends object>({
   children,
   items,
   placeholder = "Select an item",
+  size = DEFAULT_FIELD_SIZE,
   ...props
 }: SelectProps<T>) {
   return (
@@ -53,6 +58,7 @@ export function Select<T extends object>({
       allowsEmptyCollection
       {...props}
       items={items}
+      data-field-size={size}
       className={clsx("react-aria-ComboBox", styles.select)}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
@@ -65,7 +71,13 @@ export function Select<T extends object>({
       </Group>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>
-      <Popover hideArrow className={styles.selectPopover}>
+      {/* The popover is portaled to the document body, so it cannot inherit
+          the --field-* scope from the field: carry the size across explicitly. */}
+      <Popover
+        hideArrow
+        data-field-size={size}
+        className={styles.selectPopover}
+      >
         <DropdownListBox renderEmptyState={() => "No results found."}>
           {children}
         </DropdownListBox>
