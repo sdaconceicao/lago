@@ -1,0 +1,52 @@
+.alertHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--alert-gap);
+
+  .alertIcon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: var(--alert-icon-size);
+    /* Centres the glyph on the first line of the title rather than the whole
+       text block, which otherwise drifts as the title wraps. */
+    height: calc(var(--font-size) * 1.5);
+    color: var(--alert-accent);
+  }
+
+  .alertHeaderText {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--spacing) / 2);
+
+    .alertTitle {
+      margin: 0;
+      font: var(--font-size) var(--font-family);
+
+      font-weight: 600;
+      color: var(--alert-title-color);
+    }
+
+    .alertSubtitle {
+      margin: 0;
+      font: var(--font-size) var(--font-family);
+
+      color: var(--alert-text-color);
+    }
+  }
+
+  .alertDismiss {
+    flex: 0 0 auto;
+    /* Pins the control to the inline end whatever else the header holds. */
+    margin-inline-start: auto;
+
+    /* The quiet button reads off the theme tint; pull it onto the variant's
+       text colour so it belongs to the alert. Set through the button's own
+       custom property, which beats the `utilities` layer that consumes it. */
+    :global(.react-aria-Button) {
+      --button-text: var(--alert-text-color);
+    }
+  }
+}

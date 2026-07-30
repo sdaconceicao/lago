@@ -77,6 +77,43 @@
       --button-color: var(--gray);
     }
 
+    /* Semantic tones, for the action that resolves the state a message is
+     * reporting — retry, delete, confirm. Each only names a hue; the filled
+     * treatment they share with a selected button is below.
+     *
+     * They are filled rather than soft-tinted on purpose. A toned button is
+     * almost always sitting on a surface already tinted with its own hue — an
+     * Alert, for one — and the soft treatment puts its background at
+     * `--lightness-100`, exactly where such a surface sits, so it would
+     * dissolve into it and end up ranking below the grey secondary beside it. */
+    &:where([data-variant="info"]) {
+      --button-color: var(--blue);
+    }
+
+    &:where([data-variant="success"]) {
+      --button-color: var(--green);
+    }
+
+    &:where([data-variant="warning"]) {
+      --button-color: var(--yellow);
+    }
+
+    &:where([data-variant="error"]) {
+      --button-color: var(--red);
+    }
+
+    /* The focus ring defaults to the theme tint, which reads as a stray colour
+     * against a toned fill. A selected button keeps the tint ring, because the
+     * tint is what it is filled with. */
+    &:where(
+        [data-variant="info"],
+        [data-variant="success"],
+        [data-variant="warning"],
+        [data-variant="error"]
+      ) {
+      --focus-ring-color: oklch(from var(--button-color) 45% c h);
+    }
+
     &:where([data-variant="quiet"]) {
       --button-background: none;
       --button-text: var(--text-color);
@@ -89,7 +126,21 @@
       }
     }
 
-    &:where([data-selected]) {
+    /* Filled treatment: a solid fill of `--button-color` with foreground text.
+     * Shared by a selected button and by the semantic tones above — the
+     * lightness steps are fixed rather than scale positions because they have
+     * to hold the same contrast against the foreground in both themes.
+     *
+     * Not extended to the forced-colors block below: `Highlight` is the right
+     * system colour for a selected control, but a toned button is not selected,
+     * so it should fall through to the plain ButtonFace treatment. */
+    &:where(
+        [data-selected],
+        [data-variant="info"],
+        [data-variant="success"],
+        [data-variant="warning"],
+        [data-variant="error"]
+      ) {
       --button-background: oklch(from var(--button-color) 55% c h);
       --button-border: oklch(from var(--button-color) 50% c h);
       --button-gradient: var(--button-border);

@@ -18,6 +18,7 @@ export * from "./components/Collections/Tree/Tree";
 // Components
 export * from "./components/Expandable/Accordion/Accordion";
 export * from "./components/Expandable/Disclosure/Disclosure";
+export * from "./components/Feedback/Alert/Alert";
 export * from "./components/Feedback/ProgressBar/ProgressBar";
 export * from "./components/Feedback/ProgressCircle/ProgressCircle";
 export * from "./components/Feedback/Toast/Toast";
@@ -45,6 +46,7 @@ export * from "./components/Inputs/DropZone/DropZone";
 export * from "./components/Inputs/FormComponents/index";
 export * from "./components/Inputs/MultiSelect/MultiSelect";
 export * from "./components/Inputs/NumberField/NumberField";
+export * from "./components/Inputs/Password/Password";
 export * from "./components/Inputs/Radio/RadioGroup/RadioGroup";
 export * from "./components/Inputs/Radio/RadioItem/Radio";
 export * from "./components/Inputs/Search/SearchField/SearchField";

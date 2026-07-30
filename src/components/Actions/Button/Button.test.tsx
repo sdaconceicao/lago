@@ -32,17 +32,19 @@ describe("Button", () => {
     );
   });
 
-  it.each(["primary", "secondary", "quiet"] as const)(
-    "reflects the %s variant as a data attribute",
-    (variant) => {
-      render(<Button variant={variant}>Press me</Button>);
+  it.each([
+    "primary",
+    "secondary",
+    "quiet",
+    "info",
+    "success",
+    "warning",
+    "error",
+  ] as const)("reflects the %s variant as a data attribute", (variant) => {
+    render(<Button variant={variant}>Press me</Button>);
 
-      expect(screen.getByRole("button")).toHaveAttribute(
-        "data-variant",
-        variant
-      );
-    }
-  );
+    expect(screen.getByRole("button")).toHaveAttribute("data-variant", variant);
+  });
 
   it("renders the md size by default", () => {
     render(<Button>Press me</Button>);

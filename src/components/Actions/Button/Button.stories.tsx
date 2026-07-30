@@ -33,6 +33,45 @@ Example.args = {
   onPress: () => alert("Hello world!"),
 };
 
+export const Variants: Story = (args) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+      <Button {...args} variant="primary">
+        Primary
+      </Button>
+      <Button {...args} variant="secondary">
+        Secondary
+      </Button>
+      <Button {...args} variant="quiet">
+        Quiet
+      </Button>
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+      <Button {...args} variant="info">
+        Info
+      </Button>
+      <Button {...args} variant="success">
+        Success
+      </Button>
+      <Button {...args} variant="warning">
+        Warning
+      </Button>
+      <Button {...args} variant="error">
+        Error
+      </Button>
+    </div>
+  </div>
+);
+
+Variants.parameters = {
+  docs: {
+    description: {
+      story:
+        'Variants fall into two groups. The first row ranks a button by emphasis and takes the theme tint: "primary" (the default) is a soft raised button, "secondary" swaps the tint for grey, and "quiet" drops the fill until hovered. The second row is the semantic tones — "info", "success", "warning" and "error" — for the action that resolves a state, such as retrying a failed request or confirming a delete. A tone renders as a solid fill of its hue rather than a soft tint, because a toned button is usually placed on a surface already tinted with the same hue, such as an Alert of the matching variant, where the soft treatment would dissolve into the background and end up ranking below a grey secondary beside it. The fill and its focus ring use fixed lightness steps, so a tone reads the same in both themes; under forced colours every variant falls back to the system button palette.',
+    },
+  },
+};
+
 export const Sizes: Story = (args) => (
   <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
     <Button {...args} size="sm">

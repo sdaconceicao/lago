@@ -13,9 +13,22 @@ export interface ButtonProps extends RACButtonProps {
   /**
    * The visual style of the button (Vanilla CSS implementation specific).
    *
+   * `primary`, `secondary` and `quiet` rank a button by emphasis and take the
+   * theme tint. `info`, `success`, `warning` and `error` are semantic tones for
+   * the action that resolves a state — retry, delete, confirm — and render as a
+   * solid fill of that hue so they hold their own on a surface already tinted
+   * with it, such as an Alert of the matching variant.
+   *
    * @default 'primary'
    */
-  variant?: "primary" | "secondary" | "quiet";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "quiet"
+    | "info"
+    | "success"
+    | "warning"
+    | "error";
   /**
    * Button size: 28px, 36px, or 48px tall, matching the field of the same size.
    *
