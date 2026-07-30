@@ -32,6 +32,7 @@ export * from "./components/Inputs/Colors/ColorSwatch/ColorSwatch";
 export * from "./components/Inputs/Colors/ColorSwatchPicker/ColorSwatchPicker";
 export * from "./components/Inputs/Colors/ColorThumb/ColorThumb";
 export * from "./components/Inputs/Colors/ColorWheel/ColorWheel";
+export * from "./components/Inputs/CreditCardNumber/CreditCardNumber";
 export * from "./components/Inputs/Date/Calendar/Calendar";
 export {
   CalendarCell,

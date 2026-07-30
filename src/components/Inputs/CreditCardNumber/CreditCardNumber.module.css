@@ -1,0 +1,49 @@
+/* Digits are re-grouped as the user types, so they are set in a tabular figure
+   to keep the groups from shifting sideways under the caret. */
+.creditCardNumber input {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The trailing brand slot. It reserves the full width of a card mark from the
+   start — the marks all share one 780 × 500 canvas — so swapping the placeholder
+   icon for a brand, or one brand for another, never moves the text beside it. */
+.brand {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--field-inner-height) * 1.56);
+  height: var(--field-inner-height);
+}
+
+/* Brand marks are artwork: they keep their own colours in a forced-colors theme,
+   where a repainted logo is no longer the logo. The radius is proportional to
+   the mark so it reads as a card at every field size. */
+.brandLogo {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--field-inner-height) / 12);
+  forced-color-adjust: none;
+}
+
+/* Shown until the digits settle on a brand. An outline icon, not a card, so a
+   number that has not been recognised is never mistaken for one that has. */
+.brandIcon {
+  width: var(--field-icon-size);
+  height: var(--field-icon-size);
+  color: var(--text-color-placeholder);
+}
+
+/* A disabled field drains the mark rather than hiding it: the brand is still
+   worth knowing on a number the user cannot edit, but it should not be the
+   brightest thing in an inert field. */
+.creditCardNumber [data-disabled] .brand {
+  .brandLogo {
+    filter: grayscale(1);
+    opacity: 0.6;
+  }
+
+  .brandIcon {
+    color: var(--text-color-disabled);
+  }
+}

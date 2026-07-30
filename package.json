@@ -25,6 +25,9 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "style": "./dist/index.css",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -42,14 +45,15 @@
   ],
   "peerDependencies": {
     "react": "^19",
-    "react-dom": "^19",
-    "react-aria-components": "^1"
+    "react-aria-components": "^1",
+    "react-dom": "^19"
   },
   "dependencies": {
     "clsx": "^2.1.1",
     "lucide-react": "^1.25.0",
     "react": "^19.2.4",
-    "react-aria-components": "^1.19.0"
+    "react-aria-components": "^1.19.0",
+    "react-payment-logos": "^1.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
