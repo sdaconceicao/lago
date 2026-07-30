@@ -319,7 +319,14 @@
     transition: box-shadow 200ms;
     forced-color-adjust: none;
 
-    :global(:root.dark-mode) & {
+    /* Dark mode resting surface. The ancestor match sits inside :where() so this
+       block keeps the specificity of a bare `.inset` (0,1,0) instead of the
+       (0,3,0) a `:root.dark-mode &` descendant selector would carry: the state
+       rules below are all single-class selectors, and at (0,3,0) this block
+       outranked every one of them, leaving the invalid, hover, and disabled
+       borders stuck at the resting color in dark mode. Same specificity plus
+       earlier source order means each state rule now wins, as intended. */
+    &:where(:global(:root.dark-mode) *) {
       --inset-border: var(--gray-200);
       --border-color-hover: var(--gray-300);
       --inset-highlight: var(--gray-400);

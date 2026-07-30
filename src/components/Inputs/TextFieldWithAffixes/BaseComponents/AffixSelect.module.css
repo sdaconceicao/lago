@@ -1,0 +1,53 @@
+/* The trigger below is the visible control; this wrapper only centers it in the
+   affix segment. */
+.select {
+  display: flex;
+  align-items: center;
+}
+
+/* The trigger is a FieldButton, so a dropdown affix looks like every other
+   trigger inside a field — the Select chevron, the DatePicker calendar button.
+   Only the width constraints are relaxed: FieldButton is square because it holds
+   a lone icon, while this holds a value and a chevron. Qualified with .select so
+   these overrides land after FieldButton's own rules whichever order the two
+   stylesheets end up in. Height stays FieldButton's — it scales with the field's
+   `size` through --field-inner-height. */
+.select .trigger {
+  gap: var(--field-gap);
+  aspect-ratio: auto;
+  width: auto;
+  padding-inline: var(--field-inner-inset);
+  font: inherit;
+  white-space: nowrap;
+
+  &[data-disabled] {
+    /* Dimmer than the resting trigger, but deliberately more legible than
+       FieldButton's disabled color: an affix dropdown shows a value — a
+       currency, a unit — that is still worth reading on a disabled field, where
+       a chevron or calendar icon is pure affordance and can fade out.
+       --text-color-disabled reads at 2.5:1 on the field surface in light mode
+       and 4:1 in dark; this clears 4.5:1 in both, matching the static affix. */
+    color: var(--text-color-placeholder);
+  }
+}
+
+.value {
+  /* Dimmer than a real selection, but drawn from the tint ramp rather than
+     --text-color-placeholder: the trigger's background is tinted, and the gray
+     placeholder reads at only 4.3:1 on it in light mode and 3.9:1 in dark. This
+     clears 4.5:1 in both (7.7:1 and 5:1). */
+  &[data-placeholder] {
+    color: var(--tint-1200);
+  }
+}
+
+.chevron {
+  flex-shrink: 0;
+}
+
+/* Wide enough to show the trigger's options in full, but never narrower than
+   the trigger itself. */
+.popover[data-trigger="Select"] {
+  min-width: var(--trigger-width);
+  padding: 0;
+}

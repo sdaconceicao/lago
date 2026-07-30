@@ -24,6 +24,8 @@ import { Slider } from "@/components/Inputs/Slider/Slider";
 import { Switch } from "@/components/Inputs/Switch/Switch";
 import { TextArea } from "@/components/Inputs/TextArea/TextArea";
 import { TextField } from "@/components/Inputs/TextField/TextField";
+import { AffixSelect } from "@/components/Inputs/TextFieldWithAffixes/BaseComponents/AffixSelect";
+import { TextFieldWithAffixes } from "@/components/Inputs/TextFieldWithAffixes/TextFieldWithAffixes";
 import { ToggleButton } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 
 /**
@@ -58,6 +60,26 @@ const FieldRow = ({ size }: { size: FieldSize }) => (
     data-testid={`row-${size}`}
   >
     <TextField aria-label="Text" size={size} placeholder="Text" />
+    <TextFieldWithAffixes
+      aria-label="Static affixes"
+      data-testid="affixes-static"
+      size={size}
+      prefix="https://"
+      suffix=".com"
+      placeholder="site"
+    />
+    <TextFieldWithAffixes
+      aria-label="Dropdown affix"
+      data-testid="affixes-dropdown"
+      size={size}
+      placeholder="0.00"
+      prefix={
+        <AffixSelect aria-label="Currency" defaultSelectedKey="usd">
+          <SelectItem id="usd">USD</SelectItem>
+          <SelectItem id="eur">EUR</SelectItem>
+        </AffixSelect>
+      }
+    />
     <Password aria-label="Password" size={size} placeholder="Password" />
     <SearchField aria-label="Search" size={size} placeholder="Search" />
     <Select aria-label="Select" size={size}>
@@ -90,8 +112,9 @@ const FIELD_BOX =
 
 /**
  * The distance from the field's leading edge to its text. Group-based fields
- * (Select, MultiSelect) split this between the group and the input inside it,
- * so both contributions have to be summed.
+ * (Select, MultiSelect) split this between the group and the input inside it, and
+ * TextFieldWithAffixes puts it on the segment wrapping the input, so every box
+ * between the field and its text contributes and all of them have to be summed.
  */
 const textInset = (field: Element) => {
   const inner = field.matches(".react-aria-Group")
@@ -99,10 +122,11 @@ const textInset = (field: Element) => {
         ".react-aria-Input, .react-aria-DateInput, .react-aria-ComboBoxValue"
       )
     : null;
-  return (
-    px(getComputedStyle(field).paddingLeft) +
-    (inner ? px(getComputedStyle(inner).paddingLeft) : 0)
-  );
+  let total = px(getComputedStyle(field).paddingLeft);
+  for (let box = inner; box && box !== field; box = box.parentElement) {
+    total += px(getComputedStyle(box).paddingLeft);
+  }
+  return total;
 };
 
 /**
@@ -126,18 +150,45 @@ const ROOTS = [
   .join(", ");
 
 /**
+ * An affix dropdown. Select and MultiSelect are built on ComboBox, so this class
+ * only ever appears on the dropdown inside a TextFieldWithAffixes affix — which
+ * is the one field trigger that does not sit at the trailing edge.
+ */
+const AFFIX_DROPDOWN = ".react-aria-Select";
+
+/**
  * Where a control's trailing trigger sits, measured from the field box's own
  * edges. Every control that has one must place it identically, whatever
  * mechanism positions it.
  */
 const triggerBox = (field: Element) => {
-  const button = field.querySelector(".field-Button");
+  const button = [...field.querySelectorAll(".field-Button")].find(
+    (candidate) => !candidate.closest(AFFIX_DROPDOWN)
+  );
   if (!button) return null;
   const fieldRect = field.getBoundingClientRect();
   const buttonRect = button.getBoundingClientRect();
   return {
     size: `${Math.round(buttonRect.width)}x${Math.round(buttonRect.height)}`,
     fromEnd: Math.round(fieldRect.right - buttonRect.right),
+    fromTop: Math.round(buttonRect.top - fieldRect.top),
+  };
+};
+
+/**
+ * An affix dropdown's trigger, measured from the leading edge its affix sits at.
+ * Its width is its own — it holds a value as well as a chevron — but its height
+ * and inset have to match the trailing triggers in the row, since that is what
+ * makes a field with a dropdown affix read as the Select and DatePicker beside it.
+ */
+const affixTriggerBox = (field: Element) => {
+  const button = field.querySelector(`${AFFIX_DROPDOWN} .field-Button`);
+  if (!button) return null;
+  const fieldRect = field.getBoundingClientRect();
+  const buttonRect = button.getBoundingClientRect();
+  return {
+    height: Math.round(buttonRect.height),
+    fromStart: Math.round(buttonRect.left - fieldRect.left),
     fromTop: Math.round(buttonRect.top - fieldRect.top),
   };
 };
@@ -150,12 +201,16 @@ const measureRow = (row: HTMLElement) =>
     }
     const style = getComputedStyle(field);
     return {
-      name: control.className.split(" ")[0],
+      // Three controls in the row are react-aria TextFields, so the affix fields
+      // carry a testid to keep the failure messages telling them apart.
+      name:
+        control.getAttribute("data-testid") ?? control.className.split(" ")[0],
       height: Math.round(field.getBoundingClientRect().height),
       radius: style.borderTopLeftRadius,
       fontSize: style.fontSize,
       inset: textInset(field),
       trigger: triggerBox(field),
+      affixTrigger: affixTriggerBox(field),
       // How far the field box sits below the top of its own control. Equal
       // heights are not enough to line up: anything rendered above the field
       // (a label, even an empty one) shifts it down inside its own root. This
@@ -182,9 +237,9 @@ export const Alignment: StoryObj = {
   ),
   play: async ({ canvasElement }) => {
     const expected = {
-      sm: { height: 28, inset: 8 },
-      md: { height: 36, inset: 12 },
-      lg: { height: 48, inset: 16 },
+      sm: { height: 28, inset: 8, triggerHeight: 20, triggerInset: 4 },
+      md: { height: 36, inset: 12, triggerHeight: 24, triggerInset: 6 },
+      lg: { height: 48, inset: 16, triggerHeight: 32, triggerInset: 8 },
     };
 
     for (const size of ["sm", "md", "lg"] as const) {
@@ -196,7 +251,7 @@ export const Alignment: StoryObj = {
       const measured = measureRow(row);
       const [first] = measured;
       // Guard the TEMPLATE filter above from silently dropping a real control.
-      expect(measured, `${size}: every control measured`).toHaveLength(11);
+      expect(measured, `${size}: every control measured`).toHaveLength(13);
 
       for (const control of measured) {
         expect(
@@ -206,7 +261,15 @@ export const Alignment: StoryObj = {
           height: expected[size].height,
           radius: first.radius,
           fontSize: first.fontSize,
-          inset: expected[size].inset,
+          // A dropdown affix is a button, not text, so the value beside it is
+          // inset by the trigger inset rather than the text inset — the same
+          // distance a DatePicker leaves between its date and its calendar
+          // button. Every other control in the row, the static-affix field
+          // included, starts its text at the field's text inset.
+          inset:
+            control.name === "affixes-dropdown"
+              ? expected[size].triggerInset
+              : expected[size].inset,
           // None of these controls is given a label, so every field box must
           // start flush with the top of its own root.
           offsetTop: 0,
@@ -223,6 +286,23 @@ export const Alignment: StoryObj = {
           `${size}: ${control.name} trigger must match ${firstTrigger.name}`
         ).toEqual(firstTrigger.trigger);
       }
+
+      // An affix dropdown puts a trigger at the leading edge instead. It has to
+      // land at the inset the trailing triggers use, or a field with a dropdown
+      // affix stops reading as part of the same set.
+      const affixTriggers = measured.filter((control) => control.affixTrigger);
+      expect(
+        affixTriggers,
+        `${size}: one affix dropdown measured`
+      ).toHaveLength(1);
+      expect(
+        affixTriggers[0].affixTrigger,
+        `${size}: affix dropdown trigger must sit where a trailing trigger does`
+      ).toEqual({
+        height: expected[size].triggerHeight,
+        fromStart: firstTrigger.trigger?.fromEnd,
+        fromTop: expected[size].triggerInset,
+      });
     }
   },
 };
