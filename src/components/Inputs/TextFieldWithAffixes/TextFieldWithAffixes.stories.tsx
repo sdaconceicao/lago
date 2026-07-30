@@ -216,7 +216,7 @@ States.parameters = {
   docs: {
     description: {
       story:
-        "The field surface carries the state for every segment at once. Disabled mutes the affix text along with the input and drops the separators to the disabled border color; invalid turns the field border and its separators red and reveals the error message below. Because the separators read the field's own border color, they also follow the hover state — there is nothing to keep in sync per segment.",
+        "The field surface carries the state for every segment at once. Disabled mutes the input value and drops the field border and its separators to the disabled border color, while the affixes hold their muted-but-legible color so they stay above the 4.5:1 contrast minimum; invalid turns the field border and its separators red and reveals the error message below. Because the separators read the field's own border color, they also follow the hover state — there is nothing to keep in sync per segment.",
     },
   },
 };

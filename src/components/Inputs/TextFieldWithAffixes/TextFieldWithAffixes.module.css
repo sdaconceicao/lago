@@ -55,17 +55,20 @@
   padding-inline: var(--field-padding-x);
   white-space: nowrap;
   /* Muted, so the value the user types stays the most prominent text. A
-     dropdown affix opts back into the full-contrast field color. */
+     dropdown affix opts back into the full-contrast field color.
+     Held for the disabled field too, rather than stepping down to
+     --text-color-disabled: an affix is static content in a plain element, not a
+     disabled control, so it gets no exemption from the contrast requirement, and
+     --text-color-disabled reads at 2.5:1 on the field surface in light mode and
+     4:1 in dark — both short of 4.5:1. This is the dimmest step on the ramp that
+     clears it in both modes (5.5:1 and 5.8:1), and the disabled state still
+     reads from the flattened field surface and the muted input value. */
   color: var(--text-color-placeholder);
 
   svg {
     width: var(--field-icon-size);
     height: var(--field-icon-size);
     flex-shrink: 0;
-  }
-
-  .group[data-disabled] & {
-    color: var(--text-color-disabled);
   }
 }
 

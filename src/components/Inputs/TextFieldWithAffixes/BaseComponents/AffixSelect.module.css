@@ -38,7 +38,11 @@
 
   &[data-disabled] {
     background: none;
-    color: var(--text-color-disabled);
+    /* Dims one step off the field text color instead of dropping to
+       --text-color-disabled, which reads at 2.5:1 on the field surface in light
+       mode and 4:1 in dark. This still reads as inactive next to an enabled
+       trigger and clears 4.5:1 in both modes, matching the static affix. */
+    color: var(--text-color-placeholder);
     cursor: default;
   }
 
