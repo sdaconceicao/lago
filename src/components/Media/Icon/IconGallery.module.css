@@ -1,0 +1,95 @@
+/* Chrome for the icon catalogue in the Icon story. Every value comes from a
+ * theme token, so the grid follows the Storybook theme toggle the way the
+ * components themselves do. */
+
+.gallery {
+  box-sizing: border-box;
+  min-height: 100vh;
+  font: var(--font-size) var(--font-family);
+  color: var(--text-color);
+  margin: 0;
+}
+
+/* The catalogue scrolls with the canvas, so the field and the count follow the
+ * top of the viewport rather than scrolling out of reach of 1,700 icons. */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-4);
+  gap: var(--spacing-2);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--background-color);
+}
+
+.search {
+  max-width: 420px;
+}
+
+.count {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+  gap: var(--spacing-2);
+  padding: var(--spacing-4);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--background-color);
+  color: var(--text-color);
+  font: var(--font-size-sm) var(--font-family);
+  cursor: pointer;
+  /* Hundreds of cards can sit in the list at once. Letting the browser skip the
+   * ones scrolled out of view is what keeps typing in the search field smooth;
+   * the intrinsic size stops that skipping from collapsing the scrollbar. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 72px;
+}
+
+.card:hover {
+  border-color: var(--border-color-hover);
+  background: var(--highlight-hover);
+}
+
+.card:active {
+  background: var(--highlight-background-pressed);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--focus-ring-color);
+  outline-offset: 2px;
+}
+
+.cardName {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  margin: 0;
+  padding: var(--spacing-4) 0;
+  text-align: center;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.sentinel {
+  height: 1px;
+}
