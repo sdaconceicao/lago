@@ -1,0 +1,43 @@
+/* The `--avatar-*` metrics read below are declared in `../Avatar.module.css`,
+   keyed off the `data-avatar-size` attribute this component renders on its own
+   root. They are inherited, so an initials avatar is sized identically whether
+   it stands on its own or fills an Avatar frame. */
+.initials {
+  /* Set per instance from the name, so the same person keeps the same colour.
+     The grey here is only the fallback for a stylesheet-only render. */
+  --avatar-color: var(--gray);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 9999px;
+  background: oklch(
+    from var(--avatar-color) var(--lightness-200) var(--chroma-200) h
+  );
+  color: oklch(
+    from var(--avatar-color) var(--lightness-1400) var(--chroma-1400) h
+  );
+  /* Declared before the weight and leading below: the `font` shorthand resets
+     both, so it has to come first. */
+  font: var(--avatar-font-size) var(--font-family);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &[data-shape="square"] {
+    border-radius: var(--avatar-radius);
+  }
+
+  @media (forced-colors: active) {
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: inset 0 0 0 1px ButtonBorder;
+  }
+}
