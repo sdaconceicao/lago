@@ -1,0 +1,170 @@
+/* ImagePlaceholder
+ *
+ * A media box that owns its space before the picture arrives, so a page does
+ * not reflow around an image that turns up late. Three layers share one box:
+ * the image, the surface that shimmers while it loads, and the error state
+ * that stands in when it cannot be loaded. Only one of the last two is ever
+ * mounted, so they never fight over the same pixels.
+ *
+ * The box takes its size from the `width`, `height` and `aspectRatio` props,
+ * written as inline styles, or from CSS the consumer supplies. Every value here
+ * derives from --spacing, --font-size, --radius or the grey scale, so the
+ * hi-dpi and dark-mode scaling in `theme.css` reaches these too.
+ */
+.imagePlaceholder {
+  /* Both the resting surface and the error state sit on this, so overriding it
+     once re-skins the component for a card or a toolbar that is not the page
+     colour. */
+  --image-placeholder-surface-color: var(--gray-200);
+
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  max-width: 100%;
+  border-radius: var(--image-placeholder-radius, 0);
+  background: var(--image-placeholder-surface-color);
+  font: var(--font-size) var(--font-family);
+  color: var(--text-color);
+  vertical-align: middle;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  /* Photographs rarely match the box exactly; crop to it rather than distort. */
+  object-fit: var(--image-placeholder-object-fit, cover);
+  /* Hidden until it decodes, so a half-painted image never shows through the
+     surface above it. */
+  opacity: 0;
+  transition: opacity 150ms ease;
+
+  &[data-loaded="true"] {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+/* Covers the box until there is something to show. Rendered only while the
+   status is `empty` or `loading`, so the image fades in against the page rather
+   than through a layer that is still there. */
+.surface {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: inherit;
+  background: var(--image-placeholder-surface-color);
+}
+
+/* The mark drawn by `placeholder="image"`. Its viewBox carries its own padding,
+   so it can be handed the whole box: the default `preserveAspectRatio` fits it
+   to the shorter edge and centres it, which keeps the frame square in a box of
+   any shape. Capped so it settles at a readable size in a hero rather than
+   growing with the space. */
+.glyph {
+  width: 100%;
+  height: 100%;
+  max-width: 10rem;
+  max-height: 10rem;
+  color: var(--image-placeholder-glyph-color, var(--gray-1000));
+
+  @media (forced-colors: active) {
+    color: CanvasText;
+  }
+}
+
+/* The shimmer runs only while something is actually loading: an empty
+   placeholder is holding space, not reporting progress, and animating it would
+   promise an image that is never coming. */
+.imagePlaceholder[data-status="loading"] .surface {
+  background-image: linear-gradient(
+    90deg,
+    var(--gray-200) 0%,
+    var(--gray-400) 50%,
+    var(--gray-200) 100%
+  );
+  background-size: 200% 100%;
+  animation: image-placeholder-shimmer 1.4s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    background-image: none;
+    animation: none;
+  }
+
+  @media (forced-colors: active) {
+    background-image: none;
+    animation: none;
+    box-shadow: inset 0 0 0 1px CanvasText;
+  }
+}
+
+/* Replaces the image on failure, in the same box, so the layout the page
+   already reserved is kept rather than collapsing to nothing.
+
+   It is its own container so the label and the code can drop out when the
+   reserved space is too small to fit them — a 40px thumbnail gets the icon
+   alone. Containment is safe here because an inset-0 absolute box takes its
+   size from the placeholder above it, never from these contents. */
+.error {
+  container-type: inline-size;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing);
+  padding: var(--spacing-2);
+  border-radius: inherit;
+  background: var(--image-placeholder-surface-color);
+  color: var(--gray-1200);
+  text-align: center;
+}
+
+.errorIcon {
+  /* Scales with the box so it still reads inside a thumbnail. */
+  width: min(var(--spacing-6), 40cqw);
+  height: auto;
+  flex-shrink: 0;
+  color: var(--red);
+}
+
+.errorCode {
+  font-size: var(--font-size);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--red);
+}
+
+.errorMessage {
+  font-size: var(--font-size-sm);
+  line-height: 1.2;
+}
+
+@container (max-width: 9rem) {
+  .errorMessage {
+    display: none;
+  }
+}
+
+@container (max-width: 4rem) {
+  .errorCode {
+    display: none;
+  }
+}
+
+@keyframes image-placeholder-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
