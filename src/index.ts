@@ -46,6 +46,7 @@ export * from "./components/Inputs/DropZone/DropZone";
 export * from "./components/Inputs/FormComponents/index";
 export * from "./components/Inputs/MultiSelect/MultiSelect";
 export * from "./components/Inputs/NumberField/NumberField";
+export * from "./components/Inputs/Password/Password";
 export * from "./components/Inputs/Radio/RadioGroup/RadioGroup";
 export * from "./components/Inputs/Radio/RadioItem/Radio";
 export * from "./components/Inputs/Search/SearchField/SearchField";

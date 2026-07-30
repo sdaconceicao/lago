@@ -15,6 +15,7 @@ import {
   MultiSelectItem,
 } from "@/components/Inputs/MultiSelect/MultiSelect";
 import { NumberField } from "@/components/Inputs/NumberField/NumberField";
+import { Password } from "@/components/Inputs/Password/Password";
 import { RadioGroup } from "@/components/Inputs/Radio/RadioGroup/RadioGroup";
 import { Radio } from "@/components/Inputs/Radio/RadioItem/Radio";
 import { SearchField } from "@/components/Inputs/Search/SearchField/SearchField";
@@ -57,6 +58,7 @@ const FieldRow = ({ size }: { size: FieldSize }) => (
     data-testid={`row-${size}`}
   >
     <TextField aria-label="Text" size={size} placeholder="Text" />
+    <Password aria-label="Password" size={size} placeholder="Password" />
     <SearchField aria-label="Search" size={size} placeholder="Search" />
     <Select aria-label="Select" size={size}>
       <SelectItem id="a">Apple</SelectItem>
@@ -194,7 +196,7 @@ export const Alignment: StoryObj = {
       const measured = measureRow(row);
       const [first] = measured;
       // Guard the TEMPLATE filter above from silently dropping a real control.
-      expect(measured, `${size}: every control measured`).toHaveLength(10);
+      expect(measured, `${size}: every control measured`).toHaveLength(11);
 
       for (const control of measured) {
         expect(
