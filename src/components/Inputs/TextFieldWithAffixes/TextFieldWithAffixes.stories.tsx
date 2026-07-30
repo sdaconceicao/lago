@@ -13,7 +13,7 @@ const meta: Meta<typeof TextFieldWithAffixes> = {
     docs: {
       description: {
         component:
-          "A text input flanked by an optional prefix and suffix, all sharing a single inset field surface with a vertical border between each segment. Use it for values that read as one unit with a fixed part — a URL scheme, a currency, a unit of measure — where the fixed part is either static text or a dropdown. It accepts every TextField prop, so its label, description, validation, sizing, and trailing button all behave identically. The one difference is `onChange`, which reports the input's text and both affix selections as a single value.",
+          "A text input flanked by an optional prefix and suffix, all sharing a single inset field surface. Use it for values that read as one unit with a fixed part — a URL scheme, a currency, a unit of measure — where the fixed part is either static text, which sits in its own segment behind a vertical border, or a dropdown, which renders as a button inside the field like the Select and DatePicker triggers do. It accepts every TextField prop, so its label, description, validation, sizing, and trailing button all behave identically. The one difference is `onChange`, which reports the input's text and both affix selections as a single value.",
       },
     },
   },
@@ -111,7 +111,7 @@ Dropdowns.parameters = {
   docs: {
     description: {
       story:
-        "An affix can be a dropdown instead of static text: pass an AffixSelect, which takes the same options and selection props as Select but draws no field surface of its own. Its trigger fills the segment edge to edge so the hover background stops at the separators, and it inherits the field's size for its portaled popover — no need to repeat the `size` prop. Because it has no visible label, `aria-label` is required. Picking an option fires the field's `onChange` as well as the dropdown's own `onSelectionChange`.",
+        "An affix can be a dropdown instead of static text: pass an AffixSelect, which takes the same options and selection props as Select. Because a dropdown is a control rather than a fixed part of the value, it reads as a button sitting inside the field — the same tinted trigger the Select chevron and the DatePicker calendar button use, at the same inset — so the end holding it shows no separator, and the field lines up with a Select or DatePicker beside it. It inherits the field's size for its portaled popover, so there is no need to repeat the `size` prop. Because it has no visible label, `aria-label` is required. Picking an option fires the field's `onChange` as well as the dropdown's own `onSelectionChange`.",
     },
   },
 };

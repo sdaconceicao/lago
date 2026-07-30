@@ -24,15 +24,15 @@ import styles from "./TextFieldWithAffixes.module.css";
 export interface TextFieldWithAffixesProps<T = HTMLInputElement>
   extends Omit<TextFieldProps<T>, "onChange"> {
   /**
-   * Content rendered in its own segment before the input, separated from it by
-   * a vertical border. Static content such as `"https://"` or an icon, or a
-   * dropdown — see AffixSelect.
+   * Content rendered before the input. Static content such as `"https://"` or an
+   * icon sits in its own segment, separated from the input by a vertical border;
+   * a dropdown — see AffixSelect — renders as a button inside the field instead.
    */
   prefix?: React.ReactNode;
   /**
-   * Content rendered in its own segment after the input, separated from it by a
-   * vertical border. Static content such as `".com"` or an icon, or a dropdown
-   * — see AffixSelect.
+   * Content rendered after the input. Static content such as `".com"` or an icon
+   * sits in its own segment, separated from the input by a vertical border; a
+   * dropdown — see AffixSelect — renders as a button inside the field instead.
    */
   suffix?: React.ReactNode;
   /**
@@ -49,9 +49,11 @@ export interface TextFieldWithAffixesProps<T = HTMLInputElement>
 
 /**
  * A text input flanked by an optional prefix and suffix, all sharing a single
- * inset field surface with a vertical border between each segment. Use it for
- * values that read as one unit with a fixed part — a URL scheme, a currency, a
- * unit of measure — where the fixed part is either static text or a dropdown.
+ * inset field surface. Use it for values that read as one unit with a fixed part
+ * — a URL scheme, a currency, a unit of measure — where the fixed part is either
+ * static text, separated from the input by a vertical border, or a dropdown,
+ * which renders as a button inside the field like the Select and DatePicker
+ * triggers do.
  *
  * Accepts every TextField prop, so it is a drop-in replacement wherever an affix
  * is needed, and its metrics match the other fields at the same size. Only
@@ -72,6 +74,7 @@ export function TextFieldWithAffixes({
 }: TextFieldWithAffixesProps) {
   const { onInputChange, prefixContext, suffixContext } = useAffixesChange({
     size,
+    isDisabled: props.isDisabled,
     value: props.value,
     defaultValue: props.defaultValue,
     onChange,
@@ -91,7 +94,9 @@ export function TextFieldWithAffixes({
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       {/* One inset surface shared by every segment. The separators are drawn on
           the segments themselves so they pick up the field's border color,
-          including its hover, invalid, and disabled states. */}
+          including its hover, invalid, and disabled states — and the segment
+          holding a dropdown drops its separator, since that affix paints itself
+          as a button instead. */}
       <Group
         isDisabled={props.isDisabled}
         isInvalid={props.isInvalid}

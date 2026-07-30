@@ -22,6 +22,8 @@ export interface TextFieldWithAffixesChange {
 export interface UseAffixesChangeOptions {
   /** Field size, passed through to each affix so portaled content can re-declare it. */
   size: FieldSize;
+  /** Whether the field is disabled, passed through so a control in an affix can follow. */
+  isDisabled?: boolean;
   /** The controlled text value, when the field is controlled. */
   value?: string;
   /** The initial text value, when the field is uncontrolled. */
@@ -50,6 +52,7 @@ export interface UseAffixesChangeResult {
  */
 export function useAffixesChange({
   size,
+  isDisabled,
   value,
   defaultValue,
   onChange,
@@ -89,12 +92,20 @@ export function useAffixesChange({
   }, []);
 
   const prefixContext = useMemo<AffixContextValue>(
-    () => ({ size, reportValue: (key) => reportValue("prefix", key) }),
-    [size, reportValue]
+    () => ({
+      size,
+      isDisabled,
+      reportValue: (key) => reportValue("prefix", key),
+    }),
+    [size, isDisabled, reportValue]
   );
   const suffixContext = useMemo<AffixContextValue>(
-    () => ({ size, reportValue: (key) => reportValue("suffix", key) }),
-    [size, reportValue]
+    () => ({
+      size,
+      isDisabled,
+      reportValue: (key) => reportValue("suffix", key),
+    }),
+    [size, isDisabled, reportValue]
   );
 
   return { onInputChange, prefixContext, suffixContext };

@@ -454,11 +454,12 @@ describe("TextFieldWithAffixes", () => {
   });
 
   describe("with a dropdown affix", () => {
-    const renderWithDropdown = (props = {}) =>
+    const renderWithDropdown = (props = {}, fieldProps = {}) =>
       render(
         <TextFieldWithAffixes
           label="Website"
           suffix=".com"
+          {...fieldProps}
           prefix={
             <AffixSelect
               aria-label="Scheme"
@@ -500,6 +501,25 @@ describe("TextFieldWithAffixes", () => {
       expect(screen.getByRole("button", { name: /Scheme/ })).toHaveTextContent(
         "http://"
       );
+    });
+
+    it("disables the dropdown when the field is disabled", async () => {
+      const user = userEvent.setup();
+      renderWithDropdown({}, { isDisabled: true });
+
+      const trigger = screen.getByRole("button", { name: /Scheme/ });
+      expect(trigger).toBeDisabled();
+
+      await user.click(trigger);
+
+      expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+    });
+
+    it("disables a single dropdown inside an enabled field", () => {
+      renderWithDropdown({ isDisabled: true });
+
+      expect(screen.getByRole("button", { name: /Scheme/ })).toBeDisabled();
+      expect(screen.getByRole("textbox")).toBeEnabled();
     });
 
     it("scopes the portaled dropdown to the field's size", async () => {

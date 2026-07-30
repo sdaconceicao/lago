@@ -2,14 +2,16 @@
 import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
 import { useCallback, useEffect } from "react";
-import { Button } from "react-aria-components/Button";
 import {
   Select as AriaSelect,
   type SelectProps as AriaSelectProps,
   SelectValue,
 } from "react-aria-components/Select";
 import { DropdownListBox } from "@/components/Collections/ListBox/ListBox";
-import type { FieldSize } from "@/components/Inputs/FormComponents/index";
+import {
+  FieldButton,
+  type FieldSize,
+} from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
 import { type AffixKey, useAffixContext } from "../AffixContext";
 import styles from "./AffixSelect.module.css";
@@ -36,8 +38,9 @@ export interface AffixSelectProps<T extends object>
 
 /**
  * A dropdown sized and styled to sit in a TextFieldWithAffixes prefix or suffix
- * segment. It draws no field surface of its own — the field provides the inset —
- * so the trigger reads as part of the field and only paints a hover background.
+ * segment. Its trigger is a FieldButton, so it reads as the same tinted control
+ * as the Select chevron and the DatePicker calendar button — a button sitting
+ * inside the field, rather than a segment of the field surface.
  *
  * Selecting an option fires the enclosing field's `onChange` alongside this
  * dropdown's own `onSelectionChange`, so a consumer can read the text and both
@@ -51,7 +54,11 @@ export function AffixSelect<T extends object>({
   onSelectionChange,
   ...props
 }: AffixSelectProps<T>) {
-  const { size: fieldSize, reportValue } = useAffixContext();
+  const {
+    size: fieldSize,
+    isDisabled: isFieldDisabled,
+    reportValue,
+  } = useAffixContext();
   const startingKey = props.selectedKey ?? props.defaultSelectedKey ?? null;
 
   // Announce the selection this dropdown mounted with, so the field's onChange
@@ -72,13 +79,18 @@ export function AffixSelect<T extends object>({
   return (
     <AriaSelect
       {...props}
+      // A disabled field has to disable its dropdowns explicitly: react-aria
+      // disables the input over context, but this Select is a control of its
+      // own and would otherwise still open. An explicit prop still wins, so a
+      // dropdown can be disabled on its own inside an enabled field.
+      isDisabled={props.isDisabled ?? isFieldDisabled}
       onSelectionChange={handleSelectionChange}
       className={clsx("react-aria-Select", styles.select, className)}
     >
-      <Button className={clsx("react-aria-Button", styles.trigger)}>
+      <FieldButton className={styles.trigger}>
         <SelectValue className={styles.value} />
         <ChevronDown aria-hidden="true" className={styles.chevron} />
-      </Button>
+      </FieldButton>
       {/* The popover is portaled to the document body, so it cannot inherit the
           --field-* scope from the field: carry the size across explicitly. */}
       <Popover

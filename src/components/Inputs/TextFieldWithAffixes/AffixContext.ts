@@ -25,6 +25,14 @@ export interface AffixContextValue {
    */
   size: FieldSize;
   /**
+   * Whether the enclosing TextFieldWithAffixes is disabled.
+   *
+   * A control in an affix has to opt into this itself: react-aria disables the
+   * input through context, but an affix dropdown is a Select of its own, so
+   * nothing would otherwise stop it from opening on a disabled field.
+   */
+  isDisabled?: boolean;
+  /**
    * Reports this affix's selected value to the field, which folds it into the
    * `onChange` payload. Pre-bound to the slot the affix renders in, so an affix
    * never needs to know which side it is on.
