@@ -1,0 +1,19 @@
+/* A spinner stacked over an optional caption.
+ *
+ * The root carries `data-field-size`, so the caption resolves `--field-font-size`
+ * and `--field-label-gap` for the step the caller asked for and lines up with
+ * the labels of any fields around it. The circle itself is a ProgressCircle, so
+ * its track, arc, and spin come from there rather than from this file. */
+.spinner {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--field-label-gap);
+  color: var(--text-color);
+  font: var(--field-font-size) var(--font-family);
+}
+
+.label {
+  /* A caption can be longer than the circle is wide, so center the wrap. */
+  text-align: center;
+}
