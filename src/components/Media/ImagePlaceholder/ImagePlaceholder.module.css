@@ -49,12 +49,15 @@
   max-height: 100%;
 }
 
-/* Sized off the shorter edge, and capped so the strokes keep the weight they
-   have in the error state rather than thickening with the box. */
+/* Grows with the box rather than settling at a fixed size, measured off the
+   shorter edge so it stays square and clears the space it is centred in. Its
+   stroke is lighter than the error icon's, which keeps the weight optically even
+   now that the mark is drawn several times larger. */
 .glyph {
-  width: min(var(--spacing-10), 40cqmin);
-  height: auto;
+  height: 50cqmin;
+  width: auto;
   flex-shrink: 0;
+  stroke-width: 1.5;
   color: var(--image-placeholder-glyph-color, var(--gray-1000));
 
   @media (forced-colors: active) {
