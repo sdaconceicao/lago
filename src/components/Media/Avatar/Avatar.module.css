@@ -1,14 +1,3 @@
-/* Avatar size scale
- *
- * Three steps — 28px, 36px, 48px — matching the Button and field heights of the
- * same name, so an avatar lines up with the controls beside it in a row.
- *
- * Declared against the `data-avatar-size` attribute rather than a class so the
- * properties are inherited by AvatarInitials, which reads them from its own
- * module without redeclaring the scale. Every value derives from --spacing,
- * --font-size or --radius, so the hi-dpi scaling in `theme.css` reaches these
- * too. Never hardcode px here.
- */
 [data-avatar-size="sm"] {
   --avatar-size: calc(var(--spacing) * 7); /* 28px */
   --avatar-font-size: var(--font-size-sm); /* 12px */
@@ -31,9 +20,6 @@
 }
 
 .avatar {
-  /* The colour the indicator's ring is punched out of, so the dot reads as
-     sitting on top of the avatar rather than inside it. Defaults to the page;
-     override it when the avatar sits on a card, a toolbar or a menu. */
   --avatar-ring-color: var(--background-color);
 
   position: relative;
@@ -43,9 +29,6 @@
   flex-shrink: 0;
   width: var(--avatar-size);
   height: var(--avatar-size);
-  /* The shape lives on the frame and every child inherits it. Clipping this way
-     rather than with `overflow: hidden` keeps the indicator's ring, which sits
-     on the edge and would otherwise be cut in half. */
   border-radius: 9999px;
   font: var(--avatar-font-size) var(--font-family);
   color: var(--text-color);
@@ -63,7 +46,6 @@
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  /* Portraits are rarely square; crop to the frame instead of distorting. */
   object-fit: cover;
 }
 
@@ -89,21 +71,11 @@
   }
 }
 
-/* Placement for the StatusIndicator an Avatar renders. Size and colour belong
-   to that component; all the frame adds is where the dot sits and the ring that
-   lifts it off whatever is behind it. `--status-indicator-size` is declared by
-   the indicator on this same element, so it can be read here. */
 .status {
   position: absolute;
-  /* On a circle the corner of the box falls outside the shape, so the dot steps
-     in to where the edge actually runs at 45° — (1 - 1/√2) / 2 of the diameter
-     — less half its own width, which lands its centre on that edge. Clamped at
-     zero so it can never be pushed back past the corner at a small size. */
   inset-block-end: max(0px, calc(14.645% - var(--status-indicator-size) / 2));
   inset-inline-end: max(0px, calc(14.645% - var(--status-indicator-size) / 2));
   box-shadow: 0 0 0 var(--avatar-status-ring) var(--avatar-ring-color);
-
-  /* A rounded rectangle has a real corner to sit in, so no inset is needed. */
   [data-shape="square"] & {
     inset-block-end: 0;
     inset-inline-end: 0;

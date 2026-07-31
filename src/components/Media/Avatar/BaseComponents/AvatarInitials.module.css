@@ -1,10 +1,4 @@
-/* The `--avatar-*` metrics read below are declared in `../Avatar.module.css`,
-   keyed off the `data-avatar-size` attribute this component renders on its own
-   root. They are inherited, so an initials avatar is sized identically whether
-   it stands on its own or fills an Avatar frame. */
 .initials {
-  /* Set per instance from the name, so the same person keeps the same colour.
-     The grey here is only the fallback for a stylesheet-only render. */
   --avatar-color: var(--gray);
 
   display: inline-flex;
@@ -20,8 +14,6 @@
   color: oklch(
     from var(--avatar-color) var(--lightness-1400) var(--chroma-1400) h
   );
-  /* Declared before the weight and leading below: the `font` shorthand resets
-     both, so it has to come first. */
   font: var(--avatar-font-size) var(--font-family);
   font-weight: 600;
   line-height: 1;

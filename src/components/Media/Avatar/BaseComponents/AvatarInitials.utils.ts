@@ -50,18 +50,6 @@ const getLeadingCharacter = (part: string): string =>
 /**
  * Derives the initials shown by an initials avatar from a name, email address
  * or username.
- *
- * Two letters are only used when the string genuinely names two parts of a
- * person — "Ada Lovelace", "ada.lovelace@example.com", "ada_lovelace" — taken
- * from the first and last of them so middle names drop out. Anything that
- * reads as a single word, such as the username "alovelace" or a mononym, gets
- * a single letter rather than an arbitrary second one.
- *
- * @example
- * getInitials("Ada Lovelace"); // "AL"
- * getInitials("ada.lovelace@example.com"); // "AL"
- * getInitials("Augusta Ada King-Noel"); // "AN"
- * getInitials("alovelace"); // "A"
  */
 export const getInitials = (value: string): string => {
   const source = getNameSource(value);
@@ -70,8 +58,6 @@ export const getInitials = (value: string): string => {
     .filter((part) => LETTER.test(part));
 
   if (parts.length === 0) {
-    // Nothing letter-like to work with — a numeric handle, say. The first
-    // character still identifies it better than an empty circle would.
     return getLeadingCharacter(source);
   }
 
@@ -87,10 +73,6 @@ export const getInitials = (value: string): string => {
 /**
  * Picks a stable hue for an initials avatar so the same person keeps the same
  * colour everywhere, and two people side by side rarely share one.
- *
- * Case and surrounding whitespace are ignored, so "Ada Lovelace" and
- * "ada lovelace" agree. Returns a `var()` reference to a theme colour, which
- * the component assigns to `--avatar-color`.
  */
 export const getInitialsColor = (value: string): string => {
   let hash = 0;

@@ -116,8 +116,6 @@ export function Avatar({
         </span>
       )}
       {status && (
-        // The frame owns where the dot sits and the ring that separates it from
-        // whatever is behind it; the indicator owns its size and colour.
         <StatusIndicator
           className={styles.status}
           status={status}
