@@ -1,0 +1,12 @@
+/* The dropdown item reserves a leading gutter for the selected check mark. The
+   create row is never selected, so its plus sign takes that same gutter and the
+   two line up down the list. */
+.createIcon {
+  position: absolute;
+  top: 50%;
+  left: var(--spacing-1);
+  translate: 0 -50%;
+  width: var(--field-icon-size);
+  height: var(--field-icon-size);
+  stroke-width: 3px;
+}

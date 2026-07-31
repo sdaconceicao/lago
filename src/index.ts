@@ -57,6 +57,7 @@ export * from "./components/Inputs/Search/SearchFieldWIthSuggestions/SearchField
 export * from "./components/Inputs/Select/Select";
 export * from "./components/Inputs/Slider/Slider";
 export * from "./components/Inputs/Switch/Switch";
+export * from "./components/Inputs/TagsInput/TagsInput";
 export * from "./components/Inputs/TextArea/TextArea";
 export * from "./components/Inputs/TextField/TextField";
 export * from "./components/Inputs/TextFieldWithAffixes/TextFieldWithAffixes";

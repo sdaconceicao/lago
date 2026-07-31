@@ -1,0 +1,44 @@
+/* Always fill the container; the parent decides the width. */
+.tagsInput {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+  width: 100%;
+  max-width: 100%;
+}
+
+/* One-line field holding the query input and the toggle. The selected tags are
+   rendered below it rather than inside it, so unlike the MultiSelect this field
+   is exactly --field-height at every size however long the selection grows, and
+   it lines up with the TextField and Select beside it without the tags having to
+   scroll or be clipped.
+
+   Padding and button placement mirror the TextField field group so all the
+   field-like controls align exactly. */
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--field-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--field-height);
+  padding: 0 var(--field-inner-inset) 0 var(--field-padding-x);
+  border-radius: var(--field-radius);
+  font: var(--field-font-size) var(--font-family);
+  color: var(--field-text-color);
+  cursor: text;
+
+  &[data-focus-within] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -1px;
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+  }
+}
+
+.tagsInputPopover[data-trigger="ComboBox"] {
+  width: var(--trigger-width);
+  padding: 0;
+}

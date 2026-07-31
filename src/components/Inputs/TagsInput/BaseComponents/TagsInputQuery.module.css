@@ -1,0 +1,26 @@
+/* The field carries the inset surface and the focus ring; the input inside it is
+   transparent and stretches to fill the row beside the toggle. */
+.input {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  font: var(--field-font-size) var(--font-family);
+  color: var(--field-text-color);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &::placeholder {
+    color: var(--text-color-placeholder);
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+    &::placeholder {
+      color: var(--text-color-disabled);
+    }
+  }
+}

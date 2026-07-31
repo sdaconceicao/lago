@@ -1,0 +1,6 @@
+/* The chips sit below the field, separated by the same gap a label leaves above
+   it, and wrap freely — unlike the MultiSelect's, they are not competing with
+   the field for a fixed height, so the tag list is allowed to grow. */
+.tags {
+  margin-top: var(--field-label-gap);
+}
