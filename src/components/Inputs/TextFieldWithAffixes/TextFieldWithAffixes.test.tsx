@@ -422,7 +422,7 @@ describe("TextFieldWithAffixes", () => {
         <TextFieldWithAffixes
           label="Website"
           prefix="https://"
-          button={<FieldButton aria-label="Clear">x</FieldButton>}
+          suffix={<FieldButton aria-label="Clear">x</FieldButton>}
         />
       );
 
@@ -439,7 +439,7 @@ describe("TextFieldWithAffixes", () => {
       render(
         <TextFieldWithAffixes
           label="Website"
-          button={
+          suffix={
             <FieldButton aria-label="Clear" onPress={onPress}>
               x
             </FieldButton>

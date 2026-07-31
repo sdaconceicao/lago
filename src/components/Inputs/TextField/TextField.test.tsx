@@ -107,7 +107,7 @@ describe("TextField", () => {
       render(
         <TextField
           label="Search"
-          button={<FieldButton aria-label="Clear">x</FieldButton>}
+          suffix={<FieldButton aria-label="Clear">x</FieldButton>}
         />
       );
 
@@ -123,7 +123,7 @@ describe("TextField", () => {
       render(
         <TextField
           label="Search"
-          button={
+          suffix={
             <FieldButton aria-label="Clear" onPress={onPress}>
               x
             </FieldButton>
@@ -142,7 +142,7 @@ describe("TextField", () => {
         <TextField
           label="Search"
           inputRef={ref}
-          button={<FieldButton aria-label="Clear">x</FieldButton>}
+          suffix={<FieldButton aria-label="Clear">x</FieldButton>}
         />
       );
 

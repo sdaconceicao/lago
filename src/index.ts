@@ -22,6 +22,7 @@ export * from "./components/Feedback/Alert/Alert";
 export * from "./components/Feedback/ProgressBar/ProgressBar";
 export * from "./components/Feedback/ProgressCircle/ProgressCircle";
 export * from "./components/Feedback/Spinner/Spinner";
+export * from "./components/Feedback/StatusIndicator/StatusIndicator";
 export * from "./components/Feedback/Toast/Toast";
 export * from "./components/Inputs/Checkbox/CheckboxGroup/CheckboxGroup";
 export * from "./components/Inputs/Checkbox/CheckboxItem/Checkbox";
@@ -33,6 +34,7 @@ export * from "./components/Inputs/Colors/ColorSwatch/ColorSwatch";
 export * from "./components/Inputs/Colors/ColorSwatchPicker/ColorSwatchPicker";
 export * from "./components/Inputs/Colors/ColorThumb/ColorThumb";
 export * from "./components/Inputs/Colors/ColorWheel/ColorWheel";
+export * from "./components/Inputs/CreditCardNumber/CreditCardNumber";
 export * from "./components/Inputs/Date/Calendar/Calendar";
 export {
   CalendarCell,
@@ -62,6 +64,7 @@ export * from "./components/Inputs/Toggle/ToggleButton/ToggleButton";
 export * from "./components/Inputs/Toggle/ToggleButtonGroup/ToggleButtonGroup";
 export * from "./components/Layout/Separator/Separator";
 export { Separator } from "./components/Layout/Separator/Separator";
+export * from "./components/Media/Avatar/Avatar";
 export * from "./components/Navigation/Breadcrumbs/Breadcrumbs";
 export * from "./components/Navigation/Tabs/Tabs";
 export * from "./components/Overlays/Dialog/Dialog";
