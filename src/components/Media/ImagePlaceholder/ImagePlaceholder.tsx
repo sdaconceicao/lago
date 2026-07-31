@@ -119,7 +119,11 @@ export interface ImagePlaceholderOwnProps {
    * it also forces the error to be announced for a decorative image.
    */
   errorLabel?: string;
-  /** CSS class name for custom styling. Merged with the component's default classes. */
+  /**
+   * CSS class name for custom styling. Merged with the component's default
+   * classes — and with the image's own once it has loaded, since the image is
+   * the box from then on.
+   */
   className?: string;
   /** CSS class name applied to the image itself rather than the box around it. */
   imageClassName?: string;
@@ -127,15 +131,6 @@ export interface ImagePlaceholderOwnProps {
   style?: CSSProperties;
 }
 
-/**
- * Props for the ImagePlaceholder component.
- *
- * `as` accepts anything that renders an image from `src`, `alt`, `className`,
- * `onLoad` and `onError` — a plain `"img"` by default, or a framework component
- * such as `next/image`. Its own props are type-checked once it is passed, so
- * `next/image`'s `priority` or `quality` are accepted without this library
- * depending on Next at all.
- */
 export type ImagePlaceholderProps<C extends ElementType = "img"> =
   ImagePlaceholderOwnProps & {
     /**
@@ -156,7 +151,8 @@ type ResolvedProps = ImagePlaceholderOwnProps & {
 /**
  * An image that holds its space from the first paint: it shimmers while
  * loading, fades the picture in once it decodes, and shows a 400 error in the
- * same box if the source cannot be loaded.
+ * same box if the source cannot be loaded. Once the picture is on screen the box
+ * has done its job and is dropped, leaving the image alone in the markup.
  */
 export function ImagePlaceholder<C extends ElementType = "img">(
   props: ImagePlaceholderProps<C>
@@ -189,12 +185,19 @@ export function ImagePlaceholder<C extends ElementType = "img">(
     settleFromNode,
   } = useImageStatus(src);
 
-  // An explicit `isLoading` outranks whatever the image itself is doing: the
-  // caller knows the data behind it has not arrived yet.
   const status: ImageStatus = isLoading ? "loading" : resolvedStatus;
-
+  const isLoaded = status === "loaded";
   const Component = (as ?? "img") as ElementType;
   const reservedSpace = getReservedSpaceStyle(width, height, aspectRatio);
+
+  // What it takes to be the box that holds the space — worn by the wrapper until
+  // the picture arrives, and by the image itself from then on.
+  const boxClassName = clsx(
+    "image-placeholder",
+    styles.imagePlaceholder,
+    className
+  );
+  const boxStyle = reservedSpace ? { ...reservedSpace, ...style } : style;
 
   const handleLoad: ReactEventHandler<HTMLImageElement> = (event) => {
     markLoaded();
@@ -206,35 +209,45 @@ export function ImagePlaceholder<C extends ElementType = "img">(
     onError?.(event);
   };
 
+  const image =
+    src && status !== "error" ? (
+      <Component
+        ref={settleFromNode}
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        // Only meaningful on a real <img>; a component that wraps one owns
+        // its own loading strategy and may not accept these at all.
+        {...(Component === "img"
+          ? { loading: "lazy" as const, decoding: "async" as const }
+          : null)}
+        {...imageProps}
+        className={clsx(
+          "image-placeholder-image",
+          isLoaded ? [boxClassName, styles.loadedImage] : styles.image,
+          imageClassName
+        )}
+        style={isLoaded ? boxStyle : undefined}
+        data-status={isLoaded ? status : undefined}
+        data-loaded={isLoaded}
+        // The standalone image loads a second time as it mounts, which is the
+        // same picture arriving again rather than news: it settles nothing and is
+        // not passed on. A later failure still is — a picture can go missing
+        // after it has been shown.
+        onLoad={isLoaded ? undefined : handleLoad}
+        onError={handleError}
+      />
+    ) : null;
+
+  // Once the picture is on screen there is nothing left for a box to hold, so
+  // the image takes over the class names, the reserved dimensions and the status
+  // and stands on its own rather than leaving a wrapper behind it.
+  if (isLoaded) return image;
+
   return (
-    <span
-      className={clsx("image-placeholder", styles.imagePlaceholder, className)}
-      style={reservedSpace ? { ...reservedSpace, ...style } : style}
-      data-status={status}
-    >
-      {status !== "error" && src && (
-        <Component
-          ref={settleFromNode}
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          // Only meaningful on a real <img>; a component that wraps one owns
-          // its own loading strategy and may not accept these at all.
-          {...(Component === "img"
-            ? { loading: "lazy" as const, decoding: "async" as const }
-            : null)}
-          {...imageProps}
-          className={clsx(
-            "image-placeholder-image",
-            styles.image,
-            imageClassName
-          )}
-          data-loaded={status === "loaded"}
-          onLoad={handleLoad}
-          onError={handleError}
-        />
-      )}
+    <span className={boxClassName} style={boxStyle} data-status={status}>
+      {image}
       {(status === "empty" || status === "loading") && (
         <span
           className={clsx("image-placeholder-surface", styles.surface)}

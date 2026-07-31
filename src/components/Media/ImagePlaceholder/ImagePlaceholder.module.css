@@ -12,6 +12,9 @@
   vertical-align: middle;
 }
 
+/* The image while the box is still holding the space: it fills that space and
+   stays hidden until it has decoded, so a half-painted picture never shows
+   through the surface above it. */
 .image {
   display: block;
   width: 100%;
@@ -19,14 +22,23 @@
   border-radius: inherit;
   object-fit: var(--image-placeholder-object-fit, cover);
   opacity: 0;
-  transition: opacity 150ms ease;
+}
 
-  &[data-loaded="true"] {
-    opacity: 1;
-  }
+/* The image once it has decoded and become the box itself. It is mounted at that
+   moment, with no earlier opacity to transition from, so it fades in with an
+   animation instead. */
+.loadedImage {
+  object-fit: var(--image-placeholder-object-fit, cover);
+  animation: image-placeholder-fade-in 150ms ease;
 
   @media (prefers-reduced-motion: reduce) {
-    transition: none;
+    animation: none;
+  }
+}
+
+@keyframes image-placeholder-fade-in {
+  from {
+    opacity: 0;
   }
 }
 

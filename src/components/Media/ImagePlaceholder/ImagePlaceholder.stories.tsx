@@ -102,7 +102,7 @@ const meta: Meta<typeof ImagePlaceholder> = {
     docs: {
       description: {
         component:
-          "An image that owns its space from the first paint, so a page does not reflow around a picture that turns up late. Give it a `width` and `height`, or an `aspectRatio`, and the box is reserved immediately: it shimmers while the image loads, fades the picture in once it decodes, and shows a 400 error in the same box if the source cannot be loaded. Every image and accessibility attribute is forwarded to the image itself, and `as` swaps the plain `<img>` for a framework component such as `next/image` without this library depending on one.",
+          "An image that owns its space from the first paint, so a page does not reflow around a picture that turns up late. Give it a `width` and `height`, or an `aspectRatio`, and the box is reserved immediately: it shimmers while the image loads, fades the picture in once it decodes, and shows a 400 error in the same box if the source cannot be loaded. Every image and accessibility attribute is forwarded to the image itself, and `as` swaps the plain `<img>` for a framework component such as `next/image` without this library depending on one. The box exists only while it is needed: once the picture has decoded it takes over the box's classes and dimensions and is left standing on its own, so a loaded image is a plain image in the markup rather than a wrapper around one.",
       },
     },
   },

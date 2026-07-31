@@ -247,6 +247,63 @@ describe("ImagePlaceholder", () => {
     });
   });
 
+  describe("loaded", () => {
+    it("leaves no wrapper behind once the image has loaded", () => {
+      const { container } = render(<ImagePlaceholder src={SRC} alt="A bell" />);
+
+      fireEvent.load(screen.getByAltText("A bell"));
+
+      expect(container.querySelector("span")).not.toBeInTheDocument();
+      expect(container.firstElementChild).toBe(screen.getByAltText("A bell"));
+    });
+
+    it("hands the box's classes, dimensions and status to the image", () => {
+      const { container } = render(
+        <ImagePlaceholder
+          src={SRC}
+          alt="A bell"
+          width={320}
+          height={180}
+          className="custom-box"
+          imageClassName="custom-image"
+          style={{ borderRadius: "8px" }}
+        />
+      );
+
+      fireEvent.load(screen.getByAltText("A bell"));
+
+      const image = screen.getByAltText("A bell");
+      expect(image).toHaveClass(
+        "image-placeholder",
+        "image-placeholder-image",
+        "custom-box",
+        "custom-image"
+      );
+      expect(image).toHaveStyle({
+        width: "320px",
+        height: "180px",
+        borderRadius: "8px",
+      });
+      expect(boxOf(container)).toBe(image);
+    });
+
+    it("puts the box back when a new src starts loading", () => {
+      const { container, rerender } = render(
+        <ImagePlaceholder src={SRC} alt="A bell" />
+      );
+
+      fireEvent.load(screen.getByAltText("A bell"));
+      rerender(<ImagePlaceholder src={OTHER_SRC} alt="A bell" />);
+
+      expect(surfaceOf(container)).toBeInTheDocument();
+      expect(boxOf(container)).toHaveAttribute("data-status", "loading");
+      expect(screen.getByAltText("A bell")).toHaveAttribute(
+        "data-loaded",
+        "false"
+      );
+    });
+  });
+
   describe("error", () => {
     it("replaces the image with a 400 error when it fails to load", () => {
       const { container } = render(<ImagePlaceholder src={SRC} alt="A bell" />);

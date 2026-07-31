@@ -36,7 +36,17 @@ export const useImageStatus = (src?: string) => {
       // Only reachable with a src — the handlers below are attached to an
       // element that is only rendered once there is one — but recording a
       // result against no URL would be meaningless, so it is guarded.
-      if (src) setResolved({ src, status: next });
+      if (!src) return;
+
+      // The same result recorded twice is not news, and the same URL can settle
+      // more than once: a picture that has already loaded settles again from the
+      // element that replaces the placeholder. Keeping the previous object spares
+      // the render that a new one would cost.
+      setResolved((previous) =>
+        previous?.src === src && previous.status === next
+          ? previous
+          : { src, status: next }
+      );
     },
     [src]
   );
