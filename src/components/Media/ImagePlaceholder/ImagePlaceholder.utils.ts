@@ -42,14 +42,7 @@ export const getReservedSpaceStyle = (
   return Object.keys(style).length > 0 ? style : undefined;
 };
 
-/**
- * Whether the error state should be hidden from assistive technology.
- *
- * An empty `alt` marks an image as decorative — it repeats something already
- * written beside it — and a decorative image that fails to load is still
- * nothing worth announcing. An explicit `errorLabel` overrides that, for the
- * case where the failure itself matters even though the picture did not.
- */
+/** Whether the error state should be hidden from assistive technology. */
 export const isErrorDecorative = (alt: string, errorLabel?: string): boolean =>
   alt === "" && errorLabel === undefined;
 

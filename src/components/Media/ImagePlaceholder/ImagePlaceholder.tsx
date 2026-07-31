@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { ImageOff } from "lucide-react";
+import { Image as ImageIcon, ImageOff } from "lucide-react";
 import type {
   ComponentPropsWithoutRef,
   CSSProperties,
@@ -8,7 +8,6 @@ import type {
   ReactEventHandler,
   ReactNode,
 } from "react";
-import { ImageGlyph, type ImageGlyphProps } from "./BaseComponents/ImageGlyph";
 import { type ImageStatus, useImageStatus } from "./ImagePlaceholder.hooks";
 import styles from "./ImagePlaceholder.module.css";
 import {
@@ -22,11 +21,14 @@ import {
  * What is drawn in the reserved space before the image arrives.
  *
  * - `"surface"` — a plain tinted panel, which shimmers while an image is on
- *   its way. The quietest option, and the right one for a grid of many boxes
- *   where a mark in every cell would be noise.
+ *   its way.
  * - `"image"` — the same panel with a framed-landscape mark centred in it,
- *   which says a picture is what is missing. Worth it for a single large slot,
- *   such as a hero or an upload target.
+ *   which says a picture is what is missing. It is the picture counterpart of
+ *   the crossed-out mark the error state shows, so a slot that is waiting and a
+ *   slot that has failed read as one family.
+ *
+ * Either can be swapped for something of the caller's own with
+ * `placeholderContent`.
  */
 export type PlaceholderKind = "surface" | "image";
 
@@ -73,6 +75,15 @@ export interface ImagePlaceholderOwnProps {
    * @default 'surface'
    */
   placeholder?: PlaceholderKind;
+  /**
+   * Something of the caller's own to centre in the reserved space instead of the
+   * built-in mark — an `<img>`, an inline SVG, a brand mark, any node at all. It
+   * is drawn whatever `placeholder` is set to, with the same shimmer behind it,
+   * and hidden from assistive technology along with the panel: like the built-in
+   * mark, it decorates space that is already held. An oversized image is scaled
+   * down to the reserved space rather than escaping it.
+   */
+  placeholderContent?: ReactNode;
   /**
    * Width of the reserved space, as a number of pixels or any CSS length. Also
    * forwarded to the image, so the browser can size it before it arrives.
@@ -156,6 +167,7 @@ export function ImagePlaceholder<C extends ElementType = "img">(
     alt,
     isLoading = false,
     placeholder = DEFAULT_PLACEHOLDER,
+    placeholderContent,
     width,
     height,
     aspectRatio,
@@ -228,7 +240,10 @@ export function ImagePlaceholder<C extends ElementType = "img">(
           className={clsx("image-placeholder-surface", styles.surface)}
           aria-hidden="true"
         >
-          {placeholder === "image" && <ImageGlyph className={styles.glyph} />}
+          {placeholderContent ??
+            (placeholder === "image" && (
+              <ImageIcon className={styles.glyph} aria-hidden="true" />
+            ))}
         </span>
       )}
       {status === "error" && (
@@ -251,5 +266,4 @@ export function ImagePlaceholder<C extends ElementType = "img">(
   );
 }
 
-export type { ImageDimension, ImageGlyphProps, ImageStatus };
-export { ImageGlyph };
+export type { ImageDimension, ImageStatus };

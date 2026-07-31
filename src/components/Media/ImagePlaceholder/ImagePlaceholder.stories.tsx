@@ -74,6 +74,27 @@ const NextImageLike = ({
   <img {...props} alt={alt} data-priority={String(Boolean(priority))} />
 );
 
+/**
+ * A mark of the story's own, to stand in for whatever a caller would hand to
+ * `placeholderContent` — an SVG that takes its size and colour from the CSS
+ * around it rather than hard-coding either.
+ */
+const BellMark = () => (
+  <svg
+    viewBox="0 0 24 24"
+    width={40}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={1.5}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+  </svg>
+);
+
 const meta: Meta<typeof ImagePlaceholder> = {
   component: ImagePlaceholder,
   parameters: {
@@ -184,7 +205,51 @@ export const Placeholders: Story = {
     docs: {
       description: {
         story:
-          "`placeholder` picks what fills the reserved space before the image lands. `surface` is the default — a plain tinted panel, and the quieter choice for a grid of many boxes where a mark in every cell would only add noise. `image` centres a framed-landscape mark in the same panel, which says a picture is what is missing rather than leaving an unexplained grey rectangle; it earns its place in a single large slot such as a hero or an upload target. Both shimmer while an image is actually loading and both rest still when there is nothing on the way, so the choice is one of tone, not behaviour. The mark scales to the shorter edge of whatever box it is given, staying square from a 64px thumbnail up, and it takes its colour from `--image-placeholder-glyph-color` — neither it nor the panel is announced, since both sit over space that is already held.",
+          "`placeholder` picks what fills the reserved space before the image lands. `surface` is the default — a plain tinted panel, and the quieter choice for a grid of many boxes where a mark in every cell would only add noise. `image` centres a framed-landscape mark in the same panel, which says a picture is what is missing rather than leaving an unexplained grey rectangle; it earns its place in a single large slot such as a hero or an upload target. The mark is the picture counterpart of the crossed-out one the error state shows, so a slot that is waiting and a slot that has failed read as the same family. Both kinds shimmer while an image is actually loading and both rest still when there is nothing on the way, so the choice is one of tone, not behaviour. The mark is drawn against the shorter edge of whatever box it is given and capped there, so its strokes keep the same weight from a 64px thumbnail up, and it takes its colour from `--image-placeholder-glyph-color` — neither it nor the panel is announced, since both sit over space that is already held.",
+      },
+    },
+  },
+};
+
+export const CustomPlaceholderContent: Story = {
+  render: () => (
+    <Row>
+      <Caption>
+        <ImagePlaceholder
+          alt=""
+          isLoading
+          placeholderContent={<BellMark />}
+          width={200}
+          height={120}
+        />
+        <Label>An SVG of your own — loading</Label>
+      </Caption>
+      <Caption>
+        <ImagePlaceholder
+          alt=""
+          placeholderContent={<img src={PHOTO} alt="" width={64} />}
+          width={200}
+          height={120}
+        />
+        <Label>A thumbnail — empty</Label>
+      </Caption>
+      <Caption>
+        <ImagePlaceholder
+          alt=""
+          isLoading
+          placeholderContent={<Label>Uploading…</Label>}
+          width={200}
+          height={120}
+        />
+        <Label>Any node at all — loading</Label>
+      </Caption>
+    </Row>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "`placeholderContent` puts something of your own in the reserved space instead of the built-in mark — an inline SVG, a low-resolution thumbnail already to hand, a brand mark, a word about what is happening. It is centred in the same panel, with the same shimmer running behind it, and it is held inside the reserved space so an oversized image is scaled down rather than escaping the box. It is drawn whatever `placeholder` is set to, and it is hidden from assistive technology along with the panel: like the built-in mark, it decorates space that is already held, so anything that genuinely needs announcing belongs in the page beside it rather than in here.",
       },
     },
   },

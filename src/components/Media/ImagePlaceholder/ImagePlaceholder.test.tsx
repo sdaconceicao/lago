@@ -157,6 +157,78 @@ describe("ImagePlaceholder", () => {
       expect(screen.getByAltText("A bell")).not.toHaveAttribute("placeholder");
     });
 
+    it("draws a mark of the caller's own in place of the built-in one", () => {
+      const { container } = render(
+        <ImagePlaceholder
+          alt="A bell"
+          isLoading
+          placeholder="image"
+          placeholderContent={<span data-testid="own-mark">bell</span>}
+        />
+      );
+
+      expect(
+        surfaceOf(container)?.querySelector("svg")
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId("own-mark")).toBeInTheDocument();
+    });
+
+    it("draws the caller's own mark on a plain surface too", () => {
+      const { container } = render(
+        <ImagePlaceholder
+          alt="A bell"
+          placeholderContent={<span data-testid="own-mark">bell</span>}
+        />
+      );
+
+      expect(boxOf(container)).toHaveAttribute("data-status", "empty");
+      expect(screen.getByTestId("own-mark")).toBeInTheDocument();
+    });
+
+    it("keeps the caller's own mark out of the accessibility tree", () => {
+      const { container } = render(
+        <ImagePlaceholder
+          alt="A bell"
+          placeholderContent={<img src={SRC} alt="A stand-in bell" />}
+        />
+      );
+
+      expect(surfaceOf(container)).toHaveAttribute("aria-hidden", "true");
+      expect(
+        screen.queryByRole("img", { name: "A stand-in bell" })
+      ).not.toBeInTheDocument();
+    });
+
+    it("drops the caller's own mark once the image has loaded", () => {
+      render(
+        <ImagePlaceholder
+          src={SRC}
+          alt="A bell"
+          placeholderContent={<span data-testid="own-mark">bell</span>}
+        />
+      );
+
+      expect(screen.getByTestId("own-mark")).toBeInTheDocument();
+
+      fireEvent.load(screen.getByAltText("A bell"));
+
+      expect(screen.queryByTestId("own-mark")).not.toBeInTheDocument();
+    });
+
+    it("does not forward placeholderContent to the image", () => {
+      render(
+        <ImagePlaceholder
+          src={SRC}
+          alt="A bell"
+          placeholderContent={<span>bell</span>}
+        />
+      );
+
+      expect(screen.getByAltText("A bell")).not.toHaveAttribute(
+        "placeholderContent"
+      );
+    });
+
     it("lazy-loads and decodes a plain image off the main thread", () => {
       render(<ImagePlaceholder src={SRC} alt="A bell" />);
 

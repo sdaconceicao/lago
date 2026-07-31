@@ -1,20 +1,4 @@
-/* ImagePlaceholder
- *
- * A media box that owns its space before the picture arrives, so a page does
- * not reflow around an image that turns up late. Three layers share one box:
- * the image, the surface that shimmers while it loads, and the error state
- * that stands in when it cannot be loaded. Only one of the last two is ever
- * mounted, so they never fight over the same pixels.
- *
- * The box takes its size from the `width`, `height` and `aspectRatio` props,
- * written as inline styles, or from CSS the consumer supplies. Every value here
- * derives from --spacing, --font-size, --radius or the grey scale, so the
- * hi-dpi and dark-mode scaling in `theme.css` reaches these too.
- */
 .imagePlaceholder {
-  /* Both the resting surface and the error state sit on this, so overriding it
-     once re-skins the component for a card or a toolbar that is not the page
-     colour. */
   --image-placeholder-surface-color: var(--gray-200);
 
   position: relative;
@@ -33,10 +17,7 @@
   width: 100%;
   height: 100%;
   border-radius: inherit;
-  /* Photographs rarely match the box exactly; crop to it rather than distort. */
   object-fit: var(--image-placeholder-object-fit, cover);
-  /* Hidden until it decodes, so a half-painted image never shows through the
-     surface above it. */
   opacity: 0;
   transition: opacity 150ms ease;
 
@@ -49,10 +30,10 @@
   }
 }
 
-/* Covers the box until there is something to show. Rendered only while the
-   status is `empty` or `loading`, so the image fades in against the page rather
-   than through a layer that is still there. */
 .surface {
+  /* Measurable for the mark inside it: an inset-0 box takes its size from the
+     placeholder above, never from these contents. */
+  container-type: size;
   position: absolute;
   inset: 0;
   display: flex;
@@ -62,16 +43,18 @@
   background: var(--image-placeholder-surface-color);
 }
 
-/* The mark drawn by `placeholder="image"`. Its viewBox carries its own padding,
-   so it can be handed the whole box: the default `preserveAspectRatio` fits it
-   to the shorter edge and centres it, which keeps the frame square in a box of
-   any shape. Capped so it settles at a readable size in a hero rather than
-   growing with the space. */
+/* Holds `placeholderContent` inside the space it decorates, however large. */
+.surface > * {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Sized off the shorter edge, and capped so the strokes keep the weight they
+   have in the error state rather than thickening with the box. */
 .glyph {
-  width: 100%;
-  height: 100%;
-  max-width: 10rem;
-  max-height: 10rem;
+  width: min(var(--spacing-10), 40cqmin);
+  height: auto;
+  flex-shrink: 0;
   color: var(--image-placeholder-glyph-color, var(--gray-1000));
 
   @media (forced-colors: active) {
@@ -104,13 +87,6 @@
   }
 }
 
-/* Replaces the image on failure, in the same box, so the layout the page
-   already reserved is kept rather than collapsing to nothing.
-
-   It is its own container so the label and the code can drop out when the
-   reserved space is too small to fit them — a 40px thumbnail gets the icon
-   alone. Containment is safe here because an inset-0 absolute box takes its
-   size from the placeholder above it, never from these contents. */
 .error {
   container-type: inline-size;
   position: absolute;
@@ -128,7 +104,6 @@
 }
 
 .errorIcon {
-  /* Scales with the box so it still reads inside a thumbnail. */
   width: min(var(--spacing-6), 40cqw);
   height: auto;
   flex-shrink: 0;
