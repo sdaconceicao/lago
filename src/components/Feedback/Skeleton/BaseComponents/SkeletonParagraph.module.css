@@ -1,0 +1,7 @@
+/* Lines stacked the way text is, with the gap standing in for leading. */
+.paragraph {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2); /* 8px */
+  width: 100%;
+}
