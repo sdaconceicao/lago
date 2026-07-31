@@ -1,0 +1,35 @@
+.initials {
+  --avatar-color: var(--gray);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 9999px;
+  background: oklch(
+    from var(--avatar-color) var(--lightness-200) var(--chroma-200) h
+  );
+  color: oklch(
+    from var(--avatar-color) var(--lightness-1400) var(--chroma-1400) h
+  );
+  font: var(--avatar-font-size) var(--font-family);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &[data-shape="square"] {
+    border-radius: var(--avatar-radius);
+  }
+
+  @media (forced-colors: active) {
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: inset 0 0 0 1px ButtonBorder;
+  }
+}

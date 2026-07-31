@@ -1,0 +1,83 @@
+[data-avatar-size="sm"] {
+  --avatar-size: calc(var(--spacing) * 7); /* 28px */
+  --avatar-font-size: var(--font-size-sm); /* 12px */
+  --avatar-radius: var(--radius-sm); /* 6px */
+  --avatar-status-ring: 1.5px;
+}
+
+[data-avatar-size="md"] {
+  --avatar-size: var(--spacing-9); /* 36px */
+  --avatar-font-size: var(--font-size); /* 14px */
+  --avatar-radius: var(--radius); /* 8px */
+  --avatar-status-ring: 2px;
+}
+
+[data-avatar-size="lg"] {
+  --avatar-size: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+  --avatar-font-size: var(--font-size-lg); /* 16px */
+  --avatar-radius: var(--radius); /* 8px */
+  --avatar-status-ring: 2px;
+}
+
+.avatar {
+  --avatar-ring-color: var(--background-color);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 9999px;
+  font: var(--avatar-font-size) var(--font-family);
+  color: var(--text-color);
+  vertical-align: middle;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &[data-shape="square"] {
+    border-radius: var(--avatar-radius);
+  }
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gray-300);
+  color: var(--gray-1100);
+
+  > svg {
+    width: 60%;
+    height: 60%;
+  }
+
+  @media (forced-colors: active) {
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: inset 0 0 0 1px ButtonBorder;
+  }
+}
+
+.status {
+  position: absolute;
+  inset-block-end: max(0px, calc(14.645% - var(--status-indicator-size) / 2));
+  inset-inline-end: max(0px, calc(14.645% - var(--status-indicator-size) / 2));
+  box-shadow: 0 0 0 var(--avatar-status-ring) var(--avatar-ring-color);
+  [data-shape="square"] & {
+    inset-block-end: 0;
+    inset-inline-end: 0;
+  }
+}
