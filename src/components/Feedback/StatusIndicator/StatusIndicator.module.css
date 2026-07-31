@@ -1,0 +1,54 @@
+/* Status indicator size scale
+ *
+ * Three steps — 8px, 10px, 12px — one for each Avatar size, since an Avatar
+ * passes its own size straight down. Declared against the `data-status-size`
+ * attribute rather than a class so a component positioning an indicator can
+ * read `--status-indicator-size` off the same element and offset by it. Every
+ * value derives from --spacing, so the hi-dpi scaling in `theme.css` reaches
+ * these too. Never hardcode px here.
+ */
+[data-status-size="sm"] {
+  --status-indicator-size: var(--spacing-2); /* 8px */
+}
+
+[data-status-size="md"] {
+  --status-indicator-size: calc(var(--spacing) * 2.5); /* 10px */
+}
+
+[data-status-size="lg"] {
+  --status-indicator-size: var(--spacing-3); /* 12px */
+}
+
+.indicator {
+  --status-indicator-color: var(--gray);
+
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--status-indicator-size);
+  height: var(--status-indicator-size);
+  border-radius: 9999px;
+  background: oklch(
+    from var(--status-indicator-color) var(--lightness-900) c h
+  );
+  vertical-align: middle;
+  /* The one place in the library where hue carries the meaning rather than
+     decorating it, so the dot keeps its colours in forced-colors mode. The
+     label says the same thing for anyone who cannot use them. */
+  forced-color-adjust: none;
+
+  &[data-status="online"] {
+    --status-indicator-color: var(--green);
+  }
+
+  &[data-status="busy"] {
+    --status-indicator-color: var(--red);
+  }
+
+  &[data-status="idle"] {
+    --status-indicator-color: var(--orange);
+  }
+
+  &[data-status="offline"] {
+    --status-indicator-color: var(--gray);
+  }
+}

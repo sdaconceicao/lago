@@ -51,7 +51,7 @@ export const Example: Story = (args) => {
         value={value}
         onChange={setValue}
         placeholder="Type to search…"
-        button={
+        suffix={
           value ? (
             <FieldButton
               {...args}
@@ -82,7 +82,7 @@ export const RevealPassword: Story = () => {
         onChange={setValue}
         type={visible ? "text" : "password"}
         placeholder="Enter a password"
-        button={
+        suffix={
           <FieldButton
             aria-label={visible ? "Hide password" : "Show password"}
             onPress={() => setVisible((v) => !v)}
@@ -120,7 +120,7 @@ export const States: Story = () => (
     <TextField
       label="Enabled"
       defaultValue="Hello world"
-      button={
+      suffix={
         <FieldButton aria-label="Clear">
           <X />
         </FieldButton>
@@ -130,7 +130,7 @@ export const States: Story = () => (
       label="Disabled"
       defaultValue="Hello world"
       isDisabled
-      button={
+      suffix={
         <FieldButton aria-label="Clear" isDisabled>
           <X />
         </FieldButton>
