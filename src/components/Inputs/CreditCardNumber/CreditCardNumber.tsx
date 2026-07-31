@@ -27,14 +27,9 @@ export interface CreditCardNumberProps
 /**
  * A card number entry field. CreditCardNumber is a TextField that masks what the
  * user types — digits only, grouped as the brand groups them, capped at the
- * brand's longest form — and shows the mark of the brand it recognises from the
+ * brand's longest form — and shows the mark of the brand it recognizes from the
  * leading digits, so it keeps the label, description, validation states, and
  * field sizing every other field has.
- *
- * `onChange` reports the masked value; pass it straight back as `value` to drive
- * the field, and use `getCardDigits` to read the raw number. Brands are matched
- * from their issuer identification numbers, with no network call and no card
- * data leaving the field.
  */
 export function CreditCardNumber({
   value,
@@ -73,7 +68,7 @@ export function CreditCardNumber({
       autoCorrect={autoCorrect}
       spellCheck={spellCheck}
       className={clsx(styles.creditCardNumber, props.className)}
-      button={
+      suffix={
         // Rendered in the trailing slot the reveal and clear buttons use, so the
         // field keeps its inset surface and metrics. The mark is decorative: the
         // brand reaches assistive technology through the status message beside

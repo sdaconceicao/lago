@@ -40,7 +40,7 @@ export function Password({ isRevealable = true, ...props }: PasswordProps) {
     <TextField
       {...props}
       type={isRevealed ? "text" : "password"}
-      button={
+      suffix={
         isRevealable ? (
           // The Group inside TextField only marks itself disabled; the button
           // has to be told, the same way SearchField tells its submit button.

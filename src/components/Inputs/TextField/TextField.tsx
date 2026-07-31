@@ -35,7 +35,7 @@ export interface TextFieldProps<T = HTMLInputElement>
    * a clear or reveal-password action. When present, the input and button share
    * a single inset surface that matches the Select and DatePicker fields.
    */
-  button?: React.ReactNode;
+  suffix?: React.ReactNode;
   /** Field size: 28px, 36px (default), or 48px tall. A trailing `button` scales with it. */
   size?: FieldSize;
 }
@@ -51,7 +51,7 @@ export function TextField({
   errorMessage,
   placeholder,
   inputRef,
-  button,
+  suffix,
   size = DEFAULT_FIELD_SIZE,
   ...props
 }: TextFieldProps) {
@@ -66,7 +66,7 @@ export function TextField({
       )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
-      {button ? (
+      {suffix ? (
         // The Group is the inset field surface; the input and trailing button
         // share it, mirroring the Select and DatePicker field groups.
         <Group
@@ -78,7 +78,7 @@ export function TextField({
             className={clsx("react-aria-Input", styles.fieldInput)}
             placeholder={placeholder}
           />
-          {button}
+          {suffix}
         </Group>
       ) : (
         <Input
