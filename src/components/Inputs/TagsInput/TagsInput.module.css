@@ -1,0 +1,35 @@
+.tagsInput {
+  display: flex;
+  flex-direction: column;
+  color: var(--text-color);
+  width: 100%;
+  max-width: 100%;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--field-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--field-height);
+  padding: 0 var(--field-inner-inset) 0 var(--field-padding-x);
+  border-radius: var(--field-radius);
+  font: var(--field-font-size) var(--font-family);
+  color: var(--field-text-color);
+  cursor: text;
+
+  &[data-focus-within] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -1px;
+  }
+
+  &[data-disabled] {
+    color: var(--text-color-disabled);
+  }
+}
+
+.tagsInputPopover[data-trigger="ComboBox"] {
+  width: var(--trigger-width);
+  padding: 0;
+}

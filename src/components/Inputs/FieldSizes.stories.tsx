@@ -22,6 +22,7 @@ import { SearchField } from "@/components/Inputs/Search/SearchField/SearchField"
 import { Select, SelectItem } from "@/components/Inputs/Select/Select";
 import { Slider } from "@/components/Inputs/Slider/Slider";
 import { Switch } from "@/components/Inputs/Switch/Switch";
+import { TagsInput } from "@/components/Inputs/TagsInput/TagsInput";
 import { TextArea } from "@/components/Inputs/TextArea/TextArea";
 import { TextField } from "@/components/Inputs/TextField/TextField";
 import { AffixSelect } from "@/components/Inputs/TextFieldWithAffixes/BaseComponents/AffixSelect";
@@ -90,6 +91,15 @@ const FieldRow = ({ size }: { size: FieldSize }) => (
       <MultiSelectItem id="a">Apple</MultiSelectItem>
       <MultiSelectItem id="b">Banana</MultiSelectItem>
     </MultiSelect>
+    <TagsInput
+      aria-label="Tags"
+      size={size}
+      placeholder="Tags"
+      items={[
+        { id: "a", label: "Apple" },
+        { id: "b", label: "Banana" },
+      ]}
+    />
     <NumberField aria-label="Number" size={size} />
     <ColorField aria-label="Color" size={size} />
     <DateField aria-label="Date" size={size} />
@@ -138,7 +148,7 @@ const textInset = (field: Element) => {
 const ROOTS = [
   "TextField",
   "SearchField",
-  "ComboBox", // Select and MultiSelect
+  "ComboBox", // Select, MultiSelect, and TagsInput
   "NumberField",
   "ColorField",
   "DateField",
@@ -251,7 +261,7 @@ export const Alignment: StoryObj = {
       const measured = measureRow(row);
       const [first] = measured;
       // Guard the TEMPLATE filter above from silently dropping a real control.
-      expect(measured, `${size}: every control measured`).toHaveLength(13);
+      expect(measured, `${size}: every control measured`).toHaveLength(14);
 
       for (const control of measured) {
         expect(

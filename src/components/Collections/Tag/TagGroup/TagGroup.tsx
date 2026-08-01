@@ -46,7 +46,7 @@ export function TagGroup<T>({
       {...props}
       data-size={size}
       data-variant={variant}
-      className={clsx("react-aria-TagGroup", styles.tagGroup)}
+      className={clsx("react-aria-TagGroup", styles.tagGroup, props.className)}
     >
       {label && <Label>{label}</Label>}
       <TagList

@@ -1,0 +1,10 @@
+/* Sits in the gutter .dropdownItem reserves for its check mark (ListBox.module.css). */
+.createIcon {
+  position: absolute;
+  top: 50%;
+  left: var(--spacing-1);
+  translate: 0 -50%;
+  width: var(--field-icon-size);
+  height: var(--field-icon-size);
+  stroke-width: 3px;
+}
