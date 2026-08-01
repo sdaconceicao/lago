@@ -1,16 +1,5 @@
-/* The surface every skeleton shape is drawn on, and the shimmer that sweeps
- * across it.
- *
- * One rule carries the fill, the clip and the animation; the variants below
- * only set dimensions and a radius. Anything composed from skeletons —
- * SkeletonParagraph, SkeletonCard, or a layout a consumer assembles — is built
- * from these same shapes, so a page full of placeholders shimmers in step
- * rather than as a crowd of separate animations. */
 .skeleton {
   --skeleton-surface-color: var(--gray-200);
-  /* One step lighter than the surface in either theme: the scale inverts in
-   * dark mode, so the highlight has to be picked per theme rather than derived
-   * from a single step. */
   --skeleton-shimmer-color: var(--gray-100);
   --skeleton-shimmer-duration: 1.6s;
 
@@ -24,14 +13,12 @@
   color: var(--text-color);
   vertical-align: middle;
 
+  /* The gray scale inverts in dark mode, so the highlight is a step the other
+   * way rather than the same one. */
   :global(:root.dark-mode) & {
     --skeleton-shimmer-color: var(--gray-300);
   }
 
-  /* The sweep. It is a child rather than a moving background so the gradient
-   * keeps a constant width regardless of how wide the shape is: a 40px line
-   * and a 600px box take the same time to shimmer, and the highlight reads the
-   * same size on both. */
   &::after {
     content: "";
     position: absolute;
@@ -47,17 +34,12 @@
     will-change: transform;
   }
 
-  /* Parked off the leading edge by the transform above, so dropping the
-   * animation leaves the plain surface rather than a stranded highlight. */
   @media (prefers-reduced-motion: reduce) {
     &::after {
       animation: none;
     }
   }
 
-  /* The fill is the whole component, and a placeholder flattened to Canvas
-   * would be nothing at all — so outline the shape and drop the shimmer, which
-   * has no contrast to work with once colors are forced. */
   @media (forced-colors: active) {
     background: ButtonFace;
     box-shadow: inset 0 0 0 1px ButtonBorder;
@@ -68,40 +50,30 @@
   }
 }
 
-/* Rounded corners are the default. `straight` sets no radius at all, and so
- * needs no rule — `--skeleton-radius` falls back to 0. */
+/* `straight` needs no rule: --skeleton-radius falls back to 0. */
 .skeleton[data-edges="round"] {
   --skeleton-radius: var(--radius);
 }
 
-/* A stand-in for a block of content: an image, a chart, a map, a video. Full
- * width of whatever it is dropped into, and 120px tall until told otherwise. */
 .skeleton[data-variant="box"] {
   width: 100%;
   height: calc(var(--spacing) * 30); /* 120px */
 }
 
-/* A stand-in for one line of text. Height tracks the font size rather than a
- * fixed value, so a skeleton inside larger type grows with it. */
 .skeleton[data-variant="line"] {
   width: 100%;
   height: 1em;
 
-  /* Fully rounded rather than the 8px corners of a box: at 14px tall an 8px
-   * radius is most of the height already, and a pill is what a rounded line
-   * wants to be. */
   &[data-edges="round"] {
     --skeleton-radius: 9999px;
   }
 }
 
-/* A stand-in for an avatar or an icon. `edges` does not apply — the shape is
- * the point — so this comes after the `round` rule and pins the radius.
- * Sizing by width alone keeps it square; pass `height` too to make an oval. */
+/* After the edges rule, which it overrides: a circle is always round. */
 .skeleton[data-variant="circle"] {
   --skeleton-radius: 9999px;
 
-  width: var(--spacing-9); /* 36px, matching an md avatar */
+  width: var(--spacing-9); /* 36px */
   aspect-ratio: 1;
 }
 

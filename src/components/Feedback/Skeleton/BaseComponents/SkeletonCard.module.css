@@ -1,5 +1,3 @@
-/* A box with its caption line underneath, spaced as a card spaces its media
- * from the title below it. */
 .card {
   display: flex;
   flex-direction: column;

@@ -1,4 +1,3 @@
-/* Lines stacked the way text is, with the gap standing in for leading. */
 .paragraph {
   display: flex;
   flex-direction: column;
