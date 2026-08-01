@@ -12,9 +12,6 @@
   vertical-align: middle;
 }
 
-/* The image while the box is still holding the space: it fills that space and
-   stays hidden until it has decoded, so a half-painted picture never shows
-   through the surface above it. */
 .image {
   display: block;
   width: 100%;
@@ -24,9 +21,8 @@
   opacity: 0;
 }
 
-/* The image once it has decoded and become the box itself. It is mounted at that
-   moment, with no earlier opacity to transition from, so it fades in with an
-   animation instead. */
+/* Mounted at the moment it is shown, so it has no earlier opacity to transition
+   from and fades in with an animation instead. */
 .loadedImage {
   object-fit: var(--image-placeholder-object-fit, cover);
   animation: image-placeholder-fade-in 150ms ease;
@@ -43,8 +39,7 @@
 }
 
 .surface {
-  /* Measurable for the mark inside it: an inset-0 box takes its size from the
-     placeholder above, never from these contents. */
+  /* What the glyph's cqmin below is measured against. */
   container-type: size;
   position: absolute;
   inset: 0;
@@ -55,16 +50,11 @@
   background: var(--image-placeholder-surface-color);
 }
 
-/* Holds `placeholderContent` inside the space it decorates, however large. */
 .surface > * {
   max-width: 100%;
   max-height: 100%;
 }
 
-/* Grows with the box rather than settling at a fixed size, measured off the
-   shorter edge so it stays square and clears the space it is centred in. Its
-   stroke is lighter than the error icon's, which keeps the weight optically even
-   now that the mark is drawn several times larger. */
 .glyph {
   height: 50cqmin;
   width: auto;
