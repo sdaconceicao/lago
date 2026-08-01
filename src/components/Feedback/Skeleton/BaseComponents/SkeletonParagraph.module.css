@@ -1,0 +1,6 @@
+.paragraph {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2); /* 8px */
+  width: 100%;
+}

@@ -21,6 +21,7 @@ export * from "./components/Expandable/Disclosure/Disclosure";
 export * from "./components/Feedback/Alert/Alert";
 export * from "./components/Feedback/ProgressBar/ProgressBar";
 export * from "./components/Feedback/ProgressCircle/ProgressCircle";
+export * from "./components/Feedback/Skeleton/Skeleton";
 export * from "./components/Feedback/Spinner/Spinner";
 export * from "./components/Feedback/StatusIndicator/StatusIndicator";
 export * from "./components/Feedback/Toast/Toast";
