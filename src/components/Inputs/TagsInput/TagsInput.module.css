@@ -1,4 +1,3 @@
-/* Always fill the container; the parent decides the width. */
 .tagsInput {
   display: flex;
   flex-direction: column;
@@ -7,14 +6,6 @@
   max-width: 100%;
 }
 
-/* One-line field holding the query input and the toggle. The selected tags are
-   rendered below it rather than inside it, so unlike the MultiSelect this field
-   is exactly --field-height at every size however long the selection grows, and
-   it lines up with the TextField and Select beside it without the tags having to
-   scroll or be clipped.
-
-   Padding and button placement mirror the TextField field group so all the
-   field-like controls align exactly. */
 .field {
   display: flex;
   align-items: center;

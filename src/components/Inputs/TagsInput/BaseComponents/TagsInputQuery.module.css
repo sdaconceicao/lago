@@ -1,5 +1,3 @@
-/* The field carries the inset surface and the focus ring; the input inside it is
-   transparent and stretches to fill the row beside the toggle. */
 .input {
   flex: 1;
   min-width: 0;

@@ -1,6 +1,4 @@
-/* The dropdown item reserves a leading gutter for the selected check mark. The
-   create row is never selected, so its plus sign takes that same gutter and the
-   two line up down the list. */
+/* Sits in the gutter .dropdownItem reserves for its check mark (ListBox.module.css). */
 .createIcon {
   position: absolute;
   top: 50%;
