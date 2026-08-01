@@ -1,0 +1,12 @@
+{
+  // Without this, `.storybook` belongs to no TS project and the editor falls
+  // back to an inferred one, which has no `vite/client` types — so the CSS
+  // side-effect imports in `preview.tsx` report TS2882 under
+  // `noUncheckedSideEffectImports`. `src` avoids it only because its own
+  // `types` pull `vite/client` in transitively.
+  "extends": "../tsconfig.app.json",
+  "compilerOptions": {
+    "types": ["vite/client"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

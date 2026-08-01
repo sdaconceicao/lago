@@ -43,7 +43,7 @@ export interface ResultsCountProps
   template?: (info: ResultsCountInfo) => ReactNode;
 }
 
-export function ResultsCount({
+export function TableResultsCount({
   from,
   to,
   total,

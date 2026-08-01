@@ -15,7 +15,7 @@ export interface ColumnProps extends AriaColumnProps {
   allowsResizing?: boolean;
 }
 
-export function Column(
+export function TableColumn(
   props: Omit<ColumnProps, "children"> & { children?: React.ReactNode }
 ) {
   return (

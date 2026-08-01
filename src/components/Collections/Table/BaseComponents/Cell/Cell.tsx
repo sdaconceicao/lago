@@ -11,7 +11,7 @@ import styles from "./Cell.module.css";
 
 export type { CellProps };
 
-export function Cell(props: CellProps) {
+export function TableCell(props: CellProps) {
   return (
     <AriaCell
       {...props}

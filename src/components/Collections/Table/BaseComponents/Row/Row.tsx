@@ -9,12 +9,17 @@ import {
   useTableOptions,
 } from "react-aria-components/Table";
 import { Checkbox } from "@/components/Inputs/Checkbox/CheckboxItem/Checkbox";
-import { Cell } from "../Cell/Cell";
+import { TableCell } from "../Cell/Cell";
 import styles from "./Row.module.css";
 
 export type { RowProps };
 
-export function Row<T>({ id, columns, children, ...otherProps }: RowProps<T>) {
+export function TableRow<T>({
+  id,
+  columns,
+  children,
+  ...otherProps
+}: RowProps<T>) {
   const { selectionBehavior, allowsDragging } = useTableOptions();
 
   return (
@@ -24,19 +29,19 @@ export function Row<T>({ id, columns, children, ...otherProps }: RowProps<T>) {
       className={otherProps.className ?? clsx("react-aria-Row", styles.row)}
     >
       {allowsDragging && (
-        <Cell>
+        <TableCell>
           <Button
             slot="drag"
             className={clsx("drag-button", styles.dragButton)}
           >
             <GripVertical />
           </Button>
-        </Cell>
+        </TableCell>
       )}
       {selectionBehavior === "toggle" && (
-        <Cell>
+        <TableCell>
           <Checkbox slot="selection" />
-        </Cell>
+        </TableCell>
       )}
       <Collection items={columns}>{children}</Collection>
     </AriaRow>

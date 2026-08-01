@@ -24,6 +24,13 @@ import styles from "./TextFieldWithAffixes.module.css";
 export interface TextFieldWithAffixesProps<T = HTMLInputElement>
   extends Omit<TextFieldProps<T>, "onChange"> {
   /**
+   * Trailing control rendered inside the input segment, e.g. a FieldButton for
+   * a clear or reveal action. It sits against the value it acts on rather than
+   * in an affix segment of its own, so no separator is drawn beside it. This is
+   * the role TextField gives `suffix`, which here means the trailing affix.
+   */
+  button?: React.ReactNode;
+  /**
    * Content rendered before the input. Static content such as `"https://"` or an
    * icon sits in its own segment, separated from the input by a vertical border;
    * a dropdown — see AffixSelect — renders as a button inside the field instead.

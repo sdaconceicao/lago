@@ -159,7 +159,10 @@ const getBrandMatchLength = (
   digits: string,
   definition: CardBrandDefinition
 ): number =>
-  definition.patterns.reduce(
+  // Explicit accumulator type: `CardBrandPattern` includes `number`, so the
+  // initial `0` would otherwise match the same-type `reduce` overload and widen
+  // `longest` to the pattern type.
+  definition.patterns.reduce<number>(
     (longest, pattern) =>
       Math.max(longest, getPatternMatchLength(digits, pattern)),
     0

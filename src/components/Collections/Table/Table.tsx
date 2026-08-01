@@ -4,15 +4,15 @@ import {
   Table as AriaTable,
   type TableProps,
 } from "react-aria-components/Table";
-import { Cell, type CellProps } from "./BaseComponents/Cell/Cell";
-import { Column, type ColumnProps } from "./BaseComponents/Column/Column";
+import { type CellProps, TableCell } from "./BaseComponents/Cell/Cell";
+import { type ColumnProps, TableColumn } from "./BaseComponents/Column/Column";
 import {
   defaultResultsTemplate,
-  ResultsCount,
   type ResultsCountInfo,
   type ResultsCountProps,
+  TableResultsCount,
 } from "./BaseComponents/ResultsCount/ResultsCount";
-import { Row, type RowProps } from "./BaseComponents/Row/Row";
+import { type RowProps, TableRow } from "./BaseComponents/Row/Row";
 import {
   TableBody,
   type TableBodyProps,
@@ -43,11 +43,11 @@ export function Table(props: TableProps) {
 Table.Header = TableHeader;
 Table.Body = TableBody;
 Table.Footer = TableFooter;
-Table.Column = Column;
-Table.Row = Row;
-Table.Cell = Cell;
+Table.Column = TableColumn;
+Table.Row = TableRow;
+Table.Cell = TableCell;
 Table.LoadMoreItem = TableLoadMoreItem;
-Table.ResultsCount = ResultsCount;
+Table.ResultsCount = TableResultsCount;
 
 export type {
   CellProps,
@@ -62,13 +62,13 @@ export type {
   TableProps,
 };
 export {
-  Cell,
-  Column,
   defaultResultsTemplate,
-  ResultsCount,
-  Row,
   TableBody,
+  TableCell,
+  TableColumn,
   TableFooter,
   TableHeader,
   TableLoadMoreItem,
+  TableResultsCount,
+  TableRow,
 };

@@ -3,14 +3,14 @@ import { useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components/Table";
 import { fn } from "storybook/test";
 import {
-  Cell,
-  Column,
-  Row,
   Table,
   TableBody,
+  TableCell,
+  TableColumn,
   TableFooter,
   TableHeader,
   TableLoadMoreItem,
+  TableRow,
 } from "./Table";
 import tableStyles from "./Table.module.css";
 
@@ -27,7 +27,7 @@ const meta: Meta<typeof Table> = {
     docs: {
       description: {
         component:
-          "A structured layout of columns and rows used to display and optionally select data. Tables support sortable columns, row and cell selection, and keyboard navigation. Columns, headers, and rows are composed from Column, TableHeader, Row, and Cell.",
+          "A structured layout of columns and rows used to display and optionally select data. Tables support sortable columns, row and cell selection, and keyboard navigation. Columns, headers, and rows are composed from TableColumn, TableHeader, TableRow, and TableCell.",
       },
     },
   },
@@ -41,26 +41,26 @@ type Story = StoryFn<typeof Table>;
 export const Example: Story = (args) => (
   <Table aria-label="Files" {...args}>
     <TableHeader>
-      <Column isRowHeader>Name</Column>
-      <Column>Type</Column>
-      <Column>Date Modified</Column>
+      <TableColumn isRowHeader>Name</TableColumn>
+      <TableColumn>Type</TableColumn>
+      <TableColumn>Date Modified</TableColumn>
     </TableHeader>
     <TableBody>
-      <Row>
-        <Cell>Games</Cell>
-        <Cell>File folder</Cell>
-        <Cell>6/7/2020</Cell>
-      </Row>
-      <Row>
-        <Cell>Program Files</Cell>
-        <Cell>File folder</Cell>
-        <Cell>4/7/2021</Cell>
-      </Row>
-      <Row>
-        <Cell>bootmgr</Cell>
-        <Cell>System file</Cell>
-        <Cell>11/20/2010</Cell>
-      </Row>
+      <TableRow>
+        <TableCell>Games</TableCell>
+        <TableCell>File folder</TableCell>
+        <TableCell>6/7/2020</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>Program Files</TableCell>
+        <TableCell>File folder</TableCell>
+        <TableCell>4/7/2021</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell>bootmgr</TableCell>
+        <TableCell>System file</TableCell>
+        <TableCell>11/20/2010</TableCell>
+      </TableRow>
     </TableBody>
   </Table>
 );
@@ -125,23 +125,23 @@ const SortingExample = () => {
       onSortChange={setSortDescriptor}
     >
       <TableHeader>
-        <Column id="name" isRowHeader allowsSorting>
+        <TableColumn id="name" isRowHeader allowsSorting>
           Name
-        </Column>
-        <Column id="type" allowsSorting>
+        </TableColumn>
+        <TableColumn id="type" allowsSorting>
           Type
-        </Column>
-        <Column id="date" allowsSorting>
+        </TableColumn>
+        <TableColumn id="date" allowsSorting>
           Date Modified
-        </Column>
+        </TableColumn>
       </TableHeader>
       <TableBody>
         {rows.map((row) => (
-          <Row key={row.id} id={row.id}>
-            <Cell>{row.name}</Cell>
-            <Cell>{row.type}</Cell>
-            <Cell>{row.date}</Cell>
-          </Row>
+          <TableRow key={row.id} id={row.id}>
+            <TableCell>{row.name}</TableCell>
+            <TableCell>{row.type}</TableCell>
+            <TableCell>{row.date}</TableCell>
+          </TableRow>
         ))}
       </TableBody>
     </Table>
@@ -183,17 +183,17 @@ const LoadMoreExample = () => {
     >
       <Table aria-label="Files">
         <TableHeader>
-          <Column isRowHeader>Name</Column>
-          <Column>Type</Column>
-          <Column>Date Modified</Column>
+          <TableColumn isRowHeader>Name</TableColumn>
+          <TableColumn>Type</TableColumn>
+          <TableColumn>Date Modified</TableColumn>
         </TableHeader>
         <TableBody>
           {rows.map((row) => (
-            <Row key={row.id} id={row.id}>
-              <Cell>{row.name}</Cell>
-              <Cell>{row.type}</Cell>
-              <Cell>{row.date}</Cell>
-            </Row>
+            <TableRow key={row.id} id={row.id}>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.type}</TableCell>
+              <TableCell>{row.date}</TableCell>
+            </TableRow>
           ))}
           {rows.length < MAX_ROWS && (
             <TableLoadMoreItem onLoadMore={loadMore} isLoading={isLoading} />
@@ -224,25 +224,25 @@ export const Scrolling: StoryFn = () => {
     >
       <Table aria-label="Files">
         <TableHeader>
-          <Column isRowHeader>Name</Column>
-          <Column>Type</Column>
-          <Column>Date Modified</Column>
+          <TableColumn isRowHeader>Name</TableColumn>
+          <TableColumn>Type</TableColumn>
+          <TableColumn>Date Modified</TableColumn>
         </TableHeader>
         <TableBody>
           {rows.map((row) => (
-            <Row key={row.id} id={row.id}>
-              <Cell>{row.name}</Cell>
-              <Cell>{row.type}</Cell>
-              <Cell>{row.date}</Cell>
-            </Row>
+            <TableRow key={row.id} id={row.id}>
+              <TableCell>{row.name}</TableCell>
+              <TableCell>{row.type}</TableCell>
+              <TableCell>{row.date}</TableCell>
+            </TableRow>
           ))}
         </TableBody>
         <TableFooter>
-          <Row>
-            <Cell>{rows.length} items</Cell>
-            <Cell>&nbsp;</Cell>
-            <Cell>&nbsp;</Cell>
-          </Row>
+          <TableRow>
+            <TableCell>{rows.length} items</TableCell>
+            <TableCell>&nbsp;</TableCell>
+            <TableCell>&nbsp;</TableCell>
+          </TableRow>
         </TableFooter>
       </Table>
     </div>

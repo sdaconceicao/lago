@@ -1,9 +1,10 @@
 {
+  // Used only by the dts plugin in vite.build.config.ts. No `declarationMap`:
+  // the plugin bundles the declarations with api-extractor, which cannot map a
+  // rolled-up .d.ts back to its sources, so no map is emitted either way.
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": false,
     "noEmit": false,
     "outDir": "./dist"
   },

@@ -1,7 +1,22 @@
 import type { ReactNode } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 
 export type Theme = "light" | "dark" | "system";
+
+/**
+ * The theme class has to land on `<html>` before the browser paints, otherwise
+ * the first frame renders with the light tokens and visibly flashes. Layout
+ * effects run pre-paint in the browser; `useEffect` is only the SSR fallback,
+ * where there is no paint to beat.
+ */
+const useApplyThemeEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 interface ThemeContextType {
   theme: Theme;
@@ -55,7 +70,7 @@ export const ThemeProvider = ({
     return defaultTheme;
   });
 
-  useEffect(() => {
+  useApplyThemeEffect(() => {
     const applyTheme = () => {
       const root = window.document.documentElement;
 

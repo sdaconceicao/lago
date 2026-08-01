@@ -1,6 +1,13 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Cell, Column, Row, Table, TableBody, TableHeader } from "./Table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "./Table";
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -18,20 +25,20 @@ const renderTable = (props = {}, columnProps = {}) =>
   render(
     <Table aria-label="Files" {...props}>
       <TableHeader>
-        <Column id="name" isRowHeader {...columnProps}>
+        <TableColumn id="name" isRowHeader {...columnProps}>
           Name
-        </Column>
-        <Column id="type">Type</Column>
+        </TableColumn>
+        <TableColumn id="type">Type</TableColumn>
       </TableHeader>
       <TableBody>
-        <Row id="games">
-          <Cell>Games</Cell>
-          <Cell>File folder</Cell>
-        </Row>
-        <Row id="bootmgr">
-          <Cell>bootmgr</Cell>
-          <Cell>System file</Cell>
-        </Row>
+        <TableRow id="games">
+          <TableCell>Games</TableCell>
+          <TableCell>File folder</TableCell>
+        </TableRow>
+        <TableRow id="bootmgr">
+          <TableCell>bootmgr</TableCell>
+          <TableCell>System file</TableCell>
+        </TableRow>
       </TableBody>
     </Table>
   );

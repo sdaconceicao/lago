@@ -1,6 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Cell, Column, Row, TableBody, TableHeader } from "../Table";
+import {
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "../Table";
 import { TableWithPagination } from "./TableWithPagination";
 
 beforeAll(() => {
@@ -39,17 +45,17 @@ const renderTable = (props = {}) =>
       {(pageItems) => (
         <>
           <TableHeader>
-            <Column id="name" isRowHeader>
+            <TableColumn id="name" isRowHeader>
               Name
-            </Column>
-            <Column id="type">Type</Column>
+            </TableColumn>
+            <TableColumn id="type">Type</TableColumn>
           </TableHeader>
           <TableBody items={pageItems} renderEmptyState={() => "No results."}>
             {(item) => (
-              <Row id={item.id}>
-                <Cell>{item.name}</Cell>
-                <Cell>{item.type}</Cell>
-              </Row>
+              <TableRow id={item.id}>
+                <TableCell>{item.name}</TableCell>
+                <TableCell>{item.type}</TableCell>
+              </TableRow>
             )}
           </TableBody>
         </>
