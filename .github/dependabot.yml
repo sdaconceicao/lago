@@ -10,7 +10,7 @@ updates:
       include: "scope"
     open-pull-requests-limit: 10
     cooldown:
-      default-days: 1
+      default-days: 3
     groups:
       production-dependencies:
         dependency-type: "production"
