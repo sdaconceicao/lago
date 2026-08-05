@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { defaultResultsTemplate, ResultsCount } from "./ResultsCount";
+import { defaultResultsTemplate, TableResultsCount } from "./ResultsCount";
 
 describe("defaultResultsTemplate", () => {
   it("formats a populated range", () => {
@@ -23,14 +23,14 @@ describe("defaultResultsTemplate", () => {
 
 describe("ResultsCount", () => {
   it("renders the default 'Showing x to y of z results' string", () => {
-    render(<ResultsCount from={1} to={10} total={42} />);
+    render(<TableResultsCount from={1} to={10} total={42} />);
     expect(
       screen.getByText("Showing 1 to 10 of 42 results")
     ).toBeInTheDocument();
   });
 
   it("exposes the summary as a live status region", () => {
-    render(<ResultsCount from={1} to={10} total={42} />);
+    render(<TableResultsCount from={1} to={10} total={42} />);
     const status = screen.getByRole("status");
     expect(status).toHaveTextContent("Showing 1 to 10 of 42 results");
     expect(status).toHaveAttribute("aria-live", "polite");
@@ -38,7 +38,7 @@ describe("ResultsCount", () => {
 
   it("supports a custom template", () => {
     render(
-      <ResultsCount
+      <TableResultsCount
         from={11}
         to={20}
         total={42}
@@ -50,7 +50,7 @@ describe("ResultsCount", () => {
 
   it("supports a rich ReactNode template", () => {
     render(
-      <ResultsCount
+      <TableResultsCount
         from={1}
         to={5}
         total={5}
@@ -62,7 +62,7 @@ describe("ResultsCount", () => {
   });
 
   it("merges a custom className", () => {
-    render(<ResultsCount from={1} to={5} total={5} className="custom" />);
+    render(<TableResultsCount from={1} to={5} total={5} className="custom" />);
     expect(screen.getByRole("status")).toHaveClass("custom");
   });
 });

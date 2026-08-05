@@ -28,7 +28,7 @@ export default defineConfig({
     dts({
       tsconfigPath: "./tsconfig.declarations.json",
       insertTypesEntry: true,
-      outDir: "dist",
+      outDirs: "dist",
       include: ["src/**/*"],
       exclude: [
         "**/*.test.ts",
@@ -37,7 +37,13 @@ export default defineConfig({
         "**/stories/**",
         "**/pages/**",
       ],
-      rollupTypes: true,
+      // Collapse the per-file declarations into a single dist/index.d.ts.
+      // Named `rollupTypes` before vite-plugin-dts 5; under the old name it was
+      // silently ignored, so the package shipped one .d.ts per source file.
+      // Bundling is done by @microsoft/api-extractor, which the plugin loads at
+      // build time and therefore has to be a direct devDependency — without it
+      // it logs "Failed to load '@microsoft/api-extractor'" and skips bundling.
+      bundleTypes: true,
     }),
   ],
   resolve: {

@@ -5,8 +5,8 @@ import type { TableProps } from "react-aria-components/Table";
 import { Pagination } from "@/components/Actions/Pagination/Pagination";
 import { clampPage } from "@/components/Actions/Pagination/Pagination.utils";
 import {
-  ResultsCount,
   type ResultsCountInfo,
+  TableResultsCount,
 } from "../BaseComponents/ResultsCount/ResultsCount";
 import { Table } from "../Table";
 import styles from "./TableWithPagination.module.css";
@@ -128,7 +128,7 @@ export function TableWithPagination<T>({
         <div className={clsx("table-footer", styles.footer)}>
           <div className={clsx("table-footer-start", styles.footerStart)}>
             {showResults && (
-              <ResultsCount
+              <TableResultsCount
                 from={resultsRange.from}
                 to={resultsRange.to}
                 total={resultsRange.total}

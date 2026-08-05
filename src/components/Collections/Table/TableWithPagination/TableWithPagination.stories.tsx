@@ -2,7 +2,13 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { useMemo, useState } from "react";
 import type { SortDescriptor } from "react-aria-components/Table";
 import { fn } from "storybook/test";
-import { Cell, Column, Row, TableBody, TableHeader } from "../Table";
+import {
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "../Table";
 import { TableWithPagination } from "./TableWithPagination";
 
 interface Person {
@@ -45,7 +51,7 @@ const meta: Meta<typeof TableWithPagination<Person>> = {
     docs: {
       description: {
         component:
-          "A Table composed with a Pagination control. The full data set is passed via `items` and sliced internally according to `rowsPerPage`. The table content — TableHeader/Column and TableBody/Row/Cell — is still composed by the caller through a render function that receives the current page's items. Supports both uncontrolled (defaultPage) and controlled (page + onPageChange) paging, and forwards all Table props such as selection and sorting.",
+          "A Table composed with a Pagination control. The full data set is passed via `items` and sliced internally according to `rowsPerPage`. The table content — TableHeader/TableColumn and TableBody/TableRow/TableCell — is still composed by the caller through a render function that receives the current page's items. Supports both uncontrolled (defaultPage) and controlled (page + onPageChange) paging, and forwards all Table props such as selection and sorting.",
       },
     },
   },
@@ -56,19 +62,19 @@ const meta: Meta<typeof TableWithPagination<Person>> = {
         return (
           <>
             <TableHeader>
-              <Column id="name" isRowHeader>
+              <TableColumn id="name" isRowHeader>
                 Name
-              </Column>
-              <Column id="role">Role</Column>
-              <Column id="location">Location</Column>
+              </TableColumn>
+              <TableColumn id="role">Role</TableColumn>
+              <TableColumn id="location">Location</TableColumn>
             </TableHeader>
             <TableBody items={pageItems}>
               {(person) => (
-                <Row id={person.id}>
-                  <Cell>{person.name}</Cell>
-                  <Cell>{person.role}</Cell>
-                  <Cell>{person.location}</Cell>
-                </Row>
+                <TableRow id={person.id}>
+                  <TableCell>{person.name}</TableCell>
+                  <TableCell>{person.role}</TableCell>
+                  <TableCell>{person.location}</TableCell>
+                </TableRow>
               )}
             </TableBody>
           </>
@@ -222,23 +228,23 @@ export const Sorting: Story = {
         {(pageItems) => (
           <>
             <TableHeader>
-              <Column id="name" isRowHeader allowsSorting>
+              <TableColumn id="name" isRowHeader allowsSorting>
                 Name
-              </Column>
-              <Column id="role" allowsSorting>
+              </TableColumn>
+              <TableColumn id="role" allowsSorting>
                 Role
-              </Column>
-              <Column id="location" allowsSorting>
+              </TableColumn>
+              <TableColumn id="location" allowsSorting>
                 Location
-              </Column>
+              </TableColumn>
             </TableHeader>
             <TableBody items={pageItems}>
               {(person) => (
-                <Row id={person.id}>
-                  <Cell>{person.name}</Cell>
-                  <Cell>{person.role}</Cell>
-                  <Cell>{person.location}</Cell>
-                </Row>
+                <TableRow id={person.id}>
+                  <TableCell>{person.name}</TableCell>
+                  <TableCell>{person.role}</TableCell>
+                  <TableCell>{person.location}</TableCell>
+                </TableRow>
               )}
             </TableBody>
           </>
