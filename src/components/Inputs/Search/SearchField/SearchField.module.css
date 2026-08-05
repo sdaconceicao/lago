@@ -31,3 +31,18 @@
 .searchPopover [role="option"] {
   cursor: pointer;
 }
+
+/* DropdownItem reserves an indent on the left for the check it shows once an
+   option is selected — the TagsInput dropdown needs it. Suggestions are picked
+   with onAction and never carry a check, so that indent is dead space: pull it
+   back to the Select's own option padding, so a suggestion's label starts where
+   the query above it does. */
+.searchPopover [role="option"] {
+  padding-left: var(--spacing-3);
+}
+
+/* The empty and loading rows sit on the listbox itself, outside the options'
+   margin, so they carry it in their own padding to land on the same edge. */
+.searchPopover [role="listbox"][data-empty] {
+  padding-left: calc(var(--spacing-3) + var(--spacing-1));
+}
