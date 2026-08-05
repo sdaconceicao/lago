@@ -67,13 +67,15 @@ describe("Skeleton", () => {
       });
     });
 
+    // Read off the inline style rather than `toHaveStyle`, which compares
+    // computed values: jsdom resolves `2rem` to `32px` there, so the assertion
+    // would hold for a component that converted the unit itself.
     it("uses a string dimension as given", () => {
       const { container } = render(<Skeleton width="60%" height="2rem" />);
 
-      expect(container.firstElementChild).toHaveStyle({
-        width: "60%",
-        height: "2rem",
-      });
+      const skeleton = container.firstElementChild as HTMLElement;
+      expect(skeleton.style.width).toBe("60%");
+      expect(skeleton.style.height).toBe("2rem");
     });
   });
 

@@ -76,7 +76,11 @@ describe("SkeletonParagraph", () => {
     it("uses a string width as given", () => {
       const { container } = render(<SkeletonParagraph width="24rem" />);
 
-      expect(container.firstElementChild).toHaveStyle({ width: "24rem" });
+      // Inline style rather than `toHaveStyle`, which resolves `24rem` to
+      // `384px` through jsdom's computed style.
+      expect((container.firstElementChild as HTMLElement).style.width).toBe(
+        "24rem"
+      );
     });
 
     it("applies the line height to every line", () => {
