@@ -1,5 +1,8 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { fn } from "storybook/test";
+import type { PresenceStatus } from "@/components/Feedback/StatusIndicator/StatusIndicator";
+import { Avatar } from "@/components/Media/Avatar/Avatar";
+import { Text } from "@/components/Typography/index";
 import { Select, SelectItem } from "./Select";
 
 const meta: Meta<typeof Select> = {
@@ -40,6 +43,62 @@ export const Example: Story = (args) => (
 
 Example.args = {
   label: "Ice cream flavor",
+};
+
+interface Person {
+  id: string;
+  name: string;
+  role: string;
+  status: PresenceStatus;
+}
+
+const people: Person[] = [
+  { id: "ada", name: "Ada Lovelace", role: "Engineering", status: "online" },
+  { id: "grace", name: "Grace Hopper", role: "Compilers", status: "busy" },
+  { id: "alan", name: "Alan Turing", role: "Research", status: "idle" },
+  {
+    id: "katherine",
+    name: "Katherine Johnson",
+    role: "Flight dynamics",
+    status: "offline",
+  },
+];
+
+export const CustomItemRenderer: Story = (args) => (
+  <Select {...args} defaultItems={people}>
+    {(item) => {
+      const person = item as Person;
+      return (
+        <SelectItem id={person.id} textValue={person.name}>
+          <Avatar
+            size="sm"
+            name={person.name}
+            alt=""
+            status={person.status}
+            statusLabel=""
+          />
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <Text slot="label">{person.name}</Text>
+            <Text slot="description">{person.role}</Text>
+          </div>
+        </SelectItem>
+      );
+    }}
+  </Select>
+);
+
+CustomItemRenderer.args = {
+  label: "Assignee",
+  placeholder: "Search people...",
+};
+
+CustomItemRenderer.parameters = {
+  docs: {
+    description: {
+      story:
+        'Passing a function as children renders each item yourself: the function receives an entry from defaultItems and returns a SelectItem, whose children can be any ReactNode — here an Avatar with a presence dot beside a name and role. Two things to keep in mind. Set textValue on the item: with non-string children the component has no text to fall back on, and textValue is what typeahead filtering matches and what fills the field once an option is chosen. Use Text slot="label" and slot="description" for the two lines rather than plain elements, so they pick up the dropdown\'s own label and description styling, including at the other sizes and in the highlighted state.',
+    },
+  },
 };
 
 export const Sizes: Story = (args) => (

@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { fn } from "storybook/test";
+import type { PresenceStatus } from "@/components/Feedback/StatusIndicator/StatusIndicator";
+import { Avatar } from "@/components/Media/Avatar/Avatar";
+import { Text } from "@/components/Typography/index";
 import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 
 const fruits = [
@@ -60,6 +63,63 @@ export const Default: Story = {
       )}
     </MultiSelect>
   ),
+};
+
+interface Person {
+  id: string;
+  name: string;
+  role: string;
+  status: PresenceStatus;
+}
+
+const people: Person[] = [
+  { id: "ada", name: "Ada Lovelace", role: "Engineering", status: "online" },
+  { id: "grace", name: "Grace Hopper", role: "Compilers", status: "busy" },
+  { id: "alan", name: "Alan Turing", role: "Research", status: "idle" },
+  {
+    id: "katherine",
+    name: "Katherine Johnson",
+    role: "Flight dynamics",
+    status: "offline",
+  },
+];
+
+export const CustomItemRenderer: Story = {
+  render: (args) => (
+    <MultiSelect {...args} defaultItems={people}>
+      {(item) => {
+        const person = item as Person;
+        return (
+          <MultiSelectItem id={person.id} textValue={person.name}>
+            <Avatar
+              size="sm"
+              name={person.name}
+              alt=""
+              status={person.status}
+              statusLabel=""
+            />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <Text slot="label">{person.name}</Text>
+              <Text slot="description">{person.role}</Text>
+            </div>
+          </MultiSelectItem>
+        );
+      }}
+    </MultiSelect>
+  ),
+  args: {
+    label: "Reviewers",
+    placeholder: "Search people...",
+    defaultValue: ["ada"],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Passing a function as children renders each option yourself: the function receives an entry from defaultItems and returns a MultiSelectItem, whose children can be any ReactNode — here an Avatar with a presence dot beside a name and role. The shared checkbox indicator is still rendered for you, ahead of whatever you return. Two things to keep in mind. Set textValue on the item: with non-string children the component has no text to fall back on, and textValue is what typeahead filtering matches and what the field shows for a selection — the tag chips in "tags" mode and the comma-separated list in "text" mode both read it, so without it a selected option has no visible label. Use Text slot="label" and slot="description" for the two lines rather than plain elements, so they pick up the dropdown\'s own label and description styling, including at the other sizes and in the highlighted state.',
+      },
+    },
+  },
 };
 
 export const Sizes: Story = {
