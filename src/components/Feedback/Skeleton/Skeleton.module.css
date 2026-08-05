@@ -1,0 +1,88 @@
+.skeleton {
+  --skeleton-surface-color: var(--gray-200);
+  --skeleton-shimmer-color: var(--gray-100);
+  --skeleton-shimmer-duration: 1.6s;
+
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  max-width: 100%;
+  border-radius: var(--skeleton-radius, 0);
+  background: var(--skeleton-surface-color);
+  font: var(--font-size) var(--font-family);
+  color: var(--text-color);
+  vertical-align: middle;
+
+  /* The gray scale inverts in dark mode, so the highlight is a step the other
+   * way rather than the same one. */
+  :global(:root.dark-mode) & {
+    --skeleton-shimmer-color: var(--gray-300);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--skeleton-shimmer-color) 50%,
+      transparent 100%
+    );
+    animation: skeleton-shimmer var(--skeleton-shimmer-duration) infinite;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    background: ButtonFace;
+    box-shadow: inset 0 0 0 1px ButtonBorder;
+
+    &::after {
+      display: none;
+    }
+  }
+}
+
+/* `straight` needs no rule: --skeleton-radius falls back to 0. */
+.skeleton[data-edges="round"] {
+  --skeleton-radius: var(--radius);
+}
+
+.skeleton[data-variant="box"] {
+  width: 100%;
+  height: calc(var(--spacing) * 30); /* 120px */
+}
+
+.skeleton[data-variant="line"] {
+  width: 100%;
+  height: 1em;
+
+  &[data-edges="round"] {
+    --skeleton-radius: 9999px;
+  }
+}
+
+/* After the edges rule, which it overrides: a circle is always round. */
+.skeleton[data-variant="circle"] {
+  --skeleton-radius: 9999px;
+
+  width: var(--spacing-9); /* 36px */
+  aspect-ratio: 1;
+}
+
+@keyframes skeleton-shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(100%);
+  }
+}

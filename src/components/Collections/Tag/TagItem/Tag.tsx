@@ -1,6 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { X } from "lucide-react";
+import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   Tag as AriaTag,
   Button,
@@ -25,7 +26,9 @@ export function Tag({ children, ...props }: TagItemProps) {
     <AriaTag
       textValue={textValue}
       {...props}
-      className={clsx("react-aria-Tag", utils.buttonBase, styles.tag)}
+      className={composeRenderProps(props.className, (className) =>
+        clsx("react-aria-Tag", utils.buttonBase, styles.tag, className)
+      )}
     >
       {({ allowsRemoving }) => (
         <>
