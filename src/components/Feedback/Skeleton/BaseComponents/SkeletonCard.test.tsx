@@ -74,7 +74,9 @@ describe("SkeletonCard", () => {
     it("applies the line height to the line, not to the box", () => {
       const { container } = render(<SkeletonCard lineHeight="1.5rem" />);
 
-      expect(getLine(container)).toHaveStyle({ height: "1.5rem" });
+      // Inline style rather than `toHaveStyle`, which resolves `1.5rem` to
+      // `24px` through jsdom's computed style.
+      expect(getLine(container)?.style.height).toBe("1.5rem");
       expect(getBox(container)?.style.height).toBe("");
     });
   });
