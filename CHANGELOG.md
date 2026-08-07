@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.4.0](https://github.com/sdaconceicao/lago/compare/lago-v0.3.0...lago-v0.4.0) (2026-08-07)
+
+
+### Features
+
+* Alerts ([#59](https://github.com/sdaconceicao/lago/issues/59)) ([be23e4a](https://github.com/sdaconceicao/lago/commit/be23e4ad93d0757baf0690fa8c883124480a8a6e))
+* Avatar component ([#70](https://github.com/sdaconceicao/lago/issues/70)) ([78958bf](https://github.com/sdaconceicao/lago/commit/78958bf4cc2b70d2ba150abf110d2d861f9c116a))
+* CreditCardNumber component ([#68](https://github.com/sdaconceicao/lago/issues/68)) ([99ced87](https://github.com/sdaconceicao/lago/commit/99ced8796bc06206f62d9dc736bb4343c048d951))
+* ImageWithPlaceholder component ([#69](https://github.com/sdaconceicao/lago/issues/69)) ([f6b389c](https://github.com/sdaconceicao/lago/commit/f6b389c647ced0ba7d481c5e56add2a304f24883))
+* Password component ([#63](https://github.com/sdaconceicao/lago/issues/63)) ([7710240](https://github.com/sdaconceicao/lago/commit/7710240e37aee914e2b2dde12c02e9f13e6330e6))
+* Skeleton loader components ([#72](https://github.com/sdaconceicao/lago/issues/72)) ([0de1ae3](https://github.com/sdaconceicao/lago/commit/0de1ae392b716df62aeb33e5b75767f940c65984))
+* Spinner component ([#67](https://github.com/sdaconceicao/lago/issues/67)) ([4f9729f](https://github.com/sdaconceicao/lago/commit/4f9729fb7ae7e469d6f6dcfa0b39e49ee8746024))
+* Tag Input component ([#73](https://github.com/sdaconceicao/lago/issues/73)) ([ba73d1c](https://github.com/sdaconceicao/lago/commit/ba73d1c165c6b18c5226a673424cce170740b3e3))
+* TextfieldWithAffix component ([#62](https://github.com/sdaconceicao/lago/issues/62)) ([139d3da](https://github.com/sdaconceicao/lago/commit/139d3da32fd14ab023c29aee6792aac92498d1c2))
+
+
+### Bug Fixes
+
+* SearchfieldWithSuggestions alignment and documentation on custom render items ([#81](https://github.com/sdaconceicao/lago/issues/81)) ([0185df5](https://github.com/sdaconceicao/lago/commit/0185df5ff5ee057ab875955b4a6b164652007223))
+* Update theme and type handling ([#80](https://github.com/sdaconceicao/lago/issues/80)) ([dfdc20d](https://github.com/sdaconceicao/lago/commit/dfdc20d1097400ed63e4f97aabf41545f2ae782c))
+
 ## [0.3.0](https://github.com/sdaconceicao/lago/compare/lago-v0.2.1...lago-v0.3.0) (2026-07-29)
 
 
