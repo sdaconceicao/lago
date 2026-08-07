@@ -85,9 +85,22 @@
     background: var(--highlight-hover);
   }
 
-  &[data-focused] {
+  /*
+   * react-aria focuses menu items on hover, so focus normally tracks the pointer. It
+   * also hands focus to an item whenever the open menu loses focus — pressing the
+   * trigger to close it, or clicking outside — which would otherwise light up an item
+   * the pointer is nowhere near. Requiring hover or a focus ring keeps the highlight
+   * tied to what the user is actually doing. Disabled items never get [data-focused],
+   * so they stay unhighlighted on hover.
+   */
+  &[data-focused]:is(:hover, [data-focus-visible]) {
     background: var(--highlight-background);
     color: var(--highlight-foreground);
+
+    kbd {
+      background: rgb(255 255 255 / 0.1);
+      border-color: rgb(255 255 255 / 0.2);
+    }
   }
 
   &[data-selection-mode] {
@@ -138,11 +151,6 @@
     border: 0.5px solid var(--highlight-pressed);
     padding: 0 var(--spacing-1);
     border-radius: var(--radius-sm);
-  }
-
-  &[data-focused] kbd {
-    background: rgb(255 255 255 / 0.1);
-    border-color: rgb(255 255 255 / 0.2);
   }
 
   .lucide-chevron-right {

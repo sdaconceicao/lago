@@ -51,6 +51,15 @@ describe("Menu", () => {
     ]);
   });
 
+  it("does not focus an item when opened with a pointer", async () => {
+    const user = userEvent.setup();
+    renderMenu();
+
+    await user.click(screen.getByRole("button", { name: "Edit" }));
+
+    expect(screen.getByRole("menu")).toHaveFocus();
+  });
+
   it("calls onAction with the item key and closes the menu", async () => {
     const user = userEvent.setup();
     const onAction = vi.fn();
@@ -124,9 +133,10 @@ describe("Menu", () => {
       </MenuTrigger>
     );
 
-    // Opening the menu focuses the first item; ArrowDown moves to Share.
-    await user.click(screen.getByRole("button", { name: "Edit" }));
-    await user.keyboard("{ArrowDown}{ArrowRight}");
+    // Opening the menu with the keyboard focuses the first item;
+    // ArrowDown moves to Share and ArrowRight opens its submenu.
+    await user.tab();
+    await user.keyboard("{Enter}{ArrowDown}{ArrowRight}");
 
     expect(screen.getByRole("menuitem", { name: "SMS" })).toBeInTheDocument();
 
@@ -139,9 +149,10 @@ describe("Menu", () => {
     const onAction = vi.fn();
     renderMenu({ onAction });
 
-    // Opening the menu focuses the first item; ArrowDown moves to Edit.
-    await user.click(screen.getByRole("button", { name: "Edit" }));
-    await user.keyboard("{ArrowDown}{Enter}");
+    // Opening the menu with the keyboard focuses the first item;
+    // ArrowDown moves to Edit.
+    await user.tab();
+    await user.keyboard("{Enter}{ArrowDown}{Enter}");
 
     expect(onAction.mock.calls[0][0]).toBe("edit");
   });
