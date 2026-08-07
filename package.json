@@ -88,6 +88,11 @@
     "vite-plugin-lib-inject-css": "^2.2.2",
     "vitest": "^4.1.10"
   },
+  "pnpm": {
+    "overrides": {
+      "fast-uri": "3.1.5"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sdaconceicao/lago.git"
