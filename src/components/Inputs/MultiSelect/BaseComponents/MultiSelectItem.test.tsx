@@ -47,6 +47,8 @@ describe("MultiSelectItem", () => {
       </ListBox>
     );
 
-    expect(screen.getByTestId("custom-child")).toHaveTextContent("Custom Apple");
+    expect(screen.getByTestId("custom-child")).toHaveTextContent(
+      "Custom Apple"
+    );
   });
 });

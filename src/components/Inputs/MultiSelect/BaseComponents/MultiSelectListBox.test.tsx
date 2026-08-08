@@ -1,6 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MultiSelect, MultiSelectItem } from "@/components/Inputs/MultiSelect/MultiSelect";
+import {
+  MultiSelect,
+  MultiSelectItem,
+} from "@/components/Inputs/MultiSelect/MultiSelect";
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();

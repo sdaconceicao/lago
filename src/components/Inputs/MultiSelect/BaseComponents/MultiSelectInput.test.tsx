@@ -1,6 +1,9 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MultiSelect, MultiSelectItem } from "@/components/Inputs/MultiSelect/MultiSelect";
+import {
+  MultiSelect,
+  MultiSelectItem,
+} from "@/components/Inputs/MultiSelect/MultiSelect";
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -30,7 +33,11 @@ describe("MultiSelectInput", () => {
 
   it("hides the placeholder when an item is selected", () => {
     render(
-      <MultiSelect label="Fruits" placeholder="Search fruits..." defaultValue={["apple"]}>
+      <MultiSelect
+        label="Fruits"
+        placeholder="Search fruits..."
+        defaultValue={["apple"]}
+      >
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
       </MultiSelect>
     );
@@ -42,7 +49,11 @@ describe("MultiSelectInput", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <MultiSelect label="Fruits" defaultValue={["apple", "banana"]} onChange={onChange}>
+      <MultiSelect
+        label="Fruits"
+        defaultValue={["apple", "banana"]}
+        onChange={onChange}
+      >
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
         <MultiSelectItem id="banana">Banana</MultiSelectItem>
       </MultiSelect>
@@ -58,7 +69,11 @@ describe("MultiSelectInput", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <MultiSelect label="Fruits" defaultValue={["apple", "banana"]} onChange={onChange}>
+      <MultiSelect
+        label="Fruits"
+        defaultValue={["apple", "banana"]}
+        onChange={onChange}
+      >
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
         <MultiSelectItem id="banana">Banana</MultiSelectItem>
       </MultiSelect>

@@ -29,7 +29,10 @@ describe("MultiSelectToolbar", () => {
 
     const selectAll = screen.getByRole("option", { name: "Select all" });
     expect(selectAll).toBeInTheDocument();
-    expect(selectAll).toHaveAttribute("id", expect.stringContaining(SELECT_ALL_KEY));
+    expect(selectAll).toHaveAttribute(
+      "id",
+      expect.stringContaining(SELECT_ALL_KEY)
+    );
   });
 
   it("renders the select none control", () => {
@@ -37,7 +40,10 @@ describe("MultiSelectToolbar", () => {
 
     const selectNone = screen.getByRole("option", { name: "Select none" });
     expect(selectNone).toBeInTheDocument();
-    expect(selectNone).toHaveAttribute("id", expect.stringContaining(SELECT_NONE_KEY));
+    expect(selectNone).toHaveAttribute(
+      "id",
+      expect.stringContaining(SELECT_NONE_KEY)
+    );
   });
 
   it("renders controls with custom labels", () => {
@@ -53,9 +59,9 @@ describe("MultiSelectToolbar", () => {
   it("applies the toolbar CSS class", () => {
     renderToolbar();
 
-    const controls = screen.getAllByRole("option").filter((option) =>
-      option.classList.contains("multi-select-control")
-    );
+    const controls = screen
+      .getAllByRole("option")
+      .filter((option) => option.classList.contains("multi-select-control"));
     expect(controls).toHaveLength(2);
   });
 });

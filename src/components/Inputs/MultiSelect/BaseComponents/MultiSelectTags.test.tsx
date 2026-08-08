@@ -1,6 +1,9 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MultiSelect, MultiSelectItem } from "@/components/Inputs/MultiSelect/MultiSelect";
+import {
+  MultiSelect,
+  MultiSelectItem,
+} from "@/components/Inputs/MultiSelect/MultiSelect";
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -43,7 +46,11 @@ describe("MultiSelectTags", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <MultiSelect label="Fruits" defaultValue={["apple", "banana"]} onChange={onChange}>
+      <MultiSelect
+        label="Fruits"
+        defaultValue={["apple", "banana"]}
+        onChange={onChange}
+      >
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
         <MultiSelectItem id="banana">Banana</MultiSelectItem>
       </MultiSelect>

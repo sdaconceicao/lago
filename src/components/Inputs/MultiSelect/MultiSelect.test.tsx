@@ -362,7 +362,9 @@ describe("MultiSelect", () => {
       await user.type(input, "a");
       expect(input).toHaveValue("a");
       expect(
-        (await screen.findAllByRole("option")).map((option) => option.textContent)
+        (await screen.findAllByRole("option")).map(
+          (option) => option.textContent
+        )
       ).toContain("Select all");
 
       await user.keyboard("{Backspace}");
