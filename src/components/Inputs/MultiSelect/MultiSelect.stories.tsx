@@ -24,7 +24,7 @@ const meta: Meta<typeof MultiSelect> = {
     docs: {
       description: {
         component:
-          "A multi-select combobox. Typing in the input filters the list, options toggle with checkboxes and remain visible while the menu stays open, and selected items render as removable tags or comma-separated text. Backspace in an empty input removes the most recently selected item.",
+          'A multi-select combobox. Typing in the input filters the list, options toggle with checkboxes and remain visible while the menu stays open, and selected items render as removable tags or comma-separated text. Backspace in an empty input removes the most recently selected item, and allowsSelectAll adds "select all" / "select none" controls above the options.',
       },
     },
   },
@@ -33,6 +33,7 @@ const meta: Meta<typeof MultiSelect> = {
     label: "Fruits",
     placeholder: "Search fruits...",
     displayMode: "tags",
+    allowsSelectAll: false,
     onChange: fn(),
     onSelectionChange: fn(),
     onOpenChange: fn(),
@@ -117,6 +118,30 @@ export const CustomItemRenderer: Story = {
       description: {
         story:
           'Passing a function as children renders each option yourself: the function receives an entry from defaultItems and returns a MultiSelectItem, whose children can be any ReactNode — here an Avatar with a presence dot beside a name and role. The shared checkbox indicator is still rendered for you, ahead of whatever you return. Two things to keep in mind. Set textValue on the item: with non-string children the component has no text to fall back on, and textValue is what typeahead filtering matches and what the field shows for a selection — the tag chips in "tags" mode and the comma-separated list in "text" mode both read it, so without it a selected option has no visible label. Use Text slot="label" and slot="description" for the two lines rather than plain elements, so they pick up the dropdown\'s own label and description styling, including at the other sizes and in the highlighted state.',
+      },
+    },
+  },
+};
+
+export const WithSelectAll: Story = {
+  render: (args) => (
+    <MultiSelect {...args} defaultItems={fruits}>
+      {(item) => (
+        <MultiSelectItem id={(item as Fruit).id}>
+          {(item as Fruit).name}
+        </MultiSelectItem>
+      )}
+    </MultiSelect>
+  ),
+  args: {
+    allowsSelectAll: true,
+    defaultValue: ["apple"],
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Setting allowsSelectAll adds "select all" and "select none" controls to the dropdown, laid out as a toolbar that stays pinned above the options while they scroll. The two are options of the list rather than buttons beside it, which is what keeps them on the arrow key path without adding another tab stop to the field: they come first in the option order, so ArrowDown from an empty field lands on them ahead of the first checkbox — this story opens with Apple selected, which is where the list puts focus instead, so here they are one ArrowUp away — and Enter runs whichever is focused. Neither can be checked itself: pressing one only changes the options below it, and the menu stays open exactly as it does when a single option is toggled. Both act on the options currently on offer, so with a filter typed they apply to the matches shown and leave the rest of the selection alone; disabled options are never selected. Pass selectAllLabel and selectNoneLabel to relabel them.',
       },
     },
   },

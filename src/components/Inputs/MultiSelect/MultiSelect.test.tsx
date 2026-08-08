@@ -334,6 +334,323 @@ describe("MultiSelect", () => {
       expect(input).toHaveValue("");
       expect(getTagLabels(container)).toEqual(["Apple"]);
     });
+
+    it("clears a filter that matches a selection control when allowsSelectAll uses defaultItems", async () => {
+      // "a" matches "Select all". That used to freeze the input on Backspace when
+      // the controls lived in a ListBoxSection (react-stately section filtering
+      // threw under React 19 and aborted the controlled value update).
+      const user = userEvent.setup();
+      const fruits = [
+        { id: "apple", name: "Apple" },
+        { id: "banana", name: "Banana" },
+        { id: "carrot", name: "Carrot" },
+      ];
+      const { container } = render(
+        <MultiSelect
+          label="Fruits"
+          allowsSelectAll
+          defaultItems={fruits}
+          defaultValue={["apple"]}
+        >
+          {(item) => (
+            <MultiSelectItem id={item.id}>{item.name}</MultiSelectItem>
+          )}
+        </MultiSelect>
+      );
+      const input = screen.getByRole("combobox");
+
+      await user.type(input, "a");
+      expect(input).toHaveValue("a");
+      expect(
+        (await screen.findAllByRole("option")).map(
+          (option) => option.textContent
+        )
+      ).toContain("Select all");
+
+      await user.keyboard("{Backspace}");
+
+      expect(input).toHaveValue("");
+      await user.keyboard("b");
+      expect(input).toHaveValue("b");
+      expect(getTagLabels(container)).toEqual(["Apple"]);
+    });
+  });
+
+  describe("selection controls", () => {
+    const getOptionNames = () =>
+      screen.getAllByRole("option").map((option) => option.textContent);
+
+    it("does not render the controls by default", async () => {
+      const user = userEvent.setup();
+      renderMultiSelect();
+
+      await user.click(screen.getByRole("combobox"));
+
+      expect(await screen.findByRole("listbox")).toBeInTheDocument();
+      expect(
+        screen.queryByRole("option", { name: "Select all" })
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("option", { name: "Select none" })
+      ).not.toBeInTheDocument();
+    });
+
+    it("renders both controls as options ahead of the checkboxes", async () => {
+      const user = userEvent.setup();
+      renderMultiSelect({ allowsSelectAll: true });
+
+      await user.click(screen.getByRole("combobox"));
+
+      expect(await screen.findByRole("listbox")).toBeInTheDocument();
+      expect(getOptionNames()).toEqual([
+        "Select all",
+        "Select none",
+        "Apple",
+        "Banana",
+        "Carrot",
+      ]);
+    });
+
+    it("renders the controls with custom labels", async () => {
+      const user = userEvent.setup();
+      renderMultiSelect({
+        allowsSelectAll: true,
+        selectAllLabel: "All",
+        selectNoneLabel: "None",
+      });
+
+      await user.click(screen.getByRole("combobox"));
+
+      expect(await screen.findByRole("option", { name: "All" })).toBeVisible();
+      expect(screen.getByRole("option", { name: "None" })).toBeVisible();
+    });
+
+    it("renders the controls as a sticky toolbar above the options", async () => {
+      const user = userEvent.setup();
+      const { container } = renderMultiSelect({ allowsSelectAll: true });
+
+      await user.click(screen.getByRole("combobox"));
+      await screen.findByRole("listbox");
+
+      const controls = document.querySelectorAll(".multi-select-control");
+      expect(controls).toHaveLength(2);
+      // Portaled into the popover, not into the field's own container.
+      expect(container.querySelector(".multi-select-control")).toBeNull();
+    });
+
+    it("selects every option when select all is clicked", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const { container } = renderMultiSelect({
+        allowsSelectAll: true,
+        onChange,
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await user.click(
+        await screen.findByRole("option", { name: "Select all" })
+      );
+
+      expect(onChange).toHaveBeenLastCalledWith(["apple", "banana", "carrot"]);
+      expect(getTagLabels(container)).toEqual(["Apple", "Banana", "Carrot"]);
+      for (const name of ["Apple", "Banana", "Carrot"]) {
+        expect(screen.getByRole("option", { name })).toHaveAttribute(
+          "aria-selected",
+          "true"
+        );
+      }
+    });
+
+    it("clears the selection when select none is clicked", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const { container } = renderMultiSelect({
+        allowsSelectAll: true,
+        defaultValue: ["apple", "carrot"],
+        onChange,
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await user.click(
+        await screen.findByRole("option", { name: "Select none" })
+      );
+
+      expect(onChange).toHaveBeenLastCalledWith([]);
+      await waitFor(() => {
+        expect(getTagLabels(container)).toEqual([]);
+      });
+    });
+
+    it("keeps the menu open after a control is used", async () => {
+      const user = userEvent.setup();
+      renderMultiSelect({ allowsSelectAll: true });
+
+      await user.click(screen.getByRole("combobox"));
+      await user.click(
+        await screen.findByRole("option", { name: "Select all" })
+      );
+
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+      expect(getOptionNames()).toHaveLength(5);
+    });
+
+    it("never selects the controls themselves", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const { container } = renderMultiSelect({
+        allowsSelectAll: true,
+        onChange,
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      const selectAll = await screen.findByRole("option", {
+        name: "Select all",
+      });
+      await user.click(selectAll);
+
+      expect(selectAll).toHaveAttribute("aria-selected", "false");
+      expect(getTagLabels(container)).toEqual(["Apple", "Banana", "Carrot"]);
+      expect(onChange).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not notify onChange when a control changes nothing", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderMultiSelect({
+        allowsSelectAll: true,
+        defaultValue: ["apple", "banana", "carrot"],
+        onChange,
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await user.click(
+        await screen.findByRole("option", { name: "Select all" })
+      );
+
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it("leaves disabled options unselected", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderMultiSelect({
+        allowsSelectAll: true,
+        disabledKeys: ["banana"],
+        onChange,
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await user.click(
+        await screen.findByRole("option", { name: "Select all" })
+      );
+
+      expect(onChange).toHaveBeenLastCalledWith(["apple", "carrot"]);
+    });
+
+    it("moves to the controls first with the arrow keys", async () => {
+      const user = userEvent.setup();
+      renderMultiSelect({ allowsSelectAll: true });
+      const input = screen.getByRole("combobox");
+
+      await user.click(input);
+      await screen.findByRole("listbox");
+      await user.keyboard("{ArrowDown}");
+
+      expect(
+        screen.getByRole("option", { name: "Select all" })
+      ).toHaveAttribute("data-focused", "true");
+
+      await user.keyboard("{ArrowDown}");
+      expect(
+        screen.getByRole("option", { name: "Select none" })
+      ).toHaveAttribute("data-focused", "true");
+    });
+
+    it("runs the focused control on Enter and keeps the menu open", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const { container } = renderMultiSelect({
+        allowsSelectAll: true,
+        onChange,
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await screen.findByRole("listbox");
+      await user.keyboard("{ArrowDown}{Enter}");
+
+      expect(onChange).toHaveBeenLastCalledWith(["apple", "banana", "carrot"]);
+      expect(getTagLabels(container)).toEqual(["Apple", "Banana", "Carrot"]);
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("keeps the control focused after Enter, so the next one is a key away", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const { container } = renderMultiSelect({
+        allowsSelectAll: true,
+        onChange,
+      });
+
+      await user.click(screen.getByRole("combobox"));
+      await screen.findByRole("listbox");
+      // Select all, then move on to the control beside it and clear again.
+      await user.keyboard("{ArrowDown}{Enter}");
+      expect(
+        screen.getByRole("option", { name: "Select all" })
+      ).toHaveAttribute("data-focused", "true");
+
+      await user.keyboard("{ArrowDown}{Enter}");
+
+      expect(onChange).toHaveBeenLastCalledWith([]);
+      expect(getTagLabels(container)).toEqual([]);
+      expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    it("filters the controls out along with the options", async () => {
+      const user = userEvent.setup();
+      renderMultiSelect({ allowsSelectAll: true });
+
+      await user.type(screen.getByRole("combobox"), "ban");
+
+      expect(await screen.findByRole("listbox")).toBeInTheDocument();
+      expect(getOptionNames()).toEqual(["Banana"]);
+    });
+
+    it("only selects the matching options while a filter is typed", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderMultiSelect({
+        allowsSelectAll: true,
+        defaultValue: ["apple"],
+        onChange,
+      });
+
+      // "c" matches "Select all" and "Select none" as well as "Carrot".
+      await user.type(screen.getByRole("combobox"), "c");
+      expect(await screen.findByRole("listbox")).toBeInTheDocument();
+      expect(getOptionNames()).toEqual(["Select all", "Select none", "Carrot"]);
+
+      await user.click(screen.getByRole("option", { name: "Select all" }));
+
+      expect(onChange).toHaveBeenLastCalledWith(["carrot", "apple"]);
+    });
+
+    it("only clears the matching options while a filter is typed", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderMultiSelect({
+        allowsSelectAll: true,
+        defaultValue: ["apple", "carrot"],
+        onChange,
+      });
+
+      await user.type(screen.getByRole("combobox"), "c");
+      await user.click(
+        await screen.findByRole("option", { name: "Select none" })
+      );
+
+      expect(onChange).toHaveBeenLastCalledWith(["apple"]);
+    });
   });
 
   describe('displayMode="text"', () => {
