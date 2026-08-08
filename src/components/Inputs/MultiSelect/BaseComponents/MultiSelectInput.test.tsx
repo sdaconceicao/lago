@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import {
   MultiSelect,
@@ -13,7 +13,7 @@ beforeAll(() => {
       observe() {}
       unobserve() {}
       disconnect() {}
-    }
+    },
   );
 });
 
@@ -22,12 +22,12 @@ describe("MultiSelectInput", () => {
     render(
       <MultiSelect label="Fruits" placeholder="Search fruits...">
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
-      </MultiSelect>
+      </MultiSelect>,
     );
 
     expect(screen.getByRole("combobox")).toHaveAttribute(
       "placeholder",
-      "Search fruits..."
+      "Search fruits...",
     );
   });
 
@@ -39,7 +39,7 @@ describe("MultiSelectInput", () => {
         defaultValue={["apple"]}
       >
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
-      </MultiSelect>
+      </MultiSelect>,
     );
 
     expect(screen.getByRole("combobox")).not.toHaveAttribute("placeholder");
@@ -56,7 +56,7 @@ describe("MultiSelectInput", () => {
       >
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
         <MultiSelectItem id="banana">Banana</MultiSelectItem>
-      </MultiSelect>
+      </MultiSelect>,
     );
 
     await user.click(screen.getByRole("combobox"));
@@ -76,7 +76,7 @@ describe("MultiSelectInput", () => {
       >
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
         <MultiSelectItem id="banana">Banana</MultiSelectItem>
-      </MultiSelect>
+      </MultiSelect>,
     );
 
     await user.click(screen.getByRole("combobox"));
@@ -91,7 +91,7 @@ describe("MultiSelectInput", () => {
     render(
       <MultiSelect label="Fruits" defaultValue={["apple"]} onChange={onChange}>
         <MultiSelectItem id="apple">Apple</MultiSelectItem>
-      </MultiSelect>
+      </MultiSelect>,
     );
 
     const input = screen.getByRole("combobox");
