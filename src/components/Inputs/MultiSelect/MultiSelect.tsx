@@ -8,7 +8,6 @@ import {
   type ValidationResult,
 } from "react-aria-components/ComboBox";
 import { Group } from "react-aria-components/Group";
-import { DropdownListBox } from "@/components/Collections/ListBox/ListBox";
 import {
   DEFAULT_FIELD_SIZE,
   Description,
@@ -20,6 +19,7 @@ import {
 import { Popover } from "@/components/Overlays/Popover/Popover";
 import utils from "@/styles/utilities.module.css";
 import { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
+import { MultiSelectListBox } from "./BaseComponents/MultiSelectListBox";
 import { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
 import styles from "./MultiSelect.module.css";
 
@@ -46,13 +46,27 @@ export interface MultiSelectProps<T>
    * so the field holds its height; at `"lg"` they wrap and it grows.
    */
   size?: FieldSize;
+  /**
+   * Adds "select all" and "select none" controls to the dropdown, laid out as a
+   * toolbar above the options. They are options of the list themselves, so the
+   * arrow keys reach them without introducing another tab stop, and they act on
+   * the options currently on offer: with a filter typed that is the matches
+   * shown, leaving the rest of the selection untouched. Disabled options are
+   * never selected. Defaults to `false`.
+   */
+  allowsSelectAll?: boolean;
+  /** Label for the control that checks every option on offer. Defaults to "Select all". */
+  selectAllLabel?: string;
+  /** Label for the control that unchecks every option on offer. Defaults to "Select none". */
+  selectNoneLabel?: string;
 }
 
 /**
  * A multi-select combobox. Typing in the input filters the list, options
  * toggle with checkboxes and stay visible while the menu remains open, and
  * selected items render as removable tags or comma-separated text. Backspace
- * in an empty input removes the most recently selected item.
+ * in an empty input removes the most recently selected item. `allowsSelectAll`
+ * adds "select all" and "select none" controls above the options.
  */
 export function MultiSelect<T>({
   label,
@@ -62,13 +76,25 @@ export function MultiSelect<T>({
   placeholder,
   displayMode = "tags",
   size = DEFAULT_FIELD_SIZE,
+  allowsSelectAll = false,
+  selectAllLabel = "Select all",
+  selectNoneLabel = "Select none",
+  items,
+  defaultItems,
   ...props
 }: MultiSelectProps<T>) {
+  // When the select-all toolbar is present, dynamic options sit beside the
+  // static controls in a nested <Collection items={...}>. Items belong on that
+  // Collection only — the ComboBox's own items/defaultItems would also feed
+  // ListBoxContext and re-register the same list at the top level.
+  const collectionItems = items ?? defaultItems;
+
   return (
     <AriaComboBox
       menuTrigger="focus"
       allowsEmptyCollection
       {...props}
+      {...(allowsSelectAll ? {} : { items, defaultItems })}
       selectionMode="multiple"
       data-field-size={size}
       className={clsx("react-aria-ComboBox", styles.multiSelect)}
@@ -102,9 +128,14 @@ export function MultiSelect<T>({
         data-field-size={size}
         className={styles.multiSelectPopover}
       >
-        <DropdownListBox renderEmptyState={() => "No results found."}>
+        <MultiSelectListBox
+          items={allowsSelectAll ? collectionItems : undefined}
+          allowsSelectAll={allowsSelectAll}
+          selectAllLabel={selectAllLabel}
+          selectNoneLabel={selectNoneLabel}
+        >
           {children}
-        </DropdownListBox>
+        </MultiSelectListBox>
       </Popover>
     </AriaComboBox>
   );
