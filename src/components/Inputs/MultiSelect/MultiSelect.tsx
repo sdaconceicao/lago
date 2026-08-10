@@ -1,6 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { ChevronDown } from "lucide-react";
+import { useMemo, useRef } from "react";
 import {
   ComboBox as AriaComboBox,
   type ComboBoxProps as AriaComboBoxProps,
@@ -21,6 +22,11 @@ import utils from "@/styles/utilities.module.css";
 import { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
 import { MultiSelectListBox } from "./BaseComponents/MultiSelectListBox";
 import { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
+import {
+  MultiSelectToolbar,
+  MultiSelectToolbarContext,
+  type MultiSelectToolbarBridge,
+} from "./BaseComponents/MultiSelectToolbar";
 import styles from "./MultiSelect.module.css";
 
 /** Controls how selected items are displayed inside the field. */
@@ -47,12 +53,13 @@ export interface MultiSelectProps<T>
    */
   size?: FieldSize;
   /**
-   * Adds "select all" and "select none" controls to the dropdown, laid out as a
-   * toolbar above the options. They are options of the list themselves, so the
-   * arrow keys reach them without introducing another tab stop, and they act on
-   * the options currently on offer: with a filter typed that is the matches
-   * shown, leaving the rest of the selection untouched. Disabled options are
-   * never selected. Defaults to `false`.
+   * Adds "select all" and "select none" controls to the dropdown, as a toolbar
+   * of buttons pinned above the options. ArrowUp from the search input (while
+   * focus is not deeper in the list) moves to them; ArrowDown from a control
+   * returns to the input. Tab reaches them as well. They act on the options
+   * currently on offer — with a filter typed that is the matches shown, leaving
+   * the rest of the selection untouched — and never select a disabled option.
+   * A control that would change nothing is disabled. Defaults to `false`.
    */
   allowsSelectAll?: boolean;
   /** Label for the control that checks every option on offer. Defaults to "Select all". */
@@ -79,65 +86,75 @@ export function MultiSelect<T>({
   allowsSelectAll = false,
   selectAllLabel = "Select all",
   selectNoneLabel = "Select none",
-  items,
-  defaultItems,
   ...props
 }: MultiSelectProps<T>) {
-  // When the select-all toolbar is present, dynamic options sit beside the
-  // static controls in a nested <Collection items={...}>. Items belong on that
-  // Collection only — the ComboBox's own items/defaultItems would also feed
-  // ListBoxContext and re-register the same list at the top level.
-  const collectionItems = items ?? defaultItems;
+  // The toolbar lives in the portaled popover; these refs let the input and
+  // toolbar hand focus to each other on ArrowUp / ArrowDown. Null while the
+  // toolbar is off, so the input leaves arrow keys to react-aria.
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const bridge = useMemo<MultiSelectToolbarBridge>(
+    () => ({ toolbarRef, searchInputRef }),
+    []
+  );
 
   return (
-    <AriaComboBox
-      menuTrigger="focus"
-      allowsEmptyCollection
-      {...props}
-      {...(allowsSelectAll ? {} : { items, defaultItems })}
-      selectionMode="multiple"
-      data-field-size={size}
-      className={clsx("react-aria-ComboBox", styles.multiSelect)}
+    <MultiSelectToolbarContext.Provider
+      value={allowsSelectAll ? bridge : null}
     >
-      {label && <Label isRequired={props.isRequired}>{label}</Label>}
-      {/* The Group is wired up by the ComboBox: the popover is positioned
-          against it and it gets data-hovered/focus/disabled/invalid states. */}
-      <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
-        {displayMode === "tags" ? (
-          <MultiSelectTags />
-        ) : (
-          <ComboBoxValue
-            className={clsx("react-aria-ComboBoxValue", styles.textValue)}
-          >
-            {({ state }) =>
-              state.selectedItems.map((item) => item.textValue).join(", ")
-            }
-          </ComboBoxValue>
-        )}
-        <MultiSelectInput placeholder={placeholder} />
-        <FieldButton>
-          <ChevronDown />
-        </FieldButton>
-      </Group>
-      {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
-      {/* The popover is portaled to the document body, so it cannot inherit
-          the --field-* scope from the field: carry the size across explicitly. */}
-      <Popover
-        hideArrow
+      <AriaComboBox
+        menuTrigger="focus"
+        allowsEmptyCollection
+        {...props}
+        selectionMode="multiple"
         data-field-size={size}
-        className={styles.multiSelectPopover}
+        className={clsx("react-aria-ComboBox", styles.multiSelect)}
       >
-        <MultiSelectListBox
-          items={allowsSelectAll ? collectionItems : undefined}
-          allowsSelectAll={allowsSelectAll}
-          selectAllLabel={selectAllLabel}
-          selectNoneLabel={selectNoneLabel}
+        {label && <Label isRequired={props.isRequired}>{label}</Label>}
+        {/* The Group is wired up by the ComboBox: the popover is positioned
+            against it and it gets data-hovered/focus/disabled/invalid states. */}
+        <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
+          {displayMode === "tags" ? (
+            <MultiSelectTags />
+          ) : (
+            <ComboBoxValue
+              className={clsx("react-aria-ComboBoxValue", styles.textValue)}
+            >
+              {({ state }) =>
+                state.selectedItems.map((item) => item.textValue).join(", ")
+              }
+            </ComboBoxValue>
+          )}
+          <MultiSelectInput
+            ref={searchInputRef}
+            placeholder={placeholder}
+          />
+          <FieldButton>
+            <ChevronDown />
+          </FieldButton>
+        </Group>
+        {description && <Description>{description}</Description>}
+        <FieldError>{errorMessage}</FieldError>
+        {/* The popover is portaled to the document body, so it cannot inherit
+            the --field-* scope from the field: carry the size across explicitly. */}
+        <Popover
+          hideArrow
+          data-field-size={size}
+          className={styles.multiSelectPopover}
         >
-          {children}
-        </MultiSelectListBox>
-      </Popover>
-    </AriaComboBox>
+          {/* Inside the popover but outside the listbox: the controls act on
+              the collection, they are not part of it. */}
+          {allowsSelectAll && (
+            <MultiSelectToolbar
+              size={size}
+              selectAllLabel={selectAllLabel}
+              selectNoneLabel={selectNoneLabel}
+            />
+          )}
+          <MultiSelectListBox>{children}</MultiSelectListBox>
+        </Popover>
+      </AriaComboBox>
+    </MultiSelectToolbarContext.Provider>
   );
 }
 

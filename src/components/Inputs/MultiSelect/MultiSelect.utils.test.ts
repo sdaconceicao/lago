@@ -1,44 +1,23 @@
-import {
-  addKeys,
-  hasSameKeys,
-  isSelectionActionKey,
-  removeKeys,
-  SELECT_ALL_KEY,
-  SELECT_NONE_KEY,
-} from "./MultiSelect.utils";
+import { addKeys, hasSameKeys, removeKeys } from "./MultiSelect.utils";
 
 describe("MultiSelect.utils", () => {
-  describe("isSelectionActionKey", () => {
-    it("recognizes both control keys", () => {
-      expect(isSelectionActionKey(SELECT_ALL_KEY)).toBe(true);
-      expect(isSelectionActionKey(SELECT_NONE_KEY)).toBe(true);
-    });
-
-    it("rejects option keys and empty values", () => {
-      expect(isSelectionActionKey("apple")).toBe(false);
-      expect(isSelectionActionKey(0)).toBe(false);
-      expect(isSelectionActionKey(null)).toBe(false);
-      expect(isSelectionActionKey(undefined)).toBe(false);
-    });
-  });
-
   describe("addKeys", () => {
     it("returns the added keys in their own order", () => {
       expect(addKeys([], ["apple", "banana"])).toEqual(["apple", "banana"]);
     });
 
-    it("keeps selected keys that were not added, after the added ones", () => {
+    it("appends newly added keys after the existing selection", () => {
       expect(addKeys(["fig"], ["apple", "banana"])).toEqual([
+        "fig",
         "apple",
         "banana",
-        "fig",
       ]);
     });
 
     it("does not repeat a key that is already selected", () => {
       expect(addKeys(["banana"], ["apple", "banana"])).toEqual([
-        "apple",
         "banana",
+        "apple",
       ]);
     });
 

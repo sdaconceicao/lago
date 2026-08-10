@@ -88,7 +88,19 @@
   }
 }
 
+/* A column so the selection toolbar can hold the top of the popover while the
+   listbox takes the rest and scrolls. react-aria sets the popover's max-height
+   inline from the space available; `min-height: 0` is what lets the listbox
+   shrink inside it rather than pushing the toolbar out of view. */
 .multiSelectPopover[data-trigger="ComboBox"] {
+  display: flex;
+  flex-direction: column;
   width: var(--trigger-width);
   padding: 0;
+  overflow: hidden;
+
+  :global(.dropdown-listbox) {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
 }

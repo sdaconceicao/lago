@@ -1,83 +1,21 @@
-/* When select-all is on, the listbox lays the two controls out as a sticky
-   toolbar row and lets every real option take a full-width line beneath.
-   Marked via data-multi-select-toolbar on the listbox (see MultiSelectListBox). */
-:global(.dropdown-listbox[data-multi-select-toolbar]) {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: var(--field-gap);
+/* The toolbar is a sibling of the listbox rather than a row inside it, so it
+   holds its place at the top of the popover without `position: sticky` — the
+   listbox does the scrolling on its own. The row spans the full popover width,
+   which is what draws the divider all the way across. */
+.toolbarRow {
+  flex: 0 0 auto;
   box-sizing: border-box;
-  /* The inline inset matches the margin the options carry, so the first
-     control lines up with the checkboxes below it. */
+  /* The inline inset matches the margin the options carry, so the first control
+     lines up with the checkboxes below it. */
   padding: var(--spacing) var(--spacing-1);
+  border-bottom: 1px solid var(--border-color);
+  background: var(--overlay-background);
 }
 
-:global(.dropdown-listbox[data-multi-select-toolbar] .multi-select-control) {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  box-shadow: 0 0.5px 0 var(--border-color);
-}
-
-:global(
-  .dropdown-listbox[data-multi-select-toolbar]
-    > :not(.multi-select-control):not(style)
-) {
-  flex: 1 1 100%;
-}
-
-/* Sized and tinted like the field's own trigger button, the closest thing to
-   these in the control they belong to. */
-.control {
+.toolbar {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  min-height: var(--field-inner-height);
-  padding-inline: var(--spacing-2);
-  border-radius: var(--field-radius);
-  background: var(--tint-200);
-  color: var(--tint-1400);
-  font: var(--field-font-size) var(--font-family);
-  font-weight: 500;
-  white-space: nowrap;
-  cursor: pointer;
-  outline: none;
-  forced-color-adjust: none;
-  transition-property: background, color;
-  transition-duration: 200ms;
-  -webkit-tap-highlight-color: transparent;
-
-  /* Plain :hover rather than react-aria's [data-hovered]: the option carries no
-     action of its own — the listbox handles the press — so react-aria leaves
-     its hover tracking switched off. */
-  &:hover {
-    background: var(--tint-300);
-    color: var(--tint-1200);
-  }
-
-  /* Focus in the dropdown is virtual: DOM focus stays in the search input and
-     the arrow keys move a focused *option*, which is why this is the same
-     treatment an option gets rather than a focus ring. */
-  &[data-focused] {
-    background: var(--highlight-background);
-    color: var(--highlight-foreground);
-  }
-
-  &[data-pressed] {
-    background: var(--highlight-pressed);
-    color: var(--tint-1400);
-  }
-
-  @media (forced-colors: active) {
-    background: ButtonFace;
-    color: ButtonText;
-    border: 1px solid ButtonBorder;
-
-    &[data-focused] {
-      background: Highlight;
-      color: HighlightText;
-    }
-  }
+  gap: var(--field-gap);
+  width: 100%;
 }

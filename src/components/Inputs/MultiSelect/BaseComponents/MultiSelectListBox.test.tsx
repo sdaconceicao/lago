@@ -45,21 +45,30 @@ describe("MultiSelectListBox", () => {
     );
   });
 
-  it("sets the toolbar data attribute when allowsSelectAll is true", async () => {
+  it("holds only the options, even with the selection toolbar on", async () => {
     const user = userEvent.setup();
     renderMultiSelectListBox({ allowsSelectAll: true });
 
     await user.click(screen.getByRole("combobox"));
     const listbox = await screen.findByRole("listbox");
-    expect(listbox).toHaveAttribute("data-multi-select-toolbar", "true");
+
+    expect(
+      Array.from(listbox.querySelectorAll('[role="option"]')).map(
+        (option) => option.textContent
+      )
+    ).toEqual(["Apple", "Banana"]);
+    expect(listbox.querySelector("button")).toBeNull();
   });
 
-  it("does not set the toolbar data attribute when allowsSelectAll is false", async () => {
+  it("shows the empty state when no option matches, toolbar or not", async () => {
     const user = userEvent.setup();
-    renderMultiSelectListBox();
+    renderMultiSelectListBox({ allowsSelectAll: true });
 
-    await user.click(screen.getByRole("combobox"));
-    const listbox = await screen.findByRole("listbox");
-    expect(listbox).not.toHaveAttribute("data-multi-select-toolbar");
+    await user.type(screen.getByRole("combobox"), "zzz");
+
+    expect(await screen.findByText("No results found.")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("option", { name: "Apple" })
+    ).not.toBeInTheDocument();
   });
 });
