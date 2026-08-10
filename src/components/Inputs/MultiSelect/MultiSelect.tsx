@@ -99,9 +99,7 @@ export function MultiSelect<T>({
   );
 
   return (
-    <MultiSelectToolbarContext.Provider
-      value={allowsSelectAll ? bridge : null}
-    >
+    <MultiSelectToolbarContext.Provider value={allowsSelectAll ? bridge : null}>
       <AriaComboBox
         menuTrigger="focus"
         allowsEmptyCollection
@@ -125,10 +123,7 @@ export function MultiSelect<T>({
               }
             </ComboBoxValue>
           )}
-          <MultiSelectInput
-            ref={searchInputRef}
-            placeholder={placeholder}
-          />
+          <MultiSelectInput ref={searchInputRef} placeholder={placeholder} />
           <FieldButton>
             <ChevronDown />
           </FieldButton>

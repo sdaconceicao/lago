@@ -55,9 +55,10 @@ export const MultiSelectInput = forwardRef<
         // The first control is disabled whenever it would change nothing, and a
         // disabled button cannot take focus: aim at the first one that can, and
         // leave Tab alone when neither can, rather than swallowing it.
-        const control = bridge.toolbarRef.current?.querySelector<HTMLButtonElement>(
-          "button:not([disabled])"
-        );
+        const control =
+          bridge.toolbarRef.current?.querySelector<HTMLButtonElement>(
+            "button:not([disabled])"
+          );
         if (!control) {
           return;
         }
@@ -78,9 +79,10 @@ export const MultiSelectInput = forwardRef<
         return;
       }
 
-      const control = bridge.toolbarRef.current?.querySelector<HTMLButtonElement>(
-        "button:not([disabled])"
-      );
+      const control =
+        bridge.toolbarRef.current?.querySelector<HTMLButtonElement>(
+          "button:not([disabled])"
+        );
       if (!control) {
         return;
       }

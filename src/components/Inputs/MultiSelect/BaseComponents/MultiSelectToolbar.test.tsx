@@ -104,9 +104,7 @@ describe("MultiSelectToolbar", () => {
     await openDropdown(user);
 
     expect(screen.getByRole("button", { name: "Select all" })).toBeDisabled();
-    expect(
-      screen.getByRole("button", { name: "Select none" })
-    ).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Select none" })).toBeEnabled();
   });
 
   it("disables select none while nothing on offer is selected", async () => {
