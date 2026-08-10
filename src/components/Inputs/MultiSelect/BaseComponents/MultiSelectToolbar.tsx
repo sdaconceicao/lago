@@ -62,12 +62,14 @@ export function MultiSelectToolbar({
 
   // ArrowDown returns to the search input and puts virtual focus on the first
   // option, so the next ArrowDown continues into the list as usual. Left/Right
-  // stay with the Toolbar for moving between the two controls.
+  // stay with the Toolbar for moving between the two controls. Lives on the
+  // buttons (not the layout wrapper) so keyboard handlers stay on interactive
+  // elements.
   //
   // Focusing the trigger from inside the portaled popover can race the
   // overlay's focusout and close the menu; open() after focus keeps it up.
-  const onKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const onArrowDownToInput = useCallback(
+    (event: React.KeyboardEvent) => {
       if (event.key !== "ArrowDown" || !state || !bridge) {
         return;
       }
@@ -93,11 +95,7 @@ export function MultiSelectToolbar({
   const withNone = removeKeys(selected, onOffer);
 
   return (
-    <div
-      ref={bridge?.toolbarRef ?? undefined}
-      className={styles.toolbarRow}
-      onKeyDown={onKeyDown}
-    >
+    <div ref={bridge?.toolbarRef ?? undefined} className={styles.toolbarRow}>
       <Toolbar aria-label="Selection" className={styles.toolbar}>
         <Button
           size={size}
@@ -107,6 +105,7 @@ export function MultiSelectToolbar({
           preventFocusOnPress
           isDisabled={hasSameKeys(selected, withAll)}
           onPress={() => state.setValue(withAll)}
+          onKeyDown={onArrowDownToInput}
         >
           {selectAllLabel}
         </Button>
@@ -116,6 +115,7 @@ export function MultiSelectToolbar({
           preventFocusOnPress
           isDisabled={hasSameKeys(selected, withNone)}
           onPress={() => state.setValue(withNone)}
+          onKeyDown={onArrowDownToInput}
         >
           {selectNoneLabel}
         </Button>
