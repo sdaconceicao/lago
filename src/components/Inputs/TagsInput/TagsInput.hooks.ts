@@ -21,7 +21,7 @@ import {
  * the natural thing to write — would otherwise have the input cleared on every
  * keystroke. Freezing the reference makes that impossible.
  */
-export const useStableKeys = (keys: Key[]): Key[] => {
+export const useStableKeys = (keys: readonly Key[]): readonly Key[] => {
   const stable = useRef(keys);
   if (stable.current !== keys && !isSameKeys(stable.current, keys)) {
     stable.current = keys;
@@ -33,9 +33,9 @@ export interface UseTagsInputStateOptions {
   /** The options the caller offered. */
   items: TagsInputItem[];
   /** Selected keys, when the caller controls them. */
-  value?: Key[];
+  value?: readonly Key[];
   /** Initially selected keys, when the caller does not. */
-  defaultValue?: Key[];
+  defaultValue?: readonly Key[];
   /** Called with the full selection whenever a tag is added or removed. */
   onChange?: (keys: Key[]) => void;
   /** Whether a query matching no option can be added as a new tag. */
@@ -65,7 +65,7 @@ export const useTagsInputState = ({
   onInputChange,
 }: UseTagsInputStateOptions) => {
   const [uncontrolledKeys, setUncontrolledKeys] = useState<Key[]>(
-    () => defaultValue ?? []
+    () => [...(defaultValue ?? [])],
   );
   const [createdItems, setCreatedItems] = useState<TagsInputItem[]>([]);
   const [query, setQuery] = useState("");
