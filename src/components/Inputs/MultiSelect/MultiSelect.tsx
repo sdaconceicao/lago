@@ -24,8 +24,8 @@ import { MultiSelectListBox } from "./BaseComponents/MultiSelectListBox";
 import { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
 import {
   MultiSelectToolbar,
-  MultiSelectToolbarContext,
   type MultiSelectToolbarBridge,
+  MultiSelectToolbarContext,
 } from "./BaseComponents/MultiSelectToolbar";
 import styles from "./MultiSelect.module.css";
 
