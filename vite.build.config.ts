@@ -89,10 +89,7 @@ export default defineConfig({
       // (e.g. "react/jsx-runtime", "react-dom/client").
       external: (id) =>
         externalDeps.some((dep) => id === dep || id.startsWith(`${dep}/`)),
-      output: [
-        preserveModulesOutput("es"),
-        preserveModulesOutput("cjs"),
-      ],
+      output: [preserveModulesOutput("es"), preserveModulesOutput("cjs")],
     },
     // Merge all CSS (theme + component modules) into one index.css. JS stays
     // preserveModules for tree-shaking.

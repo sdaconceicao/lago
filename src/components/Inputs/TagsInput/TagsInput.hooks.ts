@@ -64,9 +64,9 @@ export const useTagsInputState = ({
   onCreate,
   onInputChange,
 }: UseTagsInputStateOptions) => {
-  const [uncontrolledKeys, setUncontrolledKeys] = useState<Key[]>(
-    () => [...(defaultValue ?? [])],
-  );
+  const [uncontrolledKeys, setUncontrolledKeys] = useState<Key[]>(() => [
+    ...(defaultValue ?? []),
+  ]);
   const [createdItems, setCreatedItems] = useState<TagsInputItem[]>([]);
   const [query, setQuery] = useState("");
 
