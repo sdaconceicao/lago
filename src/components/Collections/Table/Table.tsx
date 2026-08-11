@@ -35,7 +35,7 @@ export function Table(props: TableProps) {
   return (
     <AriaTable
       {...props}
-      className={props.className ?? clsx("react-aria-Table", styles.table)}
+      className={clsx("react-aria-Table", styles.table, props.className)}
     />
   );
 }

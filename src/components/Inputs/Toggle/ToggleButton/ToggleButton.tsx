@@ -30,7 +30,8 @@ export function ToggleButton({ size = "md", ...props }: ToggleButtonProps) {
       className={clsx(
         "react-aria-ToggleButton",
         styles.toggleButton,
-        utils.buttonBase
+        utils.buttonBase,
+        props.className
       )}
       data-size={size}
       data-variant={props.variant || "primary"}

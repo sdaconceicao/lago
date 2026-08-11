@@ -13,10 +13,11 @@ export function TableLoadMoreItem(props: TableLoadMoreItemProps) {
   return (
     <AriaTableLoadMoreItem
       {...props}
-      className={
-        props.className ??
-        clsx("react-aria-TableLoadingIndicator", styles.tableLoadingIndicator)
-      }
+      className={clsx(
+        "react-aria-TableLoadingIndicator",
+        styles.tableLoadingIndicator,
+        props.className
+      )}
     >
       <div
         style={{

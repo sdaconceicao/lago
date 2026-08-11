@@ -12,9 +12,11 @@ export function TableBody<T>(props: TableBodyProps<T>) {
   return (
     <AriaTableBody
       {...props}
-      className={
-        props.className ?? clsx("react-aria-TableBody", styles.tableBody)
-      }
+      className={clsx(
+        "react-aria-TableBody",
+        styles.tableBody,
+        props.className
+      )}
     />
   );
 }

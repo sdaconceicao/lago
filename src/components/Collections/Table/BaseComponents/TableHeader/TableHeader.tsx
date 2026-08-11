@@ -25,10 +25,11 @@ export function TableHeader<T>({
   return (
     <AriaTableHeader
       {...otherProps}
-      className={
-        otherProps.className ??
-        clsx("react-aria-TableHeader", styles.tableHeader)
-      }
+      className={clsx(
+        "react-aria-TableHeader",
+        styles.tableHeader,
+        otherProps.className
+      )}
     >
       {/* Add extra columns for drag and drop and selection. */}
       {allowsDragging && (

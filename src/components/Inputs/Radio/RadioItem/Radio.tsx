@@ -33,7 +33,11 @@ export function Radio({ size, ...props }: RadioProps) {
       // inherits `md` from `:root`, and one inside a group must not stamp its
       // own size over the group's scope.
       data-field-size={size}
-      className={clsx("react-aria-RadioField", styles.radioField)}
+      className={clsx(
+        "react-aria-RadioField",
+        styles.radioField,
+        props.className
+      )}
     >
       <RadioButton
         className={clsx("react-aria-RadioButton", styles.radioButton)}

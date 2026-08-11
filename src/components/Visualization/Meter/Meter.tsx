@@ -15,7 +15,10 @@ export interface MeterProps extends AriaMeterProps {
 
 export function Meter({ label, ...props }: MeterProps) {
   return (
-    <AriaMeter {...props} className={clsx("react-aria-Meter", styles.meter)}>
+    <AriaMeter
+      {...props}
+      className={clsx("react-aria-Meter", styles.meter, props.className)}
+    >
       {({ percentage, valueText }) => (
         <>
           <Label>{label}</Label>

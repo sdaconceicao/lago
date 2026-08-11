@@ -71,7 +71,11 @@ export function MultiSelect<T>({
       {...props}
       selectionMode="multiple"
       data-field-size={size}
-      className={clsx("react-aria-ComboBox", styles.multiSelect)}
+      className={clsx(
+        "react-aria-ComboBox",
+        styles.multiSelect,
+        props.className
+      )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       {/* The Group is wired up by the ComboBox: the popover is positioned

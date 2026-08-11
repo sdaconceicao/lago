@@ -47,9 +47,11 @@ export function TimeField<T extends TimeValue>({
     <AriaTimeField
       {...props}
       data-field-size={size}
-      className={
-        props.className ?? clsx("react-aria-TimeField", styles.timeField)
-      }
+      className={clsx(
+        "react-aria-TimeField",
+        styles.timeField,
+        props.className
+      )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>

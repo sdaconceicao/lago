@@ -17,7 +17,11 @@ export function ProgressBar({ label, ...props }: ProgressBarProps) {
   return (
     <AriaProgressBar
       {...props}
-      className={clsx("react-aria-ProgressBar", styles.progressBar)}
+      className={clsx(
+        "react-aria-ProgressBar",
+        styles.progressBar,
+        props.className
+      )}
     >
       {({ percentage, valueText, isIndeterminate }) => (
         <>

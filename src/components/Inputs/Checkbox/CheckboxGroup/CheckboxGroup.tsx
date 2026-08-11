@@ -52,7 +52,11 @@ export function CheckboxGroup({
       {...props}
       data-orientation={orientation}
       data-field-size={size}
-      className={clsx("react-aria-CheckboxGroup", styles.checkboxGroup)}
+      className={clsx(
+        "react-aria-CheckboxGroup",
+        styles.checkboxGroup,
+        props.className
+      )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <div className={clsx("checkbox-items", styles.checkboxItems)}>

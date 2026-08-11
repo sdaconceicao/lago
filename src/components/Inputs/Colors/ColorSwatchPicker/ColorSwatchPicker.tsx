@@ -16,7 +16,11 @@ export function ColorSwatchPicker({
   return (
     <AriaColorSwatchPicker
       {...props}
-      className={clsx("react-aria-ColorSwatchPicker", styles.colorSwatchPicker)}
+      className={clsx(
+        "react-aria-ColorSwatchPicker",
+        styles.colorSwatchPicker,
+        props.className
+      )}
     >
       {children}
     </AriaColorSwatchPicker>
@@ -29,7 +33,8 @@ export function ColorSwatchPickerItem(props: ColorSwatchPickerItemProps) {
       {...props}
       className={clsx(
         "react-aria-ColorSwatchPickerItem",
-        styles.colorSwatchPickerItem
+        styles.colorSwatchPickerItem,
+        props.className
       )}
     >
       <ColorSwatch />

@@ -22,7 +22,7 @@ export function Dialog(props: DialogProps) {
   return (
     <RACDialog
       {...props}
-      className={props.className ?? clsx("react-aria-Dialog", styles.dialog)}
+      className={clsx("react-aria-Dialog", styles.dialog, props.className)}
     />
   );
 }

@@ -21,7 +21,12 @@ export function TableColumn(
   return (
     <AriaColumn
       {...props}
-      className={clsx("react-aria-Column", utils.buttonBase, styles.column)}
+      className={clsx(
+        "react-aria-Column",
+        utils.buttonBase,
+        styles.column,
+        props.className
+      )}
     >
       {({ allowsSorting, sortDirection }) => (
         <div className={clsx("column-header", styles.columnHeader)}>

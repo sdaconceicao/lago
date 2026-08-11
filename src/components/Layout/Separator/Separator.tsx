@@ -10,9 +10,11 @@ export function Separator(props: SeparatorProps) {
   return (
     <RACSeparator
       {...props}
-      className={
-        props.className ?? clsx("react-aria-Separator", styles.separator)
-      }
+      className={clsx(
+        "react-aria-Separator",
+        styles.separator,
+        props.className
+      )}
     />
   );
 }

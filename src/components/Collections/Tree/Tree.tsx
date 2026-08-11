@@ -23,7 +23,7 @@ export function Tree<T>(props: TreeProps<T>) {
   return (
     <AriaTree
       {...props}
-      className={props.className ?? clsx("react-aria-Tree", styles.tree)}
+      className={clsx("react-aria-Tree", styles.tree, props.className)}
     />
   );
 }
@@ -67,9 +67,7 @@ export function TreeItem(props: TreeItemProps) {
     <AriaTreeItem
       textValue={textValue}
       {...props}
-      className={
-        props.className ?? clsx("react-aria-TreeItem", styles.treeItem)
-      }
+      className={clsx("react-aria-TreeItem", styles.treeItem, props.className)}
     >
       {props.title != null ? (
         <>
@@ -87,9 +85,11 @@ export function TreeLoadMoreItem(props: TreeLoadMoreItemProps) {
   return (
     <AriaTreeLoadMoreItem
       {...props}
-      className={
-        props.className ?? clsx("react-aria-TreeLoader", styles.treeLoader)
-      }
+      className={clsx(
+        "react-aria-TreeLoader",
+        styles.treeLoader,
+        props.className
+      )}
     >
       <ProgressCircle isIndeterminate aria-label="Loading more..." />
     </AriaTreeLoadMoreItem>
@@ -102,9 +102,11 @@ export function TreeSection(
   return (
     <AriaTreeSection
       {...props}
-      className={
-        props.className ?? clsx("react-aria-TreeSection", styles.treeSection)
-      }
+      className={clsx(
+        "react-aria-TreeSection",
+        styles.treeSection,
+        props.className
+      )}
     />
   );
 }
@@ -113,9 +115,11 @@ export function TreeHeader(props: React.ComponentProps<typeof AriaTreeHeader>) {
   return (
     <AriaTreeHeader
       {...props}
-      className={
-        props.className ?? clsx("react-aria-TreeHeader", styles.treeHeader)
-      }
+      className={clsx(
+        "react-aria-TreeHeader",
+        styles.treeHeader,
+        props.className
+      )}
     />
   );
 }

@@ -19,7 +19,7 @@ export function SelectItem(props: ListBoxItemProps) {
     <ListBoxItem
       {...props}
       textValue={textValue}
-      className={clsx("select-item", styles.item)}
+      className={clsx("select-item", styles.item, props.className)}
     >
       {composeRenderProps(props.children, (children, { isSelected }) => (
         <>

@@ -49,9 +49,11 @@ export function DateField<T extends DateValue>({
     <AriaDateField
       {...props}
       data-field-size={size}
-      className={
-        props.className ?? clsx("react-aria-DateField", styles.dateField)
-      }
+      className={clsx(
+        "react-aria-DateField",
+        styles.dateField,
+        props.className
+      )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
@@ -65,9 +67,11 @@ export function DateSegment(props: DateSegmentProps) {
   return (
     <AriaDateSegment
       {...props}
-      className={
-        props.className ?? clsx("react-aria-DateSegment", styles.dateSegment)
-      }
+      className={clsx(
+        "react-aria-DateSegment",
+        styles.dateSegment,
+        props.className
+      )}
     />
   );
 }
@@ -76,7 +80,12 @@ export function DateInput(props: DateInputProps) {
   return (
     <AriaDateInput
       {...props}
-      className={clsx("react-aria-DateInput", styles.dateInput, utils.inset)}
+      className={clsx(
+        "react-aria-DateInput",
+        styles.dateInput,
+        utils.inset,
+        props.className
+      )}
     />
   );
 }

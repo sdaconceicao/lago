@@ -39,13 +39,15 @@ describe("Separator", () => {
     expect(separator.tagName).toBe("SPAN");
   });
 
-  it("passes through a custom className and aria-label", () => {
+  it("merges a custom className with its own, and passes through aria-label", () => {
     render(<Separator className="my-separator" aria-label="Section divider" />);
 
     const separator = screen.getByRole("separator", {
       name: "Section divider",
     });
+    // Merged rather than replaced: a caller adding a class should be adding to
+    // the component, not silently opting out of its styling.
     expect(separator).toHaveClass("my-separator");
-    expect(separator).not.toHaveClass("react-aria-Separator");
+    expect(separator).toHaveClass("react-aria-Separator");
   });
 });

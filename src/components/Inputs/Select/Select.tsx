@@ -59,7 +59,7 @@ export function Select<T extends object>({
       {...props}
       items={items}
       data-field-size={size}
-      className={clsx("react-aria-ComboBox", styles.select)}
+      className={clsx("react-aria-ComboBox", styles.select, props.className)}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       {/* Field, input, and chevron mirror the MultiSelect so the two align. */}

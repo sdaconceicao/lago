@@ -34,9 +34,7 @@ export function Calendar<T extends DateValue>({
   return (
     <AriaCalendar
       {...props}
-      className={
-        props.className ?? clsx("react-aria-Calendar", styles.calendar)
-      }
+      className={clsx("react-aria-Calendar", styles.calendar, props.className)}
     >
       <div className={clsx("months", styles.months)}>
         {monthKeys.map((monthKey, monthOffset) => (
@@ -78,7 +76,8 @@ export function CalendarCell(props: CalendarCellProps) {
       className={clsx(
         "react-aria-CalendarCell",
         styles.calendarCell,
-        utils.buttonBase
+        utils.buttonBase,
+        props.className
       )}
       data-variant="quiet"
     />
@@ -89,9 +88,11 @@ export function CalendarGrid(props: CalendarGridProps) {
   return (
     <AriaCalendarGrid
       {...props}
-      className={
-        props.className ?? clsx("react-aria-CalendarGrid", styles.calendarGrid)
-      }
+      className={clsx(
+        "react-aria-CalendarGrid",
+        styles.calendarGrid,
+        props.className
+      )}
     />
   );
 }
