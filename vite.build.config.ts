@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react-swc";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import { cssLayers } from "./vite.css-layers.ts";
 
 const dirname =
   typeof __dirname !== "undefined"
@@ -19,6 +20,7 @@ const externalDeps = Object.keys(packageJson.peerDependencies || {});
 
 export default defineConfig({
   plugins: [
+    cssLayers(),
     react(),
     // NOTE: We intentionally do NOT use vite-plugin-lib-inject-css here.
     // It injects a side-effect `import './index.css'` into the JS entry, which

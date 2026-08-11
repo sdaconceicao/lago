@@ -7,7 +7,7 @@ import {
   type ColumnProps as AriaColumnProps,
   ColumnResizer,
 } from "react-aria-components/Table";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Column.module.css";
 
 export interface ColumnProps extends AriaColumnProps {
@@ -21,7 +21,7 @@ export function TableColumn(
   return (
     <AriaColumn
       {...props}
-      className={clsx("react-aria-Column", utils.buttonBase, styles.column)}
+      className={clsx("react-aria-Column", base.buttonBase, styles.column)}
     >
       {({ allowsSorting, sortDirection }) => (
         <div className={clsx("column-header", styles.columnHeader)}>

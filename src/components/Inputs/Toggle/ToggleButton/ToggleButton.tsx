@@ -5,7 +5,7 @@ import {
   ToggleButton as RACToggleButton,
   type ToggleButtonProps as RACToggleButtonProps,
 } from "react-aria-components/ToggleButton";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./ToggleButton.module.css";
 
 export interface ToggleButtonProps extends RACToggleButtonProps {
@@ -30,7 +30,7 @@ export function ToggleButton({ size = "md", ...props }: ToggleButtonProps) {
       className={clsx(
         "react-aria-ToggleButton",
         styles.toggleButton,
-        utils.buttonBase
+        base.buttonBase
       )}
       data-size={size}
       data-variant={props.variant || "primary"}

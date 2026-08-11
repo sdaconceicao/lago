@@ -1,3 +1,9 @@
+/* Every token below is emitted into the `lago.tokens` cascade layer, the lowest
+   Lago declares (see vite.css-layers.ts). Restating any of them from your own
+   stylesheet therefore wins outright — no specificity to match, and no
+   dependence on which sheet the bundler emits first. The `@import` is lifted
+   back out of the layer by that plugin, since `@import` is invalid inside one. */
+
 /* fonts */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 

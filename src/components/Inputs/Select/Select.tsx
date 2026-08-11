@@ -17,7 +17,7 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import { SelectInput } from "./BaseComponents/SelectInput";
 import styles from "./Select.module.css";
 
@@ -63,7 +63,7 @@ export function Select<T extends object>({
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       {/* Field, input, and chevron mirror the MultiSelect so the two align. */}
-      <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
+      <Group className={clsx("react-aria-Group", styles.field, base.inset)}>
         <SelectInput placeholder={placeholder} />
         <FieldButton>
           <ChevronDown />

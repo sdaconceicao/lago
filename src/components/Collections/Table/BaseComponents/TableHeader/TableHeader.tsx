@@ -8,7 +8,7 @@ import {
   useTableOptions,
 } from "react-aria-components/Table";
 import { Checkbox } from "@/components/Inputs/Checkbox/CheckboxItem/Checkbox";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import columnStyles from "../Column/Column.module.css";
 import styles from "./TableHeader.module.css";
 
@@ -38,7 +38,7 @@ export function TableHeader<T>({
           style={{ width: 20 }}
           className={clsx(
             "react-aria-Column",
-            utils.buttonBase,
+            base.buttonBase,
             columnStyles.column
           )}
         />
@@ -50,7 +50,7 @@ export function TableHeader<T>({
           style={{ width: 32 }}
           className={clsx(
             "react-aria-Column",
-            utils.buttonBase,
+            base.buttonBase,
             columnStyles.column
           )}
         >

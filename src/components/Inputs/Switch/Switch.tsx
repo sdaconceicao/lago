@@ -13,7 +13,7 @@ import {
   FieldError,
   type FieldSize,
 } from "@/components/Inputs/FormComponents/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Switch.module.css";
 
 export interface SwitchProps extends Omit<SwitchFieldProps, "children"> {
@@ -49,13 +49,13 @@ export function Switch({
       >
         {({ isSelected, isDisabled }) => (
           <>
-            <div className={clsx("track", styles.track, utils.indicator)}>
+            <div className={clsx("track", styles.track, base.indicator)}>
               <div
                 data-disabled={isDisabled || undefined}
                 className={
                   isSelected
                     ? clsx("handle", styles.handle)
-                    : clsx("handle", styles.handle, utils.indicator)
+                    : clsx("handle", styles.handle, base.indicator)
                 }
               />
             </div>

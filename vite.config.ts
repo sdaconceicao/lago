@@ -6,6 +6,7 @@ import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import react from "@vitejs/plugin-react-swc";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vite";
+import { cssLayers } from "./vite.css-layers.ts";
 
 const dirname =
   typeof __dirname !== "undefined"
@@ -14,7 +15,7 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [react()],
+  plugins: [cssLayers(), react()],
   resolve: {
     alias: {
       "@": path.resolve(dirname, "./src"),
