@@ -77,6 +77,7 @@ Alert.Header = AlertHeader;
 Alert.Body = AlertBody;
 Alert.Footer = AlertFooter;
 
+export { AlertVariantContext, useAlertVariant } from "./Alert.context";
 export type {
   AlertBodyProps,
   AlertFooterProps,

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { DropZone, Text } from "./DropZone";
+import { Text } from "@/components/Typography/index";
+import { DropZone } from "./DropZone";
 
 const createDataTransfer = (text: string) => ({
   types: ["text/plain"],

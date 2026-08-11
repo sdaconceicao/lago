@@ -94,3 +94,5 @@ export function SkeletonParagraph({
     </div>
   );
 }
+
+export { DEFAULT_PARAGRAPH_LINES };

@@ -48,3 +48,5 @@ export function Breadcrumb(
     </RACBreadcrumb>
   );
 }
+
+export type { BreadcrumbProps, BreadcrumbsProps };

@@ -6,6 +6,8 @@ import {
 } from "react-aria-components/Separator";
 import styles from "./Separator.module.css";
 
+export type { SeparatorProps };
+
 export function Separator(props: SeparatorProps) {
   return (
     <RACSeparator

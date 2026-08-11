@@ -3,7 +3,6 @@ import clsx from "clsx";
 import {
   DropZone as AriaDropZone,
   type DropZoneProps as AriaDropZoneProps,
-  Text,
 } from "react-aria-components/DropZone";
 import {
   DEFAULT_FIELD_SIZE,
@@ -33,4 +32,5 @@ export function DropZone({
   );
 }
 
-export { Text };
+// `Text` is not re-exported here — Typography/Text is the canonical one. See the
+// note in Actions/Menu/Menu.tsx.

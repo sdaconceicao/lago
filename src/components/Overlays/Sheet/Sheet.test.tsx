@@ -2,7 +2,8 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button } from "@/components/Actions/Button/Button";
 import { DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
-import { Heading, Sheet } from "./Sheet";
+import { Heading } from "@/components/Typography/index";
+import { Sheet } from "./Sheet";
 
 const renderSheet = () =>
   render(

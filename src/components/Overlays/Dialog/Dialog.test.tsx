@@ -6,7 +6,8 @@ import type {
 } from "react-aria-components/Dialog";
 import { Button } from "@/components/Actions/Button/Button";
 import { Modal } from "@/components/Overlays/Modal/Modal";
-import { Dialog, DialogTrigger, Heading } from "./Dialog";
+import { Heading } from "@/components/Typography/index";
+import { Dialog, DialogTrigger } from "./Dialog";
 
 const renderDialog = (
   dialogProps: Partial<DialogProps> = {},

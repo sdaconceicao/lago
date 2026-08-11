@@ -186,7 +186,11 @@ export const States: Story = {
       <TagGroup label="With error" errorMessage="Pick at least three flavors">
         <Tag id="chocolate">Chocolate</Tag>
       </TagGroup>
-      <TagGroup label="Disabled" isDisabled onRemove={() => {}}>
+      <TagGroup
+        label="Disabled"
+        disabledKeys={["chocolate", "mint"]}
+        onRemove={() => {}}
+      >
         <Tag id="chocolate">Chocolate</Tag>
         <Tag id="mint">Mint</Tag>
       </TagGroup>
@@ -199,7 +203,7 @@ export const States: Story = {
     docs: {
       description: {
         story:
-          "TagGroup renders an optional `description` below the chips and an `errorMessage` in the invalid color. `isDisabled` prevents interaction with the whole group, and `renderEmptyState` covers the case where the group has no tags left.",
+          "TagGroup renders an optional `description` below the chips and an `errorMessage` in the invalid color. `disabledKeys` prevents interaction with the tags it names — pass every key to disable the whole group — and `renderEmptyState` covers the case where the group has no tags left.",
       },
     },
   },

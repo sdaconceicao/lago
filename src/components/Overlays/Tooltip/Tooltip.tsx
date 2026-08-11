@@ -9,6 +9,8 @@ import {
 } from "react-aria-components/Tooltip";
 import styles from "./Tooltip.module.css";
 
+export type { TooltipTriggerComponentProps };
+
 export interface TooltipProps extends Omit<AriaTooltipProps, "children"> {
   children: React.ReactNode;
 }

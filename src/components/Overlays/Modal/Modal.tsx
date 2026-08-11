@@ -8,6 +8,8 @@ import {
 } from "react-aria-components/Modal";
 import styles from "./Modal.module.css";
 
+export type { ModalOverlayProps };
+
 export function Modal(props: ModalOverlayProps) {
   return (
     <ModalOverlay

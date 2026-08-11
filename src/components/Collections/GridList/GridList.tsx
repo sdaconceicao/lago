@@ -11,7 +11,6 @@ import {
   type GridListLoadMoreItemProps,
   type GridListProps,
   GridListSection,
-  Text,
 } from "react-aria-components/GridList";
 import { ProgressCircle } from "@/components/Feedback/ProgressCircle/ProgressCircle";
 import { Checkbox } from "@/components/Inputs/Checkbox/CheckboxItem/Checkbox";
@@ -83,4 +82,7 @@ export function GridListLoadMoreItem(props: GridListLoadMoreItemProps) {
   );
 }
 
-export { GridListHeader, GridListSection, Text };
+export type { GridListItemProps, GridListLoadMoreItemProps, GridListProps };
+// `Text` is not re-exported here — Typography/Text is the canonical one. See the
+// note in Actions/Menu/Menu.tsx.
+export { GridListHeader, GridListSection };

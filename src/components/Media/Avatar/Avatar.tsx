@@ -130,4 +130,4 @@ export function Avatar({
 Avatar.Initials = AvatarInitials;
 
 export type { AvatarInitialsProps, AvatarShape, AvatarSize };
-export { AvatarInitials };
+export { AvatarInitials, DEFAULT_AVATAR_SHAPE, DEFAULT_AVATAR_SIZE };

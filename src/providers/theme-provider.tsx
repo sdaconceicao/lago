@@ -18,7 +18,7 @@ export type Theme = "light" | "dark" | "system";
 const useApplyThemeEffect =
   typeof window === "undefined" ? useEffect : useLayoutEffect;
 
-interface ThemeContextType {
+export interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
 }
@@ -37,7 +37,7 @@ export const useTheme = (): ThemeContextType => {
   return context;
 };
 
-interface ThemeProviderProps {
+export interface ThemeProviderProps {
   children: ReactNode;
   /**
    * The class to add to the root element when the theme is dark

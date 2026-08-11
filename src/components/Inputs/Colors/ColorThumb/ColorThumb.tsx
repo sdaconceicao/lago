@@ -5,6 +5,8 @@ import {
 } from "react-aria-components/ColorThumb";
 import styles from "./ColorThumb.module.css";
 
+export type { ColorThumbProps };
+
 export function ColorThumb(props: ColorThumbProps) {
   return (
     <AriaColorThumb

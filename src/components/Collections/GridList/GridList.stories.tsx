@@ -1,11 +1,11 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { fn } from "storybook/test";
+import { Text } from "@/components/Typography/index";
 import {
   GridList,
   GridListHeader,
   GridListItem,
   GridListSection,
-  Text,
 } from "./GridList";
 
 const meta: Meta<typeof GridList> = {

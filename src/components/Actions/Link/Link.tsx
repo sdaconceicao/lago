@@ -3,6 +3,8 @@ import clsx from "clsx";
 import { type LinkProps, Link as RACLink } from "react-aria-components/Link";
 import styles from "./Link.module.css";
 
+export type { LinkProps };
+
 export function Link(props: LinkProps) {
   return (
     <RACLink
