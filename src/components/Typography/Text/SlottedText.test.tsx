@@ -5,8 +5,6 @@ import {
 
 describe("SlottedText", () => {
   it("declares the client boundary it needs", () => {
-    assertClientBoundary(
-      readSiblingSource("SlottedText.tsx", import.meta.url)
-    );
+    assertClientBoundary(readSiblingSource("SlottedText.tsx", import.meta.url));
   });
 });

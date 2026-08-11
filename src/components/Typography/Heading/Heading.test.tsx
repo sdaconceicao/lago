@@ -7,9 +7,7 @@ import { Heading, Text } from "../index";
 
 describe("Heading", () => {
   it("carries no client boundary", () => {
-    assertServerSafeSource(
-      readSiblingSource("Heading.tsx", import.meta.url)
-    );
+    assertServerSafeSource(readSiblingSource("Heading.tsx", import.meta.url));
   });
 
   it("renders a level 3 heading by default", () => {
