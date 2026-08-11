@@ -14,7 +14,7 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./ColorField.module.css";
 
 export interface ColorFieldProps extends AriaColorFieldProps {
@@ -51,7 +51,7 @@ export function ColorField({
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <Input
-        className={clsx("react-aria-Input", textFieldStyles.input, utils.inset)}
+        className={clsx("react-aria-Input", textFieldStyles.input, base.inset)}
         placeholder={placeholder}
       />
       {description && <Description>{description}</Description>}

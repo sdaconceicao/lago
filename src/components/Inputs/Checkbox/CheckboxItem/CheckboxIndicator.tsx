@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./CheckboxIndicator.module.css";
 
 export interface CheckboxIndicatorProps {
@@ -18,7 +18,7 @@ export interface CheckboxIndicatorProps {
  */
 export function CheckboxIndicator({ isIndeterminate }: CheckboxIndicatorProps) {
   return (
-    <div className={clsx("indicator", utils.indicator, styles.indicator)}>
+    <div className={clsx("indicator", base.indicator, styles.indicator)}>
       <svg
         viewBox="0 0 18 18"
         aria-hidden="true"

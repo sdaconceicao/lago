@@ -15,7 +15,7 @@ import {
   type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./TextField.module.css";
 
 export interface TextFieldProps<T = HTMLInputElement>
@@ -71,7 +71,7 @@ export function TextField({
         // share it, mirroring the Select and DatePicker field groups.
         <Group
           isDisabled={props.isDisabled}
-          className={clsx("react-aria-Group", styles.field, utils.inset)}
+          className={clsx("react-aria-Group", styles.field, base.inset)}
         >
           <Input
             ref={inputRef}
@@ -83,7 +83,7 @@ export function TextField({
       ) : (
         <Input
           ref={inputRef}
-          className={clsx("react-aria-Input", styles.input, utils.inset)}
+          className={clsx("react-aria-Input", styles.input, base.inset)}
           placeholder={placeholder}
         />
       )}

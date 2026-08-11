@@ -1,6 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import { SegmentedControl, SegmentedControlItem } from "./SegmentedControl";
 
 const renderControl = (
@@ -25,7 +25,7 @@ describe("SegmentedControl", () => {
     renderControl();
 
     const group = screen.getByRole("radiogroup", { name: "View" });
-    expect(group).toHaveClass("segmented-control", utils.buttonBase);
+    expect(group).toHaveClass("segmented-control", base.buttonBase);
     expect(group).toHaveAttribute("data-variant", "secondary");
   });
 

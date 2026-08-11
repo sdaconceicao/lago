@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo } from "react";
 import { Button } from "react-aria-components/Button";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Pagination.module.css";
 import { getPaginationRange } from "./Pagination.utils";
 
@@ -60,7 +60,7 @@ export function Pagination({
             <Button
               className={clsx(
                 "react-aria-Button",
-                utils.buttonBase,
+                base.buttonBase,
                 styles.control
               )}
               data-variant="quiet"
@@ -95,7 +95,7 @@ export function Pagination({
                 <Button
                   className={clsx(
                     "react-aria-Button",
-                    utils.buttonBase,
+                    base.buttonBase,
                     styles.page
                   )}
                   data-variant="quiet"
@@ -116,7 +116,7 @@ export function Pagination({
             <Button
               className={clsx(
                 "react-aria-Button",
-                utils.buttonBase,
+                base.buttonBase,
                 styles.control
               )}
               data-variant="quiet"

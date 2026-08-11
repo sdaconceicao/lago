@@ -13,7 +13,7 @@ import {
 } from "react-aria-components/Calendar";
 import { Button } from "@/components/Actions/Button/Button";
 import { Text } from "@/components/Typography/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Calendar.module.css";
 
 export interface CalendarProps<T extends DateValue>
@@ -78,7 +78,7 @@ export function CalendarCell(props: CalendarCellProps) {
       className={clsx(
         "react-aria-CalendarCell",
         styles.calendarCell,
-        utils.buttonBase
+        base.buttonBase
       )}
       data-variant="quiet"
     />

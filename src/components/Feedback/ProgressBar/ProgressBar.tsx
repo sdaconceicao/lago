@@ -6,7 +6,7 @@ import {
   type ProgressBarProps as AriaProgressBarProps,
 } from "react-aria-components/ProgressBar";
 import { Label } from "@/components/Inputs/FormComponents/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./ProgressBar.module.css";
 
 export interface ProgressBarProps extends AriaProgressBarProps {
@@ -23,7 +23,7 @@ export function ProgressBar({ label, ...props }: ProgressBarProps) {
         <>
           <Label>{label}</Label>
           <span className={clsx("value", styles.value)}>{valueText}</span>
-          <div className={clsx(utils.track, utils.inset, styles.track)}>
+          <div className={clsx(base.track, base.inset, styles.track)}>
             <div
               className={clsx("fill", styles.fill)}
               style={

@@ -17,7 +17,7 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import { TagsInputOption } from "./BaseComponents/TagsInputOption";
 import { TagsInputQuery } from "./BaseComponents/TagsInputQuery";
 import { TagsInputTags } from "./BaseComponents/TagsInputTags";
@@ -127,7 +127,7 @@ export function TagsInput({
           against it and it gets data-hovered/focus/disabled/invalid states.
           Only the input and the toggle live in it, so the field keeps its
           height however many tags are selected. */}
-      <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
+      <Group className={clsx("react-aria-Group", styles.field, base.inset)}>
         <TagsInputQuery placeholder={placeholder} onAddQuery={addQuery} />
         <FieldButton>
           <Search />

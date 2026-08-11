@@ -17,7 +17,7 @@ import {
   type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./DateField.module.css";
 
 export interface DateFieldProps<T extends DateValue>
@@ -76,7 +76,7 @@ export function DateInput(props: DateInputProps) {
   return (
     <AriaDateInput
       {...props}
-      className={clsx("react-aria-DateInput", styles.dateInput, utils.inset)}
+      className={clsx("react-aria-DateInput", styles.dateInput, base.inset)}
     />
   );
 }

@@ -22,8 +22,8 @@ values. Theming is driven entirely by the `dark-mode` class on `<html>`, which
 Import the compiled tokens/components CSS once at your app's entry point:
 
 ```ts
-import { ThemeProvider } from "lago";
-import "lago/styles";
+import { ThemeProvider } from "@code-x/lago";
+import "@code-x/lago/styles";
 ```
 
 ### 2. Wrap your app
@@ -86,3 +86,69 @@ Reference tokens directly in your CSS for a consistent look:
   color: var(--text-color);
 }
 ```
+
+### 6. Cascade layers, and restyling a component
+
+Everything Lago ships is emitted into cascade layers, declared in this order:
+
+```css
+@layer lago.tokens, lago.base, lago.components;
+```
+
+`tokens` holds the custom properties, `base` the shared treatments components
+are built from, and `components` the per-component rules — lowest priority
+first, so each layer can build on the one before it. If you have met Tailwind's
+`theme, base, components` this is the same arrangement.
+
+Your stylesheet is **unlayered**, and unlayered styles beat layered ones however
+specific the layered rule is — layer order is resolved *before* specificity. So
+a single class selector of yours overrides any Lago rule, and re-theming is
+never a specificity fight:
+
+```css
+/* wins, even though Lago's own rule is more specific */
+.react-aria-Button {
+  border-radius: 0;
+}
+```
+
+Three things follow from that.
+
+**Prefer the custom properties to raw declarations.** Buttons, indicators and
+field surfaces are drawn from `--button-*`, `--indicator-*` and `--inset-*`
+properties, and these are a supported contract rather than internals: Lago
+never declares their defaults outright, it reads each through a `var()`
+fallback, so setting one makes yours the only declaration. Retinting a button
+is a single line, and it keeps the specular highlight, the pressed scale, the
+transition and the dark-mode treatment intact — where replacing `background`
+outright would discard them.
+
+```css
+/* the whole button, retinted */
+.my-button {
+  --button-color: var(--purple);
+}
+```
+
+**Scope a variant override away from the states.** Because your rules outrank
+everything Lago ships, they outrank its *state* rules too — so a variant
+override that doesn't exclude `[data-disabled]` will paint disabled controls as
+though they were live. Lowering your specificity will not help; no specificity
+is low enough to lose to a layered rule. Exclude the state explicitly instead:
+
+```css
+/* Restate `primary` as a solid fill, reusing the filled treatment Lago's
+   semantic tones already use, pointed at the brand tint. */
+.react-aria-Button[data-variant="primary"]:not([data-disabled]) {
+  --button-background: var(--tint);
+  --button-border: oklch(from var(--tint) 50% c h);
+  --button-gradient: var(--button-border);
+  --button-highlight: rgb(255 255 255 / 0.2);
+  --button-shadow: oklch(from var(--tint) 30% c h);
+  --button-text: var(--highlight-foreground);
+}
+```
+
+**Don't reach for `!important`.** It *reverses* layer order — an `!important`
+declaration inside a layer beats an `!important` one outside it — so against a
+Lago rule it can make things worse. Being unlayered is already enough.

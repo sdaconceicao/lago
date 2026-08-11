@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import { Button } from "./Button";
 import styles from "./Button.module.css";
 
@@ -19,7 +19,7 @@ describe("Button", () => {
     expect(screen.getByRole("button")).toHaveClass(
       "react-aria-Button",
       styles.button,
-      utils.buttonBase
+      base.buttonBase
     );
   });
 
