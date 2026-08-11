@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.4.1](https://github.com/sdaconceicao/lago/compare/lago-v0.4.0...lago-v0.4.1) (2026-08-11)
+
+
+### Bug Fixes
+
+* Added consistent class merging ([#87](https://github.com/sdaconceicao/lago/issues/87)) ([89b9066](https://github.com/sdaconceicao/lago/commit/89b9066b01feeaf6c5e75114e90829a6d7546092))
+* Dependency updates and build ([#84](https://github.com/sdaconceicao/lago/issues/84)) ([eae603d](https://github.com/sdaconceicao/lago/commit/eae603df5215511fbd6c452922d548a9a776cd8d))
+* Updated css layers and order ([#86](https://github.com/sdaconceicao/lago/issues/86)) ([16ade2d](https://github.com/sdaconceicao/lago/commit/16ade2d5d5c4acd3fed1520f17acb8feeccb4dd4))
+
 ## [0.4.0](https://github.com/sdaconceicao/lago/compare/lago-v0.3.0...lago-v0.4.0) (2026-08-07)
 
 
