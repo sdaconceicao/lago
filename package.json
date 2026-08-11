@@ -1,6 +1,6 @@
 {
   "name": "@code-x/lago",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "type": "module",
   "license": "MIT",
   "packageManager": "pnpm@10.12.1",

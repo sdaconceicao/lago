@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/sdaconceicao/lago/compare/lago-v0.4.1...lago-v0.4.2) (2026-08-11)
+
+
+### Bug Fixes
+
+* Better handling of use client for SSR on hooks/components ([#89](https://github.com/sdaconceicao/lago/issues/89)) ([4c4754f](https://github.com/sdaconceicao/lago/commit/4c4754f8a9ce36d7ac23e5ea2c370700c5e85fb0))
+
 ## [0.4.1](https://github.com/sdaconceicao/lago/compare/lago-v0.4.0...lago-v0.4.1) (2026-08-11)
 
 
