@@ -3,14 +3,14 @@ import type React from "react";
 // barrel, which has no `sideEffects` flag and would pull all fifty-odd payment
 // marks into the bundle. The `dist/esm` build is the one a bundler can shake;
 // `dist/flat` is CommonJS and would survive as an opaque require.
-import Amex from "react-payment-logos/dist/esm/flat/Amex";
-import Diners from "react-payment-logos/dist/esm/flat/Diners";
-import Discover from "react-payment-logos/dist/esm/flat/Discover";
-import Jcb from "react-payment-logos/dist/esm/flat/Jcb";
-import Maestro from "react-payment-logos/dist/esm/flat/Maestro";
-import Mastercard from "react-payment-logos/dist/esm/flat/Mastercard";
-import Unionpay from "react-payment-logos/dist/esm/flat/Unionpay";
-import Visa from "react-payment-logos/dist/esm/flat/Visa";
+import Amex from "react-payment-logos/dist/esm/flat/Amex.js";
+import Diners from "react-payment-logos/dist/esm/flat/Diners.js";
+import Discover from "react-payment-logos/dist/esm/flat/Discover.js";
+import Jcb from "react-payment-logos/dist/esm/flat/Jcb.js";
+import Maestro from "react-payment-logos/dist/esm/flat/Maestro.js";
+import Mastercard from "react-payment-logos/dist/esm/flat/Mastercard.js";
+import Unionpay from "react-payment-logos/dist/esm/flat/Unionpay.js";
+import Visa from "react-payment-logos/dist/esm/flat/Visa.js";
 import type { CardBrand } from "./CreditCardNumber.utils";
 
 /**

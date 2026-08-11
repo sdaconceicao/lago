@@ -17,7 +17,7 @@ import {
   type SubmenuTriggerProps,
 } from "react-aria-components/Menu";
 import { Popover } from "@/components/Overlays/Popover/Popover";
-import { Text } from "@/components/Typography/index";
+import { SlottedText } from "@/components/Typography/index";
 import styles from "./Menu.module.css";
 
 export function MenuTrigger(props: MenuTriggerProps) {
@@ -61,7 +61,7 @@ export function MenuItem(
           {isSelected && selectionMode === "multiple" ? <Check /> : null}
           {isSelected && selectionMode === "single" ? <Dot /> : null}
           {typeof props.children === "string" ? (
-            <Text slot="label">{props.children}</Text>
+            <SlottedText slot="label">{props.children}</SlottedText>
           ) : (
             props.children
           )}

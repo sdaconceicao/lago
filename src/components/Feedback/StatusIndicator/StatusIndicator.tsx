@@ -1,4 +1,3 @@
-"use client";
 import clsx from "clsx";
 import type { HTMLAttributes } from "react";
 import styles from "./StatusIndicator.module.css";

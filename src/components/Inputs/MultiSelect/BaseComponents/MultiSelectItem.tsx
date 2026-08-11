@@ -4,7 +4,7 @@ import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import type { ListBoxItemProps } from "react-aria-components/ListBox";
 import { ListBoxItem } from "@/components/Collections/ListBox/ListBox";
 import { CheckboxIndicator } from "@/components/Inputs/Checkbox/CheckboxItem/Checkbox";
-import { Text } from "@/components/Typography/index";
+import { SlottedText } from "@/components/Typography/index";
 import styles from "./MultiSelectItem.module.css";
 
 /**
@@ -26,7 +26,7 @@ export function MultiSelectItem(props: ListBoxItemProps) {
         <>
           <CheckboxIndicator />
           {typeof children === "string" ? (
-            <Text slot="label">{children}</Text>
+            <SlottedText slot="label">{children}</SlottedText>
           ) : (
             children
           )}

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Button } from "@/components/Actions/Button/Button";
 import { DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
-import { Heading } from "@/components/Typography/index";
+import { SlottedHeading } from "@/components/Typography/index";
 import { Sheet } from "./Sheet";
 
 const renderSheet = () =>
@@ -10,7 +10,7 @@ const renderSheet = () =>
     <DialogTrigger>
       <Button>Open sheet</Button>
       <Sheet>
-        <Heading slot="title">Sheet title</Heading>
+        <SlottedHeading slot="title">Sheet title</SlottedHeading>
         <p>Sheet body</p>
         <Button slot="close">Dismiss</Button>
       </Sheet>

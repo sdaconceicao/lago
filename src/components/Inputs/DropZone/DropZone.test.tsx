@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Text } from "@/components/Typography/index";
+import { SlottedText } from "@/components/Typography/index";
 import { DropZone } from "./DropZone";
 
 const createDataTransfer = (text: string) => ({
@@ -15,7 +15,7 @@ const createDataTransfer = (text: string) => ({
 const renderDropZone = (props = {}) =>
   render(
     <DropZone {...props}>
-      <Text slot="label">Drag and drop files here</Text>
+      <SlottedText slot="label">Drag and drop files here</SlottedText>
     </DropZone>
   );
 

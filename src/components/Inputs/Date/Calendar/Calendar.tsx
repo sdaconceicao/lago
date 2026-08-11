@@ -12,7 +12,7 @@ import {
   type DateValue,
 } from "react-aria-components/Calendar";
 import { Button } from "@/components/Actions/Button/Button";
-import { Text } from "@/components/Typography/index";
+import { SlottedText } from "@/components/Typography/index";
 import base from "@/styles/base.module.css";
 import styles from "./Calendar.module.css";
 
@@ -66,7 +66,9 @@ export function Calendar<T extends DateValue>({
           </div>
         ))}
       </div>
-      {errorMessage && <Text slot="errorMessage">{errorMessage}</Text>}
+      {errorMessage && (
+        <SlottedText slot="errorMessage">{errorMessage}</SlottedText>
+      )}
     </AriaCalendar>
   );
 }

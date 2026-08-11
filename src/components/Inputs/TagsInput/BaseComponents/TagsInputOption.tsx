@@ -1,7 +1,7 @@
 "use client";
 import { Plus } from "lucide-react";
 import { DropdownItem } from "@/components/Collections/ListBox/ListBox";
-import { Text } from "@/components/Typography/index";
+import { SlottedText } from "@/components/Typography/index";
 import {
   CREATE_KEY,
   getCreateLabel,
@@ -27,7 +27,7 @@ export function TagsInputOption({ item }: TagsInputOptionProps) {
       // the ComboBox's filter always keeps this row (see getCreateLabel).
       <DropdownItem id={CREATE_KEY} textValue={label}>
         <Plus className={styles.createIcon} aria-hidden="true" />
-        <Text slot="label">{label}</Text>
+        <SlottedText slot="label">{label}</SlottedText>
       </DropdownItem>
     );
   }

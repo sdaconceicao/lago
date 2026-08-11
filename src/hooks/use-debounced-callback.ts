@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 
 export interface DebouncedCallback<Args extends unknown[]> {

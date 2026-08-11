@@ -14,7 +14,7 @@ import {
   type ListBoxSectionProps,
 } from "react-aria-components/ListBox";
 import { ProgressCircle } from "@/components/Feedback/ProgressCircle/ProgressCircle";
-import { Text } from "@/components/Typography/index";
+import { SlottedText } from "@/components/Typography/index";
 import styles from "./ListBox.module.css";
 
 export function ListBox<T>({ children, ...props }: ListBoxProps<T>) {
@@ -44,7 +44,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
     >
       {composeRenderProps(props.children, (children) =>
         typeof children === "string" ? (
-          <Text slot="label">{children}</Text>
+          <SlottedText slot="label">{children}</SlottedText>
         ) : (
           children
         )
@@ -108,7 +108,7 @@ export function DropdownItem(props: ListBoxItemProps) {
         <>
           {isSelected && <Check className={styles.checkIcon} />}
           {typeof children === "string" ? (
-            <Text slot="label">{children}</Text>
+            <SlottedText slot="label">{children}</SlottedText>
           ) : (
             children
           )}

@@ -1,4 +1,3 @@
-"use client";
 import clsx from "clsx";
 import base from "@/styles/base.module.css";
 import styles from "./CheckboxIndicator.module.css";
