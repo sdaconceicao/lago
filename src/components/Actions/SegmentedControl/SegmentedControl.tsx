@@ -8,7 +8,7 @@ import {
   type ToggleButtonGroupProps,
   type ToggleButtonProps,
 } from "react-aria-components/ToggleButtonGroup";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./SegmentedControl.module.css";
 
 export interface SegmentedControlProps extends ToggleButtonGroupProps {
@@ -30,7 +30,7 @@ export function SegmentedControl({
       className={clsx(
         "segmented-control",
         styles.segmentedControl,
-        utils.buttonBase,
+        base.buttonBase,
         props.className
       )}
       data-size={size}
@@ -52,7 +52,7 @@ export function SegmentedControlItem(props: ToggleButtonProps) {
       {composeRenderProps(props.children, (children) => (
         <>
           <SelectionIndicator
-            className={clsx("react-aria-SelectionIndicator", utils.buttonBase)}
+            className={clsx("react-aria-SelectionIndicator", base.buttonBase)}
             data-selected
           />
           <span>{children}</span>

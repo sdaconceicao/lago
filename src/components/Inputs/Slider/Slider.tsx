@@ -13,7 +13,7 @@ import {
   type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Slider.module.css";
 
 export interface SliderProps<T> extends AriaSliderProps<T> {
@@ -58,7 +58,7 @@ export function Slider<T extends number | number[]>({
         {({ state, isDisabled }) => (
           <>
             <div
-              className={clsx(utils.track, utils.inset, styles.track)}
+              className={clsx(base.track, base.inset, styles.track)}
               data-disabled={isDisabled || undefined}
             >
               <SliderFill
@@ -81,7 +81,7 @@ export function Slider<T extends number | number[]>({
                 className={clsx(
                   "react-aria-SliderThumb",
                   styles.sliderThumb,
-                  utils.indicator
+                  base.indicator
                 )}
               />
             ))}

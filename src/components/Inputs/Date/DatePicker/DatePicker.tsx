@@ -23,7 +23,7 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./DatePicker.module.css";
 
 export interface DatePickerProps<T extends DateValue>
@@ -63,7 +63,7 @@ export function DatePicker<T extends DateValue>({
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <FieldGroup
         stateContext={DatePickerStateContext}
-        className={clsx("react-aria-Group", styles.group, utils.inset)}
+        className={clsx("react-aria-Group", styles.group, base.inset)}
       >
         <DateInput>{(segment) => <DateSegment segment={segment} />}</DateInput>
         <FieldButton>

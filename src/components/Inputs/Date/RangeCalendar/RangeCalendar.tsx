@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/Actions/Button/Button";
 import { CalendarGrid } from "@/components/Inputs/Date/Calendar/Calendar";
 import calendarStyles from "@/components/Inputs/Date/Calendar/Calendar.module.css";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./RangeCalendar.module.css";
 
 export interface RangeCalendarProps<T extends DateValue>
@@ -103,7 +103,7 @@ export function CalendarCell(props: CalendarCellProps) {
           }
         ) => (
           <span
-            className={utils.buttonBase}
+            className={base.buttonBase}
             data-variant="quiet"
             data-hovered={isHovered || undefined}
             data-pressed={isPressed || undefined}

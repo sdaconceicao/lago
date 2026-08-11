@@ -14,7 +14,7 @@ import {
   type FieldSize,
   Label,
 } from "@/components/Inputs/FormComponents/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./TextArea.module.css";
 
 export interface TextAreaProps extends AriaTextFieldProps {
@@ -55,7 +55,7 @@ export function TextArea({
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <AriaTextArea
         ref={inputRef}
-        className={clsx("react-aria-TextArea", styles.input, utils.inset)}
+        className={clsx("react-aria-TextArea", styles.input, base.inset)}
         placeholder={placeholder}
       />
       {description && <Description>{description}</Description>}

@@ -19,7 +19,7 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import { useSearchSuggestions } from "./SearchField.hooks";
 import styles from "./SearchField.module.css";
 import { DEFAULT_DEBOUNCE_DELAY } from "./SearchField.utils";
@@ -101,7 +101,7 @@ export function SearchField({
         onKeyDownCapture={onKeyDownCapture}
         isDisabled={props.isDisabled}
         isInvalid={props.isInvalid}
-        className={clsx("react-aria-Group", textFieldStyles.field, utils.inset)}
+        className={clsx("react-aria-Group", textFieldStyles.field, base.inset)}
       >
         <Input
           ref={inputRef}

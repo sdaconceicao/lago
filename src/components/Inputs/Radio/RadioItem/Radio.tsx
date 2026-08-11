@@ -10,7 +10,7 @@ import {
   Description,
   type FieldSize,
 } from "@/components/Inputs/FormComponents/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Radio.module.css";
 
 export interface RadioProps extends RadioFieldProps {
@@ -44,7 +44,7 @@ export function Radio({ size, ...props }: RadioProps) {
       >
         {composeRenderProps(props.children, (children) => (
           <>
-            <div className={clsx(utils.indicator, styles.indicator)} />
+            <div className={clsx(base.indicator, styles.indicator)} />
             {children}
           </>
         ))}

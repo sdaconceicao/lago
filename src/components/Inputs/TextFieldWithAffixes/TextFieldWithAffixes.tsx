@@ -13,7 +13,7 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import type { TextFieldProps } from "@/components/Inputs/TextField/TextField";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import { AffixContext } from "./AffixContext";
 import {
   type TextFieldWithAffixesChange,
@@ -107,7 +107,7 @@ export function TextFieldWithAffixes({
       <Group
         isDisabled={props.isDisabled}
         isInvalid={props.isInvalid}
-        className={clsx("react-aria-Group", styles.group, utils.inset)}
+        className={clsx("react-aria-Group", styles.group, base.inset)}
       >
         {prefix != null && (
           <div className={clsx(styles.segment, styles.affix)}>

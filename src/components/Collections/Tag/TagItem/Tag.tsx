@@ -7,7 +7,7 @@ import {
   Button,
   type TagProps,
 } from "react-aria-components/TagGroup";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Tag.module.css";
 
 export interface TagItemProps extends Omit<TagProps, "children"> {
@@ -27,7 +27,7 @@ export function Tag({ children, ...props }: TagItemProps) {
       textValue={textValue}
       {...props}
       className={composeRenderProps(props.className, (className) =>
-        clsx("react-aria-Tag", utils.buttonBase, styles.tag, className)
+        clsx("react-aria-Tag", base.buttonBase, styles.tag, className)
       )}
     >
       {({ allowsRemoving }) => (

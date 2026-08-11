@@ -6,7 +6,7 @@ import {
 } from "react-aria-components/Button";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import { ProgressCircle } from "@/components/Feedback/ProgressCircle/ProgressCircle";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Button.module.css";
 
 export interface ButtonProps extends RACButtonProps {
@@ -44,7 +44,7 @@ export function Button({ size = "md", ...props }: ButtonProps) {
       className={clsx(
         "react-aria-Button",
         styles.button,
-        utils.buttonBase,
+        base.buttonBase,
         props.className
       )}
       data-size={size}

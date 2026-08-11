@@ -18,7 +18,7 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
 import { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
 import styles from "./MultiSelect.module.css";
@@ -80,7 +80,7 @@ export function MultiSelect<T>({
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       {/* The Group is wired up by the ComboBox: the popover is positioned
           against it and it gets data-hovered/focus/disabled/invalid states. */}
-      <Group className={clsx("react-aria-Group", styles.field, utils.inset)}>
+      <Group className={clsx("react-aria-Group", styles.field, base.inset)}>
         {displayMode === "tags" ? (
           <MultiSelectTags />
         ) : (

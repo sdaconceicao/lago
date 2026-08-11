@@ -1,36 +1,59 @@
-@layer utilities {
+/* The shared treatments components are built from. Called `base`, not
+   `utilities`, because a utilities layer conventionally sits *above* components
+   and this one sits below: component stylesheets expect to override these, and
+   a few tune their specificity against that.
+
+   The layer is named in full here so the build's layer plugin leaves this sheet
+   alone — see vite.css-layers.ts, which layers every other stylesheet by path. */
+@layer lago.base {
   /* utility that creates a button-like element, which can be optionally selected */
   .buttonBase {
-    --button-color: var(--tint);
+    /* The `--button-*` properties are this treatment's public inputs: a
+       component sets one to specialize itself — Tag asks for grey, Column for
+       its own border — and everything below is derived from what it resolves
+       to. They are read through a private `--_button-*` alias carrying the
+       default in a `var()` fallback, rather than declared here outright, so a
+       component that sets one is supplying the only declaration instead of
+       winning a cascade fight against ours. That keeps the contract explicit
+       and independent of which layer either rule happens to sit in.
+
+       Values Base itself varies by variant or state — the tones below, the
+       filled treatment, forced colors — do still declare the public property,
+       because those are decisions rather than defaults, and the alias picks
+       them up the same way. */
+    --_button-color: var(--button-color, var(--tint));
+    --_button-border-size: var(--button-border-size, 1px);
+    --_button-gradient-size: var(--button-gradient-size, 8px);
+    --_button-border: var(
+      --button-border,
+      oklch(from var(--_button-color) var(--lightness-300) var(--chroma-300) h)
+    );
+    --_button-shadow: var(
+      --button-shadow,
+      oklch(from var(--_button-color) var(--lightness-400) var(--chroma-400) h)
+    );
+
     --button-background: oklch(
-      from var(--button-color) var(--lightness-100) var(--chroma-100) h
+      from var(--_button-color) var(--lightness-100) var(--chroma-100) h
     );
     --button-gradient: oklch(
-      from var(--button-color) var(--lightness-200) var(--chroma-200) h
-    );
-    --button-border: oklch(
-      from var(--button-color) var(--lightness-300) var(--chroma-300) h
+      from var(--_button-color) var(--lightness-200) var(--chroma-200) h
     );
     --button-highlight: rgb(255 255 255 / 0.8);
-    --button-shadow: oklch(
-      from var(--button-color) var(--lightness-400) var(--chroma-400) h
-    );
-    --button-border-size: 1px;
     --button-text: oklch(
-      from var(--button-color) var(--lightness-1400) var(--chroma-1400) h
+      from var(--_button-color) var(--lightness-1400) var(--chroma-1400) h
     );
-    --button-gradient-size: 8px;
 
     background: var(--button-background);
     color: var(--button-text);
     box-shadow:
-      inset 0 -1px 0 var(--button-shadow),
-      /* bottom shadow */ inset 0 0 0 var(--button-border-size)
-      var(--button-border),
-      /* border */ inset 0px calc(var(--button-border-size) + 1px) 0px
+      inset 0 -1px 0 var(--_button-shadow),
+      /* bottom shadow */ inset 0 0 0 var(--_button-border-size)
+      var(--_button-border),
+      /* border */ inset 0px calc(var(--_button-border-size) + 1px) 0px
       var(--button-highlight),
       /* top specular highlight */ inset 0px
-      calc(-1 * var(--button-gradient-size)) var(--button-gradient-size) -2px
+      calc(-1 * var(--_button-gradient-size)) var(--_button-gradient-size) -2px
       var(--button-gradient); /* inner gradient */
     outline: none;
     transition-property: background, color, scale, box-shadow;
@@ -41,17 +64,17 @@
 
     :global(:root.dark-mode) & {
       --button-shadow: oklch(
-        from var(--button-color) var(--lightness-200) var(--chroma-200) h
+        from var(--_button-color) var(--lightness-200) var(--chroma-200) h
       );
       --button-highlight: rgb(255 255 255 / 0.15);
       box-shadow:
-        inset 0 var(--button-border-size) 0 var(--button-highlight),
+        inset 0 var(--_button-border-size) 0 var(--button-highlight),
         /* top specular highlight */ inset 0
-        calc(-1 * var(--button-border-size)) 0 var(--button-shadow),
-        /* bottom shadow */ inset 0 0 0 var(--button-border-size)
-        var(--button-border),
-        /* border */ inset 0 var(--button-gradient-size)
-        var(--button-gradient-size) -2px var(--button-gradient); /* inner gradient */
+        calc(-1 * var(--_button-border-size)) 0 var(--_button-shadow),
+        /* bottom shadow */ inset 0 0 0 var(--_button-border-size)
+        var(--_button-border),
+        /* border */ inset 0 var(--_button-gradient-size)
+        var(--_button-gradient-size) -2px var(--button-gradient); /* inner gradient */
 
       &[data-variant="quiet"] {
         box-shadow: 0 0 0 1px transparent;
@@ -64,7 +87,7 @@
 
     &:where([data-pressed]) {
       --button-background: oklch(
-        from var(--button-color) var(--lightness-200) var(--chroma-200) h
+        from var(--_button-color) var(--lightness-200) var(--chroma-200) h
       );
     }
 
@@ -111,7 +134,7 @@
         [data-variant="warning"],
         [data-variant="error"]
       ) {
-      --focus-ring-color: oklch(from var(--button-color) 45% c h);
+      --focus-ring-color: oklch(from var(--_button-color) 45% c h);
     }
 
     &:where([data-variant="quiet"]) {
@@ -141,34 +164,34 @@
         [data-variant="warning"],
         [data-variant="error"]
       ) {
-      --button-background: oklch(from var(--button-color) 55% c h);
-      --button-border: oklch(from var(--button-color) 50% c h);
-      --button-gradient: var(--button-border);
+      --button-background: oklch(from var(--_button-color) 55% c h);
+      --button-border: oklch(from var(--_button-color) 50% c h);
+      --button-gradient: var(--_button-border);
       --button-highlight: rgb(255 255 255 / 0.2);
-      --button-shadow: oklch(from var(--button-color) 30% c h);
+      --button-shadow: oklch(from var(--_button-color) 30% c h);
       --button-text: var(--highlight-foreground);
 
       box-shadow:
-        inset 0 -1px 0 var(--button-shadow),
-        /* bottom shadow */ inset 0 0 0 1px var(--button-border),
+        inset 0 -1px 0 var(--_button-shadow),
+        /* bottom shadow */ inset 0 0 0 1px var(--_button-border),
         /* border */ inset 0 2px 0 var(--button-highlight),
         /* top specular highlight */ inset 0
-        calc(-1 * var(--button-gradient-size)) var(--button-gradient-size)
+        calc(-1 * var(--_button-gradient-size)) var(--_button-gradient-size)
         var(--button-gradient); /* inner gradient */
 
       :global(:root.dark-mode) & {
         --button-highlight: rgb(255 255 255 / 0.4);
         --button-gradient: rgb(255 255 255 / 0.2);
-        --button-shadow: var(--button-border);
+        --button-shadow: var(--_button-border);
         box-shadow:
           inset 0 1px 0 var(--button-highlight),
-          /* top specular highlight */ inset 0 var(--button-gradient-size)
-          var(--button-gradient-size) var(--button-gradient),
-          /* inner gradient */ inset 0 0 0 1px var(--button-border); /* border */
+          /* top specular highlight */ inset 0 var(--_button-gradient-size)
+          var(--_button-gradient-size) var(--button-gradient),
+          /* inner gradient */ inset 0 0 0 1px var(--_button-border); /* border */
       }
 
       &:where([data-pressed]) {
-        --button-background: oklch(from var(--button-color) 50% c h);
+        --button-background: oklch(from var(--_button-color) 50% c h);
       }
     }
 
@@ -186,7 +209,7 @@
       --button-background: ButtonFace;
       --button-text: ButtonText;
       --button-border: ButtonBorder;
-      box-shadow: inset 0 0 0 var(--button-border-size) var(--button-border);
+      box-shadow: inset 0 0 0 var(--_button-border-size) var(--_button-border);
 
       &:where([data-variant="quiet"]) {
         --button-border: transparent;
@@ -215,22 +238,25 @@
 
   /* utility that creates a small indicator, such as a checkbox, radio, switch, or slider thumb */
   .indicator {
-    --indicator-color: var(--gray);
+    /* Public inputs, read through private aliases — see .buttonBase above for
+       why. Slider and Switch both set `--indicator-color`. */
+    --_indicator-color: var(--indicator-color, var(--gray));
+    --_indicator-drop-shadow: var(--indicator-drop-shadow, 0 0);
+
     --indicator-background: oklch(
-      from var(--indicator-color) var(--lightness-100) var(--chroma-100) h
+      from var(--_indicator-color) var(--lightness-100) var(--chroma-100) h
     );
     --indicator-border: oklch(
-      from var(--indicator-color) var(--lightness-800) var(--chroma-800) h
+      from var(--_indicator-color) var(--lightness-800) var(--chroma-800) h
     );
-    --indicator-drop-shadow: 0 0;
 
     background: var(--indicator-background);
     box-shadow:
       inset 0 0 0 1px var(--indicator-border),
       /* border */ inset 0 2px 0 white,
       /* top specular highlight */ inset 0 -4px 2px
-      oklch(from var(--indicator-color) 30% c h / 0.08),
-      /* inner gradient */ var(--indicator-drop-shadow); /* optional drop shadow */
+      oklch(from var(--_indicator-color) 30% c h / 0.08),
+      /* inner gradient */ var(--_indicator-drop-shadow); /* optional drop shadow */
     will-change: scale;
 
     :global(:root.dark-mode) & {
@@ -238,7 +264,7 @@
         inset 0 1px 0 rgb(255 255 255 / 0.4),
         /* top specular highlight */ inset 0 4px 2px rgb(255 255 255 / 0.1),
         /* inner shadow */ inset 0 0 0 1px var(--indicator-border),
-        /* border */ var(--indicator-drop-shadow); /* optional drop shadow */
+        /* border */ var(--_indicator-drop-shadow); /* optional drop shadow */
     }
 
     @media (forced-colors: active) {
@@ -255,15 +281,15 @@
     [data-selected] > &,
     [data-indeterminate] > & {
       --indicator-color: var(--highlight-background);
-      --indicator-background: var(--indicator-color);
+      --indicator-background: var(--_indicator-color);
       --indicator-highlight: rgb(255 255 255 / 0.3);
-      --indicator-shadow: oklch(from var(--indicator-color) 45% c h);
+      --indicator-shadow: oklch(from var(--_indicator-color) 45% c h);
       --indicator-border: var(--indicator-background);
       box-shadow:
         inset 0 -1px 0 var(--indicator-shadow),
         /* bottom shadow */ inset 0 0 0 1px var(--indicator-border),
         /* border */ inset 0 2px 0 var(--indicator-highlight),
-        /* top specular highlight */ var(--indicator-drop-shadow); /* optional drop shadow */
+        /* top specular highlight */ var(--_indicator-drop-shadow); /* optional drop shadow */
 
       :global(:root.dark-mode) & {
         --indicator-highlight: rgb(255 255 255 / 0.5);
@@ -272,7 +298,7 @@
           inset 0 1px 0 var(--indicator-highlight),
           /* top specular highlight */ inset 0 4px 2px var(--indicator-gradient),
           /* inner gradient */ inset 0 0 0 1px var(--indicator-border),
-          /* border */ var(--indicator-drop-shadow); /* optional drop shadow */
+          /* border */ var(--_indicator-drop-shadow); /* optional drop shadow */
       }
 
       @media (forced-colors: active) {

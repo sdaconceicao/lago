@@ -6,7 +6,7 @@ import {
   type MeterProps as AriaMeterProps,
 } from "react-aria-components/Meter";
 import { Label } from "@/components/Inputs/FormComponents/index";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./Meter.module.css";
 
 export interface MeterProps extends AriaMeterProps {
@@ -23,7 +23,7 @@ export function Meter({ label, ...props }: MeterProps) {
         <>
           <Label>{label}</Label>
           <span className={clsx("value", styles.value)}>{valueText}</span>
-          <div className={clsx(utils.track, utils.inset, styles.track)}>
+          <div className={clsx(base.track, base.inset, styles.track)}>
             <div
               className={clsx("fill", styles.fill)}
               style={

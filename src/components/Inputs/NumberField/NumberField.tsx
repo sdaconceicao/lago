@@ -17,7 +17,7 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import textFieldStyles from "@/components/Inputs/TextField/TextField.module.css";
-import utils from "@/styles/utilities.module.css";
+import base from "@/styles/base.module.css";
 import styles from "./NumberField.module.css";
 
 export interface NumberFieldProps extends AriaNumberFieldProps {
@@ -56,12 +56,12 @@ export function NumberField({
       )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
-      <Group className={clsx("react-aria-Group", utils.inset)}>
+      <Group className={clsx("react-aria-Group", base.inset)}>
         <Input
           className={clsx(
             "react-aria-Input",
             textFieldStyles.input,
-            utils.inset
+            base.inset
           )}
         />
         <Button slot="decrement" variant="secondary">
