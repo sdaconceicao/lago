@@ -7,7 +7,7 @@ import {
   type TagListProps,
 } from "react-aria-components/TagGroup";
 import { Description, Label } from "@/components/Inputs/FormComponents/index";
-import { Text } from "@/components/Typography/index";
+import { SlottedText } from "@/components/Typography/index";
 import styles from "./TagGroup.module.css";
 
 export interface TagGroupProps<T>
@@ -57,7 +57,9 @@ export function TagGroup<T>({
         {children}
       </TagList>
       {description && <Description>{description}</Description>}
-      {errorMessage && <Text slot="errorMessage">{errorMessage}</Text>}
+      {errorMessage && (
+        <SlottedText slot="errorMessage">{errorMessage}</SlottedText>
+      )}
     </AriaTagGroup>
   );
 }

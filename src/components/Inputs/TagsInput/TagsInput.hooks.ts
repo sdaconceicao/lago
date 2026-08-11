@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useMemo, useRef, useState } from "react";
 import type { Key } from "react-aria-components/ComboBox";
 import {

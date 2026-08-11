@@ -4,7 +4,7 @@ import { Check } from "lucide-react";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import type { ListBoxItemProps } from "react-aria-components/ListBox";
 import { ListBoxItem } from "@/components/Collections/ListBox/ListBox";
-import { Text } from "@/components/Typography/index";
+import { SlottedText } from "@/components/Typography/index";
 import styles from "./SelectItem.module.css";
 
 /**
@@ -24,7 +24,7 @@ export function SelectItem(props: ListBoxItemProps) {
       {composeRenderProps(props.children, (children, { isSelected }) => (
         <>
           {typeof children === "string" ? (
-            <Text slot="label">{children}</Text>
+            <SlottedText slot="label">{children}</SlottedText>
           ) : (
             children
           )}

@@ -1,8 +1,18 @@
 import { render, screen } from "@testing-library/react";
 import type { CSSProperties } from "react";
+import {
+  assertServerSafeSource,
+  readSiblingSource,
+} from "@test-utils/assertServerSafeSource";
 import { AvatarInitials } from "./AvatarInitials";
 
 describe("AvatarInitials", () => {
+  it("carries no client boundary", () => {
+    assertServerSafeSource(
+      readSiblingSource("AvatarInitials.tsx", import.meta.url)
+    );
+  });
+
   it("renders the initials for a name", () => {
     render(<AvatarInitials name="Ada Lovelace" />);
 

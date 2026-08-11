@@ -1,4 +1,3 @@
-"use client";
 import clsx from "clsx";
 import type { HTMLAttributes, ReactNode } from "react";
 import styles from "./ResultsCount.module.css";

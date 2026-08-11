@@ -1,7 +1,17 @@
 import { render, screen } from "@testing-library/react";
+import {
+  assertServerSafeSource,
+  readSiblingSource,
+} from "@test-utils/assertServerSafeSource";
 import { StatusIndicator } from "./StatusIndicator";
 
 describe("StatusIndicator", () => {
+  it("carries no client boundary", () => {
+    assertServerSafeSource(
+      readSiblingSource("StatusIndicator.tsx", import.meta.url)
+    );
+  });
+
   it.each([
     ["online", "Online"],
     ["busy", "Busy"],

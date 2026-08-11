@@ -1,4 +1,8 @@
 import { render, screen } from "@testing-library/react";
+import {
+  assertServerSafeSource,
+  readSiblingSource,
+} from "@test-utils/assertServerSafeSource";
 import { defaultResultsTemplate, TableResultsCount } from "./ResultsCount";
 
 describe("defaultResultsTemplate", () => {
@@ -22,6 +26,12 @@ describe("defaultResultsTemplate", () => {
 });
 
 describe("ResultsCount", () => {
+  it("carries no client boundary", () => {
+    assertServerSafeSource(
+      readSiblingSource("ResultsCount.tsx", import.meta.url)
+    );
+  });
+
   it("renders the default 'Showing x to y of z results' string", () => {
     render(<TableResultsCount from={1} to={10} total={42} />);
     expect(
