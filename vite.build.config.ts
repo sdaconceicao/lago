@@ -15,7 +15,32 @@ const dirname =
 const packageJson = JSON.parse(
   readFileSync(path.resolve(dirname, "package.json"), "utf-8")
 );
-const externalDeps = Object.keys(packageJson.peerDependencies || {});
+const externalDeps = [
+  ...Object.keys(packageJson.peerDependencies || {}),
+  ...Object.keys(packageJson.dependencies || {}),
+];
+
+const srcRoot = path.resolve(dirname, "src");
+
+/** Rollup output shared by both ES and CJS builds when preserveModules is enabled. */
+const preserveModulesOutput = (format: "es" | "cjs") => {
+  const extension = format === "es" ? "mjs" : "cjs";
+
+  return {
+    format,
+    preserveModules: true,
+    preserveModulesRoot: srcRoot,
+    entryFileNames: `[name].${extension}`,
+    chunkFileNames: `[name].${extension}`,
+    globals: {
+      react: "React",
+      "react-dom": "ReactDOM",
+    },
+    // Single dist/index.css for the "./styles" export (see package.json).
+    assetFileNames: (assetInfo: { name?: string }) =>
+      assetInfo.name?.endsWith(".css") ? "index.css" : "[name][extname]",
+  };
+};
 
 export default defineConfig({
   plugins: [
@@ -37,7 +62,10 @@ export default defineConfig({
         "**/stories/**",
         "**/pages/**",
       ],
-      // Collapse the per-file declarations into a single dist/index.d.ts.
+      // Emit per-file .d.ts under dist/ (mirroring src/), then collapse the
+      // public surface into dist/index.d.ts via api-extractor. This is
+      // independent of Rollup's preserveModules JS output — api-extractor reads
+      // the generated entry declaration, not the bundled JS graph.
       // Named `rollupTypes` before vite-plugin-dts 5; under the old name it was
       // silently ignored, so the package shipped one .d.ts per source file.
       // Bundling is done by @microsoft/api-extractor, which the plugin loads at
@@ -55,26 +83,17 @@ export default defineConfig({
     minify: "esbuild", // Options: false | "esbuild" | "terser" | true (default: "esbuild")
     lib: {
       entry: path.resolve(dirname, "src/index.ts"),
-      name: "Lago",
       formats: ["es", "cjs"],
-      fileName: (format) => `index.${format === "es" ? "mjs" : "cjs"}`,
     },
     rollupOptions: {
       // (e.g. "react/jsx-runtime", "react-dom/client").
       external: (id) =>
         externalDeps.some((dep) => id === dep || id.startsWith(`${dep}/`)),
-      output: {
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-        },
-        // Keep the emitted stylesheet named index.css so the package's
-        // "./styles" export and "style" field (both -> ./dist/index.css) resolve.
-        assetFileNames: (assetInfo) =>
-          assetInfo.name?.endsWith(".css") ? "index.css" : "[name][extname]",
-      },
+      output: [preserveModulesOutput("es"), preserveModulesOutput("cjs")],
     },
-    cssCodeSplit: true,
+    // Merge all CSS (theme + component modules) into one index.css. JS stays
+    // preserveModules for tree-shaking.
+    cssCodeSplit: false,
     sourcemap: true,
     emptyOutDir: true,
   },
