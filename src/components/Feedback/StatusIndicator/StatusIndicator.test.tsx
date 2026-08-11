@@ -1,8 +1,8 @@
-import { render, screen } from "@testing-library/react";
 import {
   assertServerSafeSource,
   readSiblingSource,
 } from "@test-utils/assertServerSafeSource";
+import { render, screen } from "@testing-library/react";
 import { StatusIndicator } from "./StatusIndicator";
 
 describe("StatusIndicator", () => {
