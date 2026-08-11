@@ -16,6 +16,8 @@ import { Text } from "@/components/Typography/index";
 import base from "@/styles/base.module.css";
 import styles from "./Calendar.module.css";
 
+export type { CalendarCellProps, CalendarGridProps };
+
 export interface CalendarProps<T extends DateValue>
   extends AriaCalendarProps<T> {
   errorMessage?: string;

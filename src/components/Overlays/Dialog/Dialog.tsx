@@ -3,7 +3,6 @@ import clsx from "clsx";
 import {
   type DialogProps,
   type DialogTriggerProps,
-  Heading,
   Dialog as RACDialog,
   DialogTrigger as RACDialogTrigger,
 } from "react-aria-components/Dialog";
@@ -35,5 +34,13 @@ export function DialogTrigger(props: DialogTriggerProps) {
   return <RACDialogTrigger {...props} />;
 }
 
-export type { DialogBodyProps, DialogFooterProps, DialogHeaderProps };
-export { DialogBody, DialogFooter, DialogHeader, Heading };
+export type {
+  DialogBodyProps,
+  DialogFooterProps,
+  DialogHeaderProps,
+  DialogProps,
+  DialogTriggerProps,
+};
+// `Heading` is not re-exported here — Typography/Heading is the canonical one.
+// See the note in Actions/Menu/Menu.tsx.
+export { DialogBody, DialogFooter, DialogHeader };

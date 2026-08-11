@@ -117,4 +117,9 @@ export type {
   SkeletonParagraphProps,
   SkeletonVariant,
 };
-export { SkeletonCard, SkeletonParagraph };
+export {
+  DEFAULT_SKELETON_EDGES,
+  DEFAULT_SKELETON_VARIANT,
+  SkeletonCard,
+  SkeletonParagraph,
+};

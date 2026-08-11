@@ -12,6 +12,8 @@ import {
 import { Heading } from "@/components/Typography/index";
 import styles from "./Disclosure.module.css";
 
+export type { DisclosurePanelProps, DisclosureProps };
+
 export function Disclosure(props: DisclosureProps) {
   return (
     <AriaDisclosure

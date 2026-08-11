@@ -14,6 +14,8 @@ import { flushSync } from "react-dom";
 import { Button } from "@/components/Actions/Button/Button";
 import styles from "./Toast.module.css";
 
+export type { ToastProps };
+
 // Define the type for your toast content. This interface defines the properties of your toast content, affecting what you
 // pass to the queue calls as arguments.
 interface MyToastContent {

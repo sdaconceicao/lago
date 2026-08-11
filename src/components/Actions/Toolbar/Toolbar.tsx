@@ -8,6 +8,8 @@ import {
 } from "react-aria-components/Toolbar";
 import styles from "./Toolbar.module.css";
 
+export type { ToolbarProps };
+
 export function Toolbar(props: ToolbarProps) {
   const { orientation = "horizontal" } = props;
   return (

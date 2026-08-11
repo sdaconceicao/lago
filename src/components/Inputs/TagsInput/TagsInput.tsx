@@ -157,6 +157,8 @@ export function TagsInput({
   );
 }
 
+export type { TagsInputOptionProps } from "./BaseComponents/TagsInputOption";
+export { TagsInputOption } from "./BaseComponents/TagsInputOption";
 export type { TagsInputQueryProps } from "./BaseComponents/TagsInputQuery";
 export { TagsInputQuery } from "./BaseComponents/TagsInputQuery";
 export type { TagsInputTagsProps } from "./BaseComponents/TagsInputTags";

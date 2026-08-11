@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { expect, fn } from "storybook/test";
-import { DropZone, Text } from "./DropZone";
+import { Text } from "@/components/Typography/index";
+import { DropZone } from "./DropZone";
 
 const meta: Meta<typeof DropZone> = {
   component: DropZone,

@@ -5,6 +5,8 @@ import {
 } from "react-aria-components/Heading";
 import styles from "./Heading.module.css";
 
+export type { HeadingProps };
+
 export function Heading(props: HeadingProps) {
   return (
     <AriaHeading

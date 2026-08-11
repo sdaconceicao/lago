@@ -9,6 +9,8 @@ import {
 import { ColorSwatch } from "@/components/Inputs/Colors/ColorSwatch/ColorSwatch";
 import styles from "./ColorSwatchPicker.module.css";
 
+export type { ColorSwatchPickerItemProps, ColorSwatchPickerProps };
+
 export function ColorSwatchPicker({
   children,
   ...props

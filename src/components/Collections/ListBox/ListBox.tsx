@@ -118,4 +118,12 @@ export function DropdownItem(props: ListBoxItemProps) {
   );
 }
 
-export { Header, Text };
+export type {
+  ListBoxItemProps,
+  ListBoxLoadMoreItemProps,
+  ListBoxProps,
+  ListBoxSectionProps,
+};
+// `Text` is not re-exported here — Typography/Text is the canonical one. See the
+// note in Actions/Menu/Menu.tsx.
+export { Header };

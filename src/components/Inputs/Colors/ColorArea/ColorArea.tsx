@@ -7,6 +7,8 @@ import {
 import { ColorThumb } from "@/components/Inputs/Colors/ColorThumb/ColorThumb";
 import styles from "./ColorArea.module.css";
 
+export type { ColorAreaProps };
+
 export function ColorArea(props: ColorAreaProps) {
   return (
     <AriaColorArea

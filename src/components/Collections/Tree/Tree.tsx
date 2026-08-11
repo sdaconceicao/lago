@@ -123,3 +123,10 @@ export function TreeHeader(props: React.ComponentProps<typeof AriaTreeHeader>) {
     />
   );
 }
+
+export type {
+  TreeItemContentProps,
+  TreeItemContentRenderProps,
+  TreeLoadMoreItemProps,
+  TreeProps,
+};

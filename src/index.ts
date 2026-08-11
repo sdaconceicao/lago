@@ -37,10 +37,6 @@ export * from "./components/Inputs/Colors/ColorThumb/ColorThumb";
 export * from "./components/Inputs/Colors/ColorWheel/ColorWheel";
 export * from "./components/Inputs/CreditCardNumber/CreditCardNumber";
 export * from "./components/Inputs/Date/Calendar/Calendar";
-export {
-  CalendarCell,
-  CalendarGrid,
-} from "./components/Inputs/Date/Calendar/Calendar";
 export * from "./components/Inputs/Date/DateField/DateField";
 export * from "./components/Inputs/Date/DatePicker/DatePicker";
 export * from "./components/Inputs/Date/DateRangePicker/DateRangePicker";
@@ -65,7 +61,6 @@ export * from "./components/Inputs/TextFieldWithAffixes/TextFieldWithAffixes";
 export * from "./components/Inputs/Toggle/ToggleButton/ToggleButton";
 export * from "./components/Inputs/Toggle/ToggleButtonGroup/ToggleButtonGroup";
 export * from "./components/Layout/Separator/Separator";
-export { Separator } from "./components/Layout/Separator/Separator";
 export * from "./components/Media/Avatar/Avatar";
 export * from "./components/Media/ImagePlaceholder/ImagePlaceholder";
 export * from "./components/Navigation/Breadcrumbs/Breadcrumbs";
@@ -76,17 +71,13 @@ export * from "./components/Overlays/Popover/Popover";
 export * from "./components/Overlays/Sheet/Sheet";
 export * from "./components/Overlays/Tooltip/Tooltip";
 export * from "./components/Typography/index";
-// A handful of helper names are exported by more than one component module
-// (pointing at different symbols), which a wildcard re-export drops as ambiguous.
-// Re-export the canonical version explicitly so it wins.
-export { Heading, Text } from "./components/Typography/index";
 export * from "./components/Visualization/Meter/Meter";
 
 // Hooks
-export { useClipboard } from "./hooks/use-clipboard";
-export { useDarkMode } from "./hooks/use-dark-mode";
-export { useDebouncedCallback } from "./hooks/use-debounced-callback";
+export * from "./hooks/use-clipboard";
+export * from "./hooks/use-dark-mode";
+export * from "./hooks/use-debounced-callback";
 // Providers
-export { ThemeProvider, useTheme } from "./providers/theme-provider";
+export * from "./providers/theme-provider";
 
 // Utils

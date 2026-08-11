@@ -14,7 +14,6 @@ import {
   type MenuProps,
   type MenuSectionProps,
   type MenuTriggerProps,
-  Separator,
   type SubmenuTriggerProps,
 } from "react-aria-components/Menu";
 import { Popover } from "@/components/Overlays/Popover/Popover";
@@ -101,4 +100,15 @@ export function SubmenuTrigger(props: SubmenuTriggerProps) {
   );
 }
 
-export { Header, Keyboard, Separator, Text };
+export type {
+  MenuItemProps,
+  MenuProps,
+  MenuSectionProps,
+  MenuTriggerProps,
+  SubmenuTriggerProps,
+};
+// `Separator` and `Text` are deliberately not re-exported here: the library's
+// own versions (Layout/Separator and Typography/Text) are the canonical ones,
+// and re-exporting React Aria's under the same names makes both ambiguous to a
+// wildcard re-export, which silently drops them from the public entry point.
+export { Header, Keyboard };

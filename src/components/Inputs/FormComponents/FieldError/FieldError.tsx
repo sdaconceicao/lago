@@ -6,6 +6,8 @@ import {
 } from "react-aria-components/FieldError";
 import styles from "./FieldError.module.css";
 
+export type { FieldErrorProps };
+
 export function FieldError(props: FieldErrorProps) {
   return (
     <RACFieldError

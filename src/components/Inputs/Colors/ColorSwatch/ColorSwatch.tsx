@@ -6,6 +6,8 @@ import {
 } from "react-aria-components/ColorSwatch";
 import styles from "./ColorSwatch.module.css";
 
+export type { ColorSwatchProps };
+
 export function ColorSwatch(props: ColorSwatchProps) {
   return (
     <AriaColorSwatch

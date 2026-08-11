@@ -2,7 +2,6 @@
 import clsx from "clsx";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
-  Heading,
   Modal,
   ModalOverlay,
   type ModalOverlayProps,
@@ -22,4 +21,5 @@ export function Sheet(props: ModalOverlayProps) {
   );
 }
 
-export { Heading };
+// `Heading` is not re-exported here — Typography/Heading is the canonical one.
+// See the note in Actions/Menu/Menu.tsx.

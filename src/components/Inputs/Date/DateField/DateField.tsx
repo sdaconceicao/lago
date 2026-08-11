@@ -20,6 +20,8 @@ import {
 import base from "@/styles/base.module.css";
 import styles from "./DateField.module.css";
 
+export type { DateInputProps, DateSegmentProps };
+
 export interface DateFieldProps<T extends DateValue>
   extends AriaDateFieldProps<T> {
   /** Accessible label rendered above the field. */

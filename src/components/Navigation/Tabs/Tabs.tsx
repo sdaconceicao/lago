@@ -73,3 +73,11 @@ export function TabPanel(props: TabPanelProps) {
     />
   );
 }
+
+export type {
+  TabListProps,
+  TabPanelProps,
+  TabPanelsProps,
+  TabProps,
+  TabsProps,
+};

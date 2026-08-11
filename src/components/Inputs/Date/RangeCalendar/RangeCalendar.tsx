@@ -67,7 +67,7 @@ export function RangeCalendar<T extends DateValue>({
               offset={{ months: monthOffset }}
               className={clsx("react-aria-CalendarGrid", styles.calendarGrid)}
             >
-              {(date) => <CalendarCell date={date} />}
+              {(date) => <RangeCalendarCell date={date} />}
             </CalendarGrid>
           </div>
         ))}
@@ -77,8 +77,12 @@ export function RangeCalendar<T extends DateValue>({
   );
 }
 
-export { CalendarGrid };
-export function CalendarCell(props: CalendarCellProps) {
+/**
+ * The day cell for a RangeCalendar. Layers range-selection styling (start, end,
+ * and in-between days) over the single-date Calendar's cell, and is named for
+ * its owner so it does not collide with `CalendarCell` at the entry point.
+ */
+export function RangeCalendarCell(props: CalendarCellProps) {
   return (
     <AriaCalendarCell
       {...props}
