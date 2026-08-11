@@ -30,7 +30,8 @@ export function SegmentedControl({
       className={clsx(
         "segmented-control",
         styles.segmentedControl,
-        base.buttonBase
+        base.buttonBase,
+        props.className
       )}
       data-size={size}
       data-variant="secondary"
@@ -42,7 +43,11 @@ export function SegmentedControlItem(props: ToggleButtonProps) {
   return (
     <ToggleButton
       {...props}
-      className={clsx("segmented-control-item", styles.segmentedControlItem)}
+      className={clsx(
+        "segmented-control-item",
+        styles.segmentedControlItem,
+        props.className
+      )}
     >
       {composeRenderProps(props.children, (children) => (
         <>

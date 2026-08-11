@@ -23,7 +23,11 @@ export function ToggleButtonGroup({
     <RACToggleButtonGroup
       {...props}
       data-size={size}
-      className={clsx("react-aria-ToggleButtonGroup", styles.toggleButtonGroup)}
+      className={clsx(
+        "react-aria-ToggleButtonGroup",
+        styles.toggleButtonGroup,
+        props.className
+      )}
     />
   );
 }

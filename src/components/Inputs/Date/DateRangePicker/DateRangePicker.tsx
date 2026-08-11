@@ -55,10 +55,11 @@ export function DateRangePicker<T extends DateValue>({
     <AriaDateRangePicker
       {...props}
       data-field-size={size}
-      className={
-        props.className ??
-        clsx("react-aria-DateRangePicker", styles.dateRangePicker)
-      }
+      className={clsx(
+        "react-aria-DateRangePicker",
+        styles.dateRangePicker,
+        props.className
+      )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <FieldGroup

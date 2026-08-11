@@ -30,11 +30,18 @@ export function Breadcrumb(
   return (
     <RACBreadcrumb
       {...props}
-      className={clsx("react-aria-Breadcrumb", styles.breadcrumb)}
+      className={clsx(
+        "react-aria-Breadcrumb",
+        styles.breadcrumb,
+        props.className
+      )}
     >
       {({ isCurrent }) => (
         <>
-          <Link {...props} className={clsx("react-aria-Link", styles.link)} />
+          <Link
+            {...props}
+            className={clsx("react-aria-Link", styles.link, props.className)}
+          />
           {!isCurrent && <ChevronRight size={14} />}
         </>
       )}

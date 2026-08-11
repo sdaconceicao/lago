@@ -15,7 +15,7 @@ export function TableCell(props: CellProps) {
   return (
     <AriaCell
       {...props}
-      className={props.className ?? clsx("react-aria-Cell", styles.cell)}
+      className={clsx("react-aria-Cell", styles.cell, props.className)}
     >
       {composeRenderProps(
         props.children,

@@ -21,7 +21,7 @@ export function ListBox<T>({ children, ...props }: ListBoxProps<T>) {
   return (
     <AriaListBox
       {...props}
-      className={props.className ?? clsx("react-aria-ListBox", styles.listBox)}
+      className={clsx("react-aria-ListBox", styles.listBox, props.className)}
     >
       {children}
     </AriaListBox>
@@ -36,9 +36,11 @@ export function ListBoxItem(props: ListBoxItemProps) {
     <AriaListBoxItem
       {...props}
       textValue={textValue}
-      className={
-        props.className ?? clsx("react-aria-ListBoxItem", styles.listBoxItem)
-      }
+      className={clsx(
+        "react-aria-ListBoxItem",
+        styles.listBoxItem,
+        props.className
+      )}
     >
       {composeRenderProps(props.children, (children) =>
         typeof children === "string" ? (
@@ -55,10 +57,11 @@ export function ListBoxSection<T>(props: ListBoxSectionProps<T>) {
   return (
     <AriaListBoxSection
       {...props}
-      className={
-        props.className ??
-        clsx("react-aria-ListBoxSection", styles.listBoxSection)
-      }
+      className={clsx(
+        "react-aria-ListBoxSection",
+        styles.listBoxSection,
+        props.className
+      )}
     />
   );
 }
@@ -67,13 +70,11 @@ export function ListBoxLoadMoreItem(props: ListBoxLoadMoreItemProps) {
   return (
     <AriaListBoxLoadMoreItem
       {...props}
-      className={
-        props.className ??
-        clsx(
-          "react-aria-ListBoxLoadingIndicator",
-          styles.listBoxLoadingIndicator
-        )
-      }
+      className={clsx(
+        "react-aria-ListBoxLoadingIndicator",
+        styles.listBoxLoadingIndicator,
+        props.className
+      )}
     >
       <ProgressCircle isIndeterminate aria-label="Loading more..." />
     </AriaListBoxLoadMoreItem>
@@ -84,7 +85,11 @@ export function DropdownListBox<T>(props: ListBoxProps<T>) {
   return (
     <AriaListBox
       {...props}
-      className={clsx("dropdown-listbox", styles.dropdownListbox)}
+      className={clsx(
+        "dropdown-listbox",
+        styles.dropdownListbox,
+        props.className
+      )}
     />
   );
 }
@@ -97,7 +102,7 @@ export function DropdownItem(props: ListBoxItemProps) {
     <ListBoxItem
       {...props}
       textValue={textValue}
-      className={clsx("dropdown-item", styles.dropdownItem)}
+      className={clsx("dropdown-item", styles.dropdownItem, props.className)}
     >
       {composeRenderProps(props.children, (children, { isSelected }) => (
         <>

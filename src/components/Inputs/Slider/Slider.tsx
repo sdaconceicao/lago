@@ -46,7 +46,7 @@ export function Slider<T extends number | number[]>({
     <AriaSlider
       {...props}
       data-field-size={size}
-      className={clsx("react-aria-Slider", styles.slider)}
+      className={clsx("react-aria-Slider", styles.slider, props.className)}
     >
       {label && <Label>{label}</Label>}
       <SliderOutput

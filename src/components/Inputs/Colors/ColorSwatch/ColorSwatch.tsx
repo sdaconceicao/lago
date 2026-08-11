@@ -10,7 +10,11 @@ export function ColorSwatch(props: ColorSwatchProps) {
   return (
     <AriaColorSwatch
       {...props}
-      className={clsx("react-aria-ColorSwatch", styles.colorSwatch)}
+      className={clsx(
+        "react-aria-ColorSwatch",
+        styles.colorSwatch,
+        props.className
+      )}
       style={({ color }) => ({
         background: `linear-gradient(${color}, ${color}),
           repeating-conic-gradient(#CCC 0% 25%, white 0% 50%) 50% / 16px 16px`,

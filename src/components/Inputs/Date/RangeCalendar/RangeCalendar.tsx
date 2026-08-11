@@ -35,10 +35,11 @@ export function RangeCalendar<T extends DateValue>({
   return (
     <AriaRangeCalendar
       {...props}
-      className={
-        props.className ??
-        clsx("react-aria-RangeCalendar", styles.rangeCalendar)
-      }
+      className={clsx(
+        "react-aria-RangeCalendar",
+        styles.rangeCalendar,
+        props.className
+      )}
     >
       <div className={clsx("months", styles.months)}>
         {monthKeys.map((monthKey, monthOffset) => (
@@ -81,14 +82,12 @@ export function CalendarCell(props: CalendarCellProps) {
   return (
     <AriaCalendarCell
       {...props}
-      className={
-        props.className ??
-        clsx(
-          "react-aria-CalendarCell",
-          calendarStyles.calendarCell,
-          styles.calendarCell
-        )
-      }
+      className={clsx(
+        "react-aria-CalendarCell",
+        calendarStyles.calendarCell,
+        styles.calendarCell,
+        props.className
+      )}
     >
       {composeRenderProps(
         props.children,

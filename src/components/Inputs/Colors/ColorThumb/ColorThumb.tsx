@@ -9,7 +9,11 @@ export function ColorThumb(props: ColorThumbProps) {
   return (
     <AriaColorThumb
       {...props}
-      className={clsx("react-aria-ColorThumb", styles.colorThumb)}
+      className={clsx(
+        "react-aria-ColorThumb",
+        styles.colorThumb,
+        props.className
+      )}
     />
   );
 }

@@ -18,7 +18,11 @@ export function ColorSlider({ label, ...props }: ColorSliderProps) {
   return (
     <AriaColorSlider
       {...props}
-      className={clsx("react-aria-ColorSlider", styles.colorSlider)}
+      className={clsx(
+        "react-aria-ColorSlider",
+        styles.colorSlider,
+        props.className
+      )}
     >
       {label && <Label>{label}</Label>}
       <SliderOutput />

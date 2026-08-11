@@ -47,7 +47,11 @@ export function ColorField({
     <AriaColorField
       {...props}
       data-field-size={size}
-      className={clsx("react-aria-ColorField", styles.colorField)}
+      className={clsx(
+        "react-aria-ColorField",
+        styles.colorField,
+        props.className
+      )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <Input

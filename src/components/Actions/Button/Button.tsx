@@ -41,7 +41,12 @@ export function Button({ size = "md", ...props }: ButtonProps) {
   return (
     <RACButton
       {...props}
-      className={clsx("react-aria-Button", styles.button, base.buttonBase)}
+      className={clsx(
+        "react-aria-Button",
+        styles.button,
+        base.buttonBase,
+        props.className
+      )}
       data-size={size}
       data-variant={props.variant || "primary"}
     >

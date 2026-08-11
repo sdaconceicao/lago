@@ -20,7 +20,7 @@ export function MultiSelectItem(props: ListBoxItemProps) {
     <ListBoxItem
       {...props}
       textValue={textValue}
-      className={clsx("multi-select-item", styles.item)}
+      className={clsx("multi-select-item", styles.item, props.className)}
     >
       {composeRenderProps(props.children, (children) => (
         <>

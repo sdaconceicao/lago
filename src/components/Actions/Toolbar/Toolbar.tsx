@@ -19,9 +19,11 @@ export function Toolbar(props: ToolbarProps) {
       >
         <RACToolbar
           {...props}
-          className={
-            props.className ?? clsx("react-aria-Toolbar", styles.toolbar)
-          }
+          className={clsx(
+            "react-aria-Toolbar",
+            styles.toolbar,
+            props.className
+          )}
         />
       </SeparatorContext.Provider>
     </ToggleButtonGroupContext.Provider>

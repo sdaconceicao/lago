@@ -26,7 +26,7 @@ export function TableRow<T>({
     <AriaRow
       id={id}
       {...otherProps}
-      className={otherProps.className ?? clsx("react-aria-Row", styles.row)}
+      className={clsx("react-aria-Row", styles.row, otherProps.className)}
     >
       {allowsDragging && (
         <TableCell>

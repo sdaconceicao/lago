@@ -26,9 +26,7 @@ export function GridList<T>({
     <AriaGridList
       {...props}
       layout={layout}
-      className={
-        props.className ?? clsx("react-aria-GridList", styles.gridList)
-      }
+      className={clsx("react-aria-GridList", styles.gridList, props.className)}
     >
       {children}
     </AriaGridList>
@@ -46,9 +44,11 @@ export function GridListItem({
     <AriaGridListItem
       textValue={textValue}
       {...props}
-      className={
-        props.className ?? clsx("react-aria-GridListItem", styles.gridListItem)
-      }
+      className={clsx(
+        "react-aria-GridListItem",
+        styles.gridListItem,
+        props.className
+      )}
     >
       {({ selectionMode, selectionBehavior, allowsDragging }) => (
         <>
@@ -72,13 +72,11 @@ export function GridListLoadMoreItem(props: GridListLoadMoreItemProps) {
   return (
     <AriaGridListLoadMoreItem
       {...props}
-      className={
-        props.className ??
-        clsx(
-          "react-aria-GridListLoadingIndicator",
-          styles.gridListLoadingIndicator
-        )
-      }
+      className={clsx(
+        "react-aria-GridListLoadingIndicator",
+        styles.gridListLoadingIndicator,
+        props.className
+      )}
     >
       <ProgressCircle isIndeterminate aria-label="Loading more..." />
     </AriaGridListLoadMoreItem>

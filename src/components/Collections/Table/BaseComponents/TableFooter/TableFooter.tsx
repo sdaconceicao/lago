@@ -12,9 +12,11 @@ export function TableFooter<T>(props: TableFooterProps<T>) {
   return (
     <AriaTableFooter
       {...props}
-      className={
-        props.className ?? clsx("react-aria-TableFooter", styles.tableFooter)
-      }
+      className={clsx(
+        "react-aria-TableFooter",
+        styles.tableFooter,
+        props.className
+      )}
     />
   );
 }

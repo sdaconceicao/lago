@@ -11,7 +11,11 @@ export function ColorArea(props: ColorAreaProps) {
   return (
     <AriaColorArea
       {...props}
-      className={clsx("react-aria-ColorArea", styles.colorArea)}
+      className={clsx(
+        "react-aria-ColorArea",
+        styles.colorArea,
+        props.className
+      )}
     >
       <ColorThumb />
     </AriaColorArea>

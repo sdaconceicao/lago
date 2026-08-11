@@ -40,7 +40,11 @@ export function Checkbox({
       // inherits `md` from `:root`, and one inside a group must not stamp its
       // own size over the group's scope.
       data-field-size={size}
-      className={clsx("react-aria-CheckboxField", styles.checkboxField)}
+      className={clsx(
+        "react-aria-CheckboxField",
+        styles.checkboxField,
+        props.className
+      )}
     >
       <CheckboxButton
         className={clsx("react-aria-CheckboxButton", styles.checkboxButton)}

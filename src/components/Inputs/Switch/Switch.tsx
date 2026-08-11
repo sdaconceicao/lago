@@ -42,7 +42,11 @@ export function Switch({
     <SwitchField
       {...props}
       data-field-size={size}
-      className={clsx("react-aria-SwitchField", styles.switchField)}
+      className={clsx(
+        "react-aria-SwitchField",
+        styles.switchField,
+        props.className
+      )}
     >
       <SwitchButton
         className={clsx("react-aria-SwitchButton", styles.switchButton)}

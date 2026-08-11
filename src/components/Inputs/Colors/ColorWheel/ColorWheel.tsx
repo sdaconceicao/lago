@@ -17,7 +17,11 @@ export function ColorWheel(props: ColorWheelProps) {
       {...props}
       outerRadius={100}
       innerRadius={74}
-      className={clsx("react-aria-ColorWheel", styles.colorWheel)}
+      className={clsx(
+        "react-aria-ColorWheel",
+        styles.colorWheel,
+        props.className
+      )}
     >
       <ColorWheelTrack />
       <ColorThumb />

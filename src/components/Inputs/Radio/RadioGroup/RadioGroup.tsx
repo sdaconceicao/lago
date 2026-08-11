@@ -43,7 +43,11 @@ export function RadioGroup({
     <AriaRadioGroup
       {...props}
       data-field-size={size}
-      className={clsx("react-aria-RadioGroup", styles.radioGroup)}
+      className={clsx(
+        "react-aria-RadioGroup",
+        styles.radioGroup,
+        props.className
+      )}
     >
       {label && <Label isRequired={props.isRequired}>{label}</Label>}
       <div className={clsx("radio-items", styles.radioItems)}>{children}</div>
