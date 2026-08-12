@@ -3,6 +3,7 @@ import "@/styles/theme.css";
 
 export * from "./components/Actions/Button/Button";
 export * from "./components/Actions/CommandPalette/CommandPalette";
+export * from "./components/Actions/IconButton/IconButton";
 export * from "./components/Actions/Link/Link";
 export * from "./components/Actions/Menu/Menu";
 export * from "./components/Actions/Pagination/Pagination";

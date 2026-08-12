@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { HelpCircle } from "lucide-react";
 import { fn } from "storybook/test";
-import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
 import { Heading } from "@/components/Typography/index";
 import { Popover } from "./Popover";
@@ -28,9 +28,9 @@ type Story = StoryFn<typeof Popover>;
 
 export const Example: Story = (args) => (
   <DialogTrigger>
-    <Button aria-label="Help">
+    <IconButton aria-label="Help">
       <HelpCircle size={18} />
-    </Button>
+    </IconButton>
     <Popover {...args} className="react-aria-Popover popover-padding">
       <Heading slot="title">Help</Heading>
       <p>For help accessing your account, please contact support.</p>

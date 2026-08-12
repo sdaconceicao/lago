@@ -92,13 +92,39 @@ Reference tokens directly in your CSS for a consistent look:
 Everything Lago ships is emitted into cascade layers, declared in this order:
 
 ```css
-@layer lago.tokens, lago.base, lago.components;
+@layer reset, lago.tokens, lago.base, lago.components;
 ```
 
 `tokens` holds the custom properties, `base` the shared treatments components
 are built from, and `components` the per-component rules — lowest priority
 first, so each layer can build on the one before it. If you have met Tailwind's
 `theme, base, components` this is the same arrangement.
+
+#### Put your CSS reset in the `reset` layer
+
+`reset` is declared first, and Lago never writes into it. It is there for your global reset styles. This is important because unlayered author CSS has higher priority than all normal layered author CSS, regardless of specificity. An unlayered reset can therefore unexpectedly override Lago's component styles.
+
+```css
+/* Unlayered — and so it beats every rule Lago has, at any specificity.
+   Every component silently loses its padding: buttons collapse to the
+   width of their label. */
+* {
+  padding: 0;
+  margin: 0;
+}
+
+/* Layered into the slot Lago reserves — still resets the browser's defaults,
+   no longer outranks Lago. */
+@layer reset {
+  * {
+    padding: 0;
+    margin: 0;
+  }
+}
+```
+
+Because the slot is declared in Lago's own stylesheet, this works wherever your
+reset sits in the import order.
 
 Your stylesheet is **unlayered**, and unlayered styles beat layered ones however
 specific the layered rule is — layer order is resolved *before* specificity. So

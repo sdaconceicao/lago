@@ -1,0 +1,16 @@
+:global(.react-aria-Button).iconButton {
+  width: var(--spacing-9); /* 36px — square against Button's md height */
+  padding: 0;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+:global(.react-aria-Button).iconButton[data-size="sm"] {
+  width: calc(var(--spacing) * 7); /* 28px */
+  padding: 0;
+}
+
+:global(.react-aria-Button).iconButton[data-size="lg"] {
+  width: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
+  padding: 0;
+}

@@ -37,6 +37,11 @@ export interface ButtonProps extends RACButtonProps {
   size?: "sm" | "md" | "lg";
 }
 
+/**
+ * A button with a text label. For a button whose whole content is an icon, use
+ * `IconButton` — it carries the square, fully round shape, and requires the
+ * accessible name an icon cannot supply on its own.
+ */
 export function Button({ size = "md", ...props }: ButtonProps) {
   return (
     <RACButton
