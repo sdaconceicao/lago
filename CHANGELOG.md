@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/sdaconceicao/lago/compare/lago-v0.4.2...lago-v0.5.0) (2026-08-12)
+
+
+### Features
+
+* Add IconButton and replace Button in various components, reset layering ([#93](https://github.com/sdaconceicao/lago/issues/93)) ([a972c01](https://github.com/sdaconceicao/lago/commit/a972c01a5b7c3e7adbb24b423514b23c76e12a36))
+
 ## [0.4.2](https://github.com/sdaconceicao/lago/compare/lago-v0.4.1...lago-v0.4.2) (2026-08-11)
 
 
