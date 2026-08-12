@@ -80,9 +80,9 @@ function MyToastRegion() {
               <Text slot="description">{toast.content.description}</Text>
             )}
           </ToastContent>
-          <Button slot="close" aria-label="Close" variant="quiet">
+          <IconButton slot="close" aria-label="Close" variant="quiet">
             <X size={16} />
-          </Button>
+          </IconButton>
         </MyToast>
       )}
     </ToastRegion>

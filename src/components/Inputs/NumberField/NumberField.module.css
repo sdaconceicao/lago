@@ -46,9 +46,10 @@
     justify-content: center;
     margin-inline-start: -1px;
 
-    &:has(> svg:only-child) {
-      width: var(--field-inner-height);
-    }
+    /* Both buttons here are IconButtons — the steppers — so this applies
+       unconditionally rather than sniffing for a lone svg. They need the
+       field's inner height rather than IconButton's own square. */
+    width: var(--field-inner-height);
 
     &[slot="decrement"] {
       border-radius: 0;

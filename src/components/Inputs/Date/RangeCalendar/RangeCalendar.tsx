@@ -11,7 +11,7 @@ import {
   type DateValue,
   Text,
 } from "react-aria-components/RangeCalendar";
-import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { CalendarGrid } from "@/components/Inputs/Date/Calendar/Calendar";
 import calendarStyles from "@/components/Inputs/Date/Calendar/Calendar.module.css";
 import base from "@/styles/base.module.css";
@@ -46,9 +46,9 @@ export function RangeCalendar<T extends DateValue>({
           <div key={monthKey} className={clsx("month", styles.month)}>
             <header>
               {monthOffset === 0 && (
-                <Button slot="previous" variant="quiet">
+                <IconButton slot="previous" variant="quiet">
                   <ChevronLeft />
-                </Button>
+                </IconButton>
               )}
               <CalendarHeading
                 offset={{ months: monthOffset }}
@@ -58,9 +58,9 @@ export function RangeCalendar<T extends DateValue>({
                 )}
               />
               {monthOffset === months - 1 && (
-                <Button slot="next" variant="quiet">
+                <IconButton slot="next" variant="quiet">
                   <ChevronRight />
-                </Button>
+                </IconButton>
               )}
             </header>
             <CalendarGrid

@@ -11,7 +11,7 @@ import {
   UNSTABLE_ToastRegion as ToastRegion,
 } from "react-aria-components/Toast";
 import { flushSync } from "react-dom";
-import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import styles from "./Toast.module.css";
 
 export type { ToastProps };
@@ -57,9 +57,9 @@ export function MyToastRegion() {
               <Text slot="description">{toast.content.description}</Text>
             )}
           </ToastContent>
-          <Button slot="close" aria-label="Close" variant="quiet">
+          <IconButton slot="close" aria-label="Close" variant="quiet">
             <X size={16} />
-          </Button>
+          </IconButton>
         </MyToast>
       )}
     </ToastRegion>

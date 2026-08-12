@@ -8,7 +8,7 @@ import {
   Input,
   type ValidationResult,
 } from "react-aria-components/NumberField";
-import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import {
   DEFAULT_FIELD_SIZE,
   Description,
@@ -64,12 +64,12 @@ export function NumberField({
             base.inset
           )}
         />
-        <Button slot="decrement" variant="secondary">
+        <IconButton slot="decrement" variant="secondary">
           <Minus />
-        </Button>
-        <Button slot="increment" variant="secondary">
+        </IconButton>
+        <IconButton slot="increment" variant="secondary">
           <Plus />
-        </Button>
+        </IconButton>
       </Group>
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>

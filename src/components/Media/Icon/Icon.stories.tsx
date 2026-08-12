@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { Alert } from "@/components/Feedback/Alert/Alert";
 import { TextFieldWithAffixes } from "@/components/Inputs/TextFieldWithAffixes/TextFieldWithAffixes";
 import { IconGallery } from "./IconGallery";
@@ -141,7 +142,7 @@ Each icon renders a 24×24 \`<svg>\` stroked in \`currentColor\`, accepts \`size
 
 \`\`\`tsx
 <Button><Trash2 /><span>Delete</span></Button>  {/* label carries the meaning */}
-<Button aria-label="Delete"><Trash2 /></Button> {/* icon-only control */}
+<IconButton aria-label="Delete"><Trash2 /></IconButton> {/* icon-only control */}
 <CircleCheck role="img" aria-label="Paid" />    {/* icon standing alone */}
 \`\`\`
 
@@ -360,9 +361,9 @@ export const WithComponents: Story = {
           <RefreshCw />
           <span>Retry</span>
         </Button>
-        <Button variant="secondary" aria-label="More actions">
+        <IconButton variant="secondary" aria-label="More actions">
           <Ellipsis />
-        </Button>
+        </IconButton>
       </div>
       <TextFieldWithAffixes label="Search" prefix={<Search />} />
       <Alert variant="success">

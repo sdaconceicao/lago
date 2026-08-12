@@ -9,7 +9,7 @@ import {
   X,
 } from "lucide-react";
 import type { HTMLAttributes, ReactNode } from "react";
-import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { Heading } from "@/components/Typography/Heading/Heading";
 import { type AlertVariant, useAlertVariant } from "../Alert.context";
 import styles from "./AlertHeader.module.css";
@@ -116,14 +116,14 @@ export function AlertHeader({
         // Wrapped rather than classed directly: Button sets its own className
         // and drops any passed in, so the layout hook has to live outside it.
         <span className={clsx("alert-dismiss", styles.alertDismiss)}>
-          <Button
+          <IconButton
             variant="quiet"
             size="sm"
             aria-label={dismissLabel}
             onPress={onDismiss}
           >
             <X size={16} />
-          </Button>
+          </IconButton>
         </span>
       )}
     </div>

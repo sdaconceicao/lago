@@ -11,7 +11,7 @@ import {
   CalendarHeading,
   type DateValue,
 } from "react-aria-components/Calendar";
-import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { SlottedText } from "@/components/Typography/index";
 import base from "@/styles/base.module.css";
 import styles from "./Calendar.module.css";
@@ -43,9 +43,9 @@ export function Calendar<T extends DateValue>({
           <div key={monthKey} className={clsx("month", styles.month)}>
             <header>
               {monthOffset === 0 && (
-                <Button slot="previous" variant="quiet">
+                <IconButton slot="previous" variant="quiet">
                   <ChevronLeft />
-                </Button>
+                </IconButton>
               )}
               <CalendarHeading
                 offset={{ months: monthOffset }}
@@ -55,9 +55,9 @@ export function Calendar<T extends DateValue>({
                 )}
               />
               {monthOffset === months - 1 && (
-                <Button slot="next" variant="quiet">
+                <IconButton slot="next" variant="quiet">
                   <ChevronRight />
-                </Button>
+                </IconButton>
               )}
             </header>
             <CalendarGrid offset={{ months: monthOffset }}>

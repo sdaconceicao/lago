@@ -17,7 +17,7 @@ const meta: Meta<typeof Button> = {
     docs: {
       description: {
         component:
-          "A clickable element used to trigger an action or event, such as submitting a form or opening a dialog. Buttons support variations like primary, secondary, and quiet styles, and can include icons or other content.",
+          "A clickable element used to trigger an action or event, such as submitting a form or opening a dialog. Buttons support variations like primary, secondary, and quiet styles, and can include icons alongside their label. For a button whose whole content is an icon, use `IconButton`: it carries the square, fully round shape and requires the accessible name an icon cannot supply on its own.",
       },
     },
   },

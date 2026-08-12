@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { Save } from "lucide-react";
 import { fn } from "storybook/test";
-import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { Tooltip, TooltipTrigger } from "./Tooltip";
 
 const meta: Meta<typeof Tooltip> = {
@@ -27,9 +27,9 @@ type Story = StoryFn<typeof Tooltip>;
 
 export const Example: Story = (args) => (
   <TooltipTrigger>
-    <Button>
+    <IconButton aria-label="Save">
       <Save size={18} />
-    </Button>
+    </IconButton>
     <Tooltip {...args}>Save</Tooltip>
   </TooltipTrigger>
 );

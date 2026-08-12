@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { X } from "lucide-react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { Heading } from "react-aria-components/Dialog";
-import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import styles from "./DialogHeader.module.css";
 
 export interface DialogHeaderProps
@@ -54,9 +54,9 @@ export function DialogHeader({
       )}
       {children}
       {!hideCloseButton && (
-        <Button slot="close" variant="quiet" aria-label="Close">
+        <IconButton slot="close" variant="quiet" aria-label="Close">
           <X size={16} />
-        </Button>
+        </IconButton>
       )}
     </header>
   );

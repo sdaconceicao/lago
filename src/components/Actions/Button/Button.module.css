@@ -19,13 +19,6 @@
     height: calc(var(--spacing) * 3.5);
   }
 
-  &:has(> svg:only-child) {
-    width: var(--spacing-9); /* 36px */
-    flex-shrink: 0;
-    padding: 0;
-    border-radius: 9999px;
-  }
-
   &[data-pressed] {
     scale: 0.95;
   }
@@ -68,12 +61,4 @@
     width: var(--spacing-4); /* 16px */
     height: var(--spacing-4);
   }
-}
-
-.button[data-size="sm"]:has(> svg:only-child) {
-  width: calc(var(--spacing) * 7); /* 28px */
-}
-
-.button[data-size="lg"]:has(> svg:only-child) {
-  width: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
 }

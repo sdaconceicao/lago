@@ -32,10 +32,22 @@ import type { Plugin } from "vite";
  * re-theming should never be a specificity fight. The trade-off is that it wins
  * against Lago's state rules too — see the theming docs on scoping a variant
  * override with `:not([data-disabled])`.
+ *
+ * The order also opens with an empty `reset` layer that Lago never writes into.
+ * It is there for the consumer, and it earns its keep: a CSS reset is normally
+ * unlayered, so `* { padding: 0 }` — the shape almost every reset takes — beats
+ * every layered rule Lago has at any specificity, and silently flattens the
+ * padding of every component in the library. Moving that reset into
+ * `@layer reset` puts it below Lago instead, and because the slot is declared
+ * here the consumer does not have to control stylesheet import order to get it.
  */
 
-/** Declared before any layer is used, so the order never depends on emit order. */
-export const LAYER_ORDER = "@layer lago.tokens, lago.base, lago.components;";
+/**
+ * Declared before any layer is used, so the order never depends on emit order.
+ * `reset` is deliberately left empty — see the note above.
+ */
+export const LAYER_ORDER =
+  "@layer reset, lago.tokens, lago.base, lago.components;";
 
 /** `@import` must stay at the top of a sheet and is invalid inside `@layer`. */
 const IMPORT_RULE = /^[ \t]*@import\s[^;]+;[ \t]*$/gm;
