@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import { Search, X } from "lucide-react";
 import type React from "react";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { Group } from "react-aria-components/Group";
 import {
   SearchField as AriaSearchField,
@@ -63,16 +63,8 @@ export function SearchField({
   const inputRef = useRef<HTMLInputElement>(null);
   const { search } = useSearchSuggestions({ onSearch, debounceDelay });
 
-  // Used to avoid showing the clear button when the field is empty, fixing a bug that arose from relying on a CSS [data-empty] rule.
-  const [uncontrolledHasText, setUncontrolledHasText] = useState(
-    Boolean(props.defaultValue)
-  );
-  const hasText =
-    props.value !== undefined ? props.value !== "" : uncontrolledHasText;
-
   const handleChange = useCallback(
     (value: string) => {
-      setUncontrolledHasText(value !== "");
       onChange?.(value);
       search(value);
     },
@@ -95,39 +87,47 @@ export function SearchField({
         props.className
       )}
     >
-      {label && <Label isRequired={props.isRequired}>{label}</Label>}
-      <Group
-        ref={groupRef}
-        onKeyDownCapture={onKeyDownCapture}
-        isDisabled={props.isDisabled}
-        isInvalid={props.isInvalid}
-        className={clsx("react-aria-Group", textFieldStyles.field, base.inset)}
-      >
-        <Input
-          ref={inputRef}
-          placeholder={placeholder}
-          className={clsx(
-            "react-aria-Input",
-            textFieldStyles.fieldInput,
-            styles.input
-          )}
-        />
-        {hasText && (
-          <FieldButton aria-label="Clear search">
-            <X />
-          </FieldButton>
-        )}
-        <FieldButton
-          slot={null}
-          aria-label="Search"
-          isDisabled={props.isDisabled}
-          onPress={handleSubmitPress}
-        >
-          <Search />
-        </FieldButton>
-      </Group>
-      {description && <Description>{description}</Description>}
-      <FieldError>{errorMessage}</FieldError>
+      {({ isEmpty }) => (
+        <>
+          {label && <Label isRequired={props.isRequired}>{label}</Label>}
+          <Group
+            ref={groupRef}
+            onKeyDownCapture={onKeyDownCapture}
+            isDisabled={props.isDisabled}
+            isInvalid={props.isInvalid}
+            className={clsx(
+              "react-aria-Group",
+              textFieldStyles.field,
+              base.inset
+            )}
+          >
+            <Input
+              ref={inputRef}
+              placeholder={placeholder}
+              className={clsx(
+                "react-aria-Input",
+                textFieldStyles.fieldInput,
+                styles.input
+              )}
+            />
+            {!isEmpty && (
+              <FieldButton aria-label="Clear search">
+                <X />
+              </FieldButton>
+            )}
+            <FieldButton
+              slot={null}
+              aria-label="Search"
+              isDisabled={props.isDisabled}
+              onPress={handleSubmitPress}
+            >
+              <Search />
+            </FieldButton>
+          </Group>
+          {description && <Description>{description}</Description>}
+          <FieldError>{errorMessage}</FieldError>
+        </>
+      )}
     </AriaSearchField>
   );
 }

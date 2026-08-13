@@ -51,6 +51,22 @@ describe("SearchField", () => {
     expect(onClear).toHaveBeenCalledTimes(1);
   });
 
+  it("tracks the clear button against a controlled value set from outside", () => {
+    const { rerender } = render(<SearchField label="Search" value="" />);
+
+    expect(
+      screen.queryByRole("button", { name: /clear/i })
+    ).not.toBeInTheDocument();
+
+    rerender(<SearchField label="Search" value="abc" />);
+    expect(screen.getByRole("button", { name: /clear/i })).toBeInTheDocument();
+
+    rerender(<SearchField label="Search" value="" />);
+    expect(
+      screen.queryByRole("button", { name: /clear/i })
+    ).not.toBeInTheDocument();
+  });
+
   it("submits the current value when Enter is pressed", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
