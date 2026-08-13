@@ -42,8 +42,9 @@ export interface MultiSelectProps<T>
   displayMode?: MultiSelectDisplayMode;
   /**
    * Field size: 28px, 36px (default), or 48px tall. Also scales the dropdown
-   * and the tag chips. At `"sm"` and `"md"` the tags scroll rather than wrap,
-   * so the field holds its height; at `"lg"` they wrap and it grows.
+   * and the tag chips. At `"sm"` and `"md"` the field is a single row that
+   * holds its height: the tags that fit are shown and the rest collapse into a
+   * "+N" counter. At `"lg"` every tag is shown, wrapping as the field grows.
    */
   size?: FieldSize;
 }
@@ -53,6 +54,10 @@ export interface MultiSelectProps<T>
  * toggle with checkboxes and stay visible while the menu remains open, and
  * selected items render as removable tags or comma-separated text. Backspace
  * in an empty input removes the most recently selected item.
+ *
+ * At `sm` and `md` the tags that do not fit the row collapse into a "+N"
+ * counter, so the field stays one row tall and readable however narrow the
+ * column is and however long the labels are.
  */
 export function MultiSelect<T>({
   label,
@@ -82,7 +87,7 @@ export function MultiSelect<T>({
           against it and it gets data-hovered/focus/disabled/invalid states. */}
       <Group className={clsx("react-aria-Group", styles.field, base.inset)}>
         {displayMode === "tags" ? (
-          <MultiSelectTags />
+          <MultiSelectTags size={size} />
         ) : (
           <ComboBoxValue
             className={clsx("react-aria-ComboBoxValue", styles.textValue)}

@@ -567,7 +567,7 @@ PopulatedMultiSelect.parameters = {
   docs: {
     description: {
       story:
-        "At `sm` and `md` the tags never wrap — the row scrolls horizontally — so the field holds its 28px or 36px height however many items are selected, and its toggle stays aligned with the Select and DatePicker beside it. At `lg` the tags do wrap and the field grows to fit them, which is why these rows align to the top rather than the bottom.",
+        "At `sm` and `md` the tags never wrap — the ones that do not fit collapse into a `+N` counter — so the field holds its 28px or 36px height however many items are selected, and its toggle stays aligned with the Select and DatePicker beside it. At `lg` the tags do wrap and the field grows to fit them, which is why these rows align to the top rather than the bottom.",
     },
   },
 };

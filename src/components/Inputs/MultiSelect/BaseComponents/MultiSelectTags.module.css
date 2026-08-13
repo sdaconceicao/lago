@@ -9,9 +9,55 @@
   }
 }
 
-/* Inside a compact field the row scrolls instead of wrapping (see
-   MultiSelect.module.css), so the chips have to keep their natural width
-   instead of shrinking and ellipsising to fit. */
-:where([data-field-size="sm"]) .tags :global(.react-aria-Tag) {
+/* Inside a compact field the row never wraps (see MultiSelect.module.css), so
+   the tags have to hold their natural width.
+
+   Without this they keep the initial `flex: 0 1 auto` and shrink to fit, and
+   because a tag sets `overflow: hidden` its automatic minimum size is zero —
+   so there is no floor. Five tags in a 22rem sidebar land near 45px each: the
+   label ellipsises away to nothing and the remove button is squeezed out
+   entirely. What does not fit is collapsed into the counter below instead. */
+:where([data-field-size="sm"], [data-field-size="md"])
+  .tags
+  :global(.react-aria-Tag) {
   flex: none;
+}
+
+/* The tag that is allowed to ellipsise: when even one whole tag will not fit,
+   MultiSelectTags still renders it rather than showing a bare "+5", because a
+   truncated label still says which selection this is. */
+:where([data-field-size="sm"], [data-field-size="md"])
+  .tags
+  :global(.react-aria-Tag:only-of-type) {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+/* Reads as a tag, but it is a count rather than a value: no remove button, no
+   focus stop, and the muted fill keeps it from competing with the real tags
+   beside it. */
+.counter {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: var(--field-inner-height);
+  padding: 0 var(--spacing-2);
+  border-radius: var(--radius);
+  background: var(--gray-300);
+  color: var(--gray-1100);
+  font: var(--field-font-size) var(--font-family);
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+}
+
+/* The measuring probe. Taken out of flow so MultiSelectTags can read the
+   counter's width on a pass where the counter is not being shown, without it
+   displacing the tags it is measuring against. */
+.counterProbe {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  top: 0;
+  left: 0;
 }

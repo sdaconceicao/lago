@@ -79,6 +79,7 @@ export * from "./components/Visualization/Meter/Meter";
 export * from "./hooks/use-clipboard";
 export * from "./hooks/use-dark-mode";
 export * from "./hooks/use-debounced-callback";
+export * from "./hooks/use-resize-observer";
 // Providers
 export * from "./providers/theme-provider";
 
