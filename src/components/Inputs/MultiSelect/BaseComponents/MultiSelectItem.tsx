@@ -2,7 +2,7 @@
 import clsx from "clsx";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import type { ListBoxItemProps } from "react-aria-components/ListBox";
-import { ListBoxItem } from "@/components/Collections/ListBox/ListBox";
+import { BaseListBoxItem } from "@/components/Collections/ListBox/BaseComponents/BaseListBoxItem";
 import { CheckboxIndicator } from "@/components/Inputs/Checkbox/CheckboxItem/Checkbox";
 import { SlottedText } from "@/components/Typography/index";
 import styles from "./MultiSelectItem.module.css";
@@ -17,7 +17,7 @@ export function MultiSelectItem(props: ListBoxItemProps) {
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
   return (
-    <ListBoxItem
+    <BaseListBoxItem
       {...props}
       textValue={textValue}
       className={clsx("multi-select-item", styles.item, props.className)}
@@ -32,6 +32,6 @@ export function MultiSelectItem(props: ListBoxItemProps) {
           )}
         </>
       ))}
-    </ListBoxItem>
+    </BaseListBoxItem>
   );
 }

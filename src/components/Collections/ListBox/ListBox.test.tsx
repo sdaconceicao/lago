@@ -1,6 +1,7 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Header, ListBox, ListBoxItem, ListBoxSection } from "./ListBox";
+import styles from "./ListBox.module.css";
 
 beforeAll(() => {
   window.HTMLElement.prototype.scrollIntoView = vi.fn();
@@ -133,6 +134,17 @@ describe("ListBox", () => {
     expect(within(groups[0]).getByText("Veggies")).toBeInTheDocument();
     expect(within(groups[1]).getByText("Protein")).toBeInTheDocument();
     expect(screen.getAllByRole("option")).toHaveLength(4);
+  });
+
+  // The counterpart to the Select and MultiSelect cases: their options build
+  // on the same unstyled base but must not pick this treatment up, since it
+  // lays an item out as a column. See BaseListBoxItem.
+  it("styles its own options", () => {
+    renderListBox();
+
+    expect(screen.getByRole("option", { name: "Mint" })).toHaveClass(
+      styles.listBoxItem
+    );
   });
 
   it("uses the item's string children as its text value", async () => {

@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Check } from "lucide-react";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import type { ListBoxItemProps } from "react-aria-components/ListBox";
-import { ListBoxItem } from "@/components/Collections/ListBox/ListBox";
+import { BaseListBoxItem } from "@/components/Collections/ListBox/BaseComponents/BaseListBoxItem";
 import { SlottedText } from "@/components/Typography/index";
 import styles from "./SelectItem.module.css";
 
@@ -16,7 +16,7 @@ export function SelectItem(props: ListBoxItemProps) {
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
   return (
-    <ListBoxItem
+    <BaseListBoxItem
       {...props}
       textValue={textValue}
       className={clsx("select-item", styles.item, props.className)}
@@ -33,6 +33,6 @@ export function SelectItem(props: ListBoxItemProps) {
           )}
         </>
       ))}
-    </ListBoxItem>
+    </BaseListBoxItem>
   );
 }

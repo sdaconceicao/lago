@@ -299,6 +299,8 @@
   min-height: var(--field-inner-height);
   margin-inline: var(--spacing-1);
   -webkit-tap-highlight-color: transparent;
+  transition-property: background, color, border-radius;
+  transition-duration: 200ms;
 
   &:first-of-type {
     margin-top: var(--spacing);
@@ -308,6 +310,16 @@
     margin-bottom: var(--spacing);
   }
 
+  &[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -2px;
+    z-index: 2;
+  }
+
+  /* Selection reads as the check in the reserved left gutter, not as a filled
+     row. While this composed ListBoxItem it also picked up that sheet's
+     selected `--highlight-background` — which is why the colour is restated
+     here, and the pair rendered `--text-color` on a saturated fill. */
   &[data-selected] {
     font-weight: 500;
     color: var(--text-color);

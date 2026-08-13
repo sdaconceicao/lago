@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import listBoxStyles from "@/components/Collections/ListBox/ListBox.module.css";
 import { Select, SelectItem } from "./Select";
 
 beforeAll(() => {
@@ -68,6 +69,21 @@ describe("Select", () => {
       "Strawberry",
       "Vanilla",
     ]);
+  });
+
+  // An option is not a ListBoxItem variant: it lays itself out as a row, where
+  // that component's `justify-content: center` would centre it horizontally.
+  // The two tie on specificity inside one cascade layer, so nothing downstream
+  // can correct it — see BaseListBoxItem.
+  it("does not inherit ListBoxItem's styling", async () => {
+    const user = userEvent.setup();
+    renderSelect();
+
+    await user.click(screen.getByRole("combobox"));
+
+    expect(
+      await screen.findByRole("option", { name: "Chocolate" })
+    ).not.toHaveClass(listBoxStyles.listBoxItem);
   });
 
   it("filters options as the user types", async () => {
