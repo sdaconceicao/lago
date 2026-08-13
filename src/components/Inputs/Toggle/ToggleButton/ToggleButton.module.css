@@ -16,6 +16,7 @@
   transition-property: background, box-shadow, text-shadow, scale;
   transition-duration: 200ms;
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 
   > span {
     display: flex;

@@ -4,14 +4,6 @@ import {
   type ToggleButtonProps,
 } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 
-/**
- * An icon has no text for assistive technology to read, so an icon button has
- * no accessible name unless something supplies one. Requiring that in the type
- * makes the omission unrepresentable rather than something an audit finds later.
- *
- * Three routes count, and the third is not a loophole: a button filling a
- * react-aria slot is named by the container, in the user's own locale.
- */
 type AccessibleName =
   | { "aria-label": string }
   | { "aria-labelledby": string }

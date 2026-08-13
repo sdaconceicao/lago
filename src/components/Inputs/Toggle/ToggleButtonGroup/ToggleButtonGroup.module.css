@@ -18,6 +18,7 @@
 
     &[data-disabled] {
       z-index: 0;
+      cursor: default;
     }
 
     &[data-selected],
