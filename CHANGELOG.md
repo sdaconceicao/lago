@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0](https://github.com/sdaconceicao/lago/compare/lago-v0.5.0...lago-v0.6.0) (2026-08-13)
+
+
+### Features
+
+* IconToggleButton to handle icons without css inferring icons ([#98](https://github.com/sdaconceicao/lago/issues/98)) ([516de3c](https://github.com/sdaconceicao/lago/commit/516de3cd26bb7aef2405e422cd99904fe264606f))
+
+
+### Bug Fixes
+
+* Improve SearchField to manage clear button  ([#97](https://github.com/sdaconceicao/lago/issues/97)) ([fea4fcc](https://github.com/sdaconceicao/lago/commit/fea4fccb985d4171706d9e421afc190ceac49dcf))
+* Stop dropdown options inheriting ListBoxItem's layout ([#95](https://github.com/sdaconceicao/lago/issues/95)) ([2ec2f61](https://github.com/sdaconceicao/lago/commit/2ec2f61e1620592f1f3d311e0da1a4e725af4836))
+
 ## [0.5.0](https://github.com/sdaconceicao/lago/compare/lago-v0.4.2...lago-v0.5.0) (2026-08-12)
 
 
