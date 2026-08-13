@@ -1,5 +1,6 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import type { SearchSuggestion } from "../SearchField/SearchField.utils";
 import { SearchFieldWithSuggestions } from "./SearchFieldWithSuggestions";
 
@@ -202,6 +203,49 @@ describe("SearchFieldWithSuggestions", () => {
       ).not.toBeInTheDocument();
     });
 
+    it("hides the clear button when a controlled parent resets the value on select", async () => {
+      const user = userEvent.setup();
+      function ControlledSearch() {
+        const [query, setQuery] = useState("");
+        return (
+          <SearchFieldWithSuggestions
+            label="Search"
+            suggestions={fruits}
+            value={query}
+            onChange={setQuery}
+            onSuggestionSelect={() => setQuery("")}
+          />
+        );
+      }
+      render(<ControlledSearch />);
+
+      await user.type(screen.getByRole("searchbox"), "ban");
+      await user.click(await screen.findByRole("option", { name: "Banana" }));
+
+      expect(screen.getByRole("searchbox")).toHaveValue("");
+      expect(
+        screen.queryByRole("button", { name: /clear/i })
+      ).not.toBeInTheDocument();
+    });
+
+    it("keeps the clear button after a suggestion fills the field", async () => {
+      const user = userEvent.setup();
+      render(
+        <SearchFieldWithSuggestions label="Search" suggestions={fruits} />
+      );
+
+      await user.type(screen.getByRole("searchbox"), "ban");
+      await user.click(await screen.findByRole("option", { name: "Banana" }));
+
+      expect(screen.getByRole("searchbox")).toHaveValue("Banana");
+      await user.click(screen.getByRole("button", { name: /clear/i }));
+
+      expect(screen.getByRole("searchbox")).toHaveValue("");
+      expect(
+        screen.queryByRole("button", { name: /clear/i })
+      ).not.toBeInTheDocument();
+    });
+
     it("closes the dropdown on the first Escape and clears the field on the second", async () => {
       const user = userEvent.setup();
       const onClear = vi.fn();
@@ -239,6 +283,28 @@ describe("SearchFieldWithSuggestions", () => {
 
       expect(screen.getByRole("searchbox")).toBeDisabled();
       expect(screen.getByRole("button", { name: "Search" })).toBeDisabled();
+    });
+
+    it("disables the clear button when isDisabled", async () => {
+      const user = userEvent.setup();
+      const onClear = vi.fn();
+      render(
+        <SearchFieldWithSuggestions
+          label="Search"
+          suggestions={fruits}
+          defaultValue="Banana"
+          onClear={onClear}
+          isDisabled
+        />
+      );
+
+      const clearButton = screen.getByRole("button", { name: /clear/i });
+      expect(clearButton).toBeDisabled();
+
+      await user.click(clearButton);
+
+      expect(screen.getByRole("searchbox")).toHaveValue("Banana");
+      expect(onClear).not.toHaveBeenCalled();
     });
 
     it("associates the description with the input", () => {
