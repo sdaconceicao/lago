@@ -1,5 +1,6 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import listBoxStyles from "@/components/Collections/ListBox/ListBox.module.css";
 import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 
 beforeAll(() => {
@@ -178,6 +179,21 @@ describe("MultiSelect", () => {
         "aria-selected",
         "true"
       );
+    });
+
+    // An option is not a ListBoxItem variant: it lays itself out as a row,
+    // where that component's `justify-content: center` would centre it
+    // horizontally, and the two tie on specificity inside one cascade layer.
+    // See BaseListBoxItem.
+    it("does not inherit ListBoxItem's styling", async () => {
+      const user = userEvent.setup();
+      renderMultiSelect();
+
+      await user.click(screen.getByRole("combobox"));
+
+      expect(
+        await screen.findByRole("option", { name: "Apple" })
+      ).not.toHaveClass(listBoxStyles.listBoxItem);
     });
 
     it("marks preselected options as selected", async () => {

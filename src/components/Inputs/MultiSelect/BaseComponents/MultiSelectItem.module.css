@@ -1,7 +1,13 @@
+/* Self-contained, as in SelectItem.module.css: the option builds on
+   BaseListBoxItem, which contributes no styling, so nothing here depends on
+   ListBoxItem's column layout. */
 .item {
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
+  transition-property: background, color, border-radius;
+  transition-duration: 200ms;
   gap: var(--field-gap);
   box-sizing: border-box;
   min-height: var(--field-inner-height);
@@ -28,6 +34,28 @@
 
   [slot="description"] {
     font-size: var(--font-size-sm);
+  }
+
+  /* See SelectItem.module.css on the ordering of these against the pointer
+     states below. */
+  &[data-selected] {
+    background: var(--highlight-background);
+    color: var(--highlight-foreground);
+
+    &[data-focus-visible] {
+      outline-color: var(--highlight-foreground);
+      outline-offset: -4px;
+    }
+
+    &[data-pressed] {
+      background: var(--highlight-background-pressed);
+    }
+  }
+
+  &[data-focus-visible] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -2px;
+    z-index: 2;
   }
 
   &[data-pressed] {

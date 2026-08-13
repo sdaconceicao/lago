@@ -4,7 +4,6 @@ import { Check } from "lucide-react";
 import { composeRenderProps } from "react-aria-components/composeRenderProps";
 import {
   ListBox as AriaListBox,
-  ListBoxItem as AriaListBoxItem,
   ListBoxLoadMoreItem as AriaListBoxLoadMoreItem,
   ListBoxSection as AriaListBoxSection,
   Header,
@@ -15,6 +14,7 @@ import {
 } from "react-aria-components/ListBox";
 import { ProgressCircle } from "@/components/Feedback/ProgressCircle/ProgressCircle";
 import { SlottedText } from "@/components/Typography/index";
+import { BaseListBoxItem } from "./BaseComponents/BaseListBoxItem";
 import styles from "./ListBox.module.css";
 
 export function ListBox<T>({ children, ...props }: ListBoxProps<T>) {
@@ -33,14 +33,10 @@ export function ListBoxItem(props: ListBoxItemProps) {
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
   return (
-    <AriaListBoxItem
+    <BaseListBoxItem
       {...props}
       textValue={textValue}
-      className={clsx(
-        "react-aria-ListBoxItem",
-        styles.listBoxItem,
-        props.className
-      )}
+      className={clsx(styles.listBoxItem, props.className)}
     >
       {composeRenderProps(props.children, (children) =>
         typeof children === "string" ? (
@@ -49,7 +45,7 @@ export function ListBoxItem(props: ListBoxItemProps) {
           children
         )
       )}
-    </AriaListBoxItem>
+    </BaseListBoxItem>
   );
 }
 
@@ -99,7 +95,7 @@ export function DropdownItem(props: ListBoxItemProps) {
     props.textValue ||
     (typeof props.children === "string" ? props.children : undefined);
   return (
-    <ListBoxItem
+    <BaseListBoxItem
       {...props}
       textValue={textValue}
       className={clsx("dropdown-item", styles.dropdownItem, props.className)}
@@ -114,7 +110,7 @@ export function DropdownItem(props: ListBoxItemProps) {
           )}
         </>
       ))}
-    </ListBoxItem>
+    </BaseListBoxItem>
   );
 }
 
