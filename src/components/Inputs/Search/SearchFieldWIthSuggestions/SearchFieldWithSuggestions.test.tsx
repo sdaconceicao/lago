@@ -285,6 +285,28 @@ describe("SearchFieldWithSuggestions", () => {
       expect(screen.getByRole("button", { name: "Search" })).toBeDisabled();
     });
 
+    it("disables the clear button when isDisabled", async () => {
+      const user = userEvent.setup();
+      const onClear = vi.fn();
+      render(
+        <SearchFieldWithSuggestions
+          label="Search"
+          suggestions={fruits}
+          defaultValue="Banana"
+          onClear={onClear}
+          isDisabled
+        />
+      );
+
+      const clearButton = screen.getByRole("button", { name: /clear/i });
+      expect(clearButton).toBeDisabled();
+
+      await user.click(clearButton);
+
+      expect(screen.getByRole("searchbox")).toHaveValue("Banana");
+      expect(onClear).not.toHaveBeenCalled();
+    });
+
     it("associates the description with the input", () => {
       render(
         <SearchFieldWithSuggestions
