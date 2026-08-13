@@ -14,9 +14,27 @@
   gap: var(--spacing-1);
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
+
+  /* flex box to remove the baseline shift of the svg inside a span */
+  > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* `--button-icon-size` is this rule's public input, read with the default in
+     a var() fallback so a caller supplies the only declaration rather than
+     having to outrank ours — the same shape base.module.css uses. Without it
+     the only way past these sizes was to wrap the icon in an element the
+     child combinator misses. */
+  --_button-icon-size: var(
+    --button-icon-size,
+    calc(var(--spacing) * 3.5)
+  ); /* 14px */
+
   > svg {
-    width: calc(var(--spacing) * 3.5); /* 14px */
-    height: calc(var(--spacing) * 3.5);
+    width: var(--_button-icon-size);
+    height: var(--_button-icon-size);
   }
 
   &[data-pressed] {
@@ -44,11 +62,7 @@
   font-size: var(--font-size-sm);
   height: calc(var(--spacing) * 7); /* 28px */
   padding: 0 var(--spacing-2);
-
-  > svg {
-    width: var(--spacing-3); /* 12px */
-    height: var(--spacing-3);
-  }
+  --_button-icon-size: var(--button-icon-size, var(--spacing-3)); /* 12px */
 }
 
 .button[data-size="lg"] {
@@ -56,9 +70,5 @@
   height: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
   padding: 0 var(--spacing-4);
   gap: var(--spacing-2);
-
-  > svg {
-    width: var(--spacing-4); /* 16px */
-    height: var(--spacing-4);
-  }
+  --_button-icon-size: var(--button-icon-size, var(--spacing-4)); /* 16px */
 }

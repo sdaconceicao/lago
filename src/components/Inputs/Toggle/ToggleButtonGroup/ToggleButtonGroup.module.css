@@ -98,19 +98,19 @@
 }
 
 .toggleButtonGroup[data-size="md"]
-  > :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
+  > :global(.react-aria-ToggleButton)[data-icon-only] {
   width: var(--spacing-9); /* 36px */
   padding: 0;
 }
 
 .toggleButtonGroup[data-size="sm"]
-  > :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
+  > :global(.react-aria-ToggleButton)[data-icon-only] {
   width: calc(var(--spacing) * 7); /* 28px */
   padding: 0;
 }
 
 .toggleButtonGroup[data-size="lg"]
-  > :global(.react-aria-ToggleButton):has(> span > svg:only-child) {
+  > :global(.react-aria-ToggleButton)[data-icon-only] {
   width: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
   padding: 0;
 }
