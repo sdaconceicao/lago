@@ -35,12 +35,14 @@
       "require": "./dist/index.cjs"
     },
     "./styles": {
+      "types": "./styles.d.ts",
       "import": "./dist/index.css",
       "require": "./dist/index.css"
     }
   },
   "files": [
     "dist",
+    "styles.d.ts",
     "LICENSE"
   ],
   "peerDependencies": {

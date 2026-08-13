@@ -16,6 +16,7 @@
   transition-property: background, box-shadow, text-shadow, scale;
   transition-duration: 200ms;
   -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 
   > span {
     display: flex;
@@ -26,12 +27,6 @@
   > span > svg {
     width: var(--spacing-4);
     height: var(--spacing-4);
-  }
-
-  &:has(> span > svg:only-child) {
-    width: var(--spacing-9); /* 36px */
-    padding: 0;
-    border-radius: 9999px;
   }
 
   &[data-pressed] {
@@ -62,10 +57,16 @@
   }
 }
 
-.toggleButton[data-size="sm"]:has(> span > svg:only-child) {
+.toggleButton[data-icon-only] {
+  width: var(--spacing-9); /* 36px */
+  padding: 0;
+  border-radius: 9999px;
+}
+
+.toggleButton[data-size="sm"][data-icon-only] {
   width: calc(var(--spacing) * 7); /* 28px */
 }
 
-.toggleButton[data-size="lg"]:has(> span > svg:only-child) {
+.toggleButton[data-size="lg"][data-icon-only] {
   width: calc(var(--spacing-10) + var(--spacing-2)); /* 48px */
 }
