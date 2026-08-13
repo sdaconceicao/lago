@@ -57,14 +57,6 @@
   }
 }
 
-/* Square-and-round shape for an icon-only toggle, asked for by name through
-   IconToggleButton rather than guessed at. The marker is an attribute, not a
-   class, because ToggleButtonGroup has to select it too and a CSS-module class
-   does not cross module boundaries.
-
-   These sit after the [data-size] rules deliberately: `.toggleButton[…]` and
-   `.toggleButton[data-icon-only]` have equal specificity, so source order is
-   what settles padding. */
 .toggleButton[data-icon-only] {
   width: var(--spacing-9); /* 36px */
   padding: 0;
