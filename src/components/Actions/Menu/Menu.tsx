@@ -8,7 +8,6 @@ import {
   MenuSection as AriaMenuSection,
   MenuTrigger as AriaMenuTrigger,
   SubmenuTrigger as AriaSubmenuTrigger,
-  Header,
   Keyboard,
   type MenuItemProps,
   type MenuProps,
@@ -107,8 +106,4 @@ export type {
   MenuTriggerProps,
   SubmenuTriggerProps,
 };
-// `Separator` and `Text` are deliberately not re-exported here: the library's
-// own versions (Layout/Separator and Typography/Text) are the canonical ones,
-// and re-exporting React Aria's under the same names makes both ambiguous to a
-// wildcard re-export, which silently drops them from the public entry point.
-export { Header, Keyboard };
+export { Keyboard };

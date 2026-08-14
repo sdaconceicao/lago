@@ -1,6 +1,10 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Header, ListBox, ListBoxItem, ListBoxSection } from "./ListBox";
+// `Header` comes from React Aria's own subpath, not from ./ListBox: it is a
+// shared collection-section slot, so the library re-exports it once from the
+// root entry point rather than from each component that takes one.
+import { Header } from "react-aria-components/Header";
+import { ListBox, ListBoxItem, ListBoxSection } from "./ListBox";
 import styles from "./ListBox.module.css";
 
 beforeAll(() => {
