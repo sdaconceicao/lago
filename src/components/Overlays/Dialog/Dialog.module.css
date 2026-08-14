@@ -9,6 +9,7 @@
   color: var(--text-color);
   outline: 1px solid var(--overlay-border);
   box-shadow: 0 8px 32px rgba(0 0 0 / 0.2);
+  overflow: clip;
 }
 
 .dialog {
@@ -18,6 +19,7 @@
   box-sizing: border-box;
   overflow: auto;
   padding: var(--spacing-6);
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 
   :global(.react-aria-Heading[slot="title"]) {
     margin-top: 0;

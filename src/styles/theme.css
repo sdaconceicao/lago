@@ -9,6 +9,8 @@
 
 /* colors */
 :root {
+  color-scheme: light;
+
   /* Change this variable to set the theme color for all components. */
   /* You can use the below presets, or choose a custom color. */
   --tint: var(--indigo);
@@ -129,6 +131,8 @@
 /* Driven by the `.dark-mode` class set by ThemeProvider so the theme can be
  * overridden (e.g. forced light) regardless of the OS preference. */
 :root.dark-mode {
+  color-scheme: dark;
+
   --background-color: #1b1b1b;
   --gray-50: oklch(22% 0 0);
 
@@ -169,6 +173,9 @@
   --border-color: var(--gray-400);
   --border-color-hover: var(--gray-500);
   --border-color-disabled: var(--gray-300);
+  --scrollbar-thumb: var(--gray-400);
+  --scrollbar-thumb-hover: var(--gray-500);
+  --scrollbar-track: transparent;
   --field-text-color: var(--gray-1400);
   --button-background: var(--tint-100);
   --button-background-pressed: var(--tint-200);
