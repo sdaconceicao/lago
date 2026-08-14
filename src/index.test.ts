@@ -108,9 +108,4 @@ describe("public entry point", () => {
 
     expect(missing).toEqual([]);
   });
-
-  it("exports Header, the shared collection-section slot", () => {
-    // The original regression: present in the types, absent from the bundle.
-    expect(publicApi.Header).toBeDefined();
-  });
 });
