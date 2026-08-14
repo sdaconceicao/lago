@@ -1,0 +1,57 @@
+/* Collapse the wrappers so tags flow inline with the input and wrap
+   together inside the field. */
+.tags {
+  display: contents;
+
+  :global(.react-aria-TagGroup),
+  :global(.react-aria-TagList) {
+    display: contents;
+  }
+}
+
+/* Inside a compact field the row never wraps (see MultiSelect.module.css), so
+   the tags have to hold their natural width.
+
+   Without this they keep the initial `flex: 0 1 auto` and shrink to fit, and
+   because a tag sets `overflow: hidden` its automatic minimum size is zero —
+   so there is no floor. Five tags in a 22rem sidebar land near 45px each: the
+   label ellipsises away to nothing and the remove button is squeezed out
+   entirely. What does not fit is collapsed into the counter below instead. */
+:where([data-field-size="sm"], [data-field-size="md"])
+  .tags
+  :global(.react-aria-Tag) {
+  flex: none;
+}
+
+/* The tag that is allowed to ellipsise: when even one whole tag will not fit,
+   MultiSelectTags still renders it rather than showing a bare "+5", because a
+   truncated label still says which selection this is. */
+:where([data-field-size="sm"], [data-field-size="md"])
+  .tags
+  :global(.react-aria-Tag:only-of-type) {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.counter {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: var(--field-inner-height);
+  padding: 0 var(--spacing-2);
+  border-radius: var(--radius);
+  background: var(--gray-300);
+  color: var(--gray-1100);
+  font: var(--field-font-size) var(--font-family);
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+}
+
+.counterProbe {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+}

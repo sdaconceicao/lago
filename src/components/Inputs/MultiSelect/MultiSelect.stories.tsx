@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "storybook/test";
+import { expect, fn } from "storybook/test";
 import type { PresenceStatus } from "@/components/Feedback/StatusIndicator/StatusIndicator";
 import { Avatar } from "@/components/Media/Avatar/Avatar";
 import { Text } from "@/components/Typography/index";
@@ -158,7 +158,7 @@ export const Sizes: Story = {
     docs: {
       description: {
         story:
-          'MultiSelect supports three sizes: "sm" renders a compact 28px-tall field with 12px text and 20px tag chips, "md" (the default) a 36px-tall field with 14px text and 24px chips, and "lg" a roomy 48px-tall field with 16px text and 32px chips. The size also travels to the dropdown, so its options and checkboxes scale with the field. "sm" and "md" keep a fixed height: their tags never wrap — the row scrolls horizontally instead — so the field stays exactly 28px or 36px tall however many items are selected and keeps lining up with the controls beside it. That matters most at "md", the default: measured, a wrapping 36px field reaches 66px on two chips in any column narrower than about 270px, which is most form columns. At "lg" the tags do wrap and the field grows to fit them, showing a whole selection at once at the cost of no longer matching the height of its neighbours.',
+          'MultiSelect supports three sizes: "sm" renders a compact 28px-tall field with 12px text and 20px tag chips, "md" (the default) a 36px-tall field with 14px text and 24px chips, and "lg" a roomy 48px-tall field with 16px text and 32px chips. The size also travels to the dropdown, so its options and checkboxes scale with the field. "sm" and "md" keep a fixed height: their tags never wrap, so the field stays exactly 28px or 36px tall however many items are selected and keeps lining up with the controls beside it. That matters most at "md", the default: measured, a wrapping 36px field reaches 66px on two chips in any column narrower than about 270px, which is most form columns. What does not fit collapses into a "+N" counter instead — see the Overflow story. At "lg" the tags do wrap and the field grows to fit them, showing a whole selection at once at the cost of no longer matching the height of its neighbours.',
       },
     },
   },
@@ -192,6 +192,146 @@ export const DisplayModes: Story = {
         story:
           'MultiSelect supports two display modes for selected items: "tags" (default) renders removable tag chips with close buttons, while "text" renders a comma-separated list. In both modes items can be toggled from the dropdown and removed with Backspace when the input is empty.',
       },
+    },
+  },
+};
+
+// Deliberately mixed lengths, and every id distinct: a repeated name would
+// collide on `id` and quietly select fewer items than the list has entries.
+const Names = ["Longer", "Longest", "Short", "Really Long", "Brief", "Tiny"];
+
+type NameItem = { id: string; name: string };
+
+const nameItems: NameItem[] = Names.map((name) => ({
+  id: name.toLowerCase(),
+  name: `${name} Name`,
+}));
+
+const OVERFLOW_WIDTHS = [200, 320, 560, 800] as const;
+
+export const Overflow: Story = {
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      {OVERFLOW_WIDTHS.map((width) => (
+        <div key={width} style={{ width }} data-testid={`overflow-${width}`}>
+          <MultiSelect<NameItem>
+            label={`${width}px column`}
+            placeholder="All names"
+            defaultItems={nameItems}
+            defaultValue={nameItems.map((name) => name.id)}
+          >
+            {(item) => (
+              <MultiSelectItem id={item.id}>{item.name}</MultiSelectItem>
+            )}
+          </MultiSelect>
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const results = OVERFLOW_WIDTHS.map((width) => {
+      const root = canvasElement.querySelector<HTMLElement>(
+        `[data-testid="overflow-${width}"]`
+      );
+      if (!root) throw new Error(`missing ${width}px column`);
+
+      const field = root.querySelector<HTMLElement>(".react-aria-Group");
+      if (!field) throw new Error(`no field in the ${width}px column`);
+
+      const tags = [...root.querySelectorAll<HTMLElement>(".react-aria-Tag")];
+      // The offscreen measuring probe is a counter too; the visible one is the
+      // one that takes part in layout.
+      const counter = [
+        ...root.querySelectorAll<HTMLElement>("[class*='counter']"),
+      ].find((element) => getComputedStyle(element).visibility !== "hidden");
+
+      return { width, field, tags, counter };
+    });
+
+    for (const { width, field, tags, counter } of results) {
+      const label = `${width}px column`;
+
+      // The whole point of collapsing rather than scrolling: the field is
+      // still exactly one row, and nothing has spilled out of it.
+      expect(
+        Math.round(field.getBoundingClientRect().height),
+        `${label}: field height`
+      ).toBe(36);
+      expect(field.scrollWidth, `${label}: no overflow`).toBeLessThanOrEqual(
+        field.clientWidth + 1
+      );
+
+      expect(tags.length, `${label}: at least one tag`).toBeGreaterThan(0);
+
+      for (const tag of tags) {
+        // A tag squeezed narrower than its content is the bug this story
+        // exists for: the label ellipsises away and the remove button goes
+        // with it. The one exception is the floor — when a single tag is all
+        // that is rendered there is nothing left to collapse, so it is allowed
+        // to ellipsise rather than be dropped for a bare count.
+        if (tags.length > 1) {
+          expect(
+            tag.scrollWidth,
+            `${label}: "${tag.textContent}" not clipped`
+          ).toBeLessThanOrEqual(tag.clientWidth + 1);
+        }
+
+        const remove = tag.querySelector("button");
+        expect(
+          remove,
+          `${label}: "${tag.textContent}" has a remove button`
+        ).not.toBeNull();
+        expect(
+          remove?.getBoundingClientRect().width ?? 0,
+          `${label}: remove button is hittable`
+        ).toBeGreaterThanOrEqual(12);
+      }
+
+      // Even the ellipsised floor tag keeps a readable amount of its label.
+      if (tags.length === 1) {
+        expect(
+          tags[0].getBoundingClientRect().width,
+          `${label}: floor tag is still legible`
+        ).toBeGreaterThan(40);
+      }
+
+      const hidden = nameItems.length - tags.length;
+      if (hidden > 0) {
+        expect(counter, `${label}: counter is rendered`).toBeTruthy();
+        expect(counter?.textContent, `${label}: counter text`).toContain(
+          `+${hidden}`
+        );
+      } else {
+        expect(
+          counter,
+          `${label}: no counter when everything fits`
+        ).toBeUndefined();
+      }
+    }
+
+    // The count is measured, not fixed: a wider column spends the room it has
+    // on more tags rather than leaving it empty. Asserted as a trend rather
+    // than a step per column, because how many tags a given width fits depends
+    // on font metrics — the exact numbers are not the contract.
+    const visible = results.map((result) => result.tags.length);
+    for (let i = 1; i < visible.length; i++) {
+      expect(
+        visible[i],
+        `${OVERFLOW_WIDTHS[i]}px shows no fewer than ${OVERFLOW_WIDTHS[i - 1]}px`
+      ).toBeGreaterThanOrEqual(visible[i - 1]);
+    }
+    expect(
+      visible[visible.length - 1],
+      "the widest column shows more than the narrowest"
+    ).toBeGreaterThan(visible[0]);
+  },
+};
+
+Overflow.parameters = {
+  docs: {
+    description: {
+      story:
+        'At "sm" and "md" the field is a single fixed-height row, so a selection that does not fit is not shrunk to fit: the tags that fit are rendered at their natural width and the rest collapse into a "+N" counter. How many fit is measured rather than configured, so the same component fills a wide column with tags and a narrow sidebar with one tag and a count — labels of different lengths included. The four columns here hold the same six selected names. Each visible tag keeps its full label and a hit-testable remove button, the count is announced to screen readers as "N more selected", and the field never leaves 36px.',
     },
   },
 };

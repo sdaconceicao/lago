@@ -1,6 +1,7 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import listBoxStyles from "@/components/Collections/ListBox/ListBox.module.css";
+import tagStyles from "./BaseComponents/MultiSelectTags/MultiSelectTags.module.css";
 import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 
 beforeAll(() => {
@@ -392,6 +393,263 @@ describe("MultiSelect", () => {
 
       expect(getTextValue(container)).toHaveTextContent("Apple");
       expect(getTextValue(container)).not.toHaveTextContent("Banana");
+    });
+  });
+
+  describe("tag overflow", () => {
+    // jsdom reports every box as 0x0, which the component reads as "not
+    // measured yet" and answers by showing everything — the same path SSR
+    // takes. These tests stub the three reads it actually makes so the fitting
+    // logic can be exercised here; the real browser measurements are asserted
+    // by the Overflow story's play(), which runs in Chromium.
+    const TOGGLE_WIDTH = 24;
+    const TAG_WIDTH = 100;
+    const COUNTER_WIDTH = 32;
+
+    let fieldWidth = 0;
+
+    /** Captures its callbacks so a resize can be delivered on demand. */
+    class ControllableResizeObserver {
+      static instances: ControllableResizeObserver[] = [];
+
+      constructor(private readonly callback: ResizeObserverCallback) {
+        ControllableResizeObserver.instances.push(this);
+      }
+
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+
+      static resizeTo(inlineSize: number) {
+        fieldWidth = inlineSize;
+        for (const observer of ControllableResizeObserver.instances) {
+          observer.callback(
+            [
+              {
+                contentBoxSize: [{ inlineSize, blockSize: 36 }],
+              } as unknown as ResizeObserverEntry,
+            ],
+            observer as unknown as ResizeObserver
+          );
+        }
+      }
+    }
+
+    const widthDescriptors = {
+      offsetWidth: {
+        configurable: true,
+        get(this: HTMLElement) {
+          if (this.className.includes("counterProbe")) return COUNTER_WIDTH;
+          if (this.classList.contains("react-aria-Tag")) return TAG_WIDTH;
+          if (this.classList.contains("field-Button")) return TOGGLE_WIDTH;
+          return 0;
+        },
+      },
+      clientWidth: {
+        configurable: true,
+        get(this: HTMLElement) {
+          return this.classList.contains("react-aria-Group") ? fieldWidth : 0;
+        },
+      },
+    };
+
+    const originalDescriptors = {
+      offsetWidth: Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "offsetWidth"
+      ),
+      clientWidth: Object.getOwnPropertyDescriptor(
+        HTMLElement.prototype,
+        "clientWidth"
+      ),
+    };
+
+    beforeAll(() => {
+      Object.defineProperties(HTMLElement.prototype, widthDescriptors);
+    });
+
+    afterAll(() => {
+      for (const [name, descriptor] of Object.entries(originalDescriptors)) {
+        if (descriptor) {
+          Object.defineProperty(HTMLElement.prototype, name, descriptor);
+        } else {
+          delete (HTMLElement.prototype as unknown as Record<string, unknown>)[
+            name
+          ];
+        }
+      }
+    });
+
+    beforeEach(() => {
+      ControllableResizeObserver.instances = [];
+      vi.stubGlobal("ResizeObserver", ControllableResizeObserver);
+    });
+
+    afterEach(() => {
+      vi.unstubAllGlobals();
+    });
+
+    // The offscreen measuring probe is a counter too, so the visible one has
+    // to be picked out by class rather than by its "+N" text.
+    const getCounter = (container: HTMLElement) =>
+      container.querySelector(
+        `.${tagStyles.counter}:not(.${tagStyles.counterProbe})`
+      );
+
+    const COUNTIES = ["Adams", "Berks", "Bucks", "Erie", "Pike"];
+
+    const renderCounties = (props = {}) => {
+      const result = render(
+        <MultiSelect
+          aria-label="Counties"
+          defaultValue={COUNTIES.map((county) => county.toLowerCase())}
+          {...props}
+        >
+          {COUNTIES.map((county) => (
+            <MultiSelectItem key={county} id={county.toLowerCase()}>
+              {`${county} County`}
+            </MultiSelectItem>
+          ))}
+        </MultiSelect>
+      );
+      return result;
+    };
+
+    it("shows every tag when the whole selection fits", () => {
+      // 1000 - 24 toggle leaves 976 for 5 x 100 of tags.
+      fieldWidth = 1000;
+      const { container } = renderCounties();
+
+      expect(getTagLabels(container)).toHaveLength(5);
+      expect(screen.queryByText(/more selected/)).not.toBeInTheDocument();
+    });
+
+    it("collapses the tags that do not fit into a counter", () => {
+      // 300 - 24 toggle = 276, less 32 for the counter leaves 244: two tags.
+      fieldWidth = 300;
+      const { container } = renderCounties();
+
+      expect(getTagLabels(container)).toEqual(["Adams County", "Berks County"]);
+      expect(getCounter(container)).toHaveTextContent("+3");
+    });
+
+    it("names the hidden count for assistive technology", () => {
+      fieldWidth = 300;
+      renderCounties();
+
+      expect(screen.getByText("3 more selected")).toBeInTheDocument();
+    });
+
+    it("renders every tag at full width rather than shrinking them", () => {
+      fieldWidth = 300;
+      const { container } = renderCounties();
+
+      for (const tag of container.querySelectorAll<HTMLElement>(
+        ".react-aria-Tag"
+      )) {
+        expect(tag.offsetWidth).toBe(TAG_WIDTH);
+      }
+    });
+
+    it("shows more tags as the field grows", () => {
+      fieldWidth = 300;
+      const { container } = renderCounties();
+
+      expect(getTagLabels(container)).toHaveLength(2);
+
+      act(() => {
+        ControllableResizeObserver.resizeTo(1000);
+      });
+
+      expect(getTagLabels(container)).toHaveLength(5);
+      expect(screen.queryByText(/more selected/)).not.toBeInTheDocument();
+    });
+
+    it("collapses again as the field shrinks", () => {
+      fieldWidth = 1000;
+      const { container } = renderCounties();
+
+      expect(getTagLabels(container)).toHaveLength(5);
+
+      act(() => {
+        ControllableResizeObserver.resizeTo(300);
+      });
+
+      expect(getTagLabels(container)).toHaveLength(2);
+      expect(getCounter(container)).toHaveTextContent("+3");
+    });
+
+    it("recounts when a visible tag is removed", async () => {
+      const user = userEvent.setup();
+      fieldWidth = 300;
+      const { container } = renderCounties();
+
+      const adams = screen.getByRole("row", { name: "Adams County" });
+      await user.click(within(adams).getByRole("button"));
+
+      expect(getTagLabels(container)).toEqual(["Berks County", "Bucks County"]);
+      expect(getCounter(container)).toHaveTextContent("+2");
+    });
+
+    it("drops the counter once the rest of the selection fits", async () => {
+      const user = userEvent.setup();
+      // 276 of room, so three 100px tags never fit alongside the counter.
+      fieldWidth = 300;
+      const { container } = renderCounties({
+        defaultValue: ["adams", "berks", "bucks"],
+      });
+
+      expect(getCounter(container)).toHaveTextContent("+1");
+
+      await user.click(
+        within(screen.getByRole("row", { name: "Adams County" })).getByRole(
+          "button"
+        )
+      );
+
+      expect(getTagLabels(container)).toEqual(["Berks County", "Bucks County"]);
+      expect(screen.queryByText(/more selected/)).not.toBeInTheDocument();
+    });
+
+    it("shows one ellipsised tag when not even the first one fits", () => {
+      // 90 - 24 toggle = 66, well under a single 100px tag.
+      fieldWidth = 90;
+      const { container } = renderCounties();
+
+      expect(getTagLabels(container)).toEqual(["Adams County"]);
+      expect(getCounter(container)).toHaveTextContent("+4");
+    });
+
+    it("keeps every tag at lg, where the field wraps and grows", () => {
+      fieldWidth = 300;
+      const { container } = renderCounties({ size: "lg" });
+
+      expect(getTagLabels(container)).toHaveLength(5);
+      expect(screen.queryByText(/more selected/)).not.toBeInTheDocument();
+    });
+
+    it("re-measures when the size changes", () => {
+      fieldWidth = 300;
+      const { container, rerender } = renderCounties({ size: "lg" });
+
+      expect(getTagLabels(container)).toHaveLength(5);
+
+      rerender(
+        <MultiSelect
+          aria-label="Counties"
+          size="md"
+          defaultValue={COUNTIES.map((county) => county.toLowerCase())}
+        >
+          {COUNTIES.map((county) => (
+            <MultiSelectItem key={county} id={county.toLowerCase()}>
+              {`${county} County`}
+            </MultiSelectItem>
+          ))}
+        </MultiSelect>
+      );
+
+      expect(getTagLabels(container)).toHaveLength(2);
+      expect(getCounter(container)).toHaveTextContent("+3");
     });
   });
 });

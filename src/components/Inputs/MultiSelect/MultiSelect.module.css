@@ -48,9 +48,14 @@
    would grow the field past --field-height and break its alignment with the
    controls beside it. Measured, a wrapping md field reaches 66px on two chips in
    any column narrower than ~270px, which is most form columns — and md is the
-   default, so that has to hold without the caller thinking about it. The row
-   scrolls horizontally instead, keeping every selected tag reachable at a fixed
-   28 or 36px.
+   default, so that has to hold without the caller thinking about it.
+
+   What does not fit is therefore collapsed into a "+N" counter by
+   MultiSelectTags, which measures the row and renders only whole tags. The
+   overflow-x here is the safety net behind that, not the mechanism: it catches
+   the sub-pixel cases and the moment between a resize and the recount, and it
+   keeps a stray tag reachable rather than clipped. It should almost never have
+   anything to scroll.
 
    lg deliberately still wraps and grows: at 48px with 32px chips there is room
    to show a whole selection at once, and a field that prominent is usually

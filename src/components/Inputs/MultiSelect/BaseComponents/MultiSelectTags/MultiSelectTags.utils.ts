@@ -1,0 +1,164 @@
+import type { ComboBoxState, Key } from "react-aria-components/ComboBox";
+
+export type SelectedItem = ComboBoxState<
+  unknown,
+  "multiple"
+>["selectedItems"][number];
+
+/** Width the field spends on everything that is not a tag. */
+export interface FieldReserve {
+  /** The field's flex gap. */
+  gap: number;
+  /** Search input floor + toggle button + the gaps around them. */
+  reserved: number;
+}
+
+/** A committed layout decision, and the selection it was made for. */
+export interface Measured {
+  /** How many tags to render before the counter. */
+  count: number;
+  /** The selected keys this count was computed from. */
+  signature: string;
+}
+
+/**
+ * Everything read off the DOM. Held in a ref rather than state, because none of
+ * it should trigger a render on its own — only the count derived from it does.
+ */
+export interface TagCache {
+  /** Natural width per tag key. A label's width never changes, so each is
+   *  measured once however often the field is later resized. */
+  widths: Map<Key, number>;
+  /** Natural width of the "+N" chip. */
+  counterWidth: number;
+  /** The field's constant-width parts, read once per size. */
+  reserve: FieldReserve | null;
+  /** The field's content-box width. */
+  contentWidth: number;
+  /** Signature of the selection `keys` holds. */
+  signature: string;
+  /** Selected keys, in render order. */
+  keys: Key[];
+  /** Mirrors the committed count so the resize callback never reads a stale
+   *  value through its closure. */
+  measured: Measured | null;
+}
+
+/** An empty cache. Also the reset, since a size change invalidates all of it. */
+export const createTagCache = (): TagCache => ({
+  widths: new Map(),
+  counterWidth: 0,
+  reserve: null,
+  contentWidth: 0,
+  signature: "",
+  keys: [],
+  measured: null,
+});
+
+/** Parses a CSS pixel length, treating anything unparseable as 0. */
+const px = (value: string): number => Number.parseFloat(value) || 0;
+
+/** Identifies a selection, so a cached count can be matched to the selection it
+ *  was measured for. Joined on NUL, which cannot appear inside a key. */
+export const getSignature = (items: SelectedItem[]): string =>
+  items.map((item) => String(item.key)).join("\u0000");
+
+/**
+ * Reads the parts of the field that hold a constant width for a given size: the
+ * search input's `min-width` floor, the toggle button, and the gaps. Worth
+ * caching, because `getComputedStyle` is the expensive call here and none of
+ * these change while the field is mounted at a given size.
+ */
+export const readFieldReserve = (field: HTMLElement): FieldReserve => {
+  const gap = px(getComputedStyle(field).columnGap);
+  const input = field.querySelector("input");
+  const inputFloor = input ? px(getComputedStyle(input).minWidth) : 0;
+  const toggle = field.querySelector<HTMLElement>(".field-Button");
+  return { gap, reserved: inputFloor + (toggle?.offsetWidth ?? 0) + gap * 2 };
+};
+
+/**
+ * The field's content-box width, read synchronously. Only needed for the first
+ * measurement — after that the ResizeObserver supplies the same number without
+ * touching the DOM.
+ */
+export const readFieldContentWidth = (field: HTMLElement): number => {
+  const style = getComputedStyle(field);
+  return (
+    field.clientWidth -
+    px(style.paddingInlineStart) -
+    px(style.paddingInlineEnd)
+  );
+};
+
+/** Natural width of every tag chip currently rendered, in source order. */
+export const readTagWidths = (tags: HTMLElement): number[] =>
+  Array.from(
+    tags.querySelectorAll<HTMLElement>(".react-aria-Tag"),
+    (tag) => tag.offsetWidth
+  );
+
+/** Natural width of the first element matching `selector`, or 0 if absent. */
+export const readWidth = (root: HTMLElement, selector: string): number =>
+  root.querySelector<HTMLElement>(selector)?.offsetWidth ?? 0;
+
+export interface VisibleTagCountOptions {
+  /** Natural rendered width of each tag, in source order. */
+  tagWidths: number[];
+  /** Room the tags have to share, in px. Non-positive means "not measured yet". */
+  availableWidth: number;
+  /** Flex gap between adjacent tags, in px. */
+  gap: number;
+  /** Natural rendered width of the "+N" counter chip, in px. */
+  counterWidth: number;
+}
+
+/**
+ * Total width of the first `count` tags laid out in a row, gaps included.
+ */
+const rowWidth = (tagWidths: number[], count: number, gap: number): number => {
+  let total = 0;
+  for (let i = 0; i < count; i++) {
+    total += tagWidths[i] + (i > 0 ? gap : 0);
+  }
+  return total;
+};
+
+/**
+ * How many tags to render before collapsing the rest into a "+N" counter.
+ *
+ * - `availableWidth <= 0` means nothing has been measured yet: during SSR, in
+ *   jsdom, or on the first client render before the layout effect runs. Show
+ *   everything. The alternative — showing one tag and a counter — would be a
+ *   visible correction on hydration, and would make the server render depend on
+ *   a viewport the server cannot see.
+ * - When not even the first tag fits alongside the counter, return 1 anyway.
+ *   One ellipsised tag plus "+4" tells the reader far more than a bare "+5".
+ */
+export const getVisibleTagCount = ({
+  tagWidths,
+  availableWidth,
+  gap,
+  counterWidth,
+}: VisibleTagCountOptions): number => {
+  if (tagWidths.length === 0) return 0;
+  if (availableWidth <= 0) return tagWidths.length;
+
+  if (rowWidth(tagWidths, tagWidths.length, gap) <= availableWidth) {
+    return tagWidths.length;
+  }
+
+  // Everything from here on shares the row with the counter.
+  const widthForTags = availableWidth - counterWidth - gap;
+
+  let used = 0;
+  let count = 0;
+  for (const width of tagWidths) {
+    const next = used + width + (count > 0 ? gap : 0);
+    if (next > widthForTags) break;
+    used = next;
+    count++;
+  }
+
+  return Math.max(1, count);
+};
