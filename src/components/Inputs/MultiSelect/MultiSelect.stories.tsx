@@ -196,7 +196,9 @@ export const DisplayModes: Story = {
   },
 };
 
-const Names = ["Longer", "Longest", "Short", "Really Long", "Short", "Tiny"];
+// Deliberately mixed lengths, and every id distinct: a repeated name would
+// collide on `id` and quietly select fewer items than the list has entries.
+const Names = ["Longer", "Longest", "Short", "Really Long", "Brief", "Tiny"];
 
 type NameItem = { id: string; name: string };
 
@@ -329,7 +331,7 @@ Overflow.parameters = {
   docs: {
     description: {
       story:
-        'At "sm" and "md" the field is a single fixed-height row, so a selection that does not fit is not shrunk to fit: the tags that fit are rendered at their natural width and the rest collapse into a "+N" counter. How many fit is measured rather than configured, so the same component fills a wide column with tags and a narrow sidebar with one tag and a count — labels of different lengths included. The three columns here hold the same six selected counties. Each visible tag keeps its full label and a hit-testable remove button, the count is announced to screen readers as "N more selected", and the field never leaves 36px.',
+        'At "sm" and "md" the field is a single fixed-height row, so a selection that does not fit is not shrunk to fit: the tags that fit are rendered at their natural width and the rest collapse into a "+N" counter. How many fit is measured rather than configured, so the same component fills a wide column with tags and a narrow sidebar with one tag and a count — labels of different lengths included. The four columns here hold the same six selected names. Each visible tag keeps its full label and a hit-testable remove button, the count is announced to screen readers as "N more selected", and the field never leaves 36px.',
     },
   },
 };

@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import listBoxStyles from "@/components/Collections/ListBox/ListBox.module.css";
-import tagStyles from "./BaseComponents/MultiSelectTags.module.css";
+import tagStyles from "./BaseComponents/MultiSelectTags/MultiSelectTags.module.css";
 import { MultiSelect, MultiSelectItem } from "./MultiSelect";
 
 beforeAll(() => {
