@@ -19,8 +19,8 @@ import {
 } from "@/components/Inputs/FormComponents/index";
 import { Popover } from "@/components/Overlays/Popover/Popover";
 import base from "@/styles/base.module.css";
-import { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
-import { MultiSelectTags } from "./BaseComponents/MultiSelectTags";
+import { MultiSelectInput } from "./BaseComponents/MultiSelectInput/MultiSelectInput";
+import { MultiSelectTags } from "./BaseComponents/MultiSelectTags/MultiSelectTags";
 import styles from "./MultiSelect.module.css";
 
 /** Controls how selected items are displayed inside the field. */
@@ -119,7 +119,7 @@ export function MultiSelect<T>({
   );
 }
 
-export { MultiSelectItem } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectItem";
-export { MultiSelectTags } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectTags";
-export type { MultiSelectInputProps } from "./BaseComponents/MultiSelectInput";
-export { MultiSelectInput } from "./BaseComponents/MultiSelectInput";
+export { MultiSelectItem } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectItem/MultiSelectItem";
+export { MultiSelectTags } from "@/components/Inputs/MultiSelect/BaseComponents/MultiSelectTags/MultiSelectTags";
+export type { MultiSelectInputProps } from "./BaseComponents/MultiSelectInput/MultiSelectInput";
+export { MultiSelectInput } from "./BaseComponents/MultiSelectInput/MultiSelectInput";

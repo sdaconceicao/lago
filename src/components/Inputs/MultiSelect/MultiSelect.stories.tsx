@@ -196,20 +196,13 @@ export const DisplayModes: Story = {
   },
 };
 
-const counties = [
-  "Philadelphia",
-  "Northumberland",
-  "Westmoreland",
-  "Susquehanna",
-  "Lackawanna",
-  "Erie",
-];
+const Names = ["Longer", "Longest", "Short", "Really Long", "Short", "Tiny"];
 
-type County = { id: string; name: string };
+type NameItem = { id: string; name: string };
 
-const countyItems: County[] = counties.map((name) => ({
+const nameItems: NameItem[] = Names.map((name) => ({
   id: name.toLowerCase(),
-  name: `${name} County`,
+  name: `${name} Name`,
 }));
 
 const OVERFLOW_WIDTHS = [200, 320, 560, 800] as const;
@@ -219,11 +212,11 @@ export const Overflow: Story = {
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {OVERFLOW_WIDTHS.map((width) => (
         <div key={width} style={{ width }} data-testid={`overflow-${width}`}>
-          <MultiSelect<County>
+          <MultiSelect<NameItem>
             label={`${width}px column`}
-            placeholder="All counties"
-            defaultItems={countyItems}
-            defaultValue={countyItems.map((county) => county.id)}
+            placeholder="All names"
+            defaultItems={nameItems}
+            defaultValue={nameItems.map((name) => name.id)}
           >
             {(item) => (
               <MultiSelectItem id={item.id}>{item.name}</MultiSelectItem>
@@ -300,7 +293,7 @@ export const Overflow: Story = {
         ).toBeGreaterThan(40);
       }
 
-      const hidden = countyItems.length - tags.length;
+      const hidden = nameItems.length - tags.length;
       if (hidden > 0) {
         expect(counter, `${label}: counter is rendered`).toBeTruthy();
         expect(counter?.textContent, `${label}: counter text`).toContain(
