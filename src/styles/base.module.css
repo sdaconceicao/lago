@@ -335,13 +335,14 @@
     --inset-border-size: 1px;
     --inset-shadow-offset: 2px;
     --inset-shadow-size: 4px;
+    --inset-highlight: var(--gray-50);
 
     background: var(--inset-background);
     box-shadow:
       inset 0 0 0 var(--inset-border-size) var(--inset-border),
       /* border */ inset 0 var(--inset-shadow-offset) var(--inset-shadow-size)
       rgb(0 0 0 / 0.15),
-      /* inner shadow */ 0 1px 0 var(--gray-50); /* bottom specular highlight */
+      /* inner shadow */ 0 1px 0 var(--inset-highlight); /* bottom specular highlight */
     transition: box-shadow 200ms;
     forced-color-adjust: none;
 

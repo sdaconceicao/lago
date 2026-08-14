@@ -6,7 +6,10 @@
     width: fit-content;
     border-radius: var(--field-radius);
     position: relative;
-    box-shadow: 0 1px 0 var(--gray-50);
+    /* Restates the specular highlight because this selector outranks `.inset`
+       and would otherwise drop it. Reads the same property, so a consumer that
+       clears the highlight clears it here too. */
+    box-shadow: 0 1px 0 var(--inset-highlight);
     /* The field box carries the field font, as it does in every other control.
        Without this the group inherited the page font size while the input
        declared its own, so the group and its contents disagreed. At md this
