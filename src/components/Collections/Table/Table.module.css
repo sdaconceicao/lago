@@ -179,7 +179,7 @@
 }
 
 .scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-thumb {
-  background: var(--gray-400);
+  background: var(--scrollbar-thumb);
   border-radius: 6px;
   /* Transparent border + content-box clip insets the thumb from the lane. */
   border: 3px solid transparent;
@@ -187,10 +187,10 @@
 }
 
 .scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-500);
+  background: var(--scrollbar-thumb-hover);
   background-clip: content-box;
 }
 
 .scrollContainer :global(.react-aria-TableBody)::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--scrollbar-track);
 }

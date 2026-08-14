@@ -19,6 +19,13 @@
   box-sizing: border-box;
   overflow: auto;
   padding: var(--spacing-6);
+  /* The standard property rather than ::-webkit-scrollbar: it is honoured by
+     Firefox as well, and it tints the scrollbar without opting this scroller
+     out of overlay scrollbars the way defining a ::-webkit-scrollbar rule
+     does in Chromium — which would reserve a permanent gutter and narrow the
+     content. Table uses the pseudo-elements because it needs their geometry
+     to align a reserved lane across its bands; a dialog only needs colour. */
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 
   :global(.react-aria-Heading[slot="title"]) {
     margin-top: 0;
