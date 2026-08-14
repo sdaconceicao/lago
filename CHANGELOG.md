@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.7.0](https://github.com/sdaconceicao/lago/compare/lago-v0.6.0...lago-v0.7.0) (2026-08-14)
+
+
+### Features
+
+* Better Multiselect UX ([#99](https://github.com/sdaconceicao/lago/issues/99)) ([820ea37](https://github.com/sdaconceicao/lago/commit/820ea3770e7ec89d49fdad0f6d9cbc56e2b1eed5))
+
+
+### Bug Fixes
+
+* Dialog/Table styling tweaks ([#100](https://github.com/sdaconceicao/lago/issues/100)) ([1015c22](https://github.com/sdaconceicao/lago/commit/1015c22e73fcd56c992e332c22f58cb7f14b044a))
+* Update box-shadow in NumberField and base styles for consistency ([#102](https://github.com/sdaconceicao/lago/issues/102)) ([b893436](https://github.com/sdaconceicao/lago/commit/b893436f664dad2acc284c646c2d8a1477afa828))
+
 ## [0.6.0](https://github.com/sdaconceicao/lago/compare/lago-v0.5.0...lago-v0.6.0) (2026-08-13)
 
 
