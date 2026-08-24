@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { X } from "lucide-react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { IconButton } from "@/components/Actions/IconButton/IconButton";
-import { VARIANT_ICONS } from "@/components/Feedback/Feedback.variants";
+import { VARIANT_ICONS } from "@/components/Feedback/Feedback/Feedback.variants";
 import { Heading } from "@/components/Typography/Heading/Heading";
 import { useAlertVariant } from "../Alert.context";
 import styles from "./AlertHeader.module.css";
