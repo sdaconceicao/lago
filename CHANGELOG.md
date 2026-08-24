@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0](https://github.com/sdaconceicao/lago/compare/lago-v0.7.0...lago-v0.8.0) (2026-08-24)
+
+
+### Features
+
+* Integrate Feedback Variants into Alert and Toast Components ([#106](https://github.com/sdaconceicao/lago/issues/106)) ([a2b7cdb](https://github.com/sdaconceicao/lago/commit/a2b7cdb13ac3150fa198f3a9a8a75766d5c51d82))
+
+
+### Bug Fixes
+
+* Remove duplicate Header exports ([#103](https://github.com/sdaconceicao/lago/issues/103)) ([a36715d](https://github.com/sdaconceicao/lago/commit/a36715d62129e61aa27e3b11b69bb2420be99864))
+
 ## [0.7.0](https://github.com/sdaconceicao/lago/compare/lago-v0.6.0...lago-v0.7.0) (2026-08-14)
 
 
