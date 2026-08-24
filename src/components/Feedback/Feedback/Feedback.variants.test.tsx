@@ -1,7 +1,7 @@
 import { act, render, screen } from "@testing-library/react";
-import { Alert } from "./Alert/Alert";
+import { Alert } from "../Alert/Alert";
+import { ToastArea, ToastQueue } from "../Toast/Toast";
 import { type FeedbackVariant, VARIANT_ICONS } from "./Feedback.variants";
-import { ToastArea, ToastQueue } from "./Toast/Toast";
 
 const VARIANTS: FeedbackVariant[] = [
   "default",
