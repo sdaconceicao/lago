@@ -6,7 +6,6 @@ import {
   ListBox as AriaListBox,
   ListBoxLoadMoreItem as AriaListBoxLoadMoreItem,
   ListBoxSection as AriaListBoxSection,
-  Header,
   type ListBoxItemProps,
   type ListBoxLoadMoreItemProps,
   type ListBoxProps,
@@ -120,6 +119,3 @@ export type {
   ListBoxProps,
   ListBoxSectionProps,
 };
-// `Text` is not re-exported here — Typography/Text is the canonical one. See the
-// note in Actions/Menu/Menu.tsx.
-export { Header };
