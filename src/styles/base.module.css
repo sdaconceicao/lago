@@ -400,4 +400,129 @@
       }
     }
   }
+
+  /* utility that creates a status surface, used for Alert and Toast */
+  .feedbackSurface {
+    /* `--feedback-color` is this treatment's public input: a surface sets the
+       tone's hue and every background, border and text colour below derives
+       from it through the shared lightness and chroma scales, so the whole set
+       inverts correctly in dark mode without a second palette. It is read
+       through a private `--_feedback-color` alias carrying the default in a
+       `var()` fallback, rather than declared here outright, so a component or
+       consumer that sets it is supplying the only declaration instead of
+       winning a cascade fight against ours.
+
+       The variant tones below do declare the public property, because those are
+       decisions rather than defaults, and the alias picks them up the same way.
+
+       Alert and Toast both apply this class. Neither owns the scales, so the two
+       cannot drift — which is the point, since they are required to read as the
+       same family. See Feedback.variants.tsx for the matching icon per tone. */
+    --_feedback-color: var(--feedback-color, var(--gray));
+
+    --feedback-background: oklch(
+      from var(--_feedback-color) var(--lightness-100) var(--chroma-100) h
+    );
+    --feedback-border: oklch(
+      from var(--_feedback-color) var(--lightness-300) var(--chroma-300) h
+    );
+    --feedback-accent: oklch(
+      from var(--_feedback-color) var(--lightness-1000) var(--chroma-1000) h
+    );
+    --feedback-title-color: oklch(
+      from var(--_feedback-color) var(--lightness-1500) var(--chroma-1500) h
+    );
+    --feedback-text-color: oklch(
+      from var(--_feedback-color) var(--lightness-1300) var(--chroma-1300) h
+    );
+
+    /* States for a control sitting *on* the surface — the dismiss or close
+       button. One step and two steps along the same scale, so the tint lands
+       between the surface and its border rather than arriving from the theme:
+       the quiet button's own hover fills with `--tint-200`, which paints a
+       lavender chip on a green toast. Inverts with everything else, since
+       dark mode restates the lightness scale rather than the derivations. */
+    --feedback-hover: oklch(
+      from var(--_feedback-color) var(--lightness-200) var(--chroma-200) h
+    );
+    --feedback-pressed: oklch(
+      from var(--_feedback-color) var(--lightness-300) var(--chroma-300) h
+    );
+
+    /* The gutter: shared by the leading icon box and, where a surface stacks
+       its content, by the blocks that indent past it so their text lines up
+       under the title. Held here rather than per component so Alert's icon
+       column and Toast's line up by construction instead of by both happening
+       to name the same spacing step. */
+    --feedback-icon-size: var(--spacing-5); /* 20px */
+    --feedback-gap: var(--spacing-3); /* 12px */
+    --feedback-content-inset: 0px;
+
+    background: var(--feedback-background);
+    color: var(--feedback-text-color);
+    font: var(--font-size) var(--font-family);
+    forced-color-adjust: none;
+
+    /* The default: a message that reports no status of its own, so it carries no
+       hue either. It takes the library's own surface and text tokens — the same
+       set Dialog and Popover use — which is what makes it white on the light
+       page and a raised grey on the dark one. It cannot come from the scale like
+       the hued variants do: grey at `--lightness-100` lands within a percent of
+       the light page background, so a derived grey would simply disappear
+       against it. Overrides the derived outputs rather than the input hue, since
+       there is no hue that produces them. */
+    &[data-variant="default"] {
+      --feedback-color: var(--gray);
+      --feedback-background: var(--overlay-background);
+      --feedback-border: var(--border-color);
+      --feedback-accent: var(--text-color);
+      --feedback-title-color: var(--text-color);
+      --feedback-text-color: var(--text-color-placeholder);
+      /* No hue to step along, so the neutral overlay the rest of the library
+         hovers with — already defined per theme, black on light and white on
+         dark. */
+      --feedback-hover: var(--highlight-hover);
+      --feedback-pressed: var(--highlight-pressed);
+    }
+
+    &[data-variant="info"] {
+      --feedback-color: var(--blue);
+    }
+
+    &[data-variant="success"] {
+      --feedback-color: var(--green);
+    }
+
+    &[data-variant="warning"] {
+      --feedback-color: var(--yellow);
+    }
+
+    &[data-variant="error"] {
+      --feedback-color: var(--red);
+    }
+
+    /* A leading icon pushes the text along by its own width plus the gutter gap.
+       Matching that inset keeps a stacked surface's later blocks aligned under
+       the title rather than under the icon. Matched on a child's
+       `data-has-icon` flag through a bare child combinator, so a nested surface
+       cannot indent its parent's content. */
+    &:has(> [data-has-icon]) {
+      --feedback-content-inset: calc(
+        var(--feedback-icon-size) +
+        var(--feedback-gap)
+      );
+    }
+
+    /* Left at the specificity of a bare `.feedbackSurface` and last in source
+       order, so it overrides the derived tones but still yields to the
+       `default` variant above — whose tokens resolve to system colours here
+       anyway. */
+    @media (forced-colors: active) {
+      --feedback-background: Canvas;
+      --feedback-border: ButtonBorder;
+      --feedback-accent: CanvasText;
+      --feedback-title-color: CanvasText;
+      --feedback-text-color: CanvasText;
+    }
+  }
 }

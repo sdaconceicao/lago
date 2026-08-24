@@ -1,13 +1,18 @@
 "use client";
 import { createContext, useContext } from "react";
+import type { FeedbackVariant } from "../Feedback/Feedback.variants";
 
 /**
  * Semantic tone of an alert. Drives its colours and default header icon.
  *
  * `default` is for the message that reports no status of its own and so carries
  * no hue. The other four each take one.
+ *
+ * An alias for the shared `FeedbackVariant`, which Toast uses too — the two
+ * surfaces have to stay in step, so the vocabulary has one definition. Kept
+ * under this name because it is part of the published API.
  */
-export type AlertVariant = "default" | "info" | "success" | "warning" | "error";
+export type AlertVariant = FeedbackVariant;
 
 /**
  * Shape of an alert. `module` sits inside content as a rounded, self-contained
