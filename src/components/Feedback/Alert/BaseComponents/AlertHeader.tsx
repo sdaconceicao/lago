@@ -1,30 +1,12 @@
 "use client";
 import clsx from "clsx";
-import {
-  CircleAlert,
-  CircleCheck,
-  Info,
-  Megaphone,
-  TriangleAlert,
-  X,
-} from "lucide-react";
+import { X } from "lucide-react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { IconButton } from "@/components/Actions/IconButton/IconButton";
+import { VARIANT_ICONS } from "@/components/Feedback/Feedback.variants";
 import { Heading } from "@/components/Typography/Heading/Heading";
-import { type AlertVariant, useAlertVariant } from "../Alert.context";
+import { useAlertVariant } from "../Alert.context";
 import styles from "./AlertHeader.module.css";
-
-/** The icon each variant falls back to when the consumer does not supply one. */
-const VARIANT_ICONS: Record<AlertVariant, ReactNode> = {
-  // The default alert announces rather than reports, so it gets its own glyph
-  // instead of borrowing the `info` one — otherwise the two would be told apart
-  // by colour alone, which is the one cue a grey alert has given up.
-  default: <Megaphone size={20} aria-hidden="true" />,
-  info: <Info size={20} aria-hidden="true" />,
-  success: <CircleCheck size={20} aria-hidden="true" />,
-  warning: <TriangleAlert size={20} aria-hidden="true" />,
-  error: <CircleAlert size={20} aria-hidden="true" />,
-};
 
 export interface AlertHeaderProps
   extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {

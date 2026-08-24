@@ -1,6 +1,7 @@
 "use client";
 import clsx from "clsx";
 import type { HTMLAttributes } from "react";
+import base from "@/styles/base.module.css";
 import {
   type AlertType,
   type AlertVariant,
@@ -67,7 +68,7 @@ export function Alert({
         role={role}
         data-variant={variant}
         data-type={type}
-        className={clsx("alert", styles.alert, className)}
+        className={clsx("alert", styles.alert, base.feedbackSurface, className)}
       />
     </AlertVariantContext.Provider>
   );

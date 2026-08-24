@@ -15,20 +15,37 @@
 }
 
 .toast {
-  width: 230px;
+  /* Widened from 230px by the width of the leading gutter, so the text column
+     keeps the measure it had before the variant icon arrived. */
+  width: 280px;
   display: flex;
-  align-items: center;
-  gap: var(--spacing-4);
-  background: var(--highlight-background);
+  /* Matches Alert's header: the glyph is centred on the first line of the title
+     rather than on the whole text block, so it does not drift as the title
+     wraps or a description is added. */
+  align-items: flex-start;
+  gap: var(--feedback-gap);
   padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--feedback-border);
   border-radius: var(--radius-lg);
+  /* A toast floats over arbitrary page content, where the variant's tinted
+     surface is not separation enough on its own. The same elevation Popover
+     uses seats it above whatever it covers. */
+  box-shadow: var(--popover-shadow);
   outline: none;
-  forced-color-adjust: none;
   view-transition-class: toast;
 
   &[data-focus-visible] {
     outline: 2px solid var(--focus-ring-color);
     outline-offset: 2px;
+  }
+
+  .toastIcon {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: var(--feedback-icon-size);
+    height: calc(var(--font-size) * 1.5);
+    color: var(--feedback-accent);
   }
 
   .toastContent {
@@ -40,41 +57,36 @@
 
     [slot="title"] {
       font-weight: 600;
-      color: var(--highlight-foreground);
+      color: var(--feedback-title-color);
     }
 
     [slot="description"] {
       font-size: var(--font-size-sm);
-      color: var(--highlight-foreground);
+      color: var(--feedback-text-color);
     }
   }
 
+  /* The quiet button reads off the theme tint; pull it onto the variant's text
+     colour so it belongs to the toast. Set through the button's own custom
+     property, the same treatment Alert gives its dismiss control — which is
+     also why the hover, pressed and focus states are left to the button rather
+     than restated here. */
   :global(.react-aria-Button[slot="close"]) {
+    --button-text: var(--feedback-text-color);
+
     flex: 0 0 auto;
-    background: none;
-    border: none;
-    appearance: none;
-    border-radius: var(--radius-sm);
-    height: var(--spacing-8);
-    width: var(--spacing-8);
-    color: var(--highlight-foreground);
-    padding: 0;
-    outline: none;
-    -webkit-tap-highlight-color: transparent;
 
-    &[data-hovered] {
-      background: var(--tint-900);
-      box-shadow: none;
-    }
+    /* Same retoning Alert gives its dismiss control — see the note there. */
+    @media not (forced-colors: active) {
+      &:where([data-hovered]) {
+        --button-background: var(--feedback-hover);
+        box-shadow: 0 0 0 1px var(--feedback-hover);
+      }
 
-    &[data-focus-visible] {
-      outline: 2px solid var(--highlight-foreground);
-      outline-offset: 2px;
-    }
-
-    &[data-pressed] {
-      background: var(--highlight-pressed);
-      box-shadow: none;
+      &:where([data-pressed]) {
+        --button-background: var(--feedback-pressed);
+        box-shadow: 0 0 0 1px var(--feedback-pressed);
+      }
     }
   }
 }

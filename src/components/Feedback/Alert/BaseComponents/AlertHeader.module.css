@@ -47,6 +47,26 @@
        custom property, which beats the `utilities` layer that consumes it. */
     :global(.react-aria-Button) {
       --button-text: var(--alert-text-color);
+
+      /* The quiet button's hover and pressed fills come from the theme tint,
+         which reads as a stray lavender chip on a hued alert. Retone them from
+         the variant's own scale. Declared here rather than in the treatment
+         because this sits in the components layer, which outranks both of the
+         base rules that set them — including the dark-mode one.
+
+         Left alone under forced colors, where the button's own handling puts a
+         system border on it and a fill would fight the system palette. */
+      @media not (forced-colors: active) {
+        &:where([data-hovered]) {
+          --button-background: var(--alert-hover);
+          box-shadow: 0 0 0 1px var(--alert-hover);
+        }
+
+        &:where([data-pressed]) {
+          --button-background: var(--alert-pressed);
+          box-shadow: 0 0 0 1px var(--alert-pressed);
+        }
+      }
     }
   }
 }

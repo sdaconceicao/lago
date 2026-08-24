@@ -20,6 +20,7 @@ export * from "./components/Collections/Tree/Tree";
 export * from "./components/Expandable/Accordion/Accordion";
 export * from "./components/Expandable/Disclosure/Disclosure";
 export * from "./components/Feedback/Alert/Alert";
+export * from "./components/Feedback/Feedback.variants";
 export * from "./components/Feedback/ProgressBar/ProgressBar";
 export * from "./components/Feedback/ProgressCircle/ProgressCircle";
 export * from "./components/Feedback/Skeleton/Skeleton";

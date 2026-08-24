@@ -1,80 +1,36 @@
-/* Each hued variant swaps only `--alert-color`; every surface, border and text
- * colour is derived from it through the shared lightness and chroma scales, so
- * the whole set inverts correctly in dark mode without a second palette. The
- * `default` variant is the exception — see the note on it below. */
+/* The colour and gutter scales live in the shared `feedbackSurface` treatment
+ * in `src/styles/base.module.css`, which Alert applies alongside this class and
+ * Toast applies too — the two are required to read as the same family, so
+ * neither owns the scales. Alert republishes the treatment's outputs under its
+ * own `--alert-*` names, which the header, body and footer stylesheets read.
+ *
+ * To retint an alert, set `--feedback-color`; the derived `--alert-*` values
+ * below follow it. */
 .alert {
-  /* Matches the `default` variant, so the derivations below stay honest in
-     devtools even though that variant overrides the values they produce. */
-  --alert-color: var(--gray);
-  --alert-background: oklch(
-    from var(--alert-color) var(--lightness-100) var(--chroma-100) h
-  );
-  --alert-border: oklch(
-    from var(--alert-color) var(--lightness-300) var(--chroma-300) h
-  );
-  --alert-accent: oklch(
-    from var(--alert-color) var(--lightness-1000) var(--chroma-1000) h
-  );
-  --alert-title-color: oklch(
-    from var(--alert-color) var(--lightness-1500) var(--chroma-1500) h
-  );
-  --alert-text-color: oklch(
-    from var(--alert-color) var(--lightness-1300) var(--chroma-1300) h
-  );
+  --alert-background: var(--feedback-background);
+  --alert-border: var(--feedback-border);
+  --alert-accent: var(--feedback-accent);
+  --alert-title-color: var(--feedback-title-color);
+  --alert-text-color: var(--feedback-text-color);
+  --alert-hover: var(--feedback-hover);
+  --alert-pressed: var(--feedback-pressed);
 
   /* Shared by the header (icon box, header gap) and the body and footer, which
    * indent by the same amount so their text lines up under the title. */
-  --alert-icon-size: var(--spacing-5); /* 20px */
-  --alert-gap: var(--spacing-3); /* 12px */
-  --alert-content-inset: 0px;
+  --alert-icon-size: var(--feedback-icon-size);
+  --alert-gap: var(--feedback-gap);
+  --alert-content-inset: var(--feedback-content-inset);
 
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2);
+  /* Restated from the treatment, which paints from `--feedback-background`
+     directly. Painting from Alert's own names instead keeps `--alert-background`
+     and `--alert-text-color` working as override points, as they did when this
+     stylesheet owned the scales. */
   background: var(--alert-background);
   color: var(--alert-text-color);
-  font: var(--font-size) var(--font-family);
-  forced-color-adjust: none;
-}
-
-/* An icon pushes the header text along by its own width plus the header gap.
- * Matching that inset keeps the body and footer aligned under the title rather
- * than under the icon. Matched on the header's `data-has-icon` flag — a bare
- * child combinator so a nested alert cannot indent its parent's content. */
-.alert:has(> [data-has-icon]) {
-  --alert-content-inset: calc(var(--alert-icon-size) + var(--alert-gap));
-}
-
-/* The default: a message that reports no status of its own, so it carries no
- * hue either. It takes the library's own surface and text tokens — the same set
- * Dialog and Popover use — which is what makes it white on the light page and a
- * raised grey on the dark one. It cannot come from the scale like the hued
- * variants do: grey at `--lightness-100` lands within a percent of the light
- * page background, so a derived grey would simply disappear against it. */
-.alert[data-variant="default"] {
-  --alert-color: var(--gray);
-  --alert-background: var(--overlay-background);
-  --alert-border: var(--border-color);
-  --alert-accent: var(--text-color);
-  --alert-title-color: var(--text-color);
-  --alert-text-color: var(--text-color-placeholder);
-}
-
-.alert[data-variant="info"] {
-  --alert-color: var(--blue);
-}
-
-.alert[data-variant="success"] {
-  --alert-color: var(--green);
-}
-
-.alert[data-variant="warning"] {
-  --alert-color: var(--yellow);
-}
-
-.alert[data-variant="error"] {
-  --alert-color: var(--red);
 }
 
 /* Sits inside content: rounded, fully bordered, reads as its own card. */
@@ -157,15 +113,5 @@
 
   .alert[data-type="fullWidth"]:has(> [data-has-dismiss]) {
     padding-inline-end: calc(var(--spacing-6) + var(--spacing-9));
-  }
-}
-
-@media (forced-colors: active) {
-  .alert {
-    --alert-background: Canvas;
-    --alert-border: ButtonBorder;
-    --alert-accent: CanvasText;
-    --alert-title-color: CanvasText;
-    --alert-text-color: CanvasText;
   }
 }
