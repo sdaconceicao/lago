@@ -51,6 +51,8 @@ export * from "./components/Inputs/NumberField/NumberField";
 export * from "./components/Inputs/Password/Password";
 export * from "./components/Inputs/Radio/RadioGroup/RadioGroup";
 export * from "./components/Inputs/Radio/RadioItem/Radio";
+export * from "./components/Inputs/RichTextEditor/RichTextEditor";
+export * from "./components/Inputs/RichTextEditor/RichTextEditor.types";
 export * from "./components/Inputs/Search/SearchField/SearchField";
 export * from "./components/Inputs/Search/SearchFieldWIthSuggestions/SearchFieldWithSuggestions";
 export * from "./components/Inputs/Select/Select";

@@ -1,0 +1,24 @@
+/* The toolbar sits inside the field's inset surface rather than beside it, so
+   it carries the divider between itself and the content and no border of its
+   own. Full width so a wrapped toolbar still fills the field. */
+.toolbar {
+  width: 100%;
+  padding: var(--field-inner-inset) var(--field-inner-inset)
+    calc(var(--field-inner-inset) + var(--spacing-1));
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Anchors the link Popover. A flex item rather than `display: contents`,
+   because a contents box has no rect for the popover to position against. */
+.linkAnchor {
+  display: flex;
+  align-items: center;
+}
+
+.linkForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: calc(var(--spacing-10) * 6); /* 240px */
+}

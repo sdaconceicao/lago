@@ -51,6 +51,15 @@
     "react-dom": "^19"
   },
   "dependencies": {
+    "@tiptap/core": "^3.30.5",
+    "@tiptap/extension-highlight": "^3.30.5",
+    "@tiptap/extension-list": "^3.30.5",
+    "@tiptap/extension-subscript": "^3.30.5",
+    "@tiptap/extension-superscript": "^3.30.5",
+    "@tiptap/extension-text-align": "^3.30.5",
+    "@tiptap/extensions": "^3.30.5",
+    "@tiptap/react": "^3.30.5",
+    "@tiptap/starter-kit": "^3.30.5",
     "clsx": "^2.1.1",
     "lucide-react": "^1.31.0",
     "react-payment-logos": "^1.1.0"
