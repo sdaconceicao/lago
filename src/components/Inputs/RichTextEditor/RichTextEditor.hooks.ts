@@ -17,13 +17,10 @@ import { useEffect, useRef } from "react";
  * code block, headings, blockquote, horizontal rule, both lists, links, and
  * undo/redo — so only what sits outside it is added here.
  *
- * The set is fixed rather than derived from the `toolbar` prop because changing
- * a tiptap editor's extensions means recreating the editor, which throws away
- * the document and the selection. A hidden button therefore keeps its keyboard
- * shortcut, and pasted content keeps its marks.
- *
- * `placeholder` is read through a getter rather than closed over, so a changed
- * placeholder prop takes effect without recreating the editor for that either.
+ * The set is fixed rather than derived from the `toolbar` prop, because changing
+ * a tiptap editor's extensions means recreating it and losing the document. See
+ * {@link RichTextEditorToolbar}. `placeholder` is read through a getter for the
+ * same reason: a changed prop then needs no new editor.
  */
 const buildExtensions = (getPlaceholder: () => string): Extensions => [
   StarterKit,
@@ -89,9 +86,8 @@ export const useRichTextEditor = ({
     },
   });
 
-  // Attributes carry the validation and description wiring, which changes as the
-  // field is validated. `setOptions` is tiptap's imperative door onto a live
-  // editor; recreating it would cost the document.
+  // Attributes carry the validation and description wiring, which changes as
+  // the field is validated. `setOptions` updates a live editor in place.
   useEffect(() => {
     editor?.setOptions({ editorProps: { attributes } });
   }, [editor, attributes]);
@@ -101,9 +97,8 @@ export const useRichTextEditor = ({
   }, [editor, isDisabled, isReadOnly]);
 
   // Controlled mode. Writing back only when the HTML genuinely differs keeps
-  // the caret where the user left it: every keystroke round-trips through the
-  // consumer's state, and an unconditional setContent would reset the selection
-  // to the start of the document on each one.
+  // the caret where the user left it — an unconditional setContent would reset
+  // the selection on every keystroke that round-trips through consumer state.
   useEffect(() => {
     if (!editor || value === undefined || editor.getHTML() === value) return;
     editor.commands.setContent(value, { emitUpdate: false });

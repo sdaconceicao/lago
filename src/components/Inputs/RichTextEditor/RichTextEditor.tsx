@@ -52,12 +52,9 @@ export interface RichTextEditorProps {
   /** Field size: 28px, 36px (default), or 48px toolbar buttons and matching text. */
   size?: FieldSize;
   /**
-   * The toolbar layout, as ordered groups of tools. Each group renders as one
-   * segmented button track with a separator between groups.
-   *
-   * Because the array is ordered and explicit it sets which tools appear as well
-   * as their order — omit a tool to hide its button. Formatting itself is not
-   * removed: the keyboard shortcut still works and pasted marks still render.
+   * The toolbar layout, as ordered groups of tools. See
+   * {@link RichTextEditorToolbar} for what the ordering does and does not
+   * control.
    *
    * @default DEFAULT_TOOLBAR
    */
@@ -158,9 +155,8 @@ export function RichTextEditor({
         <Label
           id={labelId}
           isRequired={isRequired}
-          // A `contenteditable` is not a labelable element, so `for` cannot
-          // reach it and a click would otherwise do nothing. `aria-labelledby`
-          // on the editable element does the naming; this restores the gesture.
+          // A contenteditable is not labelable, so `for` cannot reach it and a
+          // click would otherwise do nothing.
           onClick={() => editor?.commands.focus()}
         >
           {label}
@@ -187,10 +183,9 @@ export function RichTextEditor({
         <Description id={descriptionId}>{description}</Description>
       )}
 
-      {/* FieldError reads its validation from context, which normally comes from
-          a react-aria field wrapping a native input. There is none here, so the
-          editor supplies it — that is what lets this field reuse the same error
-          element, and the same styling, as every other input in the library. */}
+      {/* FieldError reads its validation from context, which normally comes
+          from a react-aria field wrapping a native input. There is none here,
+          so the editor supplies it. */}
       <FieldErrorContext.Provider value={validation}>
         <FieldError id={errorId}>{errorMessage}</FieldError>
       </FieldErrorContext.Provider>

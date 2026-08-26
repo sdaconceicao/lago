@@ -12,8 +12,8 @@ import { TOOL_REGISTRY } from "./Toolbar/toolRegistry";
  * than the shared setup because this is the only suite that drives ProseMirror.
  */
 beforeAll(() => {
-  Range.prototype.getClientRects ??= () =>
-    Object.assign([], { item: () => null }) as unknown as DOMRectList;
+  // An empty list is enough: ProseMirror falls through to getBoundingClientRect.
+  Range.prototype.getClientRects ??= () => [] as unknown as DOMRectList;
   Range.prototype.getBoundingClientRect ??= () => new DOMRect();
 });
 

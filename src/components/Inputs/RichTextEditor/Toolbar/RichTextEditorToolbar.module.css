@@ -9,9 +9,10 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-/* Anchors the link Popover. A flex item rather than `display: contents`,
-   because a contents box has no rect for the popover to position against. */
-.linkAnchor {
+/* One wrapper per group. A flex item rather than `display: contents`, because
+   the group holding the link anchors its Popover against this box, and a
+   contents box has no rect to position against. */
+.group {
   display: flex;
   align-items: center;
 }

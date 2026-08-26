@@ -37,10 +37,77 @@ const alwaysEnabled = () => true;
 /** Tools that apply a command rather than a state, so are never "pressed". */
 const neverActive = () => false;
 
+/** The argument-free toggle commands the registry drives. */
+type ToggleCommand =
+  | "toggleBold"
+  | "toggleItalic"
+  | "toggleUnderline"
+  | "toggleStrike"
+  | "toggleCode"
+  | "toggleHighlight"
+  | "toggleSubscript"
+  | "toggleSuperscript"
+  | "toggleBulletList"
+  | "toggleOrderedList"
+  | "toggleTaskList"
+  | "toggleBlockquote"
+  | "toggleCodeBlock";
+
+/** The argument-free one-shot commands the registry drives. */
+type OneShotCommand = "undo" | "redo" | "setHorizontalRule";
+
 /**
- * The four alignment tools differ only in the alignment they set, and each is
- * rendered as a toggle, so pressing the active one clears the alignment rather
- * than setting it again — otherwise a pressed button would refuse to unpress.
+ * A mark or node that toggles on and off: pressed while it is active at the
+ * selection, disabled when tiptap reports the command cannot run there.
+ */
+const toggleTool = (
+  name: string,
+  command: ToggleCommand,
+  label: string,
+  icon: LucideIcon
+): RichTextEditorToolDefinition => ({
+  label,
+  icon,
+  isActive: (editor) => editor.isActive(name),
+  isEnabled: (editor) => editor.can().chain()[command]().run(),
+  run: (editor) => {
+    editor.chain().focus()[command]().run();
+  },
+});
+
+/** A heading level, which differs from a plain toggle only by its attribute. */
+const headingTool = (
+  level: 1 | 2 | 3,
+  icon: LucideIcon
+): RichTextEditorToolDefinition => ({
+  label: `Heading ${level}`,
+  icon,
+  isActive: (editor) => editor.isActive("heading", { level }),
+  isEnabled: (editor) => editor.can().chain().toggleHeading({ level }).run(),
+  run: (editor) => {
+    editor.chain().focus().toggleHeading({ level }).run();
+  },
+});
+
+/** A command that acts once and holds no state of its own. */
+const commandTool = (
+  command: OneShotCommand,
+  label: string,
+  icon: LucideIcon
+): RichTextEditorToolDefinition => ({
+  label,
+  icon,
+  isActive: neverActive,
+  isEnabled: (editor) => editor.can().chain()[command]().run(),
+  run: (editor) => {
+    editor.chain().focus()[command]().run();
+  },
+});
+
+/**
+ * Alignment is rendered as a toggle, so pressing the active one clears the
+ * alignment rather than setting it again — otherwise a pressed button would
+ * refuse to unpress.
  */
 const alignTool = (
   alignment: "left" | "center" | "right" | "justify",
@@ -69,137 +136,40 @@ const alignTool = (
  * so the toolbar renders any tool without knowing what that tool does, and
  * adding a tool means adding a row here rather than a branch there.
  *
- * `isEnabled` asks tiptap whether the command could run at the current
- * selection, which is how a button greys out inside a code block instead of
- * silently doing nothing.
+ * The factories above give the rows that share a shape one definition of it,
+ * which is what keeps `isEnabled` from being derived eighteen slightly
+ * different ways. Only the two tools that genuinely differ are written out.
  */
 export const TOOL_REGISTRY: Record<
   RichTextEditorTool,
   RichTextEditorToolDefinition
 > = {
-  undo: {
-    label: "Undo",
-    icon: Undo2,
-    isActive: neverActive,
-    isEnabled: (editor) => editor.can().chain().undo().run(),
-    run: (editor) => {
-      editor.chain().focus().undo().run();
-    },
-  },
-  redo: {
-    label: "Redo",
-    icon: Redo2,
-    isActive: neverActive,
-    isEnabled: (editor) => editor.can().chain().redo().run(),
-    run: (editor) => {
-      editor.chain().focus().redo().run();
-    },
-  },
-  heading1: {
-    label: "Heading 1",
-    icon: Heading1,
-    isActive: (editor) => editor.isActive("heading", { level: 1 }),
-    isEnabled: (editor) =>
-      editor.can().chain().toggleHeading({ level: 1 }).run(),
-    run: (editor) => {
-      editor.chain().focus().toggleHeading({ level: 1 }).run();
-    },
-  },
-  heading2: {
-    label: "Heading 2",
-    icon: Heading2,
-    isActive: (editor) => editor.isActive("heading", { level: 2 }),
-    isEnabled: (editor) =>
-      editor.can().chain().toggleHeading({ level: 2 }).run(),
-    run: (editor) => {
-      editor.chain().focus().toggleHeading({ level: 2 }).run();
-    },
-  },
-  heading3: {
-    label: "Heading 3",
-    icon: Heading3,
-    isActive: (editor) => editor.isActive("heading", { level: 3 }),
-    isEnabled: (editor) =>
-      editor.can().chain().toggleHeading({ level: 3 }).run(),
-    run: (editor) => {
-      editor.chain().focus().toggleHeading({ level: 3 }).run();
-    },
-  },
-  bold: {
-    label: "Bold",
-    icon: Bold,
-    isActive: (editor) => editor.isActive("bold"),
-    isEnabled: (editor) => editor.can().chain().toggleBold().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleBold().run();
-    },
-  },
-  italic: {
-    label: "Italic",
-    icon: Italic,
-    isActive: (editor) => editor.isActive("italic"),
-    isEnabled: (editor) => editor.can().chain().toggleItalic().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleItalic().run();
-    },
-  },
-  underline: {
-    label: "Underline",
-    icon: Underline,
-    isActive: (editor) => editor.isActive("underline"),
-    isEnabled: (editor) => editor.can().chain().toggleUnderline().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleUnderline().run();
-    },
-  },
-  strike: {
-    label: "Strikethrough",
-    icon: Strikethrough,
-    isActive: (editor) => editor.isActive("strike"),
-    isEnabled: (editor) => editor.can().chain().toggleStrike().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleStrike().run();
-    },
-  },
-  code: {
-    label: "Inline code",
-    icon: Code,
-    isActive: (editor) => editor.isActive("code"),
-    isEnabled: (editor) => editor.can().chain().toggleCode().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleCode().run();
-    },
-  },
-  highlight: {
-    label: "Highlight",
-    icon: Highlighter,
-    isActive: (editor) => editor.isActive("highlight"),
-    isEnabled: (editor) => editor.can().chain().toggleHighlight().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleHighlight().run();
-    },
-  },
-  subscript: {
-    label: "Subscript",
-    icon: Subscript,
-    isActive: (editor) => editor.isActive("subscript"),
-    isEnabled: (editor) => editor.can().chain().toggleSubscript().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleSubscript().run();
-    },
-  },
-  superscript: {
-    label: "Superscript",
-    icon: Superscript,
-    isActive: (editor) => editor.isActive("superscript"),
-    isEnabled: (editor) => editor.can().chain().toggleSuperscript().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleSuperscript().run();
-    },
-  },
+  undo: commandTool("undo", "Undo", Undo2),
+  redo: commandTool("redo", "Redo", Redo2),
+  heading1: headingTool(1, Heading1),
+  heading2: headingTool(2, Heading2),
+  heading3: headingTool(3, Heading3),
+  bold: toggleTool("bold", "toggleBold", "Bold", Bold),
+  italic: toggleTool("italic", "toggleItalic", "Italic", Italic),
+  underline: toggleTool("underline", "toggleUnderline", "Underline", Underline),
+  strike: toggleTool("strike", "toggleStrike", "Strikethrough", Strikethrough),
+  code: toggleTool("code", "toggleCode", "Inline code", Code),
+  highlight: toggleTool(
+    "highlight",
+    "toggleHighlight",
+    "Highlight",
+    Highlighter
+  ),
+  subscript: toggleTool("subscript", "toggleSubscript", "Subscript", Subscript),
+  superscript: toggleTool(
+    "superscript",
+    "toggleSuperscript",
+    "Superscript",
+    Superscript
+  ),
   // A link needs a URL, which a button press cannot supply, so the toolbar
-  // intercepts this one and opens a Popover to ask for it. Removing a link
-  // needs no input, so that half is a plain command and lives here.
+  // intercepts this one and opens a Popover. Removing a link needs no input,
+  // so that half is a plain command and lives here.
   link: {
     label: "Link",
     icon: Link,
@@ -209,64 +179,37 @@ export const TOOL_REGISTRY: Record<
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
     },
   },
-  bulletList: {
-    label: "Bulleted list",
-    icon: List,
-    isActive: (editor) => editor.isActive("bulletList"),
-    isEnabled: (editor) => editor.can().chain().toggleBulletList().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleBulletList().run();
-    },
-  },
-  orderedList: {
-    label: "Numbered list",
-    icon: ListOrdered,
-    isActive: (editor) => editor.isActive("orderedList"),
-    isEnabled: (editor) => editor.can().chain().toggleOrderedList().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleOrderedList().run();
-    },
-  },
-  taskList: {
-    label: "Task list",
-    icon: ListTodo,
-    isActive: (editor) => editor.isActive("taskList"),
-    isEnabled: (editor) => editor.can().chain().toggleTaskList().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleTaskList().run();
-    },
-  },
-  blockquote: {
-    label: "Blockquote",
-    icon: TextQuote,
-    isActive: (editor) => editor.isActive("blockquote"),
-    isEnabled: (editor) => editor.can().chain().toggleBlockquote().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleBlockquote().run();
-    },
-  },
-  codeBlock: {
-    label: "Code block",
-    icon: SquareCode,
-    isActive: (editor) => editor.isActive("codeBlock"),
-    isEnabled: (editor) => editor.can().chain().toggleCodeBlock().run(),
-    run: (editor) => {
-      editor.chain().focus().toggleCodeBlock().run();
-    },
-  },
-  horizontalRule: {
-    label: "Horizontal rule",
-    icon: Minus,
-    isActive: neverActive,
-    isEnabled: (editor) => editor.can().chain().setHorizontalRule().run(),
-    run: (editor) => {
-      editor.chain().focus().setHorizontalRule().run();
-    },
-  },
+  bulletList: toggleTool(
+    "bulletList",
+    "toggleBulletList",
+    "Bulleted list",
+    List
+  ),
+  orderedList: toggleTool(
+    "orderedList",
+    "toggleOrderedList",
+    "Numbered list",
+    ListOrdered
+  ),
+  taskList: toggleTool("taskList", "toggleTaskList", "Task list", ListTodo),
+  blockquote: toggleTool(
+    "blockquote",
+    "toggleBlockquote",
+    "Blockquote",
+    TextQuote
+  ),
+  codeBlock: toggleTool(
+    "codeBlock",
+    "toggleCodeBlock",
+    "Code block",
+    SquareCode
+  ),
+  horizontalRule: commandTool("setHorizontalRule", "Horizontal rule", Minus),
   alignLeft: alignTool("left", "Align left", TextAlignStart),
   alignCenter: alignTool("center", "Align center", TextAlignCenter),
   alignRight: alignTool("right", "Align right", TextAlignEnd),
   alignJustify: alignTool("justify", "Justify", TextAlignJustify),
+  // Two commands rather than one, so it does not fit the one-shot factory.
   clearFormatting: {
     label: "Clear formatting",
     icon: RemoveFormatting,

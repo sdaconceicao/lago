@@ -4,18 +4,16 @@
 }
 
 /* One inset surface holding the toolbar and the document, so the field reads as
-   a single control the way TextArea does rather than as a bar above a box.
-   `overflow: hidden` keeps the toolbar's own bottom border inside the field's
-   rounded corners. */
+   a single control. `overflow: hidden` keeps the toolbar's bottom border inside
+   the field's rounded corners. */
 .field {
   display: flex;
   flex-direction: column;
   border-radius: var(--field-radius);
   overflow: hidden;
 
-  /* Focus lands on the contenteditable inside, which is not this element, so
-     the ring is drawn from `:focus-within` — the equivalent of the
-     `[data-focused]` rule a react-aria field would apply to its own input. */
+  /* Focus lands on the contenteditable inside, not on this element, so the
+     ring is drawn from `:focus-within`. */
   &:has(:focus-visible) {
     outline: 2px solid var(--focus-ring-color);
     outline-offset: -1px;
@@ -28,11 +26,10 @@
   min-height: 0;
 }
 
-/* The ProseMirror root, and so the editable element itself: the class is passed
-   through tiptap's `editorProps.attributes`, which is the only way to name the
-   element ProseMirror creates. The min-height is one single-line field plus a
-   second row of text, matching TextArea, so the field always reads as
-   multi-line even while empty. */
+/* The ProseMirror root, and so the editable element itself: the class arrives
+   through tiptap's `editorProps.attributes`, the only way to name the element
+   ProseMirror creates. The min-height matches TextArea — one single-line field
+   plus a second row — so the field reads as multi-line even while empty. */
 .content {
   min-height: calc(var(--field-height) + var(--spacing-4));
   padding: var(--field-inner-inset) var(--field-padding-x);
@@ -44,10 +41,9 @@
   overflow-wrap: break-word;
   -webkit-tap-highlight-color: transparent;
 
-  /* Placeholder. The extension marks the empty node with this class and carries
-     the text in a data attribute, so the text has to be pulled from there —
-     it never exists as content. Floated with zero height so it overlays the
-     caret's line instead of displacing it. */
+  /* Placeholder. The extension marks the empty node and carries the text in a
+     data attribute — it never exists as content. Floated at zero height so it
+     overlays the caret's line instead of displacing it. */
   & :global(.is-editor-empty):first-child::before {
     content: attr(data-placeholder);
     float: left;
@@ -148,9 +144,8 @@
     text-decoration: underline;
   }
 
-  /* Task list. The checkbox is rendered by the extension inside a label, with
-     the item's own content in a sibling div, so the row is laid out here rather
-     than inheriting the bullet list's indentation. */
+  /* Task list. The extension renders the checkbox inside a label with the
+     item's content in a sibling div, so the row is laid out here. */
   & ul[data-type="taskList"] {
     padding-inline-start: 0;
     list-style: none;

@@ -52,14 +52,10 @@ export function RichTextEditorToolbar({
   isDisabled,
 }: RichTextEditorToolbarProps) {
   // tiptap does not re-render React on every transaction by default, so the
-  // pressed and disabled states are selected out of the editor explicitly.
-  // useEditorState compares the result of this selector, so the toolbar
-  // re-renders when a flag actually flips rather than on every keystroke — and
-  // only for the tools on screen, since those are the only ones read here.
-  //
-  // The selector keeps the group shape so the render below reads its states
-  // straight out of it, rather than looking each tool up in a second structure
-  // that could be missing it.
+  // pressed and disabled states are read out of the editor explicitly.
+  // useEditorState compares the selector's result, so the toolbar re-renders
+  // when a flag actually flips rather than on every keystroke. The group shape
+  // is preserved so the render below reads states straight out of it.
   const groups = useEditorState({
     editor,
     selector: ({ editor: current }): ToolState[][] =>
@@ -101,9 +97,7 @@ export function RichTextEditorToolbar({
     const chain = editor.chain().focus().extendMarkRange("link");
 
     // With no text selected there is nothing to turn into a link, and marking
-    // an empty range would leave the press looking like it did nothing at all.
-    // Inserting the URL as its own linked text is what the caret position asks
-    // for, and matches what a reader would expect to appear there.
+    // an empty range would leave the press looking like it did nothing.
     if (editor.state.selection.empty) {
       chain
         .insertContent({
@@ -121,53 +115,46 @@ export function RichTextEditorToolbar({
   return (
     <>
       <Toolbar aria-label="Formatting" className={styles.toolbar}>
-        {groups.map((group, index) => {
-          const buttons = (
-            <ToggleButtonGroup
-              size={size}
-              isDisabled={isDisabled}
-              selectionMode="multiple"
+        {groups.map((group, index) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: groups are positional, so the index is their only stable identity
+          <Fragment key={index}>
+            {index > 0 && <Separator />}
+            {/* Every group gets the same wrapper, and the one holding the link
+                also anchors its Popover. ToggleButton takes no ref, and an
+                extra element inside the group would break the segmented
+                first-child/last-child radii. */}
+            <div
+              className={styles.group}
+              ref={
+                group.some(({ tool }) => tool === "link")
+                  ? linkAnchorRef
+                  : undefined
+              }
             >
-              {group.map(({ tool, isActive, isEnabled }) => {
-                const { label, icon: Icon } = TOOL_REGISTRY[tool];
-                return (
-                  <IconToggleButton
-                    key={tool}
-                    aria-label={label}
-                    variant="quiet"
-                    isSelected={isActive}
-                    isDisabled={isDisabled || !isEnabled}
-                    onChange={() => handlePress(tool)}
-                  >
-                    <Icon aria-hidden="true" />
-                  </IconToggleButton>
-                );
-              })}
-            </ToggleButtonGroup>
-          );
-
-          return (
-            // Groups are positional, so their index is the only stable identity
-            // a consumer-supplied layout gives them. A Fragment rather than a
-            // wrapper so the separators and groups stay direct children of the
-            // Toolbar, which is what its flex and separator rules style.
-            // biome-ignore lint/suspicious/noArrayIndexKey: see above
-            <Fragment key={index}>
-              {index > 0 && <Separator />}
-              {group.some(({ tool }) => tool === "link") ? (
-                // The popover anchors to a wrapper rather than the button
-                // itself: lago's ToggleButton takes no ref, and an extra
-                // element inside the group would break the segmented
-                // first-child/last-child radii.
-                <div className={styles.linkAnchor} ref={linkAnchorRef}>
-                  {buttons}
-                </div>
-              ) : (
-                buttons
-              )}
-            </Fragment>
-          );
-        })}
+              <ToggleButtonGroup
+                size={size}
+                isDisabled={isDisabled}
+                selectionMode="multiple"
+              >
+                {group.map(({ tool, isActive, isEnabled }) => {
+                  const { label, icon: Icon } = TOOL_REGISTRY[tool];
+                  return (
+                    <IconToggleButton
+                      key={tool}
+                      aria-label={label}
+                      variant="quiet"
+                      isSelected={isActive}
+                      isDisabled={isDisabled || !isEnabled}
+                      onChange={() => handlePress(tool)}
+                    >
+                      <Icon aria-hidden="true" />
+                    </IconToggleButton>
+                  );
+                })}
+              </ToggleButtonGroup>
+            </div>
+          </Fragment>
+        ))}
       </Toolbar>
 
       <Popover
