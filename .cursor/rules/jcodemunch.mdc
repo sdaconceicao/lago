@@ -1,12 +1,15 @@
 ---
-description: REQUIRED — Use jcodemunch MCP for all codebase exploration, search, and navigation. Do not use built-in Read/Grep/Glob/SemanticSearch for discovery.
-alwaysApply: true
+description: REQUIRED — Use jCodeMunch MCP for repo-wide exploration and index updates. Serena handles symbol-level work.
+alwaysApply: true
 ---
 
-# Code Exploration Policy
+# Code Exploration Policy (jCodeMunch)
 
-Always use jCodeMunch-MCP for code navigation. Never fall back to Read, Grep, Glob, or Bash for code exploration.
-**Exception:** use `Read` when you are about to edit a file — the harness requires a `Read` before `Edit`/`Write`. Use jCodeMunch to *find and understand* code, then `Read` only the file you are changing.
+Use **Serena** for known symbols, references, and structured edits (see `serena.mdc`).
+Use **jCodeMunch** for repo-wide exploration, ranked context, and keeping the index current.
+Never use Grep, Glob, or Bash for code exploration.
+
+**Exception:** use Cursor `Read` when you are about to edit a file — the harness requires a `Read` before `Edit`/`Write`. Use Serena or jCodeMunch to find the file, then `Read` only the file you are changing.
 
 This server runs the **front door** surface: three tools reach every jCodeMunch capability, so the tool list stays small and the catalogue is fetched only when you need it.
 
@@ -31,4 +34,3 @@ This server runs the **front door** surface: three tools reach every jCodeMunch 
 - Otherwise `order { "action": "register_edit", "args": { "paths": [...] } }` after an edit, batched for bulk changes.
 
 **Announce your model once per session** so the server can size its answers: `announce_model { "model": "<your-model-id>" }`.
-

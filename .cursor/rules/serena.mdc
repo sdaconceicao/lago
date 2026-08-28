@@ -1,0 +1,24 @@
+---
+description: REQUIRED — Use Serena MCP for symbol-level navigation and structured code edits. Complements jCodeMunch.
+alwaysApply: true
+---
+
+# Serena (symbol-level code intel)
+
+Serena is the project coding agent for this repo (`lago`, TypeScript LSP). Prefer it over Read/Grep/Glob for symbols and structured edits. Use jCodeMunch for repo-wide exploration (see `jcodemunch.mdc`).
+
+**Session start:** If not already active, `activate_project` with `lago` or this repo path. Call `initial_instructions` once. Offer `onboarding` if memories are empty.
+
+**Find code (known name):** `find_symbol`, `get_symbols_overview`, `find_referencing_symbols`, `find_implementations`. Read bodies with `include_body=true` only when needed — do not read whole files.
+
+**Find code (unknown name):** Serena `search_for_pattern`, then symbolic tools. For repo-wide "how does X work" / ranked context, use jCodeMunch (`route` / `order`).
+
+**Edit:**
+- Whole symbol (function/class): `replace_symbol_body`, `insert_before_symbol`, `insert_after_symbol`
+- Rename / unused delete: `rename_symbol`, `safe_delete_symbol`
+- Few lines inside a symbol: `replace_content` (regex wildcards OK)
+- Same edit in many files: `replace_in_files` (`dry_run=true` first if ambiguous)
+
+Line numbers from Serena are **0-based**. After edits, register paths with jCodeMunch `register_edit`.
+
+**Exception:** Cursor `Read` immediately before `Edit`/`Write` (harness requirement). Use Serena to find the file first.

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FileUploader, type FileUploadItem } from "./FileUploader";
 
@@ -27,7 +27,52 @@ describe("FileUploader", () => {
     expect(screen.getByText(/or drag and drop/)).toBeInTheDocument();
   });
 
-  it("adds files from the hidden file input", async () => {
+  it("labels the drop zone with the upload instructions", () => {
+    render(<FileUploader label="Attachments" />);
+
+    expect(
+      screen.getByRole("button", { name: /click to upload or drag and drop/i })
+    ).toBeInTheDocument();
+  });
+
+  it("associates the description with the field", () => {
+    render(
+      <FileUploader label="Attachments" description="We never share them" />
+    );
+
+    expect(screen.getByText("We never share them")).toBeInTheDocument();
+  });
+
+  it("shows the error message when invalid", () => {
+    render(
+      <FileUploader
+        label="Attachments"
+        isInvalid
+        errorMessage="A file is required"
+      />
+    );
+
+    expect(screen.getByText("A file is required")).toBeInTheDocument();
+  });
+
+  it("does not render the error message when valid", () => {
+    render(
+      <FileUploader label="Attachments" errorMessage="A file is required" />
+    );
+
+    expect(screen.queryByText("A file is required")).not.toBeInTheDocument();
+  });
+
+  it('renders data-field-size="md" by default', () => {
+    const { container } = render(<FileUploader label="Attachments" />);
+
+    expect(container.querySelector(".react-aria-FileUploader")).toHaveAttribute(
+      "data-field-size",
+      "md"
+    );
+  });
+
+  it("adds files from the hidden file input", () => {
     const onChange = vi.fn();
     const { container } = render(<FileUploader onChange={onChange} />);
     const input = container.querySelector(
@@ -38,7 +83,7 @@ describe("FileUploader", () => {
       target: { files: [createImageFile()] },
     });
 
-    await waitFor(() => expect(onChange).toHaveBeenCalledTimes(1));
+    expect(onChange).toHaveBeenCalledTimes(1);
 
     const items = onChange.mock.calls[0][0] as FileUploadItem[];
     expect(items).toHaveLength(1);
@@ -146,7 +191,7 @@ describe("FileUploader", () => {
     );
   });
 
-  it("ignores files that do not match accept", async () => {
+  it("ignores files that do not match accept", () => {
     const onChange = vi.fn();
     const { container } = render(
       <FileUploader accept="image/png" onChange={onChange} />
@@ -159,7 +204,7 @@ describe("FileUploader", () => {
       target: { files: [createPdfFile()] },
     });
 
-    await waitFor(() => expect(onChange).not.toHaveBeenCalled());
+    expect(onChange).not.toHaveBeenCalled();
     expect(screen.queryByText("invoice.pdf")).not.toBeInTheDocument();
   });
 
@@ -198,7 +243,7 @@ describe("FileUploader", () => {
       container.querySelector('img[src="blob:preview"]')
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "Remove photo.png" })
+      screen.getByRole("button", { name: "Remove photo.png" })
     ).toBeInTheDocument();
     expect(screen.queryByText("photo.png")).not.toBeInTheDocument();
   });

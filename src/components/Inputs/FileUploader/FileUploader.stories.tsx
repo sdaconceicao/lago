@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react";
-import { fn } from "storybook/test";
 import { useState } from "react";
+import { fn } from "storybook/test";
 import { FileUploader, type FileUploadItem } from "./FileUploader";
 
 const meta: Meta<typeof FileUploader> = {
@@ -26,9 +26,9 @@ export default meta;
 
 type Story = StoryFn<typeof FileUploader>;
 
-export const Default: Story = (args) => <FileUploader {...args} />;
+export const Example: Story = (args) => <FileUploader {...args} />;
 
-Default.args = {
+Example.args = {
   label: "Attachments",
   hint: "SVG, PNG, JPG or GIF (max. 800x400px)",
 };
@@ -102,6 +102,12 @@ Disabled.args = {
   isDisabled: true,
 };
 
+const roundPreview: FileUploadItem = {
+  id: "avatar",
+  file: new File(["a"], "avatar.jpg", { type: "image/jpeg" }),
+  previewUrl: "https://picsum.photos/seed/lago-round/80/80",
+};
+
 export const Round: Story = (args) => <FileUploader {...args} />;
 
 Round.args = {
@@ -110,13 +116,7 @@ Round.args = {
   accept: "image/png,image/jpeg",
   allowsMultiple: false,
   hint: "PNG or JPEG only.",
-  defaultValue: [
-    {
-      id: "avatar",
-      file: new File(["a"], "avatar.jpg", { type: "image/jpeg" }),
-      previewUrl: "https://picsum.photos/seed/lago-round/80/80",
-    },
-  ],
+  defaultValue: [roundPreview],
 };
 
 Round.parameters = {
@@ -129,10 +129,48 @@ Round.parameters = {
 };
 
 export const Sizes: Story = (args) => (
-  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-    <FileUploader {...args} size="sm" label="Small" />
-    <FileUploader {...args} size="md" label="Medium (default)" />
-    <FileUploader {...args} size="lg" label="Large" />
+  <div style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      <FileUploader {...args} size="sm" label="Small" />
+      <FileUploader {...args} size="md" label="Medium (default)" />
+      <FileUploader {...args} size="lg" label="Large" />
+    </div>
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "1.5rem",
+        alignItems: "flex-start",
+      }}
+    >
+      <FileUploader
+        {...args}
+        size="sm"
+        variant="round"
+        allowsMultiple={false}
+        accept="image/png,image/jpeg"
+        label="Small round"
+        defaultValue={[roundPreview]}
+      />
+      <FileUploader
+        {...args}
+        size="md"
+        variant="round"
+        allowsMultiple={false}
+        accept="image/png,image/jpeg"
+        label="Medium round"
+        defaultValue={[roundPreview]}
+      />
+      <FileUploader
+        {...args}
+        size="lg"
+        variant="round"
+        allowsMultiple={false}
+        accept="image/png,image/jpeg"
+        label="Large round"
+        defaultValue={[roundPreview]}
+      />
+    </div>
   </div>
 );
 
@@ -144,7 +182,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        "FileUploader inherits the DropZone field size scale: sm, md (default), and lg.",
+        "FileUploader inherits the DropZone field size scale: sm, md (default), and lg. The round variant uses the same sizes to scale the circular drop zone.",
     },
   },
 };

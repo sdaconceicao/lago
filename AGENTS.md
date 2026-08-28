@@ -11,6 +11,7 @@ are always in context regardless of which file you're editing — the per-glob
 auto-attach behavior from Cursor is not replicated.
 
 @.cursor/rules/jcodemunch.mdc
+@.cursor/rules/serena.mdc
 @.cursor/rules/react.mdc
 @.cursor/rules/pure-functions.mdc
 @.cursor/rules/testing-unit-standards.mdc

@@ -2,9 +2,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   createFileUploadItem,
-  filterAcceptedFiles,
   type FileUploadItem,
-} from "./FileUploader.utils";
+  filterAcceptedFiles,
+} from "../FileUploader.utils";
 
 export interface UseFileUploaderStateOptions {
   /** Selected files, when controlled. */
@@ -99,7 +99,15 @@ export const useFileUploaderState = ({
 
       setItems(nextItems);
     },
-    [accept, allowsMultiple, items, maxSize, releasePreviewUrl, setItems, trackPreviewUrl]
+    [
+      accept,
+      allowsMultiple,
+      items,
+      maxSize,
+      releasePreviewUrl,
+      setItems,
+      trackPreviewUrl,
+    ]
   );
 
   const removeItem = useCallback(

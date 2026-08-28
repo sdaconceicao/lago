@@ -1,9 +1,16 @@
 import {
   createFileUploadItem,
+  EMPTY_VALIDATION,
+  type FileUploadItem,
   fileMatchesAccept,
   fileMatchesMaxSize,
   filterAcceptedFiles,
   formatFileSize,
+  getCirclePreviewItem,
+  getFieldValidation,
+  getListItems,
+  getProgressPercent,
+  getStatusMessage,
   isImageFile,
   parseAcceptedFileTypes,
   revokePreviewUrls,
@@ -83,9 +90,7 @@ describe("createFileUploadItem", () => {
   });
 
   it("creates preview URLs for image files", () => {
-    const createObjectURL = vi
-      .spyOn(URL, "createObjectURL")
-      .mockReturnValue("blob:preview");
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:preview");
     const file = {
       name: "photo.png",
       type: "image/png",
@@ -99,8 +104,6 @@ describe("createFileUploadItem", () => {
         status: "idle",
       })
     );
-
-    createObjectURL.mockRestore();
   });
 
   it("does not create preview URLs for non-image files", () => {
@@ -113,8 +116,6 @@ describe("createFileUploadItem", () => {
 
     expect(createFileUploadItem(file).previewUrl).toBeUndefined();
     expect(createObjectURL).not.toHaveBeenCalled();
-
-    createObjectURL.mockRestore();
   });
 });
 
@@ -137,6 +138,10 @@ describe("filterAcceptedFiles", () => {
 });
 
 describe("revokePreviewUrls", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("revokes preview URLs on items", () => {
     const revokeObjectURL = vi
       .spyOn(URL, "revokeObjectURL")
@@ -149,7 +154,151 @@ describe("revokePreviewUrls", () => {
 
     expect(revokeObjectURL).toHaveBeenCalledWith("blob:one");
     expect(revokeObjectURL).toHaveBeenCalledTimes(1);
+  });
+});
 
-    revokeObjectURL.mockRestore();
+describe("getStatusMessage", () => {
+  const file = { name: "photo.png" } as File;
+
+  it("returns uploading, complete, and idle copy", () => {
+    expect(getStatusMessage({ id: "1", file, status: "uploading" })).toBe(
+      "Uploading…"
+    );
+    expect(getStatusMessage({ id: "1", file, status: "complete" })).toBe(
+      "Complete"
+    );
+    expect(getStatusMessage({ id: "1", file })).toBe("");
+  });
+
+  it("returns the item error message, falling back when it is missing", () => {
+    expect(
+      getStatusMessage({
+        id: "1",
+        file,
+        status: "error",
+        errorMessage: "Too large",
+      })
+    ).toBe("Too large");
+    expect(getStatusMessage({ id: "1", file, status: "error" })).toBe(
+      "Upload failed"
+    );
+  });
+});
+
+describe("getProgressPercent", () => {
+  const file = { name: "photo.png" } as File;
+
+  it("clamps progress to 0–100", () => {
+    expect(getProgressPercent({ id: "1", file, progress: -10 })).toBe(0);
+    expect(getProgressPercent({ id: "1", file, progress: 50 })).toBe(50);
+    expect(getProgressPercent({ id: "1", file, progress: 150 })).toBe(100);
+  });
+
+  it("treats a complete item with no progress as 100", () => {
+    expect(getProgressPercent({ id: "1", file, status: "complete" })).toBe(100);
+    expect(
+      getProgressPercent({ id: "1", file, status: "complete", progress: 80 })
+    ).toBe(80);
+  });
+});
+
+describe("getCirclePreviewItem", () => {
+  const imageItem: FileUploadItem = {
+    id: "photo-1",
+    file: { name: "photo.png", type: "image/png" } as File,
+    previewUrl: "blob:preview",
+  };
+
+  it("returns the single image on a round, single-file uploader", () => {
+    expect(getCirclePreviewItem("round", [imageItem], false)).toBe(imageItem);
+  });
+
+  it("returns undefined when the variant, count, or file cannot fill the circle", () => {
+    expect(getCirclePreviewItem("default", [imageItem], false)).toBeUndefined();
+    expect(getCirclePreviewItem("round", [imageItem], true)).toBeUndefined();
+    expect(getCirclePreviewItem("round", [], false)).toBeUndefined();
+    expect(
+      getCirclePreviewItem(
+        "round",
+        [imageItem, { ...imageItem, id: "2" }],
+        false
+      )
+    ).toBeUndefined();
+    expect(
+      getCirclePreviewItem(
+        "round",
+        [
+          {
+            id: "pdf",
+            file: { name: "a.pdf", type: "application/pdf" } as File,
+          },
+        ],
+        false
+      )
+    ).toBeUndefined();
+    expect(
+      getCirclePreviewItem(
+        "round",
+        [{ ...imageItem, status: "uploading" }],
+        false
+      )
+    ).toBeUndefined();
+    expect(
+      getCirclePreviewItem("round", [{ ...imageItem, status: "error" }], false)
+    ).toBeUndefined();
+    expect(
+      getCirclePreviewItem(
+        "round",
+        [{ ...imageItem, previewUrl: undefined }],
+        false
+      )
+    ).toBeUndefined();
+  });
+});
+
+describe("getListItems", () => {
+  const photo: FileUploadItem = {
+    id: "photo-1",
+    file: { name: "photo.png" } as File,
+  };
+  const pdf: FileUploadItem = {
+    id: "pdf-1",
+    file: { name: "a.pdf" } as File,
+  };
+
+  it("returns all items when there is no circle preview", () => {
+    expect(getListItems([photo, pdf])).toEqual([photo, pdf]);
+  });
+
+  it("omits the circle preview item", () => {
+    expect(getListItems([photo, pdf], photo)).toEqual([pdf]);
+  });
+
+  it("does not mutate the original list", () => {
+    const items = [photo, pdf];
+    getListItems(items, photo);
+    expect(items).toEqual([photo, pdf]);
+  });
+});
+
+describe("getFieldValidation", () => {
+  it("returns EMPTY_VALIDATION when the field is valid", () => {
+    expect(getFieldValidation()).toBe(EMPTY_VALIDATION);
+    expect(getFieldValidation(false)).toBe(EMPTY_VALIDATION);
+  });
+
+  it("returns a custom-error result when invalid", () => {
+    const result = getFieldValidation(true, "Required");
+
+    expect(result.isInvalid).toBe(true);
+    expect(result.validationErrors).toEqual(["Required"]);
+    expect(result.validationDetails.valid).toBe(false);
+    expect(result.validationDetails.customError).toBe(true);
+  });
+
+  it("omits validationErrors when the message is a function", () => {
+    expect(getFieldValidation(true, () => "Required").validationErrors).toEqual(
+      []
+    );
   });
 });

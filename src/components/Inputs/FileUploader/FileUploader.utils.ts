@@ -1,8 +1,51 @@
-import type { DropEvent } from "react-aria";
+import type { ValidationResult } from "react-aria-components/FieldError";
 import { isFileDropItem } from "react-aria-components/useDrop";
+
+type DropItem = Parameters<typeof isFileDropItem>[0];
+
+export const EMPTY_VALIDATION: ValidationResult = {
+  isInvalid: false,
+  validationErrors: [],
+  validationDetails: {
+    valid: true,
+    badInput: false,
+    customError: false,
+    patternMismatch: false,
+    rangeOverflow: false,
+    rangeUnderflow: false,
+    stepMismatch: false,
+    tooLong: false,
+    tooShort: false,
+    typeMismatch: false,
+    valueMissing: false,
+  },
+};
+
+/** FieldErrorContext value for an optional `isInvalid` / `errorMessage` pair. */
+export const getFieldValidation = (
+  isInvalid?: boolean,
+  errorMessage?: string | ((validation: ValidationResult) => string)
+): ValidationResult => {
+  if (!isInvalid) {
+    return EMPTY_VALIDATION;
+  }
+
+  return {
+    isInvalid: true,
+    validationErrors: typeof errorMessage === "string" ? [errorMessage] : [],
+    validationDetails: {
+      ...EMPTY_VALIDATION.validationDetails,
+      valid: false,
+      customError: true,
+    },
+  };
+};
 
 /** Lifecycle state for a file the parent may be uploading. */
 export type FileUploadStatus = "idle" | "uploading" | "complete" | "error";
+
+/** Shape variant for the drop zone and file list rows. */
+export type FileUploaderVariant = "default" | "round";
 
 /** A selected file and optional upload metadata supplied by the caller. */
 export interface FileUploadItem {
@@ -86,9 +129,9 @@ export const createFileUploadItem = (file: File): FileUploadItem => ({
 });
 
 /** Reads dropped files from a React Aria drop event. */
-export const getFilesFromDropEvent = async (
-  event: DropEvent
-): Promise<File[]> => {
+export const getFilesFromDropEvent = async (event: {
+  items: Iterable<DropItem>;
+}): Promise<File[]> => {
   const files: File[] = [];
 
   for (const item of event.items) {
@@ -119,3 +162,64 @@ export const revokePreviewUrls = (items: FileUploadItem[]): void => {
     }
   }
 };
+
+/** Status copy shown on a file row. */
+export const getStatusMessage = (item: FileUploadItem): string => {
+  switch (item.status) {
+    case "uploading":
+      return "Uploading…";
+    case "complete":
+      return "Complete";
+    case "error":
+      return item.errorMessage ?? "Upload failed";
+    default:
+      return "";
+  }
+};
+
+/** Progress to display, clamped to 0–100. Complete items without a value read as 100. */
+export const getProgressPercent = (item: FileUploadItem): number => {
+  const progress = item.progress ?? 0;
+
+  if (item.status === "complete") {
+    return progress || 100;
+  }
+
+  return Math.min(100, Math.max(0, progress));
+};
+
+/**
+ * The image shown inside a round, single-file drop zone. Anything else — a
+ * second file, a non-image, or an in-flight upload — keeps the list row.
+ */
+export const getCirclePreviewItem = (
+  variant: FileUploaderVariant,
+  items: FileUploadItem[],
+  allowsMultiple: boolean
+): FileUploadItem | undefined => {
+  if (variant !== "round" || allowsMultiple || items.length !== 1) {
+    return undefined;
+  }
+
+  const [item] = items;
+
+  if (
+    !item.previewUrl ||
+    !isImageFile(item.file) ||
+    item.status === "uploading" ||
+    item.status === "error"
+  ) {
+    return undefined;
+  }
+
+  return item;
+};
+
+/** Files shown in the list under the drop zone. The circle preview is omitted. */
+export const getListItems = (
+  items: FileUploadItem[],
+  circlePreviewItem?: FileUploadItem
+): FileUploadItem[] =>
+  circlePreviewItem
+    ? items.filter((item) => item.id !== circlePreviewItem.id)
+    : items;
