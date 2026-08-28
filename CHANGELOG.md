@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/sdaconceicao/lago/compare/lago-v0.9.0...lago-v0.9.1) (2026-08-28)
+
+
+### Bug Fixes
+
+* Updated FileUploader feedback ([#116](https://github.com/sdaconceicao/lago/issues/116)) ([c85cbc9](https://github.com/sdaconceicao/lago/commit/c85cbc96aef3d41107f1220280a32fc8e1df58e2))
+
 ## [0.9.0](https://github.com/sdaconceicao/lago/compare/lago-v0.8.0...lago-v0.9.0) (2026-08-28)
 
 
