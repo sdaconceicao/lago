@@ -34,6 +34,29 @@ Example.args = {
   hint: "SVG, PNG, JPG or GIF (max. 800x400px)",
 };
 
+const singleFilePreview: FileUploadItem = {
+  id: "contract",
+  file: new File(["a"], "acme-msa.pdf", { type: "application/pdf" }),
+};
+
+export const SingleFile: Story = (args) => <FileUploader {...args} />;
+
+SingleFile.args = {
+  label: "Contract",
+  allowsMultiple: false,
+  hint: "PDF, DOCX, or image (max. 10 MB).",
+  defaultValue: [singleFilePreview],
+};
+
+SingleFile.parameters = {
+  docs: {
+    description: {
+      story:
+        "When `allowsMultiple` is false, the selected file replaces the drop area. Click the card to replace it, or use the remove control. Multiple-file uploaders keep the empty drop zone and list files below.",
+    },
+  },
+};
+
 export const WithUploadProgress: Story = () => {
   const [items, setItems] = useState<FileUploadItem[]>([
     {
@@ -59,22 +82,85 @@ export const WithUploadProgress: Story = () => {
     },
   ]);
 
+  const [avatar, setAvatar] = useState<FileUploadItem[]>([
+    {
+      id: "avatar",
+      file: new File(["a"], "avatar.jpg", { type: "image/jpeg" }),
+      previewUrl: "https://picsum.photos/seed/lago-round/80/80",
+      status: "uploading",
+      progress: 50,
+    },
+  ]);
+
+  const [cover, setCover] = useState<FileUploadItem[]>([
+    {
+      id: "cover",
+      file: new File(["a"], "cover.jpg", { type: "image/jpeg" }),
+      previewUrl: "https://picsum.photos/seed/lago-cover/80/80",
+      status: "uploading",
+      progress: 50,
+    },
+  ]);
+
   return (
-    <FileUploader
-      label="Project files"
-      hint="Upload files to add to this project (max. 1 MB)."
-      value={items}
-      onChange={setItems}
-      onRetry={(item) => {
-        setItems((current) =>
-          current.map((entry) =>
-            entry.id === item.id
-              ? { ...entry, status: "uploading", progress: 0 }
-              : entry
-          )
-        );
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "3rem",
+        alignItems: "flex-start",
       }}
-    />
+    >
+      <FileUploader
+        label="Project files"
+        hint="Upload files to add to this project (max. 1 MB)."
+        value={items}
+        onChange={setItems}
+        onRetry={(item) => {
+          setItems((current) =>
+            current.map((entry) =>
+              entry.id === item.id
+                ? { ...entry, status: "uploading", progress: 0 }
+                : entry
+            )
+          );
+        }}
+      />
+      <FileUploader
+        label="Cover image"
+        allowsMultiple={false}
+        hint="The file occupies the drop area."
+        value={cover}
+        onChange={setCover}
+        onRetry={(item) => {
+          setCover((current) =>
+            current.map((entry) =>
+              entry.id === item.id
+                ? { ...entry, status: "uploading", progress: 0 }
+                : entry
+            )
+          );
+        }}
+      />
+      <FileUploader
+        label="Profile photo"
+        variant="round"
+        accept="image/png,image/jpeg"
+        allowsMultiple={false}
+        hint="Progress stays inside the circle."
+        value={avatar}
+        onChange={setAvatar}
+        onRetry={(item) => {
+          setAvatar((current) =>
+            current.map((entry) =>
+              entry.id === item.id
+                ? { ...entry, status: "uploading", progress: 0 }
+                : entry
+            )
+          );
+        }}
+      />
+    </div>
   );
 };
 
@@ -82,7 +168,7 @@ WithUploadProgress.parameters = {
   docs: {
     description: {
       story:
-        "Upload lifecycle states are controlled by the caller. Set `status`, `progress`, and `errorMessage` on each `FileUploadItem` to show uploading, complete, or failed rows.",
+        "Upload lifecycle states are controlled by the caller. Set `status`, `progress`, and `errorMessage` on each `FileUploadItem`. Default rows show a bar inside the existing file card. A single-file uploader occupies the drop area with that card; the round variant overlays a ProgressCircle on the image inside the circle.",
     },
   },
 };

@@ -5,12 +5,40 @@
   border-style: dashed;
 }
 
+.dropZone.filled:not(.round),
+.dropZone.filled:not(.round)[data-field-size="sm"],
+.dropZone.filled:not(.round)[data-field-size="md"],
+.dropZone.filled:not(.round)[data-field-size="lg"] {
+  padding: 0;
+  min-height: 0;
+  border: none;
+  background: transparent;
+  gap: 0;
+}
+
 .dropZoneContent {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-3);
   width: 100%;
+}
+
+.filledContent {
+  position: relative;
+  align-items: stretch;
+  gap: 0;
+}
+
+.replaceTrigger {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.filledContent :global(button),
+.filledContent :global(.react-aria-Link) {
+  pointer-events: auto;
 }
 
 .dropZoneIcon {
@@ -88,6 +116,10 @@
     display: block;
   }
 
+  .circleFileIcon {
+    pointer-events: none;
+  }
+
   .circleOverlay {
     position: absolute;
     inset: 0;
@@ -110,8 +142,31 @@
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 1;
+    z-index: 2;
     /* Sit on the rim so the bordered disc reads against the page, not the photo. */
     translate: 30% -30%;
+  }
+
+  .circleStatus {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
+    border-radius: 50%;
+    background: rgb(0 0 0 / 45%);
+    color: white;
+    text-align: center;
+    font: var(--font-size-sm) var(--font-family);
+    pointer-events: none;
+  }
+
+  .circleStatus :global(.react-aria-Link) {
+    pointer-events: auto;
+    color: white;
   }
 }

@@ -28,6 +28,16 @@
   list-style: none;
 }
 
+.dropZoneFileList {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .fileUploader[data-variant="round"] {
   align-items: center;
   max-width: none;

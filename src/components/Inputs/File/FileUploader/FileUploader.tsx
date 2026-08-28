@@ -53,7 +53,9 @@ export interface FileUploaderProps {
   isRequired?: boolean;
   /** MIME types or extensions passed to the file input's accept attribute. */
   accept?: string;
-  /** Whether multiple files can be selected. Defaults to `true`. */
+  /** Whether multiple files can be selected. When false, the selected file
+   * replaces the drop area. When true, files are listed below it. Defaults to
+   * `true`. */
   allowsMultiple?: boolean;
   /** Maximum file size in bytes. Files over this limit are refused via `onReject`. */
   maxSize?: number;
@@ -74,8 +76,9 @@ export interface FileUploaderProps {
   onRetry?: (item: FileUploadItem) => void;
   /**
    * Shape variant. `"default"` is a dashed drop area; `"round"` is a circular
-   * target with the selected image shown inside it. For a single-line field that
-   * matches TextField height, use `FileUploaderInline`.
+   * target. A single selected file replaces the drop area in both variants —
+   * an image fills a round target, and a file card fills the dashed one. For a
+   * single-line field that matches TextField height, use `FileUploaderInline`.
    *
    * @default 'default'
    */
@@ -86,10 +89,11 @@ export interface FileUploaderProps {
 
 /**
  * A file and image uploader with drag-and-drop, click-to-browse, and a list of
- * selected files. Image files show a thumbnail preview; other files show a
- * FileIcon with an extension badge. Upload progress and error states are
- * supplied by the caller through each item's `status`, `progress`, and
- * `errorMessage`.
+ * selected files. When `allowsMultiple` is false, the selected file occupies
+ * the drop zone. When true, files are listed below an empty drop zone. Image
+ * files show a thumbnail preview; other files show a FileIcon with an
+ * extension badge. Upload progress and error states are supplied by the caller
+ * through each item's `status`, `progress`, and `errorMessage`.
  */
 export function FileUploader({
   label,
@@ -117,7 +121,7 @@ export function FileUploader({
     handleDrop,
     handleRemove,
     acceptedFileTypes,
-    circlePreviewItem,
+    dropZoneItem,
     listItems,
     validation,
     labelId,
@@ -133,7 +137,6 @@ export function FileUploader({
     allowsMultiple,
     accept,
     maxSize,
-    variant,
     isInvalid,
     errorMessage,
     description,
@@ -167,13 +170,26 @@ export function FileUploader({
           isDisabled={isDisabled}
           allowsMultiple={allowsMultiple}
           acceptedFileTypes={acceptedFileTypes}
-          circlePreviewItem={circlePreviewItem}
+          filledItem={dropZoneItem}
           onSelect={addFiles}
           onDrop={handleDrop}
           onRemovePreview={handleRemove}
+          onRetry={onRetry}
           aria-labelledby={label ? labelId : undefined}
           aria-label={label}
-        />
+        >
+          {dropZoneItem && variant !== "round" ? (
+            <ul className={styles.dropZoneFileList}>
+              <FileUploaderItemRow
+                item={dropZoneItem}
+                variant={variant}
+                isDisabled={isDisabled}
+                onRemove={handleRemove}
+                onRetry={onRetry}
+              />
+            </ul>
+          ) : null}
+        </FileUploaderDropZone>
 
         {hint && (
           <Text id={hintId} className={styles.hint}>

@@ -206,14 +206,13 @@ describe("FileUploader", () => {
     const { container } = render(
       <FileUploader allowsMultiple={false} onChange={onChange} />
     );
-    const input = container.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
+    const getInput = () =>
+      container.querySelector('input[type="file"]') as HTMLInputElement;
 
-    fireEvent.change(input, {
+    fireEvent.change(getInput(), {
       target: { files: [createImageFile("one.png")] },
     });
-    fireEvent.change(input, {
+    fireEvent.change(getInput(), {
       target: { files: [createImageFile("two.png")] },
     });
 
@@ -221,6 +220,32 @@ describe("FileUploader", () => {
     const last = onChange.mock.calls[1][0] as FileUploadItem[];
     expect(last).toHaveLength(1);
     expect(last[0].file.name).toBe("two.png");
+  });
+
+  it("shows a single selected file inside the drop zone", () => {
+    const { container } = render(
+      <FileUploader
+        allowsMultiple={false}
+        defaultValue={[createFileUploadItemFromFile()]}
+      />
+    );
+
+    expect(container.querySelector(".react-aria-DropZone")).toHaveTextContent(
+      "photo.png"
+    );
+    expect(screen.queryByText(/Click to upload/)).not.toBeInTheDocument();
+  });
+
+  it("lists files below the drop zone when multiple files are allowed", () => {
+    const { container } = render(
+      <FileUploader defaultValue={[createFileUploadItemFromFile()]} />
+    );
+
+    expect(screen.getByText(/Click to upload/)).toBeInTheDocument();
+    expect(screen.getByText("photo.png")).toBeInTheDocument();
+    expect(
+      container.querySelector(".react-aria-DropZone")
+    ).not.toHaveTextContent("photo.png");
   });
 
   it("reports files over maxSize through onReject", () => {
@@ -383,6 +408,81 @@ describe("FileUploader", () => {
       screen.getByRole("button", { name: "Remove photo.png" })
     ).toBeInTheDocument();
     expect(screen.queryByText("photo.png")).not.toBeInTheDocument();
+  });
+
+  it("shows a single non-image file inside the circular drop zone", () => {
+    render(
+      <FileUploader
+        variant="round"
+        allowsMultiple={false}
+        defaultValue={[
+          {
+            id: "pdf-1",
+            file: createPdfFile(),
+          },
+        ]}
+      />
+    );
+
+    expect(screen.queryByText("invoice.pdf")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Remove invoice.pdf" })
+    ).toBeInTheDocument();
+    expect(screen.getByText("PDF")).toBeInTheDocument();
+  });
+
+  it("shows upload progress inside the round drop zone without a list row", () => {
+    const { container } = render(
+      <FileUploader
+        variant="round"
+        allowsMultiple={false}
+        defaultValue={[
+          {
+            ...createFileUploadItemFromFile(),
+            status: "uploading",
+            progress: 50,
+          },
+        ]}
+      />
+    );
+
+    expect(
+      container.querySelector('img[src="blob:preview"]')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("progressbar", {
+        name: "Upload progress for photo.png",
+      })
+    ).toHaveAttribute("aria-valuenow", "50");
+    expect(screen.queryByText("photo.png")).not.toBeInTheDocument();
+    expect(screen.queryByText("Uploading…")).not.toBeInTheDocument();
+  });
+
+  it("shows a retry action inside the round drop zone when upload fails", async () => {
+    const user = userEvent.setup();
+    const onRetry = vi.fn();
+
+    render(
+      <FileUploader
+        variant="round"
+        allowsMultiple={false}
+        onRetry={onRetry}
+        defaultValue={[
+          {
+            ...createFileUploadItemFromFile(),
+            status: "error",
+            errorMessage: "Upload failed, please try again",
+          },
+        ]}
+      />
+    );
+
+    expect(screen.queryByText("photo.png")).not.toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: "Try again" }));
+
+    expect(onRetry).toHaveBeenCalledWith(
+      expect.objectContaining({ id: "photo-1" })
+    );
   });
 });
 
