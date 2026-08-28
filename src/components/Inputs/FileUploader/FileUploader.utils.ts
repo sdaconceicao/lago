@@ -44,7 +44,7 @@ export const getFieldValidation = (
 /** Lifecycle state for a file the parent may be uploading. */
 export type FileUploadStatus = "idle" | "uploading" | "complete" | "error";
 
-/** Shape variant for the drop zone and file list rows. */
+/** Shape variant for the drop zone. `"round"` is a circular image target. */
 export type FileUploaderVariant = "default" | "round";
 
 /** A selected file and optional upload metadata supplied by the caller. */

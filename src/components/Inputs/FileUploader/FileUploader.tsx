@@ -39,7 +39,11 @@ export interface FileUploaderProps {
   hint?: string;
   /** Error message shown when the field is invalid. Also accepts a function of the validation result. */
   errorMessage?: string | ((validation: ValidationResult) => string);
-  /** Drop zone size: 48px, 72px, or 96px minimum height. Defaults to `"md"`. */
+  /**
+   * Size of the drop zone: 48px, 72px, or 96px minimum height.
+   *
+   * @default 'md'
+   */
   size?: FieldSize;
   /** Disables file selection and drag-and-drop. */
   isDisabled?: boolean;
@@ -69,8 +73,9 @@ export interface FileUploaderProps {
   /** Called when the user retries a failed upload. */
   onRetry?: (item: FileUploadItem) => void;
   /**
-   * Shape variant. `"default"` uses the field border radius; `"round"` renders a
-   * circular drop zone with the selected image shown inside it.
+   * Shape variant. `"default"` is a dashed drop area; `"round"` is a circular
+   * target with the selected image shown inside it. For a single-line field that
+   * matches TextField height, use `FileUploaderInline`.
    *
    * @default 'default'
    */

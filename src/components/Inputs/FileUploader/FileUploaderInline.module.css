@@ -1,0 +1,95 @@
+.fileUploader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--field-label-gap);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-inline-size: 0;
+  color: var(--text-color);
+  font: var(--font-size) var(--font-family);
+}
+
+.fileUploader :global(.react-aria-Label) {
+  margin-bottom: 0;
+}
+
+.hint {
+  display: block;
+  text-align: start;
+  color: var(--text-color-placeholder);
+  font: var(--font-size-sm) var(--font-family);
+}
+
+.dropZone {
+  box-sizing: border-box;
+  width: 100%;
+  flex-direction: row;
+  gap: var(--field-gap);
+  justify-content: flex-start;
+  height: var(--field-height);
+  min-height: var(--field-height);
+  max-height: var(--field-height);
+  padding: 0 var(--field-padding-x);
+  overflow: hidden;
+  text-align: start;
+  text-wrap: nowrap;
+  border-style: dashed;
+}
+
+.dropZone[data-field-size="sm"],
+.dropZone[data-field-size="md"],
+.dropZone[data-field-size="lg"] {
+  height: var(--field-height);
+  min-height: var(--field-height);
+  max-height: var(--field-height);
+  padding: 0 var(--field-padding-x);
+}
+
+.dropZoneContent {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--field-gap);
+  width: 100%;
+}
+
+.dropZoneIcon {
+  width: var(--field-icon-size);
+  height: var(--field-icon-size);
+  flex-shrink: 0;
+  color: var(--text-color-placeholder);
+}
+
+.dropZoneText {
+  min-width: 0;
+  display: block;
+  text-align: start;
+  color: var(--text-color-placeholder);
+  font: var(--field-font-size) var(--font-family);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropZone:has(.fileList) {
+  padding-inline-end: var(--field-inner-inset);
+}
+
+.fileList {
+  display: flex;
+  align-items: center;
+  gap: var(--field-gap);
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+
+.add {
+  flex-shrink: 0;
+}

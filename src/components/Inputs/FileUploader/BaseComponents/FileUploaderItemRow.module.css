@@ -116,3 +116,85 @@
     border-radius: 100%;
   }
 }
+
+/* Compact chip at --field-inner-height so it sits inside the inline drop zone. */
+.inline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--field-inner-height);
+  min-width: 0;
+  max-width: 100%;
+  gap: var(--field-gap);
+  padding: 0;
+  padding-inline-start: var(--field-gap);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--gray-300);
+  overflow: hidden;
+
+  &:only-child {
+    flex: 1;
+    max-width: none;
+    background: none;
+    padding-inline-start: 0;
+  }
+
+  .thumbnail {
+    width: var(--field-icon-size);
+    height: var(--field-icon-size);
+    border-radius: 2px;
+  }
+
+  :global([data-file-icon-size]) {
+    width: var(--field-icon-size);
+    height: var(--field-icon-size);
+
+    svg {
+      width: var(--field-icon-size);
+      height: var(--field-icon-size);
+    }
+
+    span {
+      display: none;
+    }
+  }
+
+  .fileDetails {
+    flex: 1;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--field-gap);
+  }
+
+  .removeButton {
+    margin-inline-start: auto;
+  }
+
+  .fileName {
+    font: var(--field-font-size) var(--font-family);
+    font-weight: 500;
+  }
+
+  .progressTrack {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: 0;
+  }
+
+  .fileStatusRow:not(.fileStatusRowError) {
+    display: none;
+  }
+
+  .fileStatusRowError {
+    flex: none;
+    font: var(--field-font-size) var(--font-family);
+  }
+
+  &[data-status="error"] {
+    box-shadow: inset 0 0 0 1px var(--red);
+  }
+}

@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import type { CSSProperties } from "react";
 import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { Link } from "@/components/Actions/Link/Link";
+import { FieldButton } from "@/components/Inputs/FormComponents/FieldButton/FieldButton";
 import { FileIcon } from "@/components/Media/FileIcon/FileIcon";
 import base from "@/styles/base.module.css";
 import {
@@ -22,11 +23,12 @@ export interface FileUploaderItemRowProps {
   /** Disables the remove and retry actions. */
   isDisabled?: boolean;
   /**
-   * Shape of the row. `"round"` uses a pill outline and circular thumbnail.
+   * Shape of the row. `"round"` uses a pill outline and circular thumbnail;
+   * `"inline"` is a compact chip that fits inside the field-height drop zone.
    *
    * @default 'default'
    */
-  variant?: FileUploaderVariant;
+  variant?: FileUploaderVariant | "inline";
   /** Called when the user removes this file. */
   onRemove: (item: FileUploadItem) => void;
   /** Called when the user retries a failed upload. */
@@ -49,7 +51,14 @@ export function FileUploaderItemRow({
   const progress = getProgressPercent(item);
 
   return (
-    <li className={clsx(styles.fileItem, variant === "round" && styles.round)}>
+    <li
+      className={clsx(
+        styles.fileItem,
+        variant === "round" && styles.round,
+        variant === "inline" && styles.inline
+      )}
+      data-status={status}
+    >
       {item.previewUrl && isImageFile(item.file) ? (
         <img
           src={item.previewUrl}
@@ -63,9 +72,11 @@ export function FileUploaderItemRow({
 
       <div className={styles.fileDetails}>
         <span className={styles.fileName}>{item.file.name}</span>
-        <span className={styles.fileMeta}>
-          {formatFileSize(item.file.size)}
-        </span>
+        {variant !== "inline" && (
+          <span className={styles.fileMeta}>
+            {formatFileSize(item.file.size)}
+          </span>
+        )}
 
         {showProgress && (
           <>
@@ -113,16 +124,27 @@ export function FileUploaderItemRow({
         )}
       </div>
 
-      <IconButton
-        aria-label={`Remove ${item.file.name}`}
-        variant="quiet"
-        size="sm"
-        className={styles.removeButton}
-        isDisabled={isDisabled}
-        onPress={() => onRemove(item)}
-      >
-        <X size={16} strokeWidth={2} />
-      </IconButton>
+      {variant === "inline" ? (
+        <FieldButton
+          aria-label={`Remove ${item.file.name}`}
+          className={styles.removeButton}
+          isDisabled={isDisabled}
+          onPress={() => onRemove(item)}
+        >
+          <X />
+        </FieldButton>
+      ) : (
+        <IconButton
+          aria-label={`Remove ${item.file.name}`}
+          variant="quiet"
+          size="sm"
+          className={styles.removeButton}
+          isDisabled={isDisabled}
+          onPress={() => onRemove(item)}
+        >
+          <X size={16} strokeWidth={2} />
+        </IconButton>
+      )}
     </li>
   );
 }

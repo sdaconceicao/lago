@@ -183,7 +183,7 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        "FileUploader inherits the DropZone field size scale: sm, md (default), and lg. The round variant uses the same sizes to scale the circular drop zone.",
+        "FileUploader supports sm, md (default), and lg. Default and round scale the drop zone (48 / 72 / 96px).",
     },
   },
 };

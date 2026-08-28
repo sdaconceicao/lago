@@ -46,6 +46,7 @@ export * from "./components/Inputs/Date/RangeCalendar/RangeCalendar";
 export * from "./components/Inputs/Date/TimeField/TimeField";
 export * from "./components/Inputs/DropZone/DropZone";
 export * from "./components/Inputs/FileUploader/FileUploader";
+export * from "./components/Inputs/FileUploader/FileUploaderInline";
 export * from "./components/Inputs/FormComponents/index";
 export * from "./components/Inputs/MultiSelect/MultiSelect";
 export * from "./components/Inputs/NumberField/NumberField";

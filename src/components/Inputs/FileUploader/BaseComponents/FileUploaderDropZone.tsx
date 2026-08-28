@@ -15,7 +15,7 @@ import type {
 import styles from "./FileUploaderDropZone.module.css";
 
 export interface FileUploaderDropZoneProps {
-  /** Shape of the drop zone. `"round"` renders a circular target. */
+  /** Shape of the drop zone. `"round"` is circular. */
   variant: FileUploaderVariant;
   /** Drop zone size: 48px, 72px, or 96px minimum height. */
   size: FieldSize;

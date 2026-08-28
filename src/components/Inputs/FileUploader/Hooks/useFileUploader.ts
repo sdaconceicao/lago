@@ -18,8 +18,8 @@ import {
 export interface UseFileUploaderOptions extends UseFileUploaderStateOptions {
   /** Called when the user removes a file. */
   onRemove?: (item: FileUploadItem) => void;
-  /** Shape of the drop zone and file list. */
-  variant: FileUploaderVariant;
+  /** Shape of the drop zone and file list. Defaults to `"default"`. */
+  variant?: FileUploaderVariant;
   /** Marks the field invalid and shows `errorMessage`. */
   isInvalid?: boolean;
   /** Error message shown when the field is invalid. */
@@ -36,7 +36,7 @@ export interface UseFileUploaderOptions extends UseFileUploaderStateOptions {
  */
 export const useFileUploader = ({
   onRemove,
-  variant,
+  variant = "default",
   isInvalid,
   errorMessage,
   description,
