@@ -15,7 +15,7 @@ const meta: Meta<typeof FileIcon> = {
     docs: {
       description: {
         component:
-          "A document glyph with a small extension badge overlaid on it. Pass a `fileName` to derive the badge — `invoice.pdf` shows `PDF` — or a name with no extension to render the glyph alone. Sizes are 32px (`sm`), 40px (`md`, matching the FileUploader list thumbnail), and 48px (`lg`).",
+          "A document glyph with a small extension badge overlaid on it. Pass a `fileName` to derive the badge — `invoice.pdf` shows `PDF` — or a name with no extension to render the glyph alone. Decorative by default; pass `aria-label` to expose it to assistive technology. Sizes are 32px (`sm`), 40px (`md`, matching the FileUploader list thumbnail), and 48px (`lg`).",
       },
     },
   },

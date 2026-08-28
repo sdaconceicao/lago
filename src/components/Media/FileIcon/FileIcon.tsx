@@ -26,6 +26,16 @@ export interface FileIconProps {
   size?: FileIconSize;
   /** CSS class name merged onto the root element. */
   className?: string;
+  /**
+   * Accessible name when the icon is not decorative. Passing this shows the
+   * icon to assistive technology as an image.
+   */
+  "aria-label"?: string;
+  /**
+   * Whether the icon is hidden from assistive technology. Defaults to `true`
+   * when there is no `aria-label`, and to `false` when there is one.
+   */
+  "aria-hidden"?: boolean;
 }
 
 /**
@@ -37,14 +47,19 @@ export function FileIcon({
   fileName,
   size = DEFAULT_FILE_ICON_SIZE,
   className,
+  "aria-label": ariaLabel,
+  "aria-hidden": ariaHidden,
 }: FileIconProps) {
   const extension = getFileExtensionLabel(fileName);
+  const isDecorative = ariaHidden ?? !ariaLabel;
 
   return (
     <div
       className={clsx(styles.fileIcon, className)}
       data-file-icon-size={size}
-      aria-hidden="true"
+      role="img"
+      aria-label={isDecorative ? undefined : ariaLabel}
+      aria-hidden={isDecorative || undefined}
     >
       <FileGlyph className={styles.fileGlyph} strokeWidth={1.5} />
       {extension ? (

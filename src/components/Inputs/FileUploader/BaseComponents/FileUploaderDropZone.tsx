@@ -33,8 +33,13 @@ export interface FileUploaderDropZoneProps {
   onDrop: NonNullable<ComponentProps<typeof DropZone>["onDrop"]>;
   /** Called when the user removes the image filling a round drop zone. */
   onRemovePreview: (item: FileUploadItem) => void;
-  /** Id of the hint or description that describes this drop zone. */
-  "aria-describedby"?: string;
+  /**
+   * Accessible name for the drop target. Overrides React Aria's default
+   * `"DropZone"` label — typically the visible field label.
+   */
+  "aria-label"?: string;
+  /** Id of the visible field label that names this drop zone. */
+  "aria-labelledby"?: string;
 }
 
 /**
@@ -51,7 +56,8 @@ export function FileUploaderDropZone({
   onSelect,
   onDrop,
   onRemovePreview,
-  "aria-describedby": ariaDescribedBy,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
 }: FileUploaderDropZoneProps) {
   let triggerContent: ReactNode;
   if (circlePreviewItem) {
@@ -124,6 +130,7 @@ export function FileUploaderDropZone({
   } else if (variant === "round") {
     dropZoneContent = fileTrigger;
   } else {
+    const instructions = <>{fileTrigger} or drag and drop</>;
     dropZoneContent = (
       <>
         <CloudUpload
@@ -131,9 +138,13 @@ export function FileUploaderDropZone({
           strokeWidth={1.5}
           aria-hidden="true"
         />
-        <SlottedText slot="label" className={styles.dropZoneText}>
-          {fileTrigger} or drag and drop
-        </SlottedText>
+        {ariaLabelledBy ? (
+          <span className={styles.dropZoneText}>{instructions}</span>
+        ) : (
+          <SlottedText slot="label" className={styles.dropZoneText}>
+            {instructions}
+          </SlottedText>
+        )}
       </>
     );
   }
@@ -149,8 +160,8 @@ export function FileUploaderDropZone({
       className={clsx(styles.dropZone, variant === "round" && styles.round)}
       onDrop={onDrop}
       getDropOperation={() => "copy"}
-      aria-label={variant === "round" ? roundLabel : undefined}
-      aria-describedby={ariaDescribedBy}
+      aria-labelledby={ariaLabelledBy}
+      aria-label={ariaLabel ?? (variant === "round" ? roundLabel : undefined)}
     >
       <div className={styles.dropZoneContent}>{dropZoneContent}</div>
     </DropZone>

@@ -4,6 +4,10 @@
   gap: var(--spacing-2);
   width: 100%;
   max-width: 512px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  min-inline-size: 0;
   color: var(--text-color);
   font: var(--font-size) var(--font-family);
 }

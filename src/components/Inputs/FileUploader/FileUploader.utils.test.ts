@@ -8,11 +8,13 @@ import {
   formatFileSize,
   getCirclePreviewItem,
   getFieldValidation,
+  getFilesFromDropEvent,
   getListItems,
   getProgressPercent,
   getStatusMessage,
   isImageFile,
   parseAcceptedFileTypes,
+  partitionFiles,
   revokePreviewUrls,
 } from "./FileUploader.utils";
 
@@ -134,6 +136,55 @@ describe("filterAcceptedFiles", () => {
     expect(filterAcceptedFiles([pngFile, pdfFile], "image/png", 200)).toEqual([
       pngFile,
     ]);
+  });
+});
+
+describe("partitionFiles", () => {
+  const pngFile = { name: "photo.png", type: "image/png", size: 100 } as File;
+  const pdfFile = {
+    name: "invoice.pdf",
+    type: "application/pdf",
+    size: 200,
+  } as File;
+
+  it("separates oversized files from type mismatches", () => {
+    expect(partitionFiles([pngFile, pdfFile], "image/png", 150)).toEqual({
+      accepted: [pngFile],
+      rejectedByMaxSize: [pdfFile],
+      rejectedByAccept: [],
+    });
+    expect(partitionFiles([pngFile, pdfFile], "image/png", 200)).toEqual({
+      accepted: [pngFile],
+      rejectedByMaxSize: [],
+      rejectedByAccept: [pdfFile],
+    });
+  });
+});
+
+describe("getFilesFromDropEvent", () => {
+  it("reads file drop items and skips others", async () => {
+    const file = new File(["pdf-bytes"], "invoice.pdf", {
+      type: "application/pdf",
+    });
+
+    const files = await getFilesFromDropEvent({
+      items: [
+        {
+          kind: "file",
+          type: file.type,
+          name: file.name,
+          getFile: async () => file,
+          getText: async () => "",
+        },
+        {
+          kind: "text",
+          types: new Set(["text/plain"]),
+          getText: async () => "",
+        },
+      ],
+    });
+
+    expect(files).toEqual([file]);
   });
 });
 

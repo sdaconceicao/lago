@@ -2,8 +2,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   createFileUploadItem,
+  type FileRejectReason,
   type FileUploadItem,
-  filterAcceptedFiles,
+  partitionFiles,
 } from "../FileUploader.utils";
 
 export interface UseFileUploaderStateOptions {
@@ -13,6 +14,11 @@ export interface UseFileUploaderStateOptions {
   defaultValue?: FileUploadItem[];
   /** Called when the file list changes. */
   onChange?: (items: FileUploadItem[]) => void;
+  /**
+   * Called when files are refused before they enter the list — they failed
+   * `accept` or `maxSize`.
+   */
+  onReject?: (files: File[], reason: FileRejectReason) => void;
   /** Whether multiple files can be selected. */
   allowsMultiple: boolean;
   /** MIME types or extensions passed to the file input's accept attribute. */
@@ -24,13 +30,15 @@ export interface UseFileUploaderStateOptions {
 /**
  * Selection state for a FileUploader, including preview URL lifecycle.
  *
- * Blob URLs are revoked when items are removed and when the hook unmounts so
- * long-lived forms do not leak memory.
+ * Only blob URLs minted by this hook are revoked — when they leave the list or
+ * when the hook unmounts — so a parent that supplied its own preview URLs keeps
+ * them.
  */
 export const useFileUploaderState = ({
   value,
   defaultValue,
   onChange,
+  onReject,
   allowsMultiple,
   accept,
   maxSize,
@@ -39,8 +47,8 @@ export const useFileUploaderState = ({
     () => defaultValue ?? []
   );
   const ownedPreviewUrlsRef = useRef<Set<string>>(new Set());
-
   const items = value ?? uncontrolledItems;
+  const previousItemsRef = useRef(items);
 
   const trackPreviewUrl = useCallback((previewUrl?: string) => {
     if (previewUrl) {
@@ -71,17 +79,25 @@ export const useFileUploaderState = ({
 
   const addFiles = useCallback(
     (files: FileList | readonly File[]) => {
-      const acceptedFiles = filterAcceptedFiles(
+      const { accepted, rejectedByMaxSize, rejectedByAccept } = partitionFiles(
         Array.from(files),
         accept,
         maxSize
       );
 
-      if (!acceptedFiles.length) {
+      if (rejectedByMaxSize.length) {
+        onReject?.(rejectedByMaxSize, "maxSize");
+      }
+
+      if (rejectedByAccept.length) {
+        onReject?.(rejectedByAccept, "accept");
+      }
+
+      if (!accepted.length) {
         return;
       }
 
-      const newItems = acceptedFiles.map((file) => {
+      const newItems = accepted.map((file) => {
         const item = createFileUploadItem(file);
         trackPreviewUrl(item.previewUrl);
         return item;
@@ -104,6 +120,7 @@ export const useFileUploaderState = ({
       allowsMultiple,
       items,
       maxSize,
+      onReject,
       releasePreviewUrl,
       setItems,
       trackPreviewUrl,
@@ -119,10 +136,18 @@ export const useFileUploaderState = ({
   );
 
   useEffect(() => {
-    for (const item of defaultValue ?? []) {
-      trackPreviewUrl(item.previewUrl);
+    const previousItems = previousItemsRef.current;
+    previousItemsRef.current = items;
+    const currentUrls = new Set(
+      items.flatMap((item) => (item.previewUrl ? [item.previewUrl] : []))
+    );
+
+    for (const item of previousItems) {
+      if (item.previewUrl && !currentUrls.has(item.previewUrl)) {
+        releasePreviewUrl(item.previewUrl);
+      }
     }
-  }, [defaultValue, trackPreviewUrl]);
+  }, [items, releasePreviewUrl]);
 
   useEffect(
     () => () => {

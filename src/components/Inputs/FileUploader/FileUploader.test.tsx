@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { FileUploader, type FileUploadItem } from "./FileUploader";
 
@@ -27,8 +27,17 @@ describe("FileUploader", () => {
     expect(screen.getByText(/or drag and drop/)).toBeInTheDocument();
   });
 
-  it("labels the drop zone with the upload instructions", () => {
+  it("names the drop zone with the visible label", () => {
     render(<FileUploader label="Attachments" />);
+
+    const label = screen.getByText("Attachments");
+    const dropButton = screen.getByRole("button", { name: /attachments/i });
+
+    expect(dropButton.getAttribute("aria-labelledby")).toContain(label.id);
+  });
+
+  it("labels the drop zone with the upload instructions when there is no field label", () => {
+    render(<FileUploader />);
 
     expect(
       screen.getByRole("button", { name: /click to upload or drag and drop/i })
@@ -40,7 +49,21 @@ describe("FileUploader", () => {
       <FileUploader label="Attachments" description="We never share them" />
     );
 
-    expect(screen.getByText("We never share them")).toBeInTheDocument();
+    const description = screen.getByText("We never share them");
+    expect(screen.getByRole("group")).toHaveAttribute(
+      "aria-describedby",
+      description.id
+    );
+  });
+
+  it("associates the hint with the field", () => {
+    render(<FileUploader label="Attachments" hint="PNG or JPEG only" />);
+
+    const hint = screen.getByText("PNG or JPEG only");
+    expect(screen.getByRole("group")).toHaveAttribute(
+      "aria-describedby",
+      hint.id
+    );
   });
 
   it("shows the error message when invalid", () => {
@@ -102,7 +125,7 @@ describe("FileUploader", () => {
   });
 
   it("shows a file icon for non-image files", () => {
-    render(
+    const { container } = render(
       <FileUploader
         defaultValue={[
           {
@@ -113,7 +136,7 @@ describe("FileUploader", () => {
       />
     );
 
-    expect(screen.queryByRole("img", { hidden: true })).not.toBeInTheDocument();
+    expect(container.querySelector("img")).not.toBeInTheDocument();
     expect(screen.getByText("invoice.pdf")).toBeInTheDocument();
     expect(screen.getByText("PDF")).toBeInTheDocument();
   });
@@ -139,7 +162,108 @@ describe("FileUploader", () => {
         file: expect.objectContaining({ name: "photo.png" }),
       })
     );
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+  });
+
+  it("revokes a preview URL the uploader created when the file is removed", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<FileUploader />);
+    const input = container.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+
+    fireEvent.change(input, {
+      target: { files: [createImageFile()] },
+    });
+
+    await user.click(screen.getByRole("button", { name: "Remove photo.png" }));
+
     expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:preview");
+  });
+
+  it("revokes preview URLs when a controlled value drops an item", () => {
+    const onChange = vi.fn();
+    const { container, rerender } = render(
+      <FileUploader value={[]} onChange={onChange} />
+    );
+    const input = container.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+
+    fireEvent.change(input, {
+      target: { files: [createImageFile()] },
+    });
+
+    const added = onChange.mock.calls[0][0] as FileUploadItem[];
+    rerender(<FileUploader value={added} onChange={onChange} />);
+    rerender(<FileUploader value={[]} onChange={onChange} />);
+
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith("blob:preview");
+  });
+
+  it("replaces the selected file when allowsMultiple is false", () => {
+    const onChange = vi.fn();
+    const { container } = render(
+      <FileUploader allowsMultiple={false} onChange={onChange} />
+    );
+    const input = container.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+
+    fireEvent.change(input, {
+      target: { files: [createImageFile("one.png")] },
+    });
+    fireEvent.change(input, {
+      target: { files: [createImageFile("two.png")] },
+    });
+
+    expect(onChange).toHaveBeenCalledTimes(2);
+    const last = onChange.mock.calls[1][0] as FileUploadItem[];
+    expect(last).toHaveLength(1);
+    expect(last[0].file.name).toBe("two.png");
+  });
+
+  it("reports files over maxSize through onReject", () => {
+    const onChange = vi.fn();
+    const onReject = vi.fn();
+    const { container } = render(
+      <FileUploader maxSize={4} onChange={onChange} onReject={onReject} />
+    );
+    const input = container.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    const tooLarge = new File(["too-large"], "big.png", { type: "image/png" });
+
+    fireEvent.change(input, {
+      target: { files: [tooLarge] },
+    });
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(onReject).toHaveBeenCalledWith([tooLarge], "maxSize");
+    expect(screen.queryByText("big.png")).not.toBeInTheDocument();
+  });
+
+  it("reports files that fail accept through onReject", () => {
+    const onChange = vi.fn();
+    const onReject = vi.fn();
+    const { container } = render(
+      <FileUploader
+        accept="image/png"
+        onChange={onChange}
+        onReject={onReject}
+      />
+    );
+    const input = container.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    const pdf = createPdfFile();
+
+    fireEvent.change(input, {
+      target: { files: [pdf] },
+    });
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(onReject).toHaveBeenCalledWith([pdf], "accept");
   });
 
   it("renders upload progress when provided by the caller", () => {
@@ -192,21 +316,33 @@ describe("FileUploader", () => {
     );
   });
 
-  it("ignores files that do not match accept", () => {
+  it("adds dropped files to the list", async () => {
     const onChange = vi.fn();
-    const { container } = render(
-      <FileUploader accept="image/png" onChange={onChange} />
-    );
-    const input = container.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
+    const { container } = render(<FileUploader onChange={onChange} />);
+    const dropzone = container.querySelector(
+      ".react-aria-DropZone"
+    ) as HTMLElement;
+    const file = createPdfFile();
+    const dataTransfer = {
+      types: ["Files"],
+      effectAllowed: "all",
+      dropEffect: "copy",
+      items: [
+        {
+          kind: "file",
+          type: file.type,
+          getAsFile: () => file,
+        },
+      ],
+      files: [file],
+      getData: () => "",
+    };
 
-    fireEvent.change(input, {
-      target: { files: [createPdfFile()] },
-    });
+    fireEvent.dragEnter(dropzone, { dataTransfer });
+    fireEvent.drop(dropzone, { dataTransfer });
 
-    expect(onChange).not.toHaveBeenCalled();
-    expect(screen.queryByText("invoice.pdf")).not.toBeInTheDocument();
+    await waitFor(() => expect(onChange).toHaveBeenCalledTimes(1));
+    expect(onChange.mock.calls[0][0][0].file.name).toBe("invoice.pdf");
   });
 
   it("marks the drop zone as disabled", () => {

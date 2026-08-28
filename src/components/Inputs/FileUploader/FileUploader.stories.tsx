@@ -10,7 +10,7 @@ const meta: Meta<typeof FileUploader> = {
     docs: {
       description: {
         component:
-          "A file and image uploader with drag-and-drop, click-to-browse, and a list of selected files. Image files show a thumbnail preview; upload progress and error states are supplied by the caller through each item's status.",
+          "A file and image uploader with drag-and-drop, click-to-browse, and a list of selected files. Image files show a thumbnail preview; other files show a FileIcon with an extension badge. Upload progress and error states are supplied by the caller through each item's status.",
       },
     },
   },
@@ -18,6 +18,7 @@ const meta: Meta<typeof FileUploader> = {
   args: {
     onChange: fn(),
     onRemove: fn(),
+    onReject: fn(),
     onRetry: fn(),
   },
 };

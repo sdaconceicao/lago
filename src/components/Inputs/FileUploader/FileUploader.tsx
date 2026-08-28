@@ -16,13 +16,19 @@ import { FileUploaderDropZone } from "./BaseComponents/FileUploaderDropZone";
 import { FileUploaderItemRow } from "./BaseComponents/FileUploaderItemRow";
 import styles from "./FileUploader.module.css";
 import type {
+  FileRejectReason,
   FileUploaderVariant,
   FileUploadItem,
   FileUploadStatus,
 } from "./FileUploader.utils";
 import { useFileUploader } from "./Hooks/useFileUploader";
 
-export type { FileUploaderVariant, FileUploadItem, FileUploadStatus };
+export type {
+  FileRejectReason,
+  FileUploaderVariant,
+  FileUploadItem,
+  FileUploadStatus,
+};
 
 export interface FileUploaderProps {
   /** Accessible label rendered above the drop zone. */
@@ -45,7 +51,7 @@ export interface FileUploaderProps {
   accept?: string;
   /** Whether multiple files can be selected. Defaults to `true`. */
   allowsMultiple?: boolean;
-  /** Maximum file size in bytes. Files over this limit are ignored. */
+  /** Maximum file size in bytes. Files over this limit are refused via `onReject`. */
   maxSize?: number;
   /** Selected files, when controlled. */
   value?: FileUploadItem[];
@@ -53,6 +59,11 @@ export interface FileUploaderProps {
   defaultValue?: FileUploadItem[];
   /** Called when the file list changes. */
   onChange?: (items: FileUploadItem[]) => void;
+  /**
+   * Called when files are refused before they enter the list — they failed
+   * `accept` or `maxSize`.
+   */
+  onReject?: (files: File[], reason: FileRejectReason) => void;
   /** Called when the user removes a file. */
   onRemove?: (item: FileUploadItem) => void;
   /** Called when the user retries a failed upload. */
@@ -71,8 +82,9 @@ export interface FileUploaderProps {
 /**
  * A file and image uploader with drag-and-drop, click-to-browse, and a list of
  * selected files. Image files show a thumbnail preview; other files show a
- * generic file icon. Upload progress and error states are supplied by the
- * caller through each item's `status`, `progress`, and `errorMessage`.
+ * FileIcon with an extension badge. Upload progress and error states are
+ * supplied by the caller through each item's `status`, `progress`, and
+ * `errorMessage`.
  */
 export function FileUploader({
   label,
@@ -89,6 +101,7 @@ export function FileUploader({
   value,
   defaultValue,
   onChange,
+  onReject,
   onRemove,
   onRetry,
   variant = "default",
@@ -110,6 +123,7 @@ export function FileUploader({
     value,
     defaultValue,
     onChange,
+    onReject,
     onRemove,
     allowsMultiple,
     accept,
@@ -122,12 +136,14 @@ export function FileUploader({
   });
 
   return (
-    <div
+    <fieldset
       className={clsx(
         "react-aria-FileUploader",
         styles.fileUploader,
         className
       )}
+      aria-labelledby={label ? labelId : undefined}
+      aria-describedby={describedBy}
       data-variant={variant}
       data-field-size={size}
       data-disabled={isDisabled || undefined}
@@ -150,7 +166,8 @@ export function FileUploader({
           onSelect={addFiles}
           onDrop={handleDrop}
           onRemovePreview={handleRemove}
-          aria-describedby={describedBy}
+          aria-labelledby={label ? labelId : undefined}
+          aria-label={label}
         />
 
         {hint && (
@@ -179,6 +196,6 @@ export function FileUploader({
         )}
         <FieldError>{errorMessage}</FieldError>
       </FieldErrorContext.Provider>
-    </div>
+    </fieldset>
   );
 }

@@ -120,6 +120,46 @@ export const fileMatchesAccept = (file: File, accept?: string): boolean => {
 export const fileMatchesMaxSize = (file: File, maxSize?: number): boolean =>
   maxSize == null || file.size <= maxSize;
 
+/** Why a file was refused before it entered the list. */
+export type FileRejectReason = "accept" | "maxSize";
+
+/** Files split by whether they may enter the list. */
+export interface PartitionedFiles {
+  /** Files that match accept and max size. */
+  accepted: File[];
+  /** Files over `maxSize`. */
+  rejectedByMaxSize: File[];
+  /** Files that do not match `accept`. */
+  rejectedByAccept: File[];
+}
+
+/** Splits files into accepted and rejected groups. Size is checked first. */
+export const partitionFiles = (
+  files: File[],
+  accept?: string,
+  maxSize?: number
+): PartitionedFiles => {
+  const accepted: File[] = [];
+  const rejectedByMaxSize: File[] = [];
+  const rejectedByAccept: File[] = [];
+
+  for (const file of files) {
+    if (!fileMatchesMaxSize(file, maxSize)) {
+      rejectedByMaxSize.push(file);
+      continue;
+    }
+
+    if (!fileMatchesAccept(file, accept)) {
+      rejectedByAccept.push(file);
+      continue;
+    }
+
+    accepted.push(file);
+  }
+
+  return { accepted, rejectedByMaxSize, rejectedByAccept };
+};
+
 /** Creates a list item from a browser file, minting a preview URL for images. */
 export const createFileUploadItem = (file: File): FileUploadItem => ({
   id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 9)}`,
@@ -148,11 +188,7 @@ export const filterAcceptedFiles = (
   files: File[],
   accept?: string,
   maxSize?: number
-): File[] =>
-  files.filter(
-    (file) =>
-      fileMatchesAccept(file, accept) && fileMatchesMaxSize(file, maxSize)
-  );
+): File[] => partitionFiles(files, accept, maxSize).accepted;
 
 /** Revokes any preview URLs on the given items. */
 export const revokePreviewUrls = (items: FileUploadItem[]): void => {

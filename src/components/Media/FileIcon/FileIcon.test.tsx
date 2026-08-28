@@ -42,4 +42,19 @@ describe("FileIcon", () => {
 
     expect(container.firstElementChild).toHaveClass("custom");
   });
+
+  it("is hidden from assistive technology by default", () => {
+    const { container } = render(<FileIcon fileName="invoice.pdf" />);
+
+    expect(container.firstElementChild).toHaveAttribute("aria-hidden", "true");
+    expect(screen.queryByRole("img")).not.toBeInTheDocument();
+  });
+
+  it("exposes an accessible name when aria-label is set", () => {
+    render(<FileIcon fileName="invoice.pdf" aria-label="PDF document" />);
+
+    expect(
+      screen.getByRole("img", { name: "PDF document" })
+    ).toBeInTheDocument();
+  });
 });
