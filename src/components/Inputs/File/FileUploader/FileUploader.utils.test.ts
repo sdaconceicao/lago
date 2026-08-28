@@ -6,7 +6,7 @@ import {
   fileMatchesMaxSize,
   filterAcceptedFiles,
   formatFileSize,
-  getCirclePreviewItem,
+  getDropZoneItem,
   getFieldValidation,
   getFilesFromDropEvent,
   getListItems,
@@ -253,57 +253,37 @@ describe("getProgressPercent", () => {
   });
 });
 
-describe("getCirclePreviewItem", () => {
+describe("getDropZoneItem", () => {
   const imageItem: FileUploadItem = {
     id: "photo-1",
     file: { name: "photo.png", type: "image/png" } as File,
     previewUrl: "blob:preview",
   };
+  const pdfItem: FileUploadItem = {
+    id: "pdf",
+    file: { name: "a.pdf", type: "application/pdf" } as File,
+  };
 
-  it("returns the single image on a round, single-file uploader", () => {
-    expect(getCirclePreviewItem("round", [imageItem], false)).toBe(imageItem);
+  it("returns the only item when multiple files are not allowed", () => {
+    expect(getDropZoneItem([imageItem], false)).toBe(imageItem);
+    expect(getDropZoneItem([pdfItem], false)).toBe(pdfItem);
   });
 
-  it("returns undefined when the variant, count, or file cannot fill the circle", () => {
-    expect(getCirclePreviewItem("default", [imageItem], false)).toBeUndefined();
-    expect(getCirclePreviewItem("round", [imageItem], true)).toBeUndefined();
-    expect(getCirclePreviewItem("round", [], false)).toBeUndefined();
+  it("returns undefined when multiple files are allowed or the count is not one", () => {
+    expect(getDropZoneItem([imageItem], true)).toBeUndefined();
+    expect(getDropZoneItem([], false)).toBeUndefined();
     expect(
-      getCirclePreviewItem(
-        "round",
-        [imageItem, { ...imageItem, id: "2" }],
-        false
-      )
+      getDropZoneItem([imageItem, { ...imageItem, id: "2" }], false)
     ).toBeUndefined();
+  });
+
+  it("keeps an uploading or failed file in the drop zone", () => {
     expect(
-      getCirclePreviewItem(
-        "round",
-        [
-          {
-            id: "pdf",
-            file: { name: "a.pdf", type: "application/pdf" } as File,
-          },
-        ],
-        false
-      )
-    ).toBeUndefined();
-    expect(
-      getCirclePreviewItem(
-        "round",
-        [{ ...imageItem, status: "uploading" }],
-        false
-      )
-    ).toBeUndefined();
-    expect(
-      getCirclePreviewItem("round", [{ ...imageItem, status: "error" }], false)
-    ).toBeUndefined();
-    expect(
-      getCirclePreviewItem(
-        "round",
-        [{ ...imageItem, previewUrl: undefined }],
-        false
-      )
-    ).toBeUndefined();
+      getDropZoneItem([{ ...imageItem, status: "uploading" }], false)
+    ).toEqual({ ...imageItem, status: "uploading" });
+    expect(getDropZoneItem([{ ...imageItem, status: "error" }], false)).toEqual(
+      { ...imageItem, status: "error" }
+    );
   });
 });
 
@@ -317,11 +297,11 @@ describe("getListItems", () => {
     file: { name: "a.pdf" } as File,
   };
 
-  it("returns all items when there is no circle preview", () => {
+  it("returns all items when nothing occupies the drop zone", () => {
     expect(getListItems([photo, pdf])).toEqual([photo, pdf]);
   });
 
-  it("omits the circle preview item", () => {
+  it("omits the drop-zone item", () => {
     expect(getListItems([photo, pdf], photo)).toEqual([pdf]);
   });
 

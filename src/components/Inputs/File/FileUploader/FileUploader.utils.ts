@@ -225,37 +225,23 @@ export const getProgressPercent = (item: FileUploadItem): number => {
 };
 
 /**
- * The image shown inside a round, single-file drop zone. Anything else — a
- * second file, a non-image, or an in-flight upload — keeps the list row.
+ * The file that occupies the drop zone when this is a single-file uploader.
+ * Multiple-file uploaders keep the drop zone empty and list files below.
  */
-export const getCirclePreviewItem = (
-  variant: FileUploaderVariant,
+export const getDropZoneItem = (
   items: FileUploadItem[],
   allowsMultiple: boolean
 ): FileUploadItem | undefined => {
-  if (variant !== "round" || allowsMultiple || items.length !== 1) {
+  if (allowsMultiple || items.length !== 1) {
     return undefined;
   }
 
-  const [item] = items;
-
-  if (
-    !item.previewUrl ||
-    !isImageFile(item.file) ||
-    item.status === "uploading" ||
-    item.status === "error"
-  ) {
-    return undefined;
-  }
-
-  return item;
+  return items[0];
 };
 
-/** Files shown in the list under the drop zone. The circle preview is omitted. */
+/** Files shown in the list under the drop zone. The drop-zone file is omitted. */
 export const getListItems = (
   items: FileUploadItem[],
-  circlePreviewItem?: FileUploadItem
+  dropZoneItem?: FileUploadItem
 ): FileUploadItem[] =>
-  circlePreviewItem
-    ? items.filter((item) => item.id !== circlePreviewItem.id)
-    : items;
+  dropZoneItem ? items.filter((item) => item.id !== dropZoneItem.id) : items;

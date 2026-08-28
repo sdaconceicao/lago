@@ -63,7 +63,7 @@ export function FileUploaderInline({
     handleDrop,
     handleRemove,
     acceptedFileTypes,
-    listItems,
+    items,
     validation,
     labelId,
     descriptionId,
@@ -94,7 +94,7 @@ export function FileUploaderInline({
         }
       }}
     >
-      {listItems.length > 0 ? (
+      {items.length > 0 ? (
         <Link
           className={styles.add}
           isDisabled={isDisabled}
@@ -140,10 +140,10 @@ export function FileUploaderInline({
           aria-label={label}
         >
           <div className={styles.dropZoneContent}>
-            {listItems.length > 0 ? (
+            {items.length > 0 ? (
               <>
                 <ul className={styles.fileList}>
-                  {listItems.map((item) => (
+                  {items.map((item) => (
                     <FileUploaderItemRow
                       key={item.id}
                       item={item}

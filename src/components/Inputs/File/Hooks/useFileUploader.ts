@@ -2,9 +2,8 @@
 import { useCallback, useId, useMemo } from "react";
 import type { ValidationResult } from "react-aria-components/FieldError";
 import {
-  type FileUploaderVariant,
   type FileUploadItem,
-  getCirclePreviewItem,
+  getDropZoneItem,
   getFieldValidation,
   getFilesFromDropEvent,
   getListItems,
@@ -18,8 +17,6 @@ import {
 export interface UseFileUploaderOptions extends UseFileUploaderStateOptions {
   /** Called when the user removes a file. */
   onRemove?: (item: FileUploadItem) => void;
-  /** Shape of the drop zone and file list. Defaults to `"default"`. */
-  variant?: FileUploaderVariant;
   /** Marks the field invalid and shows `errorMessage`. */
   isInvalid?: boolean;
   /** Error message shown when the field is invalid. */
@@ -36,7 +33,6 @@ export interface UseFileUploaderOptions extends UseFileUploaderStateOptions {
  */
 export const useFileUploader = ({
   onRemove,
-  variant = "default",
   isInvalid,
   errorMessage,
   description,
@@ -74,13 +70,13 @@ export const useFileUploader = ({
     () => parseAcceptedFileTypes(accept),
     [accept]
   );
-  const circlePreviewItem = useMemo(
-    () => getCirclePreviewItem(variant, items, allowsMultiple),
-    [allowsMultiple, items, variant]
+  const dropZoneItem = useMemo(
+    () => getDropZoneItem(items, allowsMultiple),
+    [allowsMultiple, items]
   );
   const listItems = useMemo(
-    () => getListItems(items, circlePreviewItem),
-    [circlePreviewItem, items]
+    () => getListItems(items, dropZoneItem),
+    [dropZoneItem, items]
   );
   const validation = useMemo(
     () => getFieldValidation(isInvalid, errorMessage),
@@ -92,11 +88,12 @@ export const useFileUploader = ({
       .join(" ") || undefined;
 
   return {
+    items,
     addFiles,
     handleDrop,
     handleRemove,
     acceptedFileTypes,
-    circlePreviewItem,
+    dropZoneItem,
     listItems,
     validation,
     labelId,
