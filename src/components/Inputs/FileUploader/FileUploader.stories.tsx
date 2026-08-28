@@ -1,0 +1,150 @@
+import type { Meta, StoryFn } from "@storybook/react";
+import { fn } from "storybook/test";
+import { useState } from "react";
+import { FileUploader, type FileUploadItem } from "./FileUploader";
+
+const meta: Meta<typeof FileUploader> = {
+  component: FileUploader,
+  parameters: {
+    layout: "centered",
+    docs: {
+      description: {
+        component:
+          "A file and image uploader with drag-and-drop, click-to-browse, and a list of selected files. Image files show a thumbnail preview; upload progress and error states are supplied by the caller through each item's status.",
+      },
+    },
+  },
+  tags: ["autodocs"],
+  args: {
+    onChange: fn(),
+    onRemove: fn(),
+    onRetry: fn(),
+  },
+};
+
+export default meta;
+
+type Story = StoryFn<typeof FileUploader>;
+
+export const Default: Story = (args) => <FileUploader {...args} />;
+
+Default.args = {
+  label: "Attachments",
+  hint: "SVG, PNG, JPG or GIF (max. 800x400px)",
+};
+
+export const WithUploadProgress: Story = () => {
+  const [items, setItems] = useState<FileUploadItem[]>([
+    {
+      id: "uploading",
+      file: new File(["a"], "dashboard.jpg", { type: "image/jpeg" }),
+      previewUrl: "https://picsum.photos/seed/lago-upload/80/80",
+      status: "uploading",
+      progress: 50,
+    },
+    {
+      id: "complete",
+      file: new File(["b"], "requirements.pdf", { type: "application/pdf" }),
+      status: "complete",
+      progress: 100,
+    },
+    {
+      id: "failed",
+      file: new File(["c"], "requirements-old.pdf", {
+        type: "application/pdf",
+      }),
+      status: "error",
+      errorMessage: "Upload failed, please try again",
+    },
+  ]);
+
+  return (
+    <FileUploader
+      label="Project files"
+      hint="Upload files to add to this project (max. 1 MB)."
+      value={items}
+      onChange={setItems}
+      onRetry={(item) => {
+        setItems((current) =>
+          current.map((entry) =>
+            entry.id === item.id
+              ? { ...entry, status: "uploading", progress: 0 }
+              : entry
+          )
+        );
+      }}
+    />
+  );
+};
+
+WithUploadProgress.parameters = {
+  docs: {
+    description: {
+      story:
+        "Upload lifecycle states are controlled by the caller. Set `status`, `progress`, and `errorMessage` on each `FileUploadItem` to show uploading, complete, or failed rows.",
+    },
+  },
+};
+
+export const AcceptImagesOnly: Story = (args) => <FileUploader {...args} />;
+
+AcceptImagesOnly.args = {
+  label: "Screenshot",
+  accept: "image/png,image/jpeg",
+  hint: "Please upload PNG or JPEG images only.",
+};
+
+export const Disabled: Story = (args) => <FileUploader {...args} />;
+
+Disabled.args = {
+  label: "Attachments",
+  hint: "Uploads are disabled.",
+  isDisabled: true,
+};
+
+export const Round: Story = (args) => <FileUploader {...args} />;
+
+Round.args = {
+  label: "Profile photo",
+  variant: "round",
+  accept: "image/png,image/jpeg",
+  allowsMultiple: false,
+  hint: "PNG or JPEG only.",
+  defaultValue: [
+    {
+      id: "avatar",
+      file: new File(["a"], "avatar.jpg", { type: "image/jpeg" }),
+      previewUrl: "https://picsum.photos/seed/lago-round/80/80",
+    },
+  ],
+};
+
+Round.parameters = {
+  docs: {
+    description: {
+      story:
+        'The `"round"` variant renders a circular drop zone. When a single image is selected, it fills the circle; click to replace or use the remove control.',
+    },
+  },
+};
+
+export const Sizes: Story = (args) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <FileUploader {...args} size="sm" label="Small" />
+    <FileUploader {...args} size="md" label="Medium (default)" />
+    <FileUploader {...args} size="lg" label="Large" />
+  </div>
+);
+
+Sizes.args = {
+  hint: "Drag files here or click to browse.",
+};
+
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        "FileUploader inherits the DropZone field size scale: sm, md (default), and lg.",
+    },
+  },
+};
