@@ -17,18 +17,6 @@
   flex-shrink: 0;
 }
 
-.fileIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(var(--spacing) * 10);
-  height: calc(var(--spacing) * 10);
-  border-radius: var(--radius-sm);
-  background: var(--highlight-overlay);
-  color: var(--text-color-placeholder);
-  flex-shrink: 0;
-}
-
 .fileDetails {
   display: flex;
   flex-direction: column;
@@ -124,8 +112,7 @@
   border-radius: 9999px;
   align-items: center;
 
-  .thumbnail,
-  .fileIcon {
+  .thumbnail {
     border-radius: 100%;
   }
 }

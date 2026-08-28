@@ -115,6 +115,7 @@ describe("FileUploader", () => {
 
     expect(screen.queryByRole("img", { hidden: true })).not.toBeInTheDocument();
     expect(screen.getByText("invoice.pdf")).toBeInTheDocument();
+    expect(screen.getByText("PDF")).toBeInTheDocument();
   });
 
   it("removes a file when the remove button is pressed", async () => {

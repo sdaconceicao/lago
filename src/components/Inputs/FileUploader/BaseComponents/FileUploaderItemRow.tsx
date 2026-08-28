@@ -1,9 +1,10 @@
 "use client";
 import clsx from "clsx";
-import { File as FileIcon, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { CSSProperties } from "react";
 import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { Link } from "@/components/Actions/Link/Link";
+import { FileIcon } from "@/components/Media/FileIcon/FileIcon";
 import base from "@/styles/base.module.css";
 import {
   type FileUploaderVariant,
@@ -57,9 +58,7 @@ export function FileUploaderItemRow({
           aria-hidden="true"
         />
       ) : (
-        <div className={styles.fileIcon} aria-hidden="true">
-          <FileIcon size={20} strokeWidth={1.75} />
-        </div>
+        <FileIcon fileName={item.file.name} />
       )}
 
       <div className={styles.fileDetails}>

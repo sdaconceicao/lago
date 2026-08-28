@@ -66,6 +66,7 @@ export * from "./components/Inputs/Toggle/ToggleButton/ToggleButton";
 export * from "./components/Inputs/Toggle/ToggleButtonGroup/ToggleButtonGroup";
 export * from "./components/Layout/Separator/Separator";
 export * from "./components/Media/Avatar/Avatar";
+export * from "./components/Media/FileIcon/FileIcon";
 export * from "./components/Media/ImagePlaceholder/ImagePlaceholder";
 export * from "./components/Navigation/Breadcrumbs/Breadcrumbs";
 export * from "./components/Navigation/Tabs/Tabs";
