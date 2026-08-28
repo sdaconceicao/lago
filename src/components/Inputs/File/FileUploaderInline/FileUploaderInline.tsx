@@ -13,10 +13,10 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { SlottedText, Text } from "@/components/Typography/index";
-import { FileUploaderItemRow } from "./BaseComponents/FileUploaderItemRow";
-import type { FileUploaderProps } from "./FileUploader";
+import { FileUploaderItemRow } from "../BaseComponents/FileUploaderItemRow";
+import type { FileUploaderProps } from "../FileUploader/FileUploader";
+import { useFileUploader } from "../Hooks/useFileUploader";
 import styles from "./FileUploaderInline.module.css";
-import { useFileUploader } from "./Hooks/useFileUploader";
 
 export interface FileUploaderInlineProps
   extends Omit<FileUploaderProps, "variant" | "size" | "allowsMultiple"> {

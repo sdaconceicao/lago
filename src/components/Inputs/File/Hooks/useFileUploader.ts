@@ -9,7 +9,7 @@ import {
   getFilesFromDropEvent,
   getListItems,
   parseAcceptedFileTypes,
-} from "../FileUploader.utils";
+} from "../FileUploader/FileUploader.utils";
 import {
   type UseFileUploaderStateOptions,
   useFileUploaderState,

@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import type { FileUploadItem } from "./FileUploader";
+import type { FileUploadItem } from "../FileUploader/FileUploader";
 import { FileUploaderInline } from "./FileUploaderInline";
 
 const createImageFile = (name = "photo.png") =>

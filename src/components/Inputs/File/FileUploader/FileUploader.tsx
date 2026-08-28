@@ -12,8 +12,9 @@ import {
   Label,
 } from "@/components/Inputs/FormComponents/index";
 import { Text } from "@/components/Typography/index";
-import { FileUploaderDropZone } from "./BaseComponents/FileUploaderDropZone";
-import { FileUploaderItemRow } from "./BaseComponents/FileUploaderItemRow";
+import { FileUploaderDropZone } from "../BaseComponents/FileUploaderDropZone";
+import { FileUploaderItemRow } from "../BaseComponents/FileUploaderItemRow";
+import { useFileUploader } from "../Hooks/useFileUploader";
 import styles from "./FileUploader.module.css";
 import type {
   FileRejectReason,
@@ -21,7 +22,6 @@ import type {
   FileUploadItem,
   FileUploadStatus,
 } from "./FileUploader.utils";
-import { useFileUploader } from "./Hooks/useFileUploader";
 
 export type {
   FileRejectReason,

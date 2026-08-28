@@ -1,8 +1,8 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { fn } from "storybook/test";
 import { TextField } from "@/components/Inputs/TextField/TextField";
-import type { FileUploadItem } from "./FileUploader";
-import { FileUploaderInline } from "./FileUploaderInline";
+import type { FileUploadItem } from "../FileUploader/FileUploader";
+import { FileUploaderInline } from "../FileUploaderInline";
 
 const meta: Meta<typeof FileUploaderInline> = {
   component: FileUploaderInline,

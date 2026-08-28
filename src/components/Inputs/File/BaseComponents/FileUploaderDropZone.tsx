@@ -11,7 +11,7 @@ import { SlottedText } from "@/components/Typography/index";
 import type {
   FileUploaderVariant,
   FileUploadItem,
-} from "../FileUploader.utils";
+} from "../FileUploader/FileUploader.utils";
 import styles from "./FileUploaderDropZone.module.css";
 
 export interface FileUploaderDropZoneProps {

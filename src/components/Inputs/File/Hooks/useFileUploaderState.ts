@@ -5,7 +5,7 @@ import {
   type FileRejectReason,
   type FileUploadItem,
   partitionFiles,
-} from "../FileUploader.utils";
+} from "../FileUploader/FileUploader.utils";
 
 export interface UseFileUploaderStateOptions {
   /** Selected files, when controlled. */

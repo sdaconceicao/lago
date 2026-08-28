@@ -14,7 +14,7 @@ import {
   getProgressPercent,
   getStatusMessage,
   isImageFile,
-} from "../FileUploader.utils";
+} from "../FileUploader/FileUploader.utils";
 import styles from "./FileUploaderItemRow.module.css";
 
 export interface FileUploaderItemRowProps {
