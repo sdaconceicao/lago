@@ -1,12 +1,12 @@
 "use client";
 import clsx from "clsx";
 import { File as FileGlyph } from "lucide-react";
+import styles from "./FileIcon.module.css";
 import {
   DEFAULT_FILE_ICON_SIZE,
   type FileIconSize,
   getFileExtensionLabel,
 } from "./FileIcon.utils";
-import styles from "./FileIcon.module.css";
 
 export type { FileIconSize };
 export { DEFAULT_FILE_ICON_SIZE, getFileExtensionLabel };
