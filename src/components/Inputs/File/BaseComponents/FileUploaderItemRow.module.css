@@ -1,0 +1,212 @@
+.fileItem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--spacing-3);
+  align-items: start;
+  padding: var(--spacing-3);
+  border: 1px solid var(--border-color);
+  border-radius: var(--field-radius);
+  background: var(--overlay-background);
+}
+
+.thumbnail {
+  width: calc(var(--spacing) * 10);
+  height: calc(var(--spacing) * 10);
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.fileDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.fileName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.fileMeta {
+  color: var(--text-color-placeholder);
+  font: var(--font-size-sm) var(--font-family);
+}
+
+.fileStatusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  color: var(--text-color-placeholder);
+  font: var(--font-size-sm) var(--font-family);
+}
+
+.fileStatusRowComplete {
+  color: var(--green);
+}
+
+.fileStatusRowError {
+  color: var(--red);
+}
+
+.fileStatusPercent {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.progressTrack {
+  width: 100%;
+  height: calc(var(--spacing-2) + 2px);
+  border-radius: 9999px;
+  overflow: clip;
+  will-change: transform;
+}
+
+.progressFill {
+  background: linear-gradient(
+    to right,
+    oklch(from var(--tint) 58% c h) 0px,
+    oklch(from var(--tint) 72% c h) 20px,
+    oklch(from var(--tint) 58% c h) 40px
+  );
+  background-size: 40px 100%;
+  height: calc(100% - 2px);
+  width: calc(var(--percent) - 2px);
+  margin: 1px 0 0 1px;
+  border-radius: inherit;
+  transition: width 200ms ease;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.3),
+    inset 0 2px 2px rgb(255 255 255 / 0.2),
+    0 1px 0 lch(from var(--tint) 42% c h),
+    0 0 0 1px var(--tint-900);
+
+  :global(:root.dark-mode) & {
+    box-shadow:
+      0 -1px 0 rgb(255 255 255 / 0.6),
+      inset 0 2px 2px rgb(255 255 255 / 0.2),
+      0 1px 0 lch(from var(--tint) 42% c h),
+      0 0 0 1px var(--tint-900);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    background: var(--highlight-background);
+  }
+
+  @media (forced-colors: active) {
+    background-image: none;
+    background-color: Highlight;
+    box-shadow: none;
+  }
+}
+
+.removeButton {
+  flex-shrink: 0;
+}
+
+.round {
+  border-radius: 9999px;
+  align-items: center;
+
+  .thumbnail {
+    border-radius: 100%;
+  }
+}
+
+/* Compact chip at --field-inner-height so it sits inside the inline drop zone. */
+.inline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--field-inner-height);
+  min-width: 0;
+  max-width: 100%;
+  gap: var(--field-gap);
+  padding: 0;
+  padding-inline-start: var(--field-gap);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--gray-300);
+  overflow: hidden;
+
+  &:only-child {
+    flex: 1;
+    max-width: none;
+    background: none;
+    padding-inline-start: 0;
+  }
+
+  .thumbnail {
+    width: var(--field-icon-size);
+    height: var(--field-icon-size);
+    border-radius: 2px;
+  }
+
+  :global([data-file-icon-size]) {
+    width: var(--field-icon-size);
+    height: var(--field-icon-size);
+
+    svg {
+      width: var(--field-icon-size);
+      height: var(--field-icon-size);
+    }
+
+    span {
+      display: none;
+    }
+  }
+
+  .fileDetails {
+    flex: 1;
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--field-gap);
+  }
+
+  .removeButton {
+    margin-inline-start: auto;
+  }
+
+  .fileName {
+    font: var(--field-font-size) var(--font-family);
+    font-weight: 500;
+  }
+
+  .progressTrack {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--gray-300);
+    overflow: hidden;
+  }
+
+  .progressFill {
+    height: 100%;
+    width: var(--percent);
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--highlight-background);
+  }
+
+  .fileStatusRow:not(.fileStatusRowError) {
+    display: none;
+  }
+
+  .fileStatusRowError {
+    flex: none;
+    font: var(--field-font-size) var(--font-family);
+  }
+
+  .fileStatusRowError > :not(:global(.react-aria-Link)) {
+    display: none;
+  }
+}

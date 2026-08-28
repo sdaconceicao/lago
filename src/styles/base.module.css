@@ -85,7 +85,7 @@
       }
     }
 
-    &:where([data-pressed]) {
+    &:where([data-hovered], [data-pressed]) {
       --button-background: oklch(
         from var(--_button-color) var(--lightness-200) var(--chroma-200) h
       );
@@ -190,7 +190,7 @@
           /* inner gradient */ inset 0 0 0 1px var(--_button-border); /* border */
       }
 
-      &:where([data-pressed]) {
+      &:where([data-hovered], [data-pressed]) {
         --button-background: oklch(from var(--_button-color) 50% c h);
       }
     }
