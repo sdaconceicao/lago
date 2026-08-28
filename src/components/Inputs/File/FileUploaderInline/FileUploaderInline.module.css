@@ -36,6 +36,7 @@
   text-align: start;
   text-wrap: nowrap;
   border-style: dashed;
+  background: var(--field-background);
 }
 
 .dropZone[data-field-size="sm"],
@@ -45,6 +46,11 @@
   min-height: var(--field-height);
   max-height: var(--field-height);
   padding: 0 var(--field-padding-x);
+  background: var(--field-background);
+}
+
+.dropZone[data-drop-target] {
+  background: var(--highlight-overlay);
 }
 
 .dropZoneContent {

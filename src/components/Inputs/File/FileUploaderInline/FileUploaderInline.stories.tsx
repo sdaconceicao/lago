@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@storybook/react";
+import { useState } from "react";
 import { fn } from "storybook/test";
 import { TextField } from "@/components/Inputs/TextField/TextField";
 import type { FileUploadItem } from "../FileUploader/FileUploader";
@@ -71,6 +72,78 @@ WithFile.parameters = {
     description: {
       story:
         "A selected file renders as a chip inside the field, with a trailing remove button. The control stays at TextField height so it lines up in a form row.",
+    },
+  },
+};
+
+export const WithUploadProgress: Story = () => {
+  const [failed, setFailed] = useState<FileUploadItem[]>([
+    {
+      id: "failed",
+      file: new File(["c"], "notes.pdf", { type: "application/pdf" }),
+      status: "error",
+      errorMessage: "Upload failed, please try again",
+    },
+  ]);
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "1.5rem",
+        width: 320,
+      }}
+    >
+      <FileUploaderInline
+        label="Uploading"
+        value={[
+          {
+            id: "uploading",
+            file: new File(["a"], "requirements.pdf", {
+              type: "application/pdf",
+            }),
+            status: "uploading",
+            progress: 50,
+          },
+        ]}
+      />
+      <FileUploaderInline
+        label="Complete"
+        defaultValue={[
+          {
+            id: "complete",
+            file: new File(["b"], "brief.pdf", {
+              type: "application/pdf",
+            }),
+            status: "complete",
+            progress: 100,
+          },
+        ]}
+      />
+      <FileUploaderInline
+        label="Failed"
+        value={failed}
+        onChange={setFailed}
+        onRetry={(item) => {
+          setFailed((current) =>
+            current.map((entry) =>
+              entry.id === item.id
+                ? { ...entry, status: "uploading", progress: 0 }
+                : entry
+            )
+          );
+        }}
+      />
+    </div>
+  );
+};
+
+WithUploadProgress.parameters = {
+  docs: {
+    description: {
+      story:
+        "Upload lifecycle is supplied by the caller on each FileUploadItem, the same as FileUploader. Inline keeps the field at TextField height: uploading and complete show a 2px bar along the bottom of the chip, and a failed file keeps a retry control inside the field.",
     },
   },
 };

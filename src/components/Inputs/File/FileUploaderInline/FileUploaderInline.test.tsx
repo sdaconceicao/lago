@@ -84,6 +84,26 @@ describe("FileUploaderInline", () => {
     ).toHaveAttribute("data-field-size", "md");
   });
 
+  it("shows a progress bar when the caller supplies upload progress", () => {
+    render(
+      <FileUploaderInline
+        defaultValue={[
+          {
+            id: "photo-1",
+            file: createImageFile(),
+            status: "uploading",
+            progress: 50,
+          },
+        ]}
+      />
+    );
+
+    expect(screen.getByRole("progressbar")).toHaveAttribute(
+      "aria-valuenow",
+      "50"
+    );
+  });
+
   it("shows the selected file as a chip inside the drop zone", () => {
     render(<FileUploaderInline defaultValue={[createFileUploadItem()]} />);
 
