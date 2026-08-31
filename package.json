@@ -3,7 +3,7 @@
   "version": "0.9.1",
   "type": "module",
   "license": "MIT",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@12.1.0",
   "scripts": {
     "build": "vite build --config vite.build.config.ts",
     "storybook": "storybook dev -p 6006",
