@@ -3,7 +3,7 @@
   "version": "0.9.1",
   "type": "module",
   "license": "MIT",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@12.1.0",
   "scripts": {
     "build": "vite build --config vite.build.config.ts",
     "storybook": "storybook dev -p 6006",
@@ -89,11 +89,6 @@
     "vite-plugin-dts": "^5.0.3",
     "vite-plugin-lib-inject-css": "^2.2.2",
     "vitest": "^4.1.11"
-  },
-  "pnpm": {
-    "overrides": {
-      "fast-uri": "3.1.5"
-    }
   },
   "repository": {
     "type": "git",
