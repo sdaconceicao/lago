@@ -30,6 +30,14 @@ describe("formatFileSize", () => {
   it("formats megabytes", () => {
     expect(formatFileSize(1.5 * 1024 * 1024)).toBe("1.5 MB");
   });
+
+  it("keeps unit boundaries from rounding into the next label", () => {
+    expect(formatFileSize(0)).toBe("0 B");
+    expect(formatFileSize(1023)).toBe("1023 B");
+    expect(formatFileSize(1024)).toBe("1 KB");
+    expect(formatFileSize(1024 * 1024 - 1)).toBe("1.0 MB");
+    expect(formatFileSize(1024 * 1024)).toBe("1.0 MB");
+  });
 });
 
 describe("isImageFile", () => {
@@ -39,6 +47,10 @@ describe("isImageFile", () => {
 
   it("returns false for non-image mime types", () => {
     expect(isImageFile({ type: "application/pdf" } as File)).toBe(false);
+  });
+
+  it("matches image mime types regardless of case", () => {
+    expect(isImageFile({ type: "IMAGE/PNG" } as File)).toBe(true);
   });
 });
 
@@ -70,6 +82,15 @@ describe("fileMatchesAccept", () => {
     expect(fileMatchesAccept(pdfFile, ".pdf")).toBe(true);
     expect(fileMatchesAccept(pngFile, "image/*")).toBe(true);
     expect(fileMatchesAccept(pdfFile, "image/*")).toBe(false);
+  });
+
+  it("matches extensions and mime types case-insensitively", () => {
+    const upperPng = { name: "Photo.PNG", type: "IMAGE/PNG" } as File;
+
+    expect(fileMatchesAccept(upperPng, ".png")).toBe(true);
+    expect(fileMatchesAccept(upperPng, "image/png")).toBe(true);
+    expect(fileMatchesAccept(upperPng, "IMAGE/*")).toBe(true);
+    expect(fileMatchesAccept(pdfFile, ".PDF")).toBe(true);
   });
 });
 
@@ -248,8 +269,20 @@ describe("getProgressPercent", () => {
   it("treats a complete item with no progress as 100", () => {
     expect(getProgressPercent({ id: "1", file, status: "complete" })).toBe(100);
     expect(
+      getProgressPercent({ id: "1", file, status: "complete", progress: 0 })
+    ).toBe(100);
+    expect(
       getProgressPercent({ id: "1", file, status: "complete", progress: 80 })
     ).toBe(80);
+  });
+
+  it("clamps a complete item the same way as an in-progress one", () => {
+    expect(
+      getProgressPercent({ id: "1", file, status: "complete", progress: 150 })
+    ).toBe(100);
+    expect(
+      getProgressPercent({ id: "1", file, status: "complete", progress: -10 })
+    ).toBe(100);
   });
 });
 

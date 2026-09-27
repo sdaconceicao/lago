@@ -65,7 +65,7 @@ export interface FileUploadItem {
 
 /** Returns whether a file is an image the browser can preview. */
 export const isImageFile = (file: File): boolean =>
-  file.type.startsWith("image/");
+  file.type.toLowerCase().startsWith("image/");
 
 /** Formats a byte count for display, e.g. `720 KB`. */
 export const formatFileSize = (bytes: number): string => {
@@ -74,7 +74,9 @@ export const formatFileSize = (bytes: number): string => {
   }
 
   if (bytes < 1024 * 1024) {
-    return `${Math.round(bytes / 1024)} KB`;
+    const kilobytes = Math.round(bytes / 1024);
+    if (kilobytes >= 1024) return "1.0 MB";
+    return `${kilobytes} KB`;
   }
 
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
@@ -102,17 +104,21 @@ export const fileMatchesAccept = (file: File, accept?: string): boolean => {
     return true;
   }
 
+  const fileType = file.type.toLowerCase();
+  const fileName = file.name.toLowerCase();
+
   return acceptedTypes.some((type) => {
-    if (type.startsWith(".")) {
-      return file.name.toLowerCase().endsWith(type.toLowerCase());
+    const normalized = type.toLowerCase();
+
+    if (normalized.startsWith(".")) {
+      return fileName.endsWith(normalized);
     }
 
-    if (type.endsWith("/*")) {
-      const prefix = type.slice(0, -1);
-      return file.type.startsWith(prefix);
+    if (normalized.endsWith("/*")) {
+      return fileType.startsWith(normalized.slice(0, -1));
     }
 
-    return file.type === type;
+    return fileType === normalized;
   });
 };
 
@@ -216,12 +222,9 @@ export const getStatusMessage = (item: FileUploadItem): string => {
 /** Progress to display, clamped to 0–100. Complete items without a value read as 100. */
 export const getProgressPercent = (item: FileUploadItem): number => {
   const progress = item.progress ?? 0;
+  const value = item.status === "complete" && progress <= 0 ? 100 : progress;
 
-  if (item.status === "complete") {
-    return progress || 100;
-  }
-
-  return Math.min(100, Math.max(0, progress));
+  return Math.min(100, Math.max(0, value));
 };
 
 /**

@@ -2,6 +2,9 @@ import { act, renderHook } from "@testing-library/react";
 import { useClipboard } from "./use-clipboard";
 
 describe("useClipboard", () => {
+  const originalExecCommand = document.execCommand;
+  const originalSecureContext = window.isSecureContext;
+
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -9,6 +12,17 @@ describe("useClipboard", () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
+    Reflect.deleteProperty(navigator, "clipboard");
+    Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
+      value: originalSecureContext,
+      writable: true,
+    });
+    if (originalExecCommand) {
+      document.execCommand = originalExecCommand;
+    } else {
+      Reflect.deleteProperty(document, "execCommand");
+    }
   });
 
   it("starts with copied as false", () => {
@@ -21,6 +35,7 @@ describe("useClipboard", () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.assign(navigator, { clipboard: { writeText } });
     Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
       value: true,
       writable: true,
     });
@@ -40,6 +55,7 @@ describe("useClipboard", () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.assign(navigator, { clipboard: { writeText } });
     Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
       value: true,
       writable: true,
     });
@@ -57,6 +73,7 @@ describe("useClipboard", () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.assign(navigator, { clipboard: { writeText } });
     Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
       value: true,
       writable: true,
     });
@@ -79,6 +96,7 @@ describe("useClipboard", () => {
   it("falls back to execCommand when clipboard API is unavailable", async () => {
     Object.assign(navigator, { clipboard: undefined });
     Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
       value: false,
       writable: true,
     });
@@ -100,6 +118,7 @@ describe("useClipboard", () => {
   it("returns error when execCommand returns false", async () => {
     Object.assign(navigator, { clipboard: undefined });
     Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
       value: false,
       writable: true,
     });
@@ -113,11 +132,15 @@ describe("useClipboard", () => {
       expect(res.success).toBe(false);
       expect(res.error).toBeInstanceOf(Error);
     });
+
+    expect(result.current.copied).toBe(false);
+    expect(document.body.querySelector("textarea")).toBeNull();
   });
 
   it("returns error when fallback throws", async () => {
     Object.assign(navigator, { clipboard: undefined });
     Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
       value: false,
       writable: true,
     });
@@ -133,12 +156,16 @@ describe("useClipboard", () => {
       expect(res.success).toBe(false);
       expect(res.error?.message).toBe("execCommand not supported");
     });
+
+    expect(result.current.copied).toBe(false);
+    expect(document.body.querySelector("textarea")).toBeNull();
   });
 
   it("falls back when modern clipboard API rejects", async () => {
     const writeText = vi.fn().mockRejectedValue(new Error("denied"));
     Object.assign(navigator, { clipboard: { writeText } });
     Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
       value: true,
       writable: true,
     });
@@ -158,6 +185,7 @@ describe("useClipboard", () => {
   it("does not forward id when falling back from missing clipboard API", async () => {
     Object.assign(navigator, { clipboard: undefined });
     Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
       value: false,
       writable: true,
     });
@@ -170,7 +198,61 @@ describe("useClipboard", () => {
       await result.current.copy("text", "btn-1");
     });
 
-    // Bug: the direct fallback call doesn't forward `id`, so copied is `true` instead of "btn-1"
-    expect(result.current.copied).toBe(true);
+    expect(result.current.copied).toBe("btn-1");
+  });
+
+  it("forwards id when the modern clipboard API rejects", async () => {
+    const writeText = vi.fn().mockRejectedValue(new Error("denied"));
+    Object.assign(navigator, { clipboard: { writeText } });
+    Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
+      value: true,
+      writable: true,
+    });
+    document.execCommand = vi.fn().mockReturnValue(true);
+
+    const { result } = renderHook(() => useClipboard());
+
+    await act(async () => {
+      const res = await result.current.copy("text", "btn-2");
+      expect(res).toEqual({ success: true });
+    });
+
+    expect(result.current.copied).toBe("btn-2");
+    expect(document.body.querySelector("textarea")).toBeNull();
+  });
+
+  it("restarts the reset timer when copy is called again", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.assign(navigator, { clipboard: { writeText } });
+    Object.defineProperty(window, "isSecureContext", {
+      configurable: true,
+      value: true,
+      writable: true,
+    });
+
+    const { result } = renderHook(() => useClipboard());
+
+    await act(async () => {
+      await result.current.copy("one", "a");
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+
+    await act(async () => {
+      await result.current.copy("two", "b");
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(1500);
+    });
+    expect(result.current.copied).toBe("b");
+
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+    expect(result.current.copied).toBe(false);
   });
 });

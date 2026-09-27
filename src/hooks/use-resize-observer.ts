@@ -11,8 +11,13 @@ import { useEffect, useRef } from "react";
  * that never populate `contentBoxSize`.
  */
 const getContentBoxSize = (entry: ResizeObserverEntry): ResizeObserverSize => {
-  const [size] = entry.contentBoxSize;
+  const boxSize = entry.contentBoxSize as
+    | ResizeObserverSize
+    | readonly ResizeObserverSize[]
+    | undefined;
+  const size = Array.isArray(boxSize) ? boxSize[0] : boxSize;
   if (size) return size;
+
   return {
     inlineSize: entry.contentRect.width,
     blockSize: entry.contentRect.height,

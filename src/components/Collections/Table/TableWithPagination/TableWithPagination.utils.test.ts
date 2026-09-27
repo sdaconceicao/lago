@@ -85,4 +85,17 @@ describe("getResultsRange", () => {
       total: 25,
     });
   });
+
+  it("returns no visible rows for a non-positive page", () => {
+    expect(getResultsRange(0, 10, 25)).toEqual({
+      from: 0,
+      to: 0,
+      total: 25,
+    });
+    expect(getResultsRange(-2, 10, 25)).toEqual({
+      from: 0,
+      to: 0,
+      total: 25,
+    });
+  });
 });

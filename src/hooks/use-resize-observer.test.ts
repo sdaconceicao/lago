@@ -118,6 +118,32 @@ describe("useResizeObserver", () => {
     expect(callback).toHaveBeenCalledWith(size(240, 28));
   });
 
+  it("falls back to contentRect when contentBoxSize is missing", () => {
+    const callback = vi.fn();
+    renderWithElement(callback);
+
+    latest().emit([
+      {
+        contentRect: { width: 180, height: 24 } as DOMRectReadOnly,
+      },
+    ]);
+
+    expect(callback).toHaveBeenCalledWith(size(180, 24));
+  });
+
+  it("reads a legacy contentBoxSize object that is not an array", () => {
+    const callback = vi.fn();
+    renderWithElement(callback);
+
+    latest().emit([
+      {
+        contentBoxSize: size(90, 16) as unknown as ResizeObserverSize[],
+      },
+    ]);
+
+    expect(callback).toHaveBeenCalledWith(size(90, 16));
+  });
+
   it("ignores a notification with no entries", () => {
     const callback = vi.fn();
     renderWithElement(callback);

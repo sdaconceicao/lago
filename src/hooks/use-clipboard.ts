@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const DEFAULT_TIMEOUT = 2000;
 
@@ -32,54 +32,79 @@ type UseClipboardReturnType = {
  */
 export const useClipboard = (): UseClipboardReturnType => {
   const [copied, setCopied] = useState<string | boolean>(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearResetTimer = useCallback(() => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => clearResetTimer, [clearResetTimer]);
+
+  const markCopied = useCallback(
+    (id?: string) => {
+      clearResetTimer();
+      setCopied(id || true);
+      timeoutRef.current = setTimeout(() => {
+        timeoutRef.current = null;
+        setCopied(false);
+      }, DEFAULT_TIMEOUT);
+    },
+    [clearResetTimer]
+  );
 
   // Fallback function for older browsers
-  const fallback = useCallback((text: string, id?: string) => {
-    try {
-      // Textarea to copy the text to the clipboard
+  const fallback = useCallback(
+    (text: string, id?: string) => {
       const textArea = document.createElement("textarea");
       textArea.value = text;
       textArea.style.position = "absolute";
       textArea.style.left = "-99999px";
-
       document.body.appendChild(textArea);
-      textArea.select();
 
-      const success = document.execCommand("copy");
-      textArea.remove();
+      try {
+        textArea.select();
+        const success = document.execCommand("copy");
 
-      setCopied(id || true);
-      setTimeout(() => setCopied(false), DEFAULT_TIMEOUT);
+        if (!success) {
+          return {
+            success: false,
+            error: new Error("execCommand returned false"),
+          };
+        }
 
-      return success
-        ? { success: true }
-        : { success: false, error: new Error("execCommand returned false") };
-    } catch (err) {
-      return {
-        success: false,
-        error: err instanceof Error ? err : new Error("Fallback copy failed"),
-      };
-    }
-  }, []);
+        markCopied(id);
+        return { success: true };
+      } catch (err) {
+        return {
+          success: false,
+          error: err instanceof Error ? err : new Error("Fallback copy failed"),
+        };
+      } finally {
+        textArea.remove();
+      }
+    },
+    [markCopied]
+  );
 
   const copy = useCallback(
     async (text: string, id?: string) => {
       if (navigator.clipboard && window.isSecureContext) {
         try {
           await navigator.clipboard.writeText(text);
-
-          setCopied(id || true);
-          setTimeout(() => setCopied(false), DEFAULT_TIMEOUT);
-
+          markCopied(id);
           return { success: true };
         } catch {
           // If modern method fails, try fallback
           return fallback(text, id);
         }
       }
-      return fallback(text);
+
+      return fallback(text, id);
     },
-    [fallback]
+    [fallback, markCopied]
   );
 
   return { copied, copy };

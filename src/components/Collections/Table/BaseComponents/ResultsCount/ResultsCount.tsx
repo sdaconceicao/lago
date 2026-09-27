@@ -14,7 +14,8 @@ export interface ResultsCountInfo {
 
 /**
  * Default results template: "Showing x to y of z results", or "No results"
- * when the list is empty. Uses locale-aware number formatting.
+ * when the list is empty. Digits are grouped with en-US separators so the
+ * server and the browser render the same string.
  */
 export const defaultResultsTemplate = ({
   from,
@@ -22,7 +23,7 @@ export const defaultResultsTemplate = ({
   total,
 }: ResultsCountInfo): ReactNode => {
   if (total <= 0) return "No results";
-  const format = (value: number) => value.toLocaleString();
+  const format = (value: number) => value.toLocaleString("en-US");
   return `Showing ${format(from)} to ${format(to)} of ${format(total)} results`;
 };
 
