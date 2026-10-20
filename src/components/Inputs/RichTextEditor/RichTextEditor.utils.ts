@@ -47,6 +47,8 @@ export interface EditorAttributesOptions {
   describedBy?: string;
   isInvalid?: boolean;
   isRequired?: boolean;
+  /** Prevents keyboard focus even when the field is also read-only. */
+  isDisabled?: boolean;
   isReadOnly?: boolean;
 }
 
@@ -65,6 +67,7 @@ export const buildEditorAttributes = ({
   describedBy,
   isInvalid,
   isRequired,
+  isDisabled,
   isReadOnly,
 }: EditorAttributesOptions): Record<string, string> => {
   const attributes: Record<string, string> = {
@@ -78,6 +81,7 @@ export const buildEditorAttributes = ({
   if (isInvalid) attributes["aria-invalid"] = "true";
   if (isRequired) attributes["aria-required"] = "true";
   if (isReadOnly) attributes["aria-readonly"] = "true";
+  if (isReadOnly && !isDisabled) attributes.tabindex = "0";
 
   return attributes;
 };

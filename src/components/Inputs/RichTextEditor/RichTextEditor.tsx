@@ -114,9 +114,10 @@ export function RichTextEditor({
         describedBy,
         isInvalid,
         isRequired,
+        isDisabled,
         isReadOnly,
       }),
-    [label, labelId, describedBy, isInvalid, isRequired, isReadOnly]
+    [label, labelId, describedBy, isInvalid, isRequired, isDisabled, isReadOnly]
   );
 
   const validation = useMemo(
@@ -191,7 +192,12 @@ export function RichTextEditor({
       </FieldErrorContext.Provider>
 
       {name !== undefined && (
-        <input type="hidden" name={name} value={value ?? submitValue} />
+        <input
+          type="hidden"
+          name={name}
+          value={value ?? submitValue}
+          disabled={isDisabled}
+        />
       )}
     </div>
   );

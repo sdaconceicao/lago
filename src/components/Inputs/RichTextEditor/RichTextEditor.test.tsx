@@ -147,7 +147,70 @@ describe("RichTextEditor", () => {
     expect(textbox).toHaveAttribute("contenteditable", "false");
   });
 
+  it("keeps read-only content reachable by keyboard as disabled state changes", async () => {
+    const user = userEvent.setup();
+    const props = { label: "Bio", isReadOnly: true, toolbar: [] };
+    const { textbox, rerender } = await renderEditor(props);
+
+    await user.tab();
+    expect(textbox).toHaveFocus();
+
+    await user.tab();
+    rerender(<RichTextEditor {...props} isDisabled />);
+
+    await user.tab();
+    expect(textbox).not.toHaveFocus();
+
+    rerender(<RichTextEditor {...props} />);
+
+    await user.tab();
+    expect(textbox).toHaveFocus();
+  });
+
+  it("skips disabled content during keyboard navigation", async () => {
+    const user = userEvent.setup();
+    const { textbox } = await renderEditor({
+      label: "Bio",
+      isDisabled: true,
+      toolbar: [],
+    });
+
+    await user.tab();
+
+    expect(textbox).not.toHaveFocus();
+  });
+
   describe("form submission", () => {
+    it.each(["value", "defaultValue"] as const)(
+      "omits disabled %s from FormData and includes it when read-only",
+      async (valueProp) => {
+        const props = {
+          label: "Bio",
+          name: "bio",
+          [valueProp]: "<p>Hello</p>",
+        };
+        const { rerender } = render(
+          <form aria-label="Profile">
+            <RichTextEditor {...props} isDisabled />
+          </form>
+        );
+        await screen.findByRole("textbox", { name: "Bio" });
+        const form = screen.getByRole<HTMLFormElement>("form", {
+          name: "Profile",
+        });
+
+        expect(new FormData(form).has("bio")).toBe(false);
+
+        rerender(
+          <form aria-label="Profile">
+            <RichTextEditor {...props} isReadOnly />
+          </form>
+        );
+
+        expect(new FormData(form).get("bio")).toBe("<p>Hello</p>");
+      }
+    );
+
     it("renders no hidden input without a name", async () => {
       const { container } = await renderEditor({ label: "Bio" });
 

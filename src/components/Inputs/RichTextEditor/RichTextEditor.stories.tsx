@@ -25,9 +25,9 @@ export default meta;
 
 type Story = StoryFn<typeof RichTextEditor>;
 
-export const Example: Story = (args) => <RichTextEditor {...args} />;
+export const Default: Story = (args) => <RichTextEditor {...args} />;
 
-Example.args = {
+Default.args = {
   label: "Release notes",
   description: "Supports headings, lists, links and inline formatting.",
 };
