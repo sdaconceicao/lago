@@ -29,10 +29,11 @@
 /* The ProseMirror root, and so the editable element itself: the class arrives
    through tiptap's `editorProps.attributes`, the only way to name the element
    ProseMirror creates. The min-height matches TextArea — one single-line field
-   plus a second row — so the field reads as multi-line even while empty. */
+   plus a second row — with equal padding around a single line of text. */
 .content {
   min-height: calc(var(--field-height) + var(--spacing-4));
-  padding: var(--field-inner-inset) var(--field-padding-x);
+  padding: calc((var(--field-height) + var(--spacing-4) - 1lh) / 2)
+    var(--field-padding-x);
   box-sizing: border-box;
   font: var(--field-font-size) var(--font-family);
   line-height: 1.5;

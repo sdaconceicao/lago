@@ -32,6 +32,29 @@ Default.args = {
   description: "Supports headings, lists, links and inline formatting.",
 };
 
+export const ResponsiveToolbar: Story = (args) => (
+  <div
+    style={{
+      width: 480,
+      maxWidth: "100%",
+      minWidth: 160,
+      resize: "horizontal",
+      overflow: "auto",
+    }}
+  >
+    <RichTextEditor {...args} label="Release notes" />
+  </div>
+);
+
+ResponsiveToolbar.parameters = {
+  docs: {
+    description: {
+      story:
+        "The toolbar stays on one line and keeps each section together. Sections that do not fit appear in a bar below the three-dot More formatting button. Drag the panel's bottom-right corner to resize it and watch sections move between the main bar and the popover.",
+    },
+  },
+};
+
 export const Sizes: Story = (args) => (
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
     <RichTextEditor {...args} size="sm" label="Small" />
@@ -113,7 +136,7 @@ CustomToolbar.parameters = {
   docs: {
     description: {
       story:
-        "The `toolbar` prop is an ordered list of groups, each an ordered list of tools. Every group renders as one segmented button track, with a separator between groups, so grouping is a layout decision the consumer makes rather than one baked into the component. Because the array is both ordered and explicit it controls which tools appear as well as the order they appear in — omitting a tool hides its button, and an empty array renders no toolbar at all. Hiding a button does not remove the formatting itself: the keyboard shortcut still works and pasted content keeps its marks, because the extension set is fixed and changing it would mean rebuilding the editor and losing the document.",
+        "The `toolbar` prop is an ordered list of groups, each an ordered list of tools. Every group renders round icon buttons, with a separator between groups, so grouping is a layout decision the consumer makes rather than one baked into the component. Because the array is both ordered and explicit it controls which tools appear as well as the order they appear in — omitting a tool hides its button, and an empty array renders no toolbar at all. Hiding a button does not remove the formatting itself: the keyboard shortcut still works and pasted content keeps its marks, because the extension set is fixed and changing it would mean rebuilding the editor and losing the document.",
     },
   },
 };

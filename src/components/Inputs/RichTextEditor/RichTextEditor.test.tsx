@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RichTextEditor } from "./RichTextEditor";
 import type { RichTextEditorTool } from "./RichTextEditor.types";
@@ -30,6 +30,193 @@ const renderEditor = async (
 };
 
 describe("RichTextEditor", () => {
+  describe("toolbar overflow", () => {
+    let toolbarWidth: number;
+    let notifyResize: ResizeObserverCallback | undefined;
+    let resizeTarget: Element;
+    const toolbar = [["bold", "italic"], ["link"], ["heading1"]] as const;
+    const props = {
+      label: "Bio",
+      defaultValue: "<p>hello</p>",
+      toolbar: toolbar.map((group) => [...group]),
+    };
+
+    beforeEach(() => {
+      toolbarWidth = 200;
+      notifyResize = undefined;
+      resizeTarget = document.body;
+      const getRect = HTMLElement.prototype.getBoundingClientRect;
+      vi.spyOn(
+        HTMLElement.prototype,
+        "getBoundingClientRect"
+      ).mockImplementation(function (this: HTMLElement) {
+        if (this.getAttribute("aria-label") === "Formatting") {
+          return new DOMRect(0, 0, toolbarWidth, 36);
+        }
+        if (this.hasAttribute("data-toolbar-section")) {
+          return new DOMRect(0, 0, 80, 36);
+        }
+        if (this.hasAttribute("data-toolbar-more-measure")) {
+          return new DOMRect(0, 0, 36, 36);
+        }
+        return getRect.call(this);
+      });
+      vi.stubGlobal(
+        "ResizeObserver",
+        class {
+          constructor(private readonly callback: ResizeObserverCallback) {}
+          observe(element: Element) {
+            if (element.querySelector('[aria-label="Formatting"]')) {
+              notifyResize = this.callback;
+              resizeTarget = element;
+            }
+          }
+          unobserve() {}
+          disconnect() {}
+        }
+      );
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      vi.unstubAllGlobals();
+    });
+
+    const resizeTo = (width: number) => {
+      toolbarWidth = width;
+      act(() =>
+        notifyResize?.(
+          [
+            {
+              contentBoxSize: [{ inlineSize: width, blockSize: 36 }],
+              borderBoxSize: [],
+              devicePixelContentBoxSize: [],
+              contentRect: new DOMRect(0, 0, width, 36),
+              target: resizeTarget,
+            },
+          ],
+          {} as ResizeObserver
+        )
+      );
+    };
+
+    it("keeps complete sections visible and reveals the remainder through More", async () => {
+      const user = userEvent.setup();
+      await renderEditor(props);
+
+      expect(screen.getByRole("button", { name: "Bold" })).toBeVisible();
+      expect(screen.getByRole("button", { name: "Link" })).toBeVisible();
+      expect(
+        screen.queryByRole("button", { name: "Heading 1" })
+      ).not.toBeInTheDocument();
+
+      await user.click(screen.getByRole("button", { name: "More formatting" }));
+
+      const overflow = await screen.findByRole("toolbar", {
+        name: "Additional formatting",
+      });
+      expect(
+        within(overflow).getByRole("button", { name: "Heading 1" })
+      ).toBeVisible();
+      expect(
+        within(overflow).queryByRole("button", { name: "Bold" })
+      ).not.toBeInTheDocument();
+    });
+
+    it("runs formatting from overflow and dismisses the popover", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      await renderEditor({ ...props, onChange });
+
+      await user.click(screen.getByRole("button", { name: "More formatting" }));
+      await user.click(
+        await screen.findByRole("button", { name: "Heading 1" })
+      );
+
+      expect(onChange).toHaveBeenCalledWith(
+        expect.stringContaining("<h1>hello</h1>")
+      );
+      await waitFor(() =>
+        expect(
+          screen.queryByRole("dialog", { name: "More formatting" })
+        ).not.toBeInTheDocument()
+      );
+    });
+
+    it("restores sections as space grows and moves whole groups as it shrinks", async () => {
+      await renderEditor(props);
+
+      resizeTo(260);
+      expect(
+        screen.queryByRole("button", { name: "More formatting" })
+      ).not.toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Heading 1" })).toBeVisible();
+
+      resizeTo(120);
+      expect(screen.getByRole("button", { name: "Bold" })).toBeVisible();
+      expect(screen.getByRole("button", { name: "Italic" })).toBeVisible();
+      expect(
+        screen.queryByRole("button", { name: "Link" })
+      ).not.toBeInTheDocument();
+
+      resizeTo(110);
+      expect(screen.getAllByRole("button")).toHaveLength(1);
+      expect(
+        screen.getByRole("button", { name: "More formatting" })
+      ).toBeVisible();
+    });
+
+    it("dismisses with Escape and restores focus to More", async () => {
+      const user = userEvent.setup();
+      await renderEditor(props);
+
+      await user.click(screen.getByRole("button", { name: "More formatting" }));
+      await screen.findByRole("dialog", { name: "More formatting" });
+      await user.keyboard("{Escape}");
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole("button", { name: "More formatting" })
+        ).toHaveFocus()
+      );
+      expect(
+        screen.queryByRole("dialog", { name: "More formatting" })
+      ).not.toBeInTheDocument();
+    });
+
+    it("keeps the link form usable when resizing restores its toolbar section", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      await renderEditor({ ...props, onChange });
+      resizeTo(120);
+
+      await user.click(screen.getByRole("button", { name: "More formatting" }));
+      await user.click(await screen.findByRole("button", { name: "Link" }));
+      await user.type(
+        await screen.findByRole("textbox", { name: "URL" }),
+        "https://example.com"
+      );
+      resizeTo(260);
+      expect(screen.getByRole("textbox", { name: "URL" })).toBeVisible();
+      await user.click(screen.getByRole("button", { name: "Add link" }));
+
+      expect(onChange).toHaveBeenCalledWith(
+        expect.stringContaining('href="https://example.com"')
+      );
+    });
+
+    it.each(["isDisabled", "isReadOnly"])(
+      "disables More when %s",
+      async (state) => {
+        await renderEditor({ ...props, [state]: true });
+
+        expect(
+          screen.getByRole("button", { name: "More formatting" })
+        ).toBeDisabled();
+      }
+    );
+  });
+
   it("renders the editable content as a multiline textbox", async () => {
     const { textbox } = await renderEditor({ label: "Bio" });
 

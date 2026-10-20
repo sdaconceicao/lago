@@ -35,8 +35,8 @@ export type RichTextEditorTool =
 
 /**
  * The toolbar layout: an ordered list of groups, each an ordered list of tools.
- * Every group renders as one segmented `ToggleButtonGroup`, with a `Separator`
- * between groups.
+ * Every group renders round icon buttons, with a `Separator` between groups.
+ * Groups that do not fit on one line move into the More formatting popover.
  *
  * Because the array is both ordered and explicit it controls which tools appear
  * as well as the order they appear in — omitting a tool hides its button. That

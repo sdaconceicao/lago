@@ -1,20 +1,45 @@
-/* The toolbar sits inside the field's inset surface rather than beside it, so
-   it carries the divider between itself and the content and no border of its
-   own. Full width so a wrapped toolbar still fills the field. */
+.container {
+  min-width: 0;
+}
+
+/* Only the overflow popover may wrap; the primary bar always stays one line. */
 .toolbar {
+  position: relative;
   width: 100%;
+  flex-wrap: nowrap;
   padding: var(--field-inner-inset) var(--field-inner-inset)
     calc(var(--field-inner-inset) + var(--spacing-1));
   box-sizing: border-box;
   border-bottom: 1px solid var(--border-color);
 }
 
-/* One wrapper per group. A flex item rather than `display: contents`, because
-   the group holding the link anchors its Popover against this box, and a
-   contents box has no rect to position against. */
+.section,
 .group {
   display: flex;
   align-items: center;
+  gap: var(--spacing-1);
+  flex: 0 0 auto;
+}
+
+/* Keep natural widths available for measurement without exposing duplicate
+   controls to pointer, keyboard, or assistive technology users. */
+.section[data-overflowed],
+.measurement {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.overflowPopover {
+  max-width: calc(100vw - var(--spacing-4) * 2);
+}
+
+.overflowDialog {
+  padding: 0;
+}
+
+.overflowToolbar {
+  max-width: 100%;
 }
 
 .linkForm {

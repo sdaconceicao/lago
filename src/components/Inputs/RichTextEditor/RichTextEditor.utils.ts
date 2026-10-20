@@ -4,7 +4,7 @@ import type { RichTextEditorToolbar } from "./RichTextEditor.types";
 /**
  * The toolbar a RichTextEditor renders when no `toolbar` prop is given: the
  * formatting a writer expects to find in a text editor, grouped so that related
- * controls sit in one segmented track.
+ * controls stay together when they move into the overflow popover.
  */
 export const DEFAULT_TOOLBAR: RichTextEditorToolbar = [
   ["undo", "redo"],
@@ -20,7 +20,7 @@ export const DEFAULT_TOOLBAR: RichTextEditorToolbar = [
 
 /**
  * Drops empty groups, so a toolbar built by filtering never renders an empty
- * `ToggleButtonGroup` or a `Separator` with nothing on one side of it.
+ * group or a `Separator` with nothing on one side of it.
  */
 export const normalizeToolbar = (
   toolbar: RichTextEditorToolbar

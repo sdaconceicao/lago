@@ -1,20 +1,22 @@
 "use client";
 import type { Editor } from "@tiptap/core";
 import { useEditorState } from "@tiptap/react";
-import { Fragment, useCallback, useRef, useState } from "react";
+import { EllipsisVertical } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/Actions/Button/Button";
+import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { Toolbar } from "@/components/Actions/Toolbar/Toolbar";
 import type { FieldSize } from "@/components/Inputs/FormComponents/index";
 import { TextField } from "@/components/Inputs/TextField/TextField";
 import { IconToggleButton } from "@/components/Inputs/Toggle/IconToggleButton/IconToggleButton";
-import { ToggleButtonGroup } from "@/components/Inputs/Toggle/ToggleButtonGroup/ToggleButtonGroup";
 import { Separator } from "@/components/Layout/Separator/Separator";
-import { Dialog } from "@/components/Overlays/Dialog/Dialog";
+import { Dialog, DialogTrigger } from "@/components/Overlays/Dialog/Dialog";
 import { Popover } from "@/components/Overlays/Popover/Popover";
 import type {
   RichTextEditorTool,
   RichTextEditorToolbar as RichTextEditorToolbarLayout,
 } from "../RichTextEditor.types";
+import { useToolbarOverflow } from "./RichTextEditorToolbar.hooks";
 import styles from "./RichTextEditorToolbar.module.css";
 import { TOOL_REGISTRY } from "./toolRegistry";
 
@@ -37,8 +39,8 @@ export interface RichTextEditorToolbarProps {
 }
 
 /**
- * The formatting toolbar: lago's `Toolbar`, `ToggleButtonGroup` and
- * `IconToggleButton`, driven by the tool registry.
+ * The formatting toolbar: lago's `Toolbar` and round `IconToggleButton`s,
+ * driven by the tool registry.
  *
  * Every button is an independent toggle whose pressed state is read from the
  * document rather than held here, so the toolbar cannot drift out of step with
@@ -72,14 +74,21 @@ export function RichTextEditorToolbar({
   });
 
   const linkAnchorRef = useRef<HTMLDivElement>(null);
+  const moreAnchorRef = useRef<HTMLDivElement>(null);
+  const { containerRef, visibleCount } = useToolbarOverflow(toolbar);
+  const hasOverflow = visibleCount < groups.length;
+  const [isOverflowOpen, setIsOverflowOpen] = useState(false);
+  const [isLinkFromOverflow, setIsLinkFromOverflow] = useState(false);
   const [isLinkOpen, setIsLinkOpen] = useState(false);
   const [href, setHref] = useState("");
 
   const handlePress = useCallback(
-    (tool: RichTextEditorTool) => {
+    (tool: RichTextEditorTool, inOverflow: boolean) => {
+      setIsOverflowOpen(false);
       // Every tool but one is a command. A link needs a URL, so pressing the
       // button when there is no link to remove opens the Popover instead.
       if (tool === "link" && !editor.isActive("link")) {
+        setIsLinkFromOverflow(inOverflow);
         setHref(editor.getAttributes("link").href ?? "");
         setIsLinkOpen(true);
         return;
@@ -112,53 +121,113 @@ export function RichTextEditorToolbar({
     chain.setLink({ href: trimmed }).run();
   }, [editor, href]);
 
+  const renderGroup = (
+    group: ToolState[],
+    index: number,
+    inOverflow = false
+  ) => {
+    const overflowed = !inOverflow && index >= visibleCount;
+    return (
+      <div
+        key={index}
+        className={styles.section}
+        data-toolbar-section={inOverflow ? undefined : ""}
+        data-overflowed={overflowed || undefined}
+        aria-hidden={overflowed || undefined}
+        inert={overflowed}
+      >
+        {index > 0 && <Separator />}
+        <div
+          className={styles.group}
+          ref={
+            !inOverflow && group.some(({ tool }) => tool === "link")
+              ? linkAnchorRef
+              : undefined
+          }
+        >
+          {group.map(({ tool, isActive, isEnabled }) => {
+            const { label, icon: Icon } = TOOL_REGISTRY[tool];
+            return (
+              <IconToggleButton
+                key={tool}
+                aria-label={label}
+                variant="quiet"
+                size={size}
+                isSelected={isActive}
+                isDisabled={isDisabled || !isEnabled}
+                onChange={() => handlePress(tool, inOverflow)}
+              >
+                <Icon aria-hidden="true" />
+              </IconToggleButton>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
-      <Toolbar aria-label="Formatting" className={styles.toolbar}>
-        {groups.map((group, index) => (
-          // biome-ignore lint/suspicious/noArrayIndexKey: groups are positional, so the index is their only stable identity
-          <Fragment key={index}>
-            {index > 0 && <Separator />}
-            {/* Every group gets the same wrapper, and the one holding the link
-                also anchors its Popover. ToggleButton takes no ref, and an
-                extra element inside the group would break the segmented
-                first-child/last-child radii. */}
-            <div
-              className={styles.group}
-              ref={
-                group.some(({ tool }) => tool === "link")
-                  ? linkAnchorRef
-                  : undefined
-              }
+      <div ref={containerRef} className={styles.container}>
+        <Toolbar aria-label="Formatting" className={styles.toolbar}>
+          {groups.map((group, index) => renderGroup(group, index))}
+          <div
+            className={styles.measurement}
+            data-toolbar-more-measure=""
+            aria-hidden="true"
+            inert
+          >
+            <IconButton
+              aria-label="More formatting"
+              variant="quiet"
+              size={size}
             >
-              <ToggleButtonGroup
-                size={size}
-                isDisabled={isDisabled}
-                selectionMode="multiple"
+              <EllipsisVertical aria-hidden="true" />
+            </IconButton>
+          </div>
+          {hasOverflow && (
+            <div ref={moreAnchorRef} className={styles.group}>
+              <DialogTrigger
+                isOpen={isOverflowOpen}
+                onOpenChange={setIsOverflowOpen}
               >
-                {group.map(({ tool, isActive, isEnabled }) => {
-                  const { label, icon: Icon } = TOOL_REGISTRY[tool];
-                  return (
-                    <IconToggleButton
-                      key={tool}
-                      aria-label={label}
-                      variant="quiet"
-                      isSelected={isActive}
-                      isDisabled={isDisabled || !isEnabled}
-                      onChange={() => handlePress(tool)}
+                <IconButton
+                  aria-label="More formatting"
+                  variant="quiet"
+                  size={size}
+                  isDisabled={isDisabled}
+                >
+                  <EllipsisVertical aria-hidden="true" />
+                </IconButton>
+                <Popover
+                  hideArrow
+                  placement="bottom end"
+                  className={styles.overflowPopover}
+                >
+                  <Dialog
+                    aria-label="More formatting"
+                    className={styles.overflowDialog}
+                  >
+                    <Toolbar
+                      aria-label="Additional formatting"
+                      className={styles.overflowToolbar}
                     >
-                      <Icon aria-hidden="true" />
-                    </IconToggleButton>
-                  );
-                })}
-              </ToggleButtonGroup>
+                      {groups
+                        .slice(visibleCount)
+                        .map((group, index) => renderGroup(group, index, true))}
+                    </Toolbar>
+                  </Dialog>
+                </Popover>
+              </DialogTrigger>
             </div>
-          </Fragment>
-        ))}
-      </Toolbar>
+          )}
+        </Toolbar>
+      </div>
 
       <Popover
-        triggerRef={linkAnchorRef}
+        triggerRef={
+          isLinkFromOverflow && hasOverflow ? moreAnchorRef : linkAnchorRef
+        }
         isOpen={isLinkOpen}
         onOpenChange={setIsLinkOpen}
         placement="bottom start"
