@@ -61,19 +61,7 @@ jobs:
           path: ./*
           key: cache-${{ runner.os }}-${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}-${{ inputs.working-directory }}
 
-      - name: Cache node modules
-        uses: actions/cache@v5
-        id: node_modules
-        with:
-          path: |
-            ${{ inputs.working-directory }}/node_modules
-            **/node_modules
-            ~/.npm
-            ~/.local/share/pnpm/store
-          key: ds-deps-${{ runner.os }}-${{ inputs.working-directory }}-${{ hashFiles(format('{0}/pnpm-lock.yaml', inputs.working-directory)) }}
-
       - name: Install dependencies
-        if: steps.node_modules.outputs.cache-hit != 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Set cache key

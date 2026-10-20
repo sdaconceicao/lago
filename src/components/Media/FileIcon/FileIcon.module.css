@@ -1,0 +1,56 @@
+[data-file-icon-size="sm"] {
+  --file-icon-size: calc(var(--spacing) * 8); /* 32px */
+  --file-icon-glyph-size: calc(var(--spacing) * 6); /* 24px */
+  --file-icon-badge-size: 0.4375rem;
+}
+
+[data-file-icon-size="md"] {
+  --file-icon-size: calc(var(--spacing) * 10); /* 40px */
+  --file-icon-glyph-size: calc(var(--spacing) * 8); /* 32px */
+  --file-icon-badge-size: 0.5rem;
+}
+
+[data-file-icon-size="lg"] {
+  --file-icon-size: calc(var(--spacing) * 12); /* 48px */
+  --file-icon-glyph-size: calc(var(--spacing) * 10); /* 40px */
+  --file-icon-badge-size: 0.5625rem;
+}
+
+.fileIcon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--file-icon-size);
+  height: var(--file-icon-size);
+  flex-shrink: 0;
+  color: var(--text-color-placeholder);
+  vertical-align: middle;
+}
+
+.fileGlyph {
+  width: var(--file-icon-glyph-size);
+  height: var(--file-icon-glyph-size);
+}
+
+.fileTypeBadge {
+  position: absolute;
+  left: 50%;
+  bottom: var(--spacing-1);
+  translate: -50% 0;
+  padding: 1px var(--spacing-1);
+  border-radius: 2px;
+  background: var(--tint);
+  color: var(--overlay-background);
+  font: 700 var(--file-icon-badge-size) / 1 var(--font-family);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 0 0 1px var(--overlay-background);
+
+  @media (forced-colors: active) {
+    background: Highlight;
+    color: HighlightText;
+    box-shadow: none;
+    forced-color-adjust: none;
+  }
+}
