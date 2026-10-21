@@ -1,7 +1,6 @@
 import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RichTextEditor } from "./RichTextEditor";
-import type { RichTextEditorTool } from "./RichTextEditor.types";
 import { TOOL_REGISTRY } from "./Toolbar/toolRegistry";
 
 /**
@@ -21,6 +20,16 @@ beforeAll(() => {
  * The editor is created on mount rather than during render, so every test waits
  * for the editable element before asserting on it.
  */
+type ButtonTool = keyof typeof TOOL_REGISTRY;
+
+const selectHeading = async (
+  user: ReturnType<typeof userEvent.setup>,
+  label: string
+) => {
+  await user.click(screen.getByRole("button", { name: /Heading/ }));
+  await user.click(await screen.findByRole("option", { name: label }));
+};
+
 const renderEditor = async (
   props: Parameters<typeof RichTextEditor>[0] = {}
 ) => {
@@ -34,7 +43,7 @@ describe("RichTextEditor", () => {
     let toolbarWidth: number;
     let notifyResize: ResizeObserverCallback | undefined;
     let resizeTarget: Element;
-    const toolbar = [["bold", "italic"], ["link"], ["heading1"]] as const;
+    const toolbar = [["bold", "italic"], ["link"], ["heading"]] as const;
     const props = {
       label: "Bio",
       defaultValue: "<p>hello</p>",
@@ -107,7 +116,7 @@ describe("RichTextEditor", () => {
       expect(screen.getByRole("button", { name: "Bold" })).toBeVisible();
       expect(screen.getByRole("button", { name: "Link" })).toBeVisible();
       expect(
-        screen.queryByRole("button", { name: "Heading 1" })
+        screen.queryByRole("button", { name: /Heading/ })
       ).not.toBeInTheDocument();
 
       await user.click(screen.getByRole("button", { name: "More formatting" }));
@@ -116,7 +125,7 @@ describe("RichTextEditor", () => {
         name: "Additional formatting",
       });
       expect(
-        within(overflow).getByRole("button", { name: "Heading 1" })
+        within(overflow).getByRole("button", { name: /Heading/ })
       ).toBeVisible();
       expect(
         within(overflow).queryByRole("button", { name: "Bold" })
@@ -129,9 +138,7 @@ describe("RichTextEditor", () => {
       await renderEditor({ ...props, onChange });
 
       await user.click(screen.getByRole("button", { name: "More formatting" }));
-      await user.click(
-        await screen.findByRole("button", { name: "Heading 1" })
-      );
+      await selectHeading(user, "Heading 1");
 
       expect(onChange).toHaveBeenCalledWith(
         expect.stringContaining("<h1>hello</h1>")
@@ -150,7 +157,7 @@ describe("RichTextEditor", () => {
       expect(
         screen.queryByRole("button", { name: "More formatting" })
       ).not.toBeInTheDocument();
-      expect(screen.getByRole("button", { name: "Heading 1" })).toBeVisible();
+      expect(screen.getByRole("button", { name: /Heading/ })).toBeVisible();
 
       resizeTo(120);
       expect(screen.getByRole("button", { name: "Bold" })).toBeVisible();
@@ -543,6 +550,67 @@ describe("RichTextEditor", () => {
   });
 
   describe("formatting", () => {
+    it.each([1, 2, 3, 4, 5, 6])(
+      "applies Heading %s from the dropdown",
+      async (level) => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        await renderEditor({
+          label: "Bio",
+          defaultValue: "<p>hello</p>",
+          toolbar: [["heading"]],
+          onChange,
+        });
+
+        await selectHeading(user, `Heading ${level}`);
+
+        expect(onChange).toHaveBeenCalledWith(
+          expect.stringContaining(`<h${level}>hello</h${level}>`)
+        );
+        expect(
+          screen.getByRole("button", { name: /Heading/ })
+        ).toHaveTextContent(`Heading ${level}`);
+      }
+    );
+
+    it("updates the heading selection when the controlled document changes", async () => {
+      const { rerender } = await renderEditor({
+        label: "Bio",
+        value: "<h6>first</h6>",
+        toolbar: [["heading"]],
+      });
+      expect(screen.getByRole("button", { name: /Heading/ })).toHaveTextContent(
+        "Heading 6"
+      );
+
+      rerender(
+        <RichTextEditor
+          label="Bio"
+          value="<h4>second</h4>"
+          toolbar={[["heading"]]}
+        />
+      );
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole("button", { name: /Heading/ })
+        ).toHaveTextContent("Heading 4")
+      );
+    });
+
+    it.each(["isDisabled", "isReadOnly"])(
+      "disables the heading dropdown when %s",
+      async (state) => {
+        await renderEditor({
+          label: "Bio",
+          toolbar: [["heading"]],
+          [state]: true,
+        });
+
+        expect(screen.getByRole("button", { name: /Heading/ })).toBeDisabled();
+      }
+    );
+
     it("marks a tool pressed once its formatting is applied", async () => {
       const user = userEvent.setup();
       await renderEditor({
@@ -559,19 +627,24 @@ describe("RichTextEditor", () => {
       );
     });
 
-    it("unpresses a tool when its formatting is toggled back off", async () => {
+    it("returns a heading to normal text", async () => {
       const user = userEvent.setup();
+      const onChange = vi.fn();
       await renderEditor({
         label: "Bio",
-        defaultValue: "<p>hello</p>",
-        toolbar: [["heading1"]],
+        defaultValue: "<h3>hello</h3>",
+        toolbar: [["heading"]],
+        onChange,
       });
 
-      const heading = () => screen.getByRole("button", { name: "Heading 1" });
-      await user.click(heading());
-      await user.click(heading());
+      await selectHeading(user, "Normal text");
 
-      expect(heading()).toHaveAttribute("aria-pressed", "false");
+      expect(onChange).toHaveBeenCalledWith(
+        expect.stringContaining("<p>hello</p>")
+      );
+      expect(screen.getByRole("button", { name: /Heading/ })).toHaveTextContent(
+        "Normal text"
+      );
     });
 
     it("reports the document HTML through onChange", async () => {
@@ -581,10 +654,10 @@ describe("RichTextEditor", () => {
         label: "Bio",
         defaultValue: "<p>hello</p>",
         onChange,
-        toolbar: [["heading1"]],
+        toolbar: [["heading"]],
       });
 
-      await user.click(screen.getByRole("button", { name: "Heading 1" }));
+      await selectHeading(user, "Heading 1");
 
       // StarterKit's trailing-node extension keeps an empty paragraph after a
       // block node so there is always somewhere to type past it.
@@ -637,12 +710,12 @@ describe("RichTextEditor", () => {
       await renderEditor({
         label: "Bio",
         defaultValue: "<p>hello</p>",
-        toolbar: [["undo", "heading1"]],
+        toolbar: [["undo", "heading"]],
       });
 
       expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
 
-      await user.click(screen.getByRole("button", { name: "Heading 1" }));
+      await selectHeading(user, "Heading 1");
 
       expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
     });
@@ -653,10 +726,10 @@ describe("RichTextEditor", () => {
         label: "Bio",
         name: "bio",
         defaultValue: "<p>hello</p>",
-        toolbar: [["heading1"]],
+        toolbar: [["heading"]],
       });
 
-      await user.click(screen.getByRole("button", { name: "Heading 1" }));
+      await selectHeading(user, "Heading 1");
 
       const hidden =
         container.querySelector<HTMLInputElement>('input[name="bio"]');
@@ -756,7 +829,7 @@ describe("RichTextEditor", () => {
   });
 
   describe("every tool", () => {
-    const ALL_TOOLS = Object.keys(TOOL_REGISTRY) as RichTextEditorTool[];
+    const ALL_TOOLS = Object.keys(TOOL_REGISTRY) as ButtonTool[];
 
     it("renders a button for each tool the registry defines", async () => {
       await renderEditor({ label: "Bio", toolbar: [ALL_TOOLS] });
@@ -785,7 +858,7 @@ describe("RichTextEditor", () => {
 
     // A mark applied to an empty selection is a stored mark rather than a
     // document change, so these are checked by their pressed state.
-    const MARK_TOOLS: RichTextEditorTool[] = [
+    const MARK_TOOLS: ButtonTool[] = [
       "bold",
       "italic",
       "underline",
@@ -813,10 +886,7 @@ describe("RichTextEditor", () => {
       );
     });
 
-    const NODE_TOOLS: Array<[RichTextEditorTool, string]> = [
-      ["heading1", "<h1>hello</h1>"],
-      ["heading2", "<h2>hello</h2>"],
-      ["heading3", "<h3>hello</h3>"],
+    const NODE_TOOLS: Array<[ButtonTool, string]> = [
       ["bulletList", "<ul>"],
       ["orderedList", "<ol>"],
       ["taskList", 'data-type="taskList"'],
@@ -853,10 +923,10 @@ describe("RichTextEditor", () => {
         label: "Bio",
         defaultValue: "<p>hello</p>",
         onChange,
-        toolbar: [["undo", "redo", "heading1"]],
+        toolbar: [["undo", "redo", "heading"]],
       });
 
-      await user.click(screen.getByRole("button", { name: "Heading 1" }));
+      await selectHeading(user, "Heading 1");
       await user.click(screen.getByRole("button", { name: "Undo" }));
 
       expect(onChange).toHaveBeenLastCalledWith(

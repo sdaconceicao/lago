@@ -42,6 +42,21 @@
   max-width: 100%;
 }
 
+.headingSelect {
+  flex: 0 0 auto;
+}
+
+.headingButton {
+  width: 9em;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+
+.headingPopover {
+  min-width: var(--trigger-width);
+  padding: 0;
+}
+
 .linkForm {
   display: flex;
   flex-direction: column;

@@ -9,9 +9,7 @@ import type { LucideIcon } from "lucide-react";
 export type RichTextEditorTool =
   | "undo"
   | "redo"
-  | "heading1"
-  | "heading2"
-  | "heading3"
+  | "heading"
   | "bold"
   | "italic"
   | "underline"
@@ -36,6 +34,7 @@ export type RichTextEditorTool =
 /**
  * The toolbar layout: an ordered list of groups, each an ordered list of tools.
  * Every group renders round icon buttons, with a `Separator` between groups.
+ * The `heading` tool renders a select for normal text and Heading 1–6.
  * Groups that do not fit on one line move into the More formatting popover.
  *
  * Because the array is both ordered and explicit it controls which tools appear

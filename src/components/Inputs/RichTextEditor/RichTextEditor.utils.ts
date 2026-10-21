@@ -8,7 +8,7 @@ import type { RichTextEditorToolbar } from "./RichTextEditor.types";
  */
 export const DEFAULT_TOOLBAR: RichTextEditorToolbar = [
   ["undo", "redo"],
-  ["heading1", "heading2", "heading3"],
+  ["heading"],
   ["bold", "italic", "underline", "strike", "code"],
   ["highlight", "subscript", "superscript"],
   ["link"],

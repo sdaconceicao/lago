@@ -2,9 +2,6 @@ import type { LucideIcon } from "lucide-react";
 import {
   Bold,
   Code,
-  Heading1,
-  Heading2,
-  Heading3,
   Highlighter,
   Italic,
   Link,
@@ -75,20 +72,6 @@ const toggleTool = (
   },
 });
 
-/** A heading level, which differs from a plain toggle only by its attribute. */
-const headingTool = (
-  level: 1 | 2 | 3,
-  icon: LucideIcon
-): RichTextEditorToolDefinition => ({
-  label: `Heading ${level}`,
-  icon,
-  isActive: (editor) => editor.isActive("heading", { level }),
-  isEnabled: (editor) => editor.can().chain().toggleHeading({ level }).run(),
-  run: (editor) => {
-    editor.chain().focus().toggleHeading({ level }).run();
-  },
-});
-
 /** A command that acts once and holds no state of its own. */
 const commandTool = (
   command: OneShotCommand,
@@ -129,7 +112,7 @@ const alignTool = (
 });
 
 /**
- * Every tool, in one table.
+ * The icon button commands, in one table. Heading styles use their own select.
  *
  * Each entry is the whole behaviour of one button — its name, its icon, how to
  * read its pressed state off the document, and what to run when it is pressed —
@@ -141,14 +124,11 @@ const alignTool = (
  * different ways. Only the two tools that genuinely differ are written out.
  */
 export const TOOL_REGISTRY: Record<
-  RichTextEditorTool,
+  Exclude<RichTextEditorTool, "heading">,
   RichTextEditorToolDefinition
 > = {
   undo: commandTool("undo", "Undo", Undo2),
   redo: commandTool("redo", "Redo", Redo2),
-  heading1: headingTool(1, Heading1),
-  heading2: headingTool(2, Heading2),
-  heading3: headingTool(3, Heading3),
   bold: toggleTool("bold", "toggleBold", "Bold", Bold),
   italic: toggleTool("italic", "toggleItalic", "Italic", Italic),
   underline: toggleTool("underline", "toggleUnderline", "Underline", Underline),

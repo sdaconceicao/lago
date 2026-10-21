@@ -16,16 +16,20 @@ import type {
   RichTextEditorTool,
   RichTextEditorToolbar as RichTextEditorToolbarLayout,
 } from "../RichTextEditor.types";
+import { RichTextEditorHeadingSelect } from "./RichTextEditorHeadingSelect";
 import { useToolbarOverflow } from "./RichTextEditorToolbar.hooks";
 import styles from "./RichTextEditorToolbar.module.css";
 import { TOOL_REGISTRY } from "./toolRegistry";
 
 /** One tool and the two states read off the document for it. */
-interface ToolState {
-  tool: RichTextEditorTool;
-  isActive: boolean;
-  isEnabled: boolean;
-}
+type ButtonTool = Exclude<RichTextEditorTool, "heading">;
+type ToolState =
+  | { tool: "heading" }
+  | {
+      tool: ButtonTool;
+      isActive: boolean;
+      isEnabled: boolean;
+    };
 
 export interface RichTextEditorToolbarProps {
   /** The live editor the tools act on. */
@@ -63,6 +67,7 @@ export function RichTextEditorToolbar({
     selector: ({ editor: current }): ToolState[][] =>
       toolbar.map((group) =>
         group.map((tool) => {
+          if (tool === "heading") return { tool };
           const definition = TOOL_REGISTRY[tool];
           return {
             tool,
@@ -81,10 +86,11 @@ export function RichTextEditorToolbar({
   const [isLinkFromOverflow, setIsLinkFromOverflow] = useState(false);
   const [isLinkOpen, setIsLinkOpen] = useState(false);
   const [href, setHref] = useState("");
+  const closeOverflow = useCallback(() => setIsOverflowOpen(false), []);
 
   const handlePress = useCallback(
-    (tool: RichTextEditorTool, inOverflow: boolean) => {
-      setIsOverflowOpen(false);
+    (tool: ButtonTool, inOverflow: boolean) => {
+      closeOverflow();
       // Every tool but one is a command. A link needs a URL, so pressing the
       // button when there is no link to remove opens the Popover instead.
       if (tool === "link" && !editor.isActive("link")) {
@@ -95,7 +101,7 @@ export function RichTextEditorToolbar({
       }
       TOOL_REGISTRY[tool].run(editor);
     },
-    [editor]
+    [editor, closeOverflow]
   );
 
   const applyLink = useCallback(() => {
@@ -145,7 +151,19 @@ export function RichTextEditorToolbar({
               : undefined
           }
         >
-          {group.map(({ tool, isActive, isEnabled }) => {
+          {group.map((state) => {
+            if (state.tool === "heading") {
+              return (
+                <RichTextEditorHeadingSelect
+                  key="heading"
+                  editor={editor}
+                  size={size}
+                  isDisabled={isDisabled}
+                  onChange={closeOverflow}
+                />
+              );
+            }
+            const { tool, isActive, isEnabled } = state;
             const { label, icon: Icon } = TOOL_REGISTRY[tool];
             return (
               <IconToggleButton

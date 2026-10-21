@@ -16,7 +16,7 @@ describe("DEFAULT_TOOLBAR", () => {
 
   it("names only tools the registry defines", () => {
     for (const tool of DEFAULT_TOOLBAR.flat()) {
-      expect(TOOL_REGISTRY[tool]).toBeDefined();
+      if (tool !== "heading") expect(TOOL_REGISTRY[tool]).toBeDefined();
     }
   });
 
@@ -29,6 +29,7 @@ describe("DEFAULT_TOOLBAR", () => {
     const tools = DEFAULT_TOOLBAR.flat();
     expect(tools).toEqual(
       expect.arrayContaining([
+        "heading",
         "bold",
         "italic",
         "underline",
