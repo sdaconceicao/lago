@@ -68,7 +68,7 @@ export const useToolbarActions = (editor: Editor, hasOverflow: boolean) => {
   const applyLink = useCallback(() => {
     const trimmed = href.trim();
     setIsLinkOpen(false);
-    if (!trimmed) return;
+    if (!editor.isEditable || !trimmed) return;
 
     const chain = editor.chain().focus().extendMarkRange("link");
 

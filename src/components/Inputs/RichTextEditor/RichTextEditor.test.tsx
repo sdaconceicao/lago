@@ -1,5 +1,13 @@
-import { act, render, screen, waitFor, within } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useState } from "react";
 import { RichTextEditor } from "./RichTextEditor";
 import { TOOL_REGISTRY } from "./Toolbar/toolRegistry";
 
@@ -764,6 +772,35 @@ describe("RichTextEditor", () => {
   });
 
   describe("link", () => {
+    it.each(["isDisabled", "isReadOnly"] as const)(
+      "prevents an open link form from editing after %s changes",
+      async (state) => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const props = {
+          label: "Bio",
+          defaultValue: "<p>hello</p>",
+          toolbar: [["link"]] as Array<Array<"link">>,
+          onChange,
+        };
+        const { rerender, textbox } = await renderEditor(props);
+        await user.click(screen.getByRole("button", { name: "Link" }));
+        const url = await screen.findByRole("textbox", { name: "URL" });
+        await user.type(url, "https://example.com");
+
+        rerender(<RichTextEditor {...props} {...{ [state]: true }} />);
+
+        expect(url).toBeDisabled();
+        expect(screen.getByRole("button", { name: "Add link" })).toBeDisabled();
+        // A queued or programmatic submit must also respect current editability.
+        const form = url.closest("form");
+        if (!form) throw new Error("Expected the link form");
+        fireEvent.submit(form);
+        expect(onChange).not.toHaveBeenCalled();
+        expect(textbox.innerHTML).toBe("<p>hello</p>");
+      }
+    );
+
     it.each(["click", "Enter"])(
       "adds a link with %s without submitting the surrounding form",
       async (trigger) => {
@@ -1045,6 +1082,60 @@ describe("RichTextEditor", () => {
     );
 
     expect(await screen.findByText("second")).toBeInTheDocument();
+  });
+
+  it.each([undefined, "bio"])(
+    "restores rejected controlled edits without a parent rerender (name: %s)",
+    async (name) => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const { textbox, container } = await renderEditor({
+        label: "Bio",
+        name,
+        value: "<p>hello</p>",
+        onChange,
+        toolbar: [],
+      });
+
+      textbox.focus();
+      document
+        .getSelection()
+        ?.collapse(textbox.querySelector("p")?.firstChild ?? null, 5);
+      await user.keyboard("!");
+
+      expect(onChange).toHaveBeenCalledExactlyOnceWith("<p>hello!</p>");
+      expect(textbox.innerHTML).toBe("<p>hello</p>");
+      if (name !== undefined) {
+        expect(container.querySelector('input[name="bio"]')).toHaveValue(
+          "<p>hello</p>"
+        );
+      }
+    }
+  );
+
+  it("keeps the caret in place when controlled edits are accepted", async () => {
+    const user = userEvent.setup();
+    function ControlledEditor() {
+      const [value, setValue] = useState("<p>hello</p>");
+      return (
+        <RichTextEditor
+          label="Bio"
+          value={value}
+          onChange={setValue}
+          toolbar={[]}
+        />
+      );
+    }
+    render(<ControlledEditor />);
+    const textbox = await screen.findByRole("textbox", { name: "Bio" });
+
+    textbox.focus();
+    document
+      .getSelection()
+      ?.collapse(textbox.querySelector("p")?.firstChild ?? null, 4);
+    await user.keyboard("12");
+
+    expect(textbox.innerHTML).toBe("<p>hell12o</p>");
   });
 
   it("leaves the document alone when the controlled value already matches", async () => {

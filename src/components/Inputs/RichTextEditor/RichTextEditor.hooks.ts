@@ -6,7 +6,7 @@ import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Placeholder } from "@tiptap/extensions";
-import { useEditor } from "@tiptap/react";
+import { useEditor, useEditorState } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useEffect, useRef } from "react";
 
@@ -96,13 +96,21 @@ export const useRichTextEditor = ({
     editor?.setEditable(!(isDisabled || isReadOnly), false);
   }, [editor, isDisabled, isReadOnly]);
 
-  // Controlled mode. Writing back only when the HTML genuinely differs keeps
-  // the caret where the user left it — an unconditional setContent would reset
-  // the selection on every keystroke that round-trips through consumer state.
+  // Controlled editors must also reconcile edits the parent rejects without
+  // changing value. Uncontrolled editors do not need to rerender for content.
+  const html = useEditorState({
+    editor,
+    selector: ({ editor: current }) =>
+      value === undefined ? undefined : current?.getHTML(),
+  });
+
+  // Only replace differing HTML so accepted edits keep their selection. Compare
+  // serialized HTML to avoid repeated resets when Tiptap normalizes the value.
   useEffect(() => {
-    if (!editor || value === undefined || editor.getHTML() === value) return;
+    if (!editor || value === undefined || (html ?? editor.getHTML()) === value)
+      return;
     editor.commands.setContent(value, { emitUpdate: false });
-  }, [editor, value]);
+  }, [editor, value, html]);
 
   return editor;
 };

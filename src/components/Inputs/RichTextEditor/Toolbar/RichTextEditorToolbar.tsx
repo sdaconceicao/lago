@@ -95,7 +95,11 @@ export function RichTextEditorToolbar({
           )}
         </Toolbar>
       </div>
-      <RichTextEditorLinkPopover {...link} size={size} />
+      <RichTextEditorLinkPopover
+        {...link}
+        size={size}
+        isDisabled={isDisabled}
+      />
     </>
   );
 }

@@ -22,6 +22,8 @@ interface RichTextEditorLinkPopoverProps {
   onSubmit: () => void;
   /** Matches the editor's field size. */
   size: FieldSize;
+  /** Prevents URL entry and submission when the editor cannot be edited. */
+  isDisabled?: boolean;
 }
 
 /** URL entry whose submission stays isolated from surrounding forms. */
@@ -33,6 +35,7 @@ export function RichTextEditorLinkPopover({
   onHrefChange,
   onSubmit,
   size,
+  isDisabled,
 }: RichTextEditorLinkPopoverProps) {
   return (
     <Popover
@@ -58,8 +61,9 @@ export function RichTextEditorLinkPopover({
             placeholder="https://example.com"
             value={href}
             onChange={onHrefChange}
+            isDisabled={isDisabled}
           />
-          <Button size={size} type="submit">
+          <Button size={size} type="submit" isDisabled={isDisabled}>
             Add link
           </Button>
         </form>

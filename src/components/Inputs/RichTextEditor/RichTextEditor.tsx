@@ -125,8 +125,8 @@ export function RichTextEditor({
     [isInvalid, errorMessage]
   );
 
-  // Only tracked when there is a hidden input to fill, so an editor without a
-  // `name` does not re-render this shell on every keystroke.
+  // Only tracked when there is a hidden input to fill, so an uncontrolled
+  // editor without a `name` does not re-render this shell on every keystroke.
   const [submitValue, setSubmitValue] = useState(value ?? defaultValue ?? "");
 
   const handleChange = useCallback(
