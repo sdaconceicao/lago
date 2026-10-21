@@ -14,7 +14,7 @@ const Icon = () => (
  * The shape used to be decided in CSS by `:has(> span > svg:only-child)`. That
  * looks equivalent and is not: `:only-child` counts element children and
  * ignores text nodes, so an icon with a label beside it still matched and
- * collapsed to a circle with the text spilling out of it.
+ * collapsed to an icon-sized square with the text spilling out of it.
  */
 describe("IconToggleButton", () => {
   it("renders a toggle carrying its accessible name", () => {

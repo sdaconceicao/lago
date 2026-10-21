@@ -1,8 +1,112 @@
 "use client";
-import { useCallback, useLayoutEffect, useState } from "react";
+import type { Editor } from "@tiptap/core";
+import { useEditorState } from "@tiptap/react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { useResizeObserver } from "@/hooks/use-resize-observer";
-import type { RichTextEditorToolbar } from "../RichTextEditor.types";
+import type {
+  RichTextEditorTool,
+  RichTextEditorToolbar,
+} from "../RichTextEditor.types";
 import { getVisibleToolbarGroupCount } from "./RichTextEditorToolbar.utils";
+import { TOOL_REGISTRY } from "./toolRegistry";
+
+export type ToolbarButtonTool = Exclude<RichTextEditorTool, "heading">;
+export type ToolbarToolState =
+  | { tool: "heading" }
+  | {
+      tool: ToolbarButtonTool;
+      isActive: boolean;
+      isEnabled: boolean;
+    };
+
+/** Subscribes to tool flags, updating only when their selected/enabled state changes. */
+export const useToolbarTools = (
+  editor: Editor,
+  toolbar: RichTextEditorToolbar
+) =>
+  useEditorState({
+    editor,
+    selector: ({ editor: current }): ToolbarToolState[][] =>
+      toolbar.map((group) =>
+        group.map((tool) => {
+          if (tool === "heading") return { tool };
+          const definition = TOOL_REGISTRY[tool];
+          return {
+            tool,
+            isActive: definition.isActive(current),
+            isEnabled: definition.isEnabled(current),
+          };
+        })
+      ),
+  });
+
+/** Coordinates commands and popovers, including the link anchor after a resize. */
+export const useToolbarActions = (editor: Editor, hasOverflow: boolean) => {
+  const linkAnchorRef = useRef<HTMLDivElement>(null);
+  const moreAnchorRef = useRef<HTMLDivElement>(null);
+  const [isOverflowOpen, setIsOverflowOpen] = useState(false);
+  const [isLinkFromOverflow, setIsLinkFromOverflow] = useState(false);
+  const [isLinkOpen, setIsLinkOpen] = useState(false);
+  const [href, setHref] = useState("");
+  const closeOverflow = useCallback(() => setIsOverflowOpen(false), []);
+
+  const handlePress = useCallback(
+    (tool: ToolbarButtonTool, inOverflow: boolean) => {
+      closeOverflow();
+      // A new link needs a URL; an active link can be removed immediately.
+      if (tool === "link" && !editor.isActive("link")) {
+        setIsLinkFromOverflow(inOverflow);
+        setHref(editor.getAttributes("link").href ?? "");
+        setIsLinkOpen(true);
+        return;
+      }
+      TOOL_REGISTRY[tool].run(editor);
+    },
+    [editor, closeOverflow]
+  );
+
+  const applyLink = useCallback(() => {
+    const trimmed = href.trim();
+    setIsLinkOpen(false);
+    if (!trimmed) return;
+
+    const chain = editor.chain().focus().extendMarkRange("link");
+
+    // Without a selection, insert the URL as linked text instead of marking an empty range.
+    if (editor.state.selection.empty) {
+      chain
+        .insertContent({
+          type: "text",
+          text: trimmed,
+          marks: [{ type: "link", attrs: { href: trimmed } }],
+        })
+        .run();
+      return;
+    }
+
+    chain.setLink({ href: trimmed }).run();
+  }, [editor, href]);
+
+  return {
+    linkAnchorRef,
+    handlePress,
+    closeOverflow,
+    overflow: {
+      anchorRef: moreAnchorRef,
+      isOpen: isOverflowOpen,
+      onOpenChange: setIsOverflowOpen,
+    },
+    link: {
+      triggerRef:
+        isLinkFromOverflow && hasOverflow ? moreAnchorRef : linkAnchorRef,
+      isOpen: isLinkOpen,
+      onOpenChange: setIsLinkOpen,
+      href,
+      onHrefChange: setHref,
+      onSubmit: applyLink,
+    },
+  };
+};
 
 /** Measures groups even while overflowed, so they can return when space grows. */
 export const useToolbarOverflow = (toolbar: RichTextEditorToolbar) => {

@@ -45,7 +45,7 @@ export interface RichTextEditorProps {
   isRequired?: boolean;
   /** Shows the invalid styling and renders `errorMessage`. */
   isInvalid?: boolean;
-  /** Disables the field: the content cannot be edited or focused. */
+  /** Makes content inert: prevents editing, focus and selection, and hides it from assistive technology. */
   isDisabled?: boolean;
   /** Allows focus and selection but not editing. */
   isReadOnly?: boolean;
@@ -177,7 +177,11 @@ export function RichTextEditor({
             isDisabled={isDisabled || isReadOnly}
           />
         )}
-        <EditorContent editor={editor} className={styles.contentWrapper} />
+        <EditorContent
+          editor={editor}
+          className={styles.contentWrapper}
+          inert={isDisabled}
+        />
       </div>
 
       {description && (

@@ -15,7 +15,7 @@ const meta: Meta<typeof IconToggleButton> = {
     docs: {
       description: {
         component:
-          "A toggle button whose whole content is an icon: square at the size given, with a fully round radius. It is a `ToggleButton` underneath, so every variant, size and state behaves identically — only the shape differs, and the accessible name is required, because an icon cannot supply one on its own. Inside a `ToggleButtonGroup` the group's segmented radii win, so it reads as one cell of the track. Reach for `ToggleButton` as soon as there is a visible label beside the icon.",
+          "An icon-only ToggleButton with equal width and height and the same corner radius as ToggleButton. It reuses ToggleButton's selection, keyboard interaction, variants and disabled behavior, adding square sizing and a required accessible name. ToggleButtonGroup supplies segmented corners when grouped. Use ToggleButton for visible text labels and IconButton for actions without a selected state.",
       },
     },
   },
@@ -31,11 +31,17 @@ const Row = ({ children }: { children: React.ReactNode }) => (
   </div>
 );
 
-export const Example: Story = (args) => (
+export const Default: Story = (args) => (
   <IconToggleButton {...args}>
     <Bold />
   </IconToggleButton>
 );
+
+Default.args = {
+  "aria-label": "Bold",
+  size: "md",
+  variant: "primary",
+};
 
 export const Sizes: Story = () => (
   <Row>
@@ -51,6 +57,15 @@ export const Sizes: Story = () => (
   </Row>
 );
 
+Sizes.parameters = {
+  docs: {
+    description: {
+      story:
+        "Small, medium and large icon toggles are 28px, 36px and 48px square. Each uses ToggleButton's corner radius for its size.",
+    },
+  },
+};
+
 export const Variants: Story = () => (
   <Row>
     <IconToggleButton aria-label="Bold" variant="primary">
@@ -64,6 +79,38 @@ export const Variants: Story = () => (
     </IconToggleButton>
   </Row>
 );
+
+Variants.parameters = {
+  docs: {
+    description: {
+      story:
+        "Primary, secondary and quiet variants reuse ToggleButton's styling while keeping the icon-only square dimensions.",
+    },
+  },
+};
+
+export const States: Story = () => (
+  <Row>
+    <IconToggleButton aria-label="Bold">
+      <Bold />
+    </IconToggleButton>
+    <IconToggleButton aria-label="Italic" defaultSelected>
+      <Italic />
+    </IconToggleButton>
+    <IconToggleButton aria-label="Bold disabled" isDisabled>
+      <Bold />
+    </IconToggleButton>
+  </Row>
+);
+
+States.parameters = {
+  docs: {
+    description: {
+      story:
+        "Unselected, selected and disabled controls retain the same square dimensions and rounded corners. Selection is exposed through aria-pressed.",
+    },
+  },
+};
 
 /** In a group the segmented radii win, so the buttons read as one track. */
 export const InAGroup: Story = () => (
@@ -79,3 +126,12 @@ export const InAGroup: Story = () => (
     </IconToggleButton>
   </ToggleButtonGroup>
 );
+
+InAGroup.parameters = {
+  docs: {
+    description: {
+      story:
+        "A single-selection alignment group gives icon toggles segmented corners and manages selection and keyboard navigation through ToggleButtonGroup.",
+    },
+  },
+};

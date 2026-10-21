@@ -334,6 +334,32 @@ describe("RichTextEditor", () => {
     expect(textbox).toHaveAttribute("contenteditable", "false");
   });
 
+  it("makes disabled task-list content inert and restores access in read-only mode", async () => {
+    const props = {
+      label: "Bio",
+      toolbar: [],
+      defaultValue:
+        '<ul data-type="taskList"><li data-type="taskItem" data-checked="false"><p>Task</p></li></ul>',
+    };
+    const { rerender, textbox } = await renderEditor({
+      ...props,
+      isDisabled: true,
+    });
+    const checkbox = screen.getByRole("checkbox");
+
+    expect(checkbox.closest("[inert]")).toContainElement(textbox);
+
+    rerender(<RichTextEditor {...props} isReadOnly />);
+
+    expect(checkbox.closest("[inert]")).toBeNull();
+    expect(textbox).toHaveAttribute("aria-readonly", "true");
+
+    rerender(<RichTextEditor {...props} />);
+
+    expect(checkbox.closest("[inert]")).toBeNull();
+    expect(textbox).toHaveAttribute("contenteditable", "true");
+  });
+
   it("makes the content uneditable but announced read-only when isReadOnly", async () => {
     const { textbox } = await renderEditor({ label: "Bio", isReadOnly: true });
 
@@ -738,6 +764,49 @@ describe("RichTextEditor", () => {
   });
 
   describe("link", () => {
+    it.each(["click", "Enter"])(
+      "adds a link with %s without submitting the surrounding form",
+      async (trigger) => {
+        const user = userEvent.setup();
+        const onSubmit = vi.fn();
+        const onChange = vi.fn();
+        render(
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              onSubmit();
+            }}
+          >
+            <RichTextEditor
+              label="Bio"
+              defaultValue="<p>hello</p>"
+              toolbar={[["link"]]}
+              onChange={onChange}
+            />
+            <button type="submit">Save</button>
+          </form>
+        );
+        await screen.findByRole("textbox", { name: "Bio" });
+
+        await user.click(screen.getByRole("button", { name: "Link" }));
+        await user.type(
+          await screen.findByRole("textbox", { name: "URL" }),
+          "https://example.com"
+        );
+        if (trigger === "click")
+          await user.click(screen.getByRole("button", { name: "Add link" }));
+        else await user.keyboard("{Enter}");
+
+        expect(onChange).toHaveBeenCalledWith(
+          expect.stringContaining('href="https://example.com"')
+        );
+        expect(onSubmit).not.toHaveBeenCalled();
+
+        await user.click(screen.getByRole("button", { name: "Save" }));
+        expect(onSubmit).toHaveBeenCalledTimes(1);
+      }
+    );
+
     it("inserts the URL as linked text when nothing is selected", async () => {
       const user = userEvent.setup();
       const onChange = vi.fn();

@@ -34,7 +34,8 @@
   max-width: calc(100vw - var(--spacing-4) * 2);
 }
 
-.overflowDialog {
+.overflowDialog,
+.linkDialog {
   padding: 0;
 }
 
