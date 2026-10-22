@@ -9,6 +9,7 @@ import { Placeholder } from "@tiptap/extensions";
 import { useEditor, useEditorState } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useEffect, useRef } from "react";
+import { MixedListIndentation } from "./RichTextEditorListKeys";
 
 /**
  * The extension set every RichTextEditor registers, whatever its toolbar shows.
@@ -26,6 +27,7 @@ const buildExtensions = (getPlaceholder: () => string): Extensions => [
   StarterKit,
   TaskList,
   TaskItem.configure({ nested: true }),
+  MixedListIndentation,
   TextAlign.configure({ types: ["heading", "paragraph"] }),
   Highlight,
   Subscript,

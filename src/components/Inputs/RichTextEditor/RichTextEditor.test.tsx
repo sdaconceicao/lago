@@ -47,6 +47,66 @@ const renderEditor = async (
 };
 
 describe("RichTextEditor", () => {
+  describe("list indentation", () => {
+    it.each(["ul", "ol"])(
+      "outdents a nested checkbox into its parent %s list",
+      async (listTag) => {
+        const user = userEvent.setup();
+        const { textbox } = await renderEditor({
+          label: "Bio",
+          toolbar: [],
+          defaultValue: `<${listTag}><li><p>Parent</p><ul data-type="taskList"><li data-type="taskItem" data-checked="true"><p>Before</p></li><li data-type="taskItem" data-checked="true"><p><strong>Child</strong></p><ul data-type="taskList"><li data-type="taskItem" data-checked="true"><p>Grandchild</p></li></ul></li><li data-type="taskItem" data-checked="true"><p>After</p></li></ul></li><li><p>Sibling</p></li></${listTag}>`,
+        });
+        textbox.focus();
+        document
+          .getSelection()
+          ?.collapse(screen.getByText("Child").firstChild, 2);
+
+        await user.keyboard("{Shift>}{Tab}{/Shift}");
+
+        const items = textbox.querySelectorAll(`:scope > ${listTag} > li`);
+        expect(items).toHaveLength(3);
+        expect(
+          Array.from(items[0].querySelectorAll("p"), (node) => node.textContent)
+        ).toEqual(["Parent", "Before"]);
+        expect(items[1].querySelector(":scope > p > strong")).toHaveTextContent(
+          "Child"
+        );
+        expect(items[1]).not.toHaveAttribute("data-type", "taskItem");
+        expect(
+          Array.from(items[1].querySelectorAll("p"), (node) => node.textContent)
+        ).toEqual(["Child", "Grandchild", "After"]);
+        expect(items[2]).toHaveTextContent("Sibling");
+        expect(within(textbox).getAllByRole("checkbox")).toHaveLength(3);
+        for (const checkbox of within(textbox).getAllByRole("checkbox")) {
+          expect(checkbox).toBeChecked();
+        }
+      }
+    );
+
+    it("keeps checkboxes when indenting and outdenting within a task list", async () => {
+      const user = userEvent.setup();
+      const { textbox } = await renderEditor({
+        label: "Bio",
+        toolbar: [],
+        defaultValue:
+          '<ul data-type="taskList"><li data-type="taskItem" data-checked="false"><p>Parent</p></li><li data-type="taskItem" data-checked="true"><p>Child</p></li></ul>',
+      });
+      textbox.focus();
+      document
+        .getSelection()
+        ?.collapse(screen.getByText("Child").firstChild, 2);
+
+      await user.keyboard("{Tab}");
+      expect(textbox.querySelectorAll(":scope > ul > li")).toHaveLength(1);
+      await user.keyboard("{Shift>}{Tab}{/Shift}");
+
+      expect(textbox.querySelectorAll(":scope > ul > li")).toHaveLength(2);
+      expect(within(textbox).getAllByRole("checkbox")).toHaveLength(2);
+      expect(within(textbox).getAllByRole("checkbox")[1]).toBeChecked();
+    });
+  });
+
   describe("toolbar overflow", () => {
     let toolbarWidth: number;
     let notifyResize: ResizeObserverCallback | undefined;
