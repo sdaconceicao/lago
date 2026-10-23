@@ -55,24 +55,6 @@ ResponsiveToolbar.parameters = {
   },
 };
 
-export const Headings: Story = (args) => (
-  <RichTextEditor
-    {...args}
-    label="Heading styles"
-    toolbar={[["heading"]]}
-    defaultValue="<h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><h4>Heading 4</h4><h5>Heading 5</h5><h6>Heading 6</h6><p>Normal text</p>"
-  />
-);
-
-Headings.parameters = {
-  docs: {
-    description: {
-      story:
-        "A single heading dropdown offers Normal text and Heading 1 through Heading 6. It follows the block at the cursor and applies the chosen style without replacing its text. All six heading levels are shown together here.",
-    },
-  },
-};
-
 export const Sizes: Story = (args) => (
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
     <RichTextEditor {...args} size="sm" label="Small" />
