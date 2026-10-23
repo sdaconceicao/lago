@@ -33,6 +33,10 @@ import { RichTextEditorToolbar } from "./Toolbar/RichTextEditorToolbar";
 export interface RichTextEditorProps {
   /** Accessible label rendered above the field. */
   label?: string;
+  /** Accessible name when no visible or referenced label is provided. */
+  "aria-label"?: string;
+  /** IDs of external labels, combined with the visible label when present. */
+  "aria-labelledby"?: string;
   /** Helper text rendered below the field. */
   description?: string;
   /** Error message shown when the field is invalid. Also accepts a function of the validation result. */
@@ -90,6 +94,8 @@ export interface RichTextEditorProps {
  */
 export function RichTextEditor({
   label,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   description,
   errorMessage,
   placeholder,
@@ -122,14 +128,25 @@ export function RichTextEditor({
     () =>
       buildEditorAttributes({
         className: styles.content,
-        labelId: label ? labelId : undefined,
+        labelId: joinIds(label && labelId, ariaLabelledBy),
+        ariaLabel,
         describedBy,
         isInvalid,
         isRequired,
         isDisabled,
         isReadOnly,
       }),
-    [label, labelId, describedBy, isInvalid, isRequired, isDisabled, isReadOnly]
+    [
+      label,
+      labelId,
+      ariaLabel,
+      ariaLabelledBy,
+      describedBy,
+      isInvalid,
+      isRequired,
+      isDisabled,
+      isReadOnly,
+    ]
   );
 
   const validation = useMemo(
@@ -137,16 +154,15 @@ export function RichTextEditor({
     [isInvalid, errorMessage]
   );
 
-  // Only tracked when there is a hidden input to fill, so an uncontrolled
-  // editor without a `name` does not re-render this shell on every keystroke.
+  // Keep edits made while unnamed so adding or restoring a name submits them.
   const [submitValue, setSubmitValue] = useState(value ?? defaultValue ?? "");
 
   const handleChange = useCallback(
     (html: string) => {
-      if (name !== undefined) setSubmitValue(html);
+      setSubmitValue(html);
       onChange?.(html);
     },
-    [name, onChange]
+    [onChange]
   );
 
   const editor = useRichTextEditor({

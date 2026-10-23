@@ -41,8 +41,10 @@ export const joinIds = (
 export interface EditorAttributesOptions {
   /** Class applied to the ProseMirror root, which is the editable element. */
   className: string;
-  /** Id of the rendered `Label`, if there is one. */
+  /** IDs of the visible and external labels, if provided. */
   labelId?: string;
+  /** Accessible name used when no referenced label is present. */
+  ariaLabel?: string;
   /** Ids of the description and error message, if rendered. */
   describedBy?: string;
   isInvalid?: boolean;
@@ -64,6 +66,7 @@ export interface EditorAttributesOptions {
 export const buildEditorAttributes = ({
   className,
   labelId,
+  ariaLabel,
   describedBy,
   isInvalid,
   isRequired,
@@ -77,6 +80,7 @@ export const buildEditorAttributes = ({
   };
 
   if (labelId) attributes["aria-labelledby"] = labelId;
+  if (ariaLabel) attributes["aria-label"] = ariaLabel;
   if (describedBy) attributes["aria-describedby"] = describedBy;
   if (isInvalid) attributes["aria-invalid"] = "true";
   if (isRequired) attributes["aria-required"] = "true";

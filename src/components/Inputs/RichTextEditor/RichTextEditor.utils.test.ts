@@ -134,6 +134,16 @@ describe("buildEditorAttributes", () => {
     expect(attributes["aria-readonly"]).toBe("true");
   });
 
+  it("forwards an accessible name without label references", () => {
+    const attributes = buildEditorAttributes({
+      className: "content",
+      ariaLabel: "Biography",
+    });
+
+    expect(attributes["aria-label"]).toBe("Biography");
+    expect(attributes).not.toHaveProperty("aria-labelledby");
+  });
+
   it("omits the state attributes when the states are false", () => {
     const attributes = buildEditorAttributes({
       className: "content",

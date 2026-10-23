@@ -309,6 +309,65 @@ describe("RichTextEditor", () => {
     const { textbox } = await renderEditor();
 
     expect(textbox).not.toHaveAttribute("aria-labelledby");
+    expect(textbox).not.toHaveAttribute("aria-label");
+  });
+
+  it("names the editable element with aria-label without a visible label", async () => {
+    await renderEditor({ "aria-label": "Biography" });
+
+    expect(
+      screen.getByRole("textbox", { name: "Biography" })
+    ).toBeInTheDocument();
+  });
+
+  it("uses external label references ahead of aria-label", async () => {
+    render(
+      <>
+        <span id="profile-label">Profile</span>
+        <span id="biography-label">Biography</span>
+      </>
+    );
+    await renderEditor({
+      "aria-label": "Fallback name",
+      "aria-labelledby": "profile-label biography-label",
+    });
+
+    expect(
+      screen.getByRole("textbox", { name: "Profile Biography" })
+    ).toBeInTheDocument();
+  });
+
+  it("combines visible and external labels", async () => {
+    render(<span id="profile-label">Profile</span>);
+    await renderEditor({
+      label: "Biography",
+      "aria-labelledby": "profile-label",
+    });
+
+    expect(
+      screen.getByRole("textbox", { name: "Biography Profile" })
+    ).toBeInTheDocument();
+  });
+
+  it("updates and removes accessible names without replacing the document", async () => {
+    render(<span id="profile-label">Profile</span>);
+    const props = { defaultValue: "<p>Keep this document</p>" };
+    const { textbox, rerender } = await renderEditor({
+      ...props,
+      "aria-label": "Fallback name",
+      "aria-labelledby": "profile-label",
+    });
+    expect(textbox).toHaveAccessibleName("Profile");
+
+    rerender(<RichTextEditor {...props} aria-label="Biography" />);
+    await waitFor(() => expect(textbox).toHaveAccessibleName("Biography"));
+    expect(textbox).not.toHaveAttribute("aria-labelledby");
+
+    rerender(<RichTextEditor {...props} />);
+    await waitFor(() => expect(textbox).not.toHaveAttribute("aria-label"));
+    expect(textbox).not.toHaveAttribute("aria-labelledby");
+    expect(screen.getByRole("textbox")).toBe(textbox);
+    expect(textbox).toHaveTextContent("Keep this document");
   });
 
   it("renders the placeholder as data the empty-node style can read", async () => {
@@ -517,6 +576,41 @@ describe("RichTextEditor", () => {
       expect(container.querySelector('input[name="bio"]')).toHaveValue(
         "<p>Hello</p>"
       );
+    });
+
+    it("submits edits made before a name is added or restored", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const view = (name?: string) => (
+        <form aria-label="Profile">
+          <RichTextEditor
+            label="Bio"
+            name={name}
+            defaultValue="<p>Hello</p>"
+            onChange={onChange}
+            toolbar={[]}
+          />
+        </form>
+      );
+      const { rerender } = render(view());
+      const textbox = await screen.findByRole("textbox", { name: "Bio" });
+      const form = screen.getByRole<HTMLFormElement>("form", {
+        name: "Profile",
+      });
+
+      for (const name of ["bio", "updatedBio"]) {
+        expect(Array.from(new FormData(form))).toEqual([]);
+        textbox.focus();
+        await user.keyboard(" edited");
+        const html = onChange.mock.lastCall?.[0];
+        expect(html).toContain("edited");
+
+        rerender(view(name));
+
+        expect(screen.getByRole("textbox", { name: "Bio" })).toBe(textbox);
+        expect(new FormData(form).get(name)).toBe(html);
+        rerender(view());
+      }
     });
 
     it("prefers the controlled value for the hidden input", async () => {

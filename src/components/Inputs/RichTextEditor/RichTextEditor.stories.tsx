@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { useState } from "react";
-import { expect, fn } from "storybook/test";
+import { expect, fn, waitFor, within } from "storybook/test";
 import { RichTextEditor } from "./RichTextEditor";
 
 const meta: Meta<typeof RichTextEditor> = {
@@ -127,21 +127,25 @@ Rows.parameters = {
 };
 
 Rows.play = async ({ canvasElement }) => {
-  const [growing, fixed] = canvasElement.querySelectorAll<HTMLElement>(
-    '[contenteditable="true"]'
-  );
-  if (!growing || !fixed) throw new Error("Missing row sizing examples");
-  const style = getComputedStyle(fixed);
-  const padding =
-    Number.parseFloat(style.paddingTop) +
-    Number.parseFloat(style.paddingBottom);
-  expect(fixed.getBoundingClientRect().height).toBeCloseTo(
-    4 * Number.parseFloat(style.lineHeight) + padding,
-    0
-  );
-  expect(fixed.scrollHeight).toBeGreaterThan(fixed.clientHeight);
-  expect(style.overflowY).toBe("auto");
-  expect(growing.scrollHeight).toBeLessThanOrEqual(growing.clientHeight + 1);
+  const canvas = within(canvasElement);
+  const [growing, fixed] = await Promise.all([
+    canvas.findByRole("textbox", { name: "Grows with content" }),
+    canvas.findByRole("textbox", { name: "Four visible lines" }),
+  ]);
+
+  await waitFor(() => {
+    const style = getComputedStyle(fixed);
+    const padding =
+      Number.parseFloat(style.paddingTop) +
+      Number.parseFloat(style.paddingBottom);
+    expect(fixed.getBoundingClientRect().height).toBeCloseTo(
+      4 * Number.parseFloat(style.lineHeight) + padding,
+      0
+    );
+    expect(fixed.scrollHeight).toBeGreaterThan(fixed.clientHeight);
+    expect(style.overflowY).toBe("auto");
+    expect(growing.scrollHeight).toBeLessThanOrEqual(growing.clientHeight + 1);
+  });
 };
 
 export const States: Story = (args) => (
