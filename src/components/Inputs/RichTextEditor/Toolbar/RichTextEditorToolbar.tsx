@@ -20,7 +20,7 @@ export interface RichTextEditorToolbarProps {
   editor: Editor;
   /** Groups of tools, already normalized, in render order. */
   toolbar: RichTextEditorToolbarLayout;
-  /** Matches the button height to the field size. */
+  /** Field size; large editors use medium toolbar controls. */
   size: FieldSize;
   /** Disables every tool without disabling the editor separately. */
   isDisabled?: boolean;
@@ -30,9 +30,10 @@ export interface RichTextEditorToolbarProps {
 export function RichTextEditorToolbar({
   editor,
   toolbar,
-  size,
+  size: fieldSize,
   isDisabled,
 }: RichTextEditorToolbarProps) {
+  const size = fieldSize === "lg" ? "md" : fieldSize;
   const groups = useToolbarTools(editor, toolbar);
   const { containerRef, visibleCount } = useToolbarOverflow(toolbar);
   const hasOverflow = visibleCount < groups.length;
@@ -48,7 +49,11 @@ export function RichTextEditorToolbar({
 
   return (
     <>
-      <div ref={containerRef} className={styles.container}>
+      <div
+        ref={containerRef}
+        className={styles.container}
+        data-field-size={size}
+      >
         <Toolbar aria-label="Formatting" className={styles.toolbar}>
           {groups.map((group, index) => (
             <RichTextEditorToolbarSection

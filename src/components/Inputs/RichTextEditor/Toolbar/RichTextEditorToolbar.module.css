@@ -7,8 +7,7 @@
   position: relative;
   width: 100%;
   flex-wrap: nowrap;
-  padding: var(--field-inner-inset) var(--field-inner-inset)
-    calc(var(--field-inner-inset) + var(--spacing-1));
+  padding: var(--field-inner-inset);
   box-sizing: border-box;
   border-bottom: 1px solid var(--border-color);
 }

@@ -28,12 +28,11 @@
 
 /* The ProseMirror root, and so the editable element itself: the class arrives
    through tiptap's `editorProps.attributes`, the only way to name the element
-   ProseMirror creates. The min-height matches TextArea — one single-line field
-   plus a second row — with equal padding around a single line of text. */
+   ProseMirror creates. Text padding matches TextField; the default minimum
+   height leaves room for two body-text lines, like TextArea. */
 .content {
-  min-height: calc(var(--field-height) + var(--spacing-4));
-  padding: calc((var(--field-height) + var(--spacing-4) - 1lh) / 2)
-    var(--field-padding-x);
+  min-height: calc(var(--field-height) + 1lh);
+  padding: calc((var(--field-height) - 1lh) / 2) var(--field-padding-x);
   box-sizing: border-box;
   font: var(--field-font-size) var(--font-family);
   line-height: 1.5;
@@ -169,19 +168,19 @@
     padding-inline-start: 0;
     list-style: none;
 
-    & li {
+    & > li {
       display: flex;
       align-items: flex-start;
       gap: var(--spacing-2);
     }
 
-    & label {
+    & > li > label {
       display: flex;
       align-items: center;
       height: 1.5em;
     }
 
-    & div {
+    & > li > div {
       flex: 1;
       min-width: 0;
     }
@@ -190,6 +189,13 @@
   &[aria-readonly="true"] {
     color: var(--text-color-placeholder);
   }
+}
+
+.fixedRows > .content {
+  height: calc(max(1, var(--editor-rows)) * 1lh + var(--field-height) - 1lh);
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 [data-disabled] > .contentWrapper .content {

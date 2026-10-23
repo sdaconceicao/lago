@@ -621,6 +621,24 @@ describe("RichTextEditor", () => {
   });
 
   describe("size", () => {
+    it("preserves the document when a row limit is added, changed and removed", async () => {
+      const onChange = vi.fn();
+      const props = {
+        label: "Bio",
+        defaultValue: "<p>Keep this document</p>",
+        onChange,
+      };
+      const { textbox, rerender } = await renderEditor(props);
+
+      for (const rows of [3, 6, undefined]) {
+        rerender(<RichTextEditor {...props} rows={rows} />);
+
+        expect(screen.getByRole("textbox", { name: "Bio" })).toBe(textbox);
+        expect(textbox).toHaveTextContent("Keep this document");
+      }
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
     it.each(["sm", "md", "lg"] as const)(
       'renders data-field-size="%s" when specified',
       async (size) => {

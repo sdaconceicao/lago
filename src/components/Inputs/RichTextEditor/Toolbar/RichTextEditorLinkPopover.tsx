@@ -20,7 +20,7 @@ interface RichTextEditorLinkPopoverProps {
   onHrefChange: (href: string) => void;
   /** Applies the URL to the editor's current selection. */
   onSubmit: () => void;
-  /** Matches the editor's field size. */
+  /** Matches the toolbar's control size. */
   size: FieldSize;
   /** Prevents URL entry and submission when the editor cannot be edited. */
   isDisabled?: boolean;

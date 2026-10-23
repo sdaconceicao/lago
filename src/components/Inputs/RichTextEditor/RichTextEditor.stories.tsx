@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@storybook/react";
 import { useState } from "react";
-import { fn } from "storybook/test";
+import { expect, fn } from "storybook/test";
 import { RichTextEditor } from "./RichTextEditor";
 
 const meta: Meta<typeof RichTextEditor> = {
@@ -85,9 +85,63 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'RichTextEditor supports the same three field sizes as every other input: "sm" renders 28px toolbar buttons with 12px text, "md" (the default) renders 36px buttons with 14px text, and "lg" renders 48px buttons with 16px text. The size scales the toolbar buttons, the field padding, and the content text together, and the minimum content height is one single-line field of that size plus a second row of text, matching TextArea so the two read as the same family when stacked in a form.',
+        'RichTextEditor content follows the shared field scale: "sm" uses 12px text, "md" (the default) uses 14px, and "lg" uses 16px, with matching field padding. The toolbar and its menus stay compact: small editors use 28px controls, while medium and large editors use 36px controls and medium toolbar padding. The default content area leaves room for two body-text lines, matching TextArea.',
     },
   },
+};
+
+export const Rows: Story = (args) => {
+  const content =
+    "<p>First line<br>Second line<br>Third line<br>Fourth line<br>Fifth line<br>Sixth line<br>Seventh line<br>Eighth line</p>";
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+        gap: 24,
+      }}
+    >
+      <RichTextEditor
+        {...args}
+        label="Grows with content"
+        rows={undefined}
+        defaultValue={content}
+      />
+      <RichTextEditor
+        {...args}
+        label="Four visible lines"
+        rows={4}
+        defaultValue={content}
+      />
+    </div>
+  );
+};
+
+Rows.parameters = {
+  docs: {
+    description: {
+      story:
+        "Without rows, the editor grows with its content. Set rows to fix the content viewport to that many body-text lines and scroll additional content while the toolbar stays visible. Headings and paragraph spacing can consume more than one body-text line.",
+    },
+  },
+};
+
+Rows.play = async ({ canvasElement }) => {
+  const [growing, fixed] = canvasElement.querySelectorAll<HTMLElement>(
+    '[contenteditable="true"]'
+  );
+  if (!growing || !fixed) throw new Error("Missing row sizing examples");
+  const style = getComputedStyle(fixed);
+  const padding =
+    Number.parseFloat(style.paddingTop) +
+    Number.parseFloat(style.paddingBottom);
+  expect(fixed.getBoundingClientRect().height).toBeCloseTo(
+    4 * Number.parseFloat(style.lineHeight) + padding,
+    0
+  );
+  expect(fixed.scrollHeight).toBeGreaterThan(fixed.clientHeight);
+  expect(style.overflowY).toBe("auto");
+  expect(growing.scrollHeight).toBeLessThanOrEqual(growing.clientHeight + 1);
 };
 
 export const States: Story = (args) => (

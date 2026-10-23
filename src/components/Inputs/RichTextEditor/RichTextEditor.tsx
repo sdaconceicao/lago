@@ -1,7 +1,13 @@
 "use client";
 import { EditorContent } from "@tiptap/react";
 import clsx from "clsx";
-import { useCallback, useId, useMemo, useState } from "react";
+import {
+  type CSSProperties,
+  useCallback,
+  useId,
+  useMemo,
+  useState,
+} from "react";
 import { FieldErrorContext } from "react-aria-components/FieldError";
 import type { ValidationResult } from "react-aria-components/TextField";
 import {
@@ -49,8 +55,13 @@ export interface RichTextEditorProps {
   isDisabled?: boolean;
   /** Allows focus and selection but not editing. */
   isReadOnly?: boolean;
-  /** Field size: 28px, 36px (default), or 48px toolbar buttons and matching text. */
+  /** Content text and padding scale. Toolbar controls use sm for sm, md for md and lg. */
   size?: FieldSize;
+  /**
+   * Visible body-text lines in a fixed, scrollable content area. The toolbar
+   * is excluded. Omit to let the editor grow with its content.
+   */
+  rows?: number;
   /**
    * The toolbar layout, as ordered groups of tools. See
    * {@link RichTextEditorToolbar} for what the ordering does and does not
@@ -91,6 +102,7 @@ export function RichTextEditor({
   isDisabled,
   isReadOnly,
   size = DEFAULT_FIELD_SIZE,
+  rows,
   toolbar = DEFAULT_TOOLBAR,
   className,
 }: RichTextEditorProps) {
@@ -179,7 +191,15 @@ export function RichTextEditor({
         )}
         <EditorContent
           editor={editor}
-          className={styles.contentWrapper}
+          className={clsx(
+            styles.contentWrapper,
+            rows !== undefined && styles.fixedRows
+          )}
+          style={
+            rows === undefined
+              ? undefined
+              : ({ "--editor-rows": rows } as CSSProperties)
+          }
           inert={isDisabled}
         />
       </div>
