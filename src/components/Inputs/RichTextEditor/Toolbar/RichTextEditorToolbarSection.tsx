@@ -5,12 +5,12 @@ import type { FieldSize } from "@/components/Inputs/FormComponents/index";
 import { IconToggleButton } from "@/components/Inputs/Toggle/IconToggleButton/IconToggleButton";
 import { Separator } from "@/components/Layout/Separator/Separator";
 import { RichTextEditorHeadingSelect } from "../Tools/RichTextEditorHeadingSelect";
+import { TOOL_REGISTRY } from "../Tools/toolRegistry";
 import type {
   ToolbarButtonTool,
   ToolbarToolState,
 } from "./RichTextEditorToolbar.hooks";
 import styles from "./RichTextEditorToolbar.module.css";
-import { TOOL_REGISTRY } from "../Tools/toolRegistry";
 
 interface RichTextEditorToolbarSectionProps {
   /** The editor whose heading control is rendered. */

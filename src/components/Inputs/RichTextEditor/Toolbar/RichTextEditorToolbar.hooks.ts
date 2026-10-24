@@ -7,8 +7,8 @@ import type {
   RichTextEditorTool,
   RichTextEditorToolbar,
 } from "../RichTextEditor.types";
-import { getVisibleToolbarGroupCount } from "./RichTextEditorToolbar.utils";
 import { TOOL_REGISTRY } from "../Tools/toolRegistry";
+import { getVisibleToolbarGroupCount } from "./RichTextEditorToolbar.utils";
 
 export type ToolbarButtonTool = Exclude<RichTextEditorTool, "heading">;
 export type ToolbarToolState =
