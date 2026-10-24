@@ -9,7 +9,7 @@ import { DropdownListBox } from "@/components/Collections/ListBox/ListBox";
 import type { FieldSize } from "@/components/Inputs/FormComponents/index";
 import { SelectItem } from "@/components/Inputs/Select/Select";
 import { Popover } from "@/components/Overlays/Popover/Popover";
-import styles from "./RichTextEditorToolbar.module.css";
+import styles from "../Toolbar/RichTextEditorToolbar.module.css";
 
 const HEADING_LEVELS = [1, 2, 3, 4, 5, 6] as const;
 
@@ -51,6 +51,7 @@ export function RichTextEditorHeadingSelect({
 
   const handleSelectionChange = useCallback(
     (key: string | number | null) => {
+      if (!editor.isEditable) return;
       // Keys are heading levels; an empty selection maps to normal text (0).
       const level = Number(key) as (typeof HEADING_LEVELS)[number] | 0;
       const chain = editor.chain().focus();

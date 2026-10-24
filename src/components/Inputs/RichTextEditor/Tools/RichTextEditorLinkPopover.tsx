@@ -5,7 +5,7 @@ import type { FieldSize } from "@/components/Inputs/FormComponents/index";
 import { TextField } from "@/components/Inputs/TextField/TextField";
 import { Dialog } from "@/components/Overlays/Dialog/Dialog";
 import { Popover } from "@/components/Overlays/Popover/Popover";
-import styles from "./RichTextEditorToolbar.module.css";
+import styles from "../Toolbar/RichTextEditorToolbar.module.css";
 
 interface RichTextEditorLinkPopoverProps {
   /** The current primary-section or More-button anchor. */

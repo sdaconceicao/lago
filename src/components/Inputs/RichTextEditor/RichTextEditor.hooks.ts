@@ -9,7 +9,7 @@ import { Placeholder } from "@tiptap/extensions";
 import { useEditor, useEditorState } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { useEffect, useRef } from "react";
-import { MixedListIndentation } from "./RichTextEditorListKeys";
+import { MixedListIndentation } from "./RichTextEditor.utils";
 
 /**
  * The extension set every RichTextEditor registers, whatever its toolbar shows.

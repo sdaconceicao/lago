@@ -9,7 +9,7 @@ import {
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
 import { RichTextEditor } from "./RichTextEditor";
-import { TOOL_REGISTRY } from "./Toolbar/toolRegistry";
+import { TOOL_REGISTRY } from "./Tools/toolRegistry";
 
 /**
  * ProseMirror measures the selection to scroll it into view after every
@@ -817,6 +817,34 @@ describe("RichTextEditor", () => {
       }
     );
 
+    it.each([
+      ["isDisabled", "<p>hello</p>", "Heading 1"],
+      ["isReadOnly", "<h3>hello</h3><p></p>", "Normal text"],
+    ] as const)(
+      "prevents an open heading menu from editing after %s changes",
+      async (state, defaultValue, optionName) => {
+        const user = userEvent.setup();
+        const onChange = vi.fn();
+        const props = {
+          label: "Bio",
+          defaultValue,
+          toolbar: [["heading"]] as Array<Array<"heading">>,
+          onChange,
+        };
+        const { rerender, textbox } = await renderEditor(props);
+        await user.click(screen.getByRole("button", { name: /Heading/ }));
+        const option = await screen.findByRole("option", { name: optionName });
+        const html = textbox.innerHTML;
+        onChange.mockClear();
+
+        rerender(<RichTextEditor {...props} {...{ [state]: true }} />);
+        await user.click(option);
+
+        expect(textbox.innerHTML).toBe(html);
+        expect(onChange).not.toHaveBeenCalled();
+      }
+    );
+
     it("marks a tool pressed once its formatting is applied", async () => {
       const user = userEvent.setup();
       await renderEditor({
@@ -944,6 +972,32 @@ describe("RichTextEditor", () => {
   });
 
   describe("link", () => {
+    it("disables Link in code blocks and restores it for paragraph text", async () => {
+      const { textbox } = await renderEditor({
+        label: "Bio",
+        defaultValue: "<pre><code>code text</code></pre><p>paragraph text</p>",
+        toolbar: [["link"]],
+      });
+      const link = screen.getByRole("button", { name: "Link" });
+      expect(link).toBeDisabled();
+
+      const selectText = (text: string) => {
+        textbox.focus();
+        const range = document.createRange();
+        range.selectNodeContents(within(textbox).getByText(text));
+        const selection = document.getSelection();
+        selection?.removeAllRanges();
+        selection?.addRange(range);
+        fireEvent(document, new Event("selectionchange"));
+      };
+
+      selectText("code text");
+      await waitFor(() => expect(link).toBeDisabled());
+
+      selectText("paragraph text");
+      await waitFor(() => expect(link).toBeEnabled());
+    });
+
     it.each(["isDisabled", "isReadOnly"] as const)(
       "prevents an open link form from editing after %s changes",
       async (state) => {

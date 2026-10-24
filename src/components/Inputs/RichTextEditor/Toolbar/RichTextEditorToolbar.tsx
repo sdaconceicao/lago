@@ -5,7 +5,7 @@ import { IconButton } from "@/components/Actions/IconButton/IconButton";
 import { Toolbar } from "@/components/Actions/Toolbar/Toolbar";
 import type { FieldSize } from "@/components/Inputs/FormComponents/index";
 import type { RichTextEditorToolbar as RichTextEditorToolbarLayout } from "../RichTextEditor.types";
-import { RichTextEditorLinkPopover } from "./RichTextEditorLinkPopover";
+import { RichTextEditorLinkPopover } from "../Tools/RichTextEditorLinkPopover";
 import {
   useToolbarActions,
   useToolbarOverflow,

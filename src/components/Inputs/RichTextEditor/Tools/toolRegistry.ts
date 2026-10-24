@@ -28,9 +28,6 @@ import type {
   RichTextEditorToolDefinition,
 } from "../RichTextEditor.types";
 
-/** Tools that are always available, so there is nothing to ask the editor. */
-const alwaysEnabled = () => true;
-
 /** Tools that apply a command rather than a state, so are never "pressed". */
 const neverActive = () => false;
 
@@ -154,7 +151,7 @@ export const TOOL_REGISTRY: Record<
     label: "Link",
     icon: Link,
     isActive: (editor) => editor.isActive("link"),
-    isEnabled: alwaysEnabled,
+    isEnabled: (editor) => editor.can().setMark("link"),
     run: (editor) => {
       editor.chain().focus().extendMarkRange("link").unsetLink().run();
     },
