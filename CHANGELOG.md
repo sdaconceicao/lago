@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/sdaconceicao/lago/compare/lago-v0.9.1...lago-v0.10.0) (2026-10-24)
+
+
+### Features
+
+* RichTextEditor ([#111](https://github.com/sdaconceicao/lago/issues/111)) ([6911461](https://github.com/sdaconceicao/lago/commit/691146145fb7e1f5161211d4de346a7ab16305c0))
+
 ## [0.9.1](https://github.com/sdaconceicao/lago/compare/lago-v0.9.0...lago-v0.9.1) (2026-08-28)
 
 
