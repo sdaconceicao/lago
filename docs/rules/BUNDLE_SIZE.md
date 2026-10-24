@@ -1,12 +1,12 @@
 # Bundle size checks
 
-The [bundle size workflow](../.github/workflows/workflow-bundle-size.yml) checks core bundle growth on pull requests, main-branch builds, and before publishing.
+The [bundle size workflow](../../.github/workflows/workflow-bundle-size.yml) checks core bundle growth on pull requests, main-branch builds, and before publishing.
 
 ## Measurement
 
 CI uses Size Limit to bundle all core ESM exports from `dist/index.mjs`, minify them, and measure gzip size. Runtime dependencies are included; React, React DOM, and React Aria Components are excluded. The optional editor entry and stylesheet are outside this check.
 
-Measurement settings are defined in [`.size-limit.cjs`](../.size-limit.cjs). Measurement tools are pinned in the lockfile and both measurement jobs use Node 24.
+Measurement settings are defined in [`.size-limit.cjs`](../../.size-limit.cjs). Measurement tools are pinned in the lockfile and both measurement jobs use Node 24.
 
 ## Growth allowance
 
