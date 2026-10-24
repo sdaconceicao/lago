@@ -1,0 +1,65 @@
+.container {
+  min-width: 0;
+}
+
+/* Only the overflow popover may wrap; the primary bar always stays one line. */
+.toolbar {
+  position: relative;
+  width: 100%;
+  flex-wrap: nowrap;
+  padding: var(--field-inner-inset);
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section,
+.group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  flex: 0 0 auto;
+}
+
+/* Keep natural widths available for measurement without exposing duplicate
+   controls to pointer, keyboard, or assistive technology users. */
+.section[data-overflowed],
+.measurement {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.overflowPopover {
+  max-width: calc(100vw - var(--spacing-4) * 2);
+}
+
+.overflowDialog,
+.linkDialog {
+  padding: 0;
+}
+
+.overflowToolbar {
+  max-width: 100%;
+}
+
+.headingSelect {
+  flex: 0 0 auto;
+}
+
+.headingButton {
+  width: 9em;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+
+.headingPopover {
+  min-width: var(--trigger-width);
+  padding: 0;
+}
+
+.linkForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-width: calc(var(--spacing-10) * 6); /* 240px */
+}

@@ -18,6 +18,7 @@ import { NumberField } from "@/components/Inputs/NumberField/NumberField";
 import { Password } from "@/components/Inputs/Password/Password";
 import { RadioGroup } from "@/components/Inputs/Radio/RadioGroup/RadioGroup";
 import { Radio } from "@/components/Inputs/Radio/RadioItem/Radio";
+import { RichTextEditor } from "@/components/Inputs/RichTextEditor/RichTextEditor";
 import { SearchField } from "@/components/Inputs/Search/SearchField/SearchField";
 import { SearchFieldWithSuggestions } from "@/components/Inputs/Search/SearchFieldWIthSuggestions/SearchFieldWithSuggestions";
 import { Select, SelectItem } from "@/components/Inputs/Select/Select";
@@ -243,6 +244,45 @@ const measureRow = (row: HTMLElement) =>
     };
   });
 
+export const Default: StoryObj<{ size: FieldSize; rows?: number }> = {
+  args: { size: "md", rows: 2 },
+  argTypes: {
+    size: { control: "inline-radio", options: ["sm", "md", "lg"] },
+    rows: { control: { type: "number", min: 1, step: 1 } },
+  },
+  render: ({ size, rows }) => (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+        alignItems: "start",
+        gap: 24,
+      }}
+    >
+      <TextField
+        label="Text field"
+        description="Shared label and description spacing."
+        placeholder="Single-line text"
+        size={size}
+      />
+      <TextArea
+        label="Text area"
+        description="Shared label and description spacing."
+        placeholder="Multi-line text"
+        size={size}
+        rows={rows}
+      />
+      <RichTextEditor
+        label="Rich text editor"
+        description="Shared label and description spacing."
+        placeholder="Formatted text"
+        size={size}
+        rows={rows}
+      />
+    </div>
+  ),
+};
+
 /**
  * Every field-like control at all three sizes. The `play` function is the
  * actual contract: within a row, every control must report the same height,
@@ -411,6 +451,12 @@ export const NonRowControls: StoryObj = {
         >
           <strong>{size}</strong>
           <TextArea aria-label="Notes" size={size} placeholder="Notes" />
+          <RichTextEditor
+            label="Rich text editor"
+            description="Formatted notes"
+            size={size}
+            placeholder="Write something…"
+          />
           <Switch size={size}>Switch</Switch>
           <Slider aria-label="Slider" size={size} defaultValue={40} />
           <Checkbox size={size}>Checkbox</Checkbox>
@@ -430,7 +476,7 @@ NonRowControls.parameters = {
   docs: {
     description: {
       story:
-        "A TextArea is multi-line, a DropZone is a box target, and Slider/Switch/Checkbox/Radio are indicator controls rather than field boxes — none of them share a field height, so they are deliberately excluded from row alignment.",
+        "TextArea and RichTextEditor are multi-line, a DropZone is a box target, and Slider/Switch/Checkbox/Radio are indicator controls rather than field boxes — none of them share a field height, so they are deliberately excluded from row alignment. RichTextEditor demonstrates the shared label and description spacing and toolbar button sizes at sm, md and lg.",
     },
   },
 };

@@ -27,9 +27,9 @@ export default meta;
 
 type Story = StoryFn<typeof TextArea>;
 
-export const Example: Story = (args) => <TextArea {...args} />;
+export const Default: Story = (args) => <TextArea {...args} />;
 
-Example.args = {
+Default.args = {
   label: "Bio",
 };
 
@@ -45,7 +45,24 @@ Sizes.parameters = {
   docs: {
     description: {
       story:
-        'TextArea supports three sizes: "sm" renders a compact field with 12px text, 8px horizontal padding, and a 44px minimum height, "md" (the default) renders 14px text, 12px horizontal padding, and a 52px minimum height, and "lg" renders 16px text, 16px horizontal padding, and a 64px minimum height. Each minimum height is one single-line field of that size plus a second row of text, so a TextArea always reads as multi-line. Because a TextArea is multi-line and resizable, its height can never match a single-line control, so it does not row-align with a TextField or Select the way those fields align with each other — at a given size it only shares their border radius, horizontal padding, and font size.',
+        "TextArea uses the same text insets as TextField: 12px text and 8px horizontal padding at sm, 14px and 12px at md, and 16px and 16px at lg. A single row matches the corresponding TextField height; each additional row adds one body-text line. The native default is two rows, and the textarea remains vertically resizable.",
+    },
+  },
+};
+
+export const Rows: Story = (args) => (
+  <div style={{ display: "flex", alignItems: "start", gap: 24 }}>
+    <TextArea {...args} label="One line" rows={1} />
+    <TextArea {...args} label="Three lines" rows={3} />
+    <TextArea {...args} label="Six lines" rows={6} />
+  </div>
+);
+
+Rows.parameters = {
+  docs: {
+    description: {
+      story:
+        "The rows prop sets the initial number of visible text lines. Additional content scrolls within the textarea, and users can still resize it vertically.",
     },
   },
 };

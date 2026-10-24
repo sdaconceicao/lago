@@ -60,7 +60,6 @@
 .toggleButton[data-icon-only] {
   width: var(--spacing-9); /* 36px */
   padding: 0;
-  border-radius: 9999px;
 }
 
 .toggleButton[data-size="sm"][data-icon-only] {

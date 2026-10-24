@@ -28,8 +28,10 @@ export interface TextAreaProps extends AriaTextFieldProps {
   placeholder?: string;
   /** Ref forwarded to the underlying `textarea` element. */
   inputRef?: React.Ref<HTMLTextAreaElement>;
-  /** Field size: 44px, 52px (default), or 64px minimum height. */
+  /** Sets text size and padding using the shared field scale. */
   size?: FieldSize;
+  /** Number of visible text lines. Defaults to the native textarea's two rows. */
+  rows?: number;
 }
 
 /**
@@ -43,6 +45,7 @@ export function TextArea({
   errorMessage,
   placeholder,
   inputRef,
+  rows,
   size = DEFAULT_FIELD_SIZE,
   ...props
 }: TextAreaProps) {
@@ -57,6 +60,7 @@ export function TextArea({
         ref={inputRef}
         className={clsx("react-aria-TextArea", styles.input, base.inset)}
         placeholder={placeholder}
+        rows={rows}
       />
       {description && <Description>{description}</Description>}
       <FieldError>{errorMessage}</FieldError>

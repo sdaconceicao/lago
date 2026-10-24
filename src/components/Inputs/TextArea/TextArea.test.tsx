@@ -68,6 +68,18 @@ describe("TextArea", () => {
     expect(ref.current).toBe(screen.getByRole("textbox"));
   });
 
+  it("uses two native rows by default", () => {
+    render(<TextArea label="Bio" />);
+
+    expect(screen.getByRole<HTMLTextAreaElement>("textbox").rows).toBe(2);
+  });
+
+  it.each([1, 4, 6])("supports %i visible rows", (rows) => {
+    render(<TextArea label="Bio" rows={rows} />);
+
+    expect(screen.getByRole<HTMLTextAreaElement>("textbox").rows).toBe(rows);
+  });
+
   describe("size", () => {
     it('renders data-field-size="md" by default', () => {
       const { container } = render(<TextArea label="Bio" />);

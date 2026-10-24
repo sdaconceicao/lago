@@ -5,10 +5,20 @@ import {
 } from "@/components/Inputs/Toggle/ToggleButton/ToggleButton";
 
 type AccessibleName =
-  | { "aria-label": string }
-  | { "aria-labelledby": string }
-  | { slot: string };
+  | {
+      /** Accessible name when the icon has no visible label. */
+      "aria-label": string;
+    }
+  | {
+      /** ID of the element that labels this button. */
+      "aria-labelledby": string;
+    }
+  | {
+      /** A React Aria slot whose parent supplies the accessible name. */
+      slot: string;
+    };
 
+/** ToggleButton props with a required accessible name for icon-only content. */
 export type IconToggleButtonProps = Omit<
   ToggleButtonProps,
   "aria-label" | "aria-labelledby"
@@ -16,17 +26,12 @@ export type IconToggleButtonProps = Omit<
   AccessibleName;
 
 /**
- * A toggle button whose whole content is an icon: square at the size given,
- * with a fully round radius. Inside a ToggleButtonGroup the group's segmented
- * radii win, so it reads as one cell of the track rather than a lone circle.
+ * An icon-only ToggleButton with equal width and height and ToggleButton's
+ * corner radius. ToggleButtonGroup supplies segmented corners when grouped.
  *
- * It is a `ToggleButton` underneath, so every variant, size and state behaves
- * identically — only the shape and the required accessible name differ. Reach
- * for `ToggleButton` the moment there is a visible label beside the icon.
- *
- * Unlike `IconButton`, which carries its own class, the shape here is keyed off
- * a `data-icon-only` attribute: ToggleButtonGroup restates the width for its
- * own size, and a CSS-module class cannot be selected from another module.
+ * ToggleButton owns selection, keyboard interaction and styling. This wrapper
+ * adds square sizing and a required accessible name. Use ToggleButton for a
+ * visible text label, or IconButton for an action without a selected state.
  */
 export function IconToggleButton(props: IconToggleButtonProps) {
   return <ToggleButton {...(props as ToggleButtonProps)} data-icon-only="" />;
