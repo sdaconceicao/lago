@@ -6,10 +6,13 @@
   "packageManager": "pnpm@12.1.0",
   "scripts": {
     "build": "vite build --config vite.build.config.ts",
+    "size": "node scripts/bundle-size.mjs check",
+    "size:record": "node scripts/bundle-size.mjs record",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:setup": "pnpm exec playwright install --with-deps chromium",
     "test": "vitest run",
+    "test:bundle-size": "node --test scripts/bundle-size.test.mjs",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage",
@@ -19,6 +22,7 @@
     "format:check": "biome format .",
     "check": "biome check .",
     "check:fix": "biome check --write .",
+    "ci:validate": "pn lint:fix && pn format && pn check:fix && pn type-check && pn test",
     "type-check": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit && tsc -p .storybook/tsconfig.json --noEmit"
   },
   "main": "./dist/index.cjs",
@@ -34,6 +38,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./rich-text-editor": {
+      "types": "./dist/rich-text-editor.d.ts",
+      "import": "./dist/rich-text-editor.mjs",
+      "require": "./dist/rich-text-editor.cjs"
+    },
     "./styles": {
       "types": "./styles.d.ts",
       "import": "./dist/index.css",
@@ -46,11 +55,6 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "react": "^19",
-    "react-aria-components": "^1",
-    "react-dom": "^19"
-  },
-  "dependencies": {
     "@tiptap/core": "^3.30.5",
     "@tiptap/extension-highlight": "^3.30.5",
     "@tiptap/extension-list": "^3.30.5",
@@ -58,8 +62,46 @@
     "@tiptap/extension-superscript": "^3.30.5",
     "@tiptap/extension-text-align": "^3.30.5",
     "@tiptap/extensions": "^3.30.5",
+    "@tiptap/pm": "^3.30.5",
     "@tiptap/react": "^3.30.5",
     "@tiptap/starter-kit": "^3.30.5",
+    "react": "^19",
+    "react-aria-components": "^1",
+    "react-dom": "^19"
+  },
+  "peerDependenciesMeta": {
+    "@tiptap/core": {
+      "optional": true
+    },
+    "@tiptap/extension-highlight": {
+      "optional": true
+    },
+    "@tiptap/extension-list": {
+      "optional": true
+    },
+    "@tiptap/extension-subscript": {
+      "optional": true
+    },
+    "@tiptap/extension-superscript": {
+      "optional": true
+    },
+    "@tiptap/extension-text-align": {
+      "optional": true
+    },
+    "@tiptap/extensions": {
+      "optional": true
+    },
+    "@tiptap/pm": {
+      "optional": true
+    },
+    "@tiptap/react": {
+      "optional": true
+    },
+    "@tiptap/starter-kit": {
+      "optional": true
+    }
+  },
+  "dependencies": {
     "clsx": "^2.1.1",
     "lucide-react": "^1.60.0",
     "react-payment-logos": "^1.1.0"
@@ -69,6 +111,8 @@
     "@chromatic-com/storybook": "^5.6.0",
     "@internationalized/date": "^3.12.4",
     "@microsoft/api-extractor": "^7.59.4",
+    "@size-limit/esbuild": "14.1.0",
+    "@size-limit/file": "14.1.0",
     "@storybook/addon-a11y": "^10.6.3",
     "@storybook/addon-designs": "^11.1.4",
     "@storybook/addon-docs": "^10.6.3",
@@ -80,6 +124,16 @@
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
+    "@tiptap/core": "^3.30.5",
+    "@tiptap/extension-highlight": "^3.30.5",
+    "@tiptap/extension-list": "^3.30.5",
+    "@tiptap/extension-subscript": "^3.30.5",
+    "@tiptap/extension-superscript": "^3.30.5",
+    "@tiptap/extension-text-align": "^3.30.5",
+    "@tiptap/extensions": "^3.30.5",
+    "@tiptap/pm": "^3.30.5",
+    "@tiptap/react": "^3.30.5",
+    "@tiptap/starter-kit": "^3.30.5",
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
@@ -92,6 +146,7 @@
     "react": "^19.3.0",
     "react-aria-components": "^1.22.1",
     "react-dom": "^19.3.0",
+    "size-limit": "14.1.0",
     "storybook": "^10.6.3",
     "typescript": "^6.0.3",
     "vite": "^8.3.4",

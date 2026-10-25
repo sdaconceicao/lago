@@ -65,7 +65,7 @@ export default defineConfig({
         "**/pages/**",
       ],
       // Emit per-file .d.ts under dist/ (mirroring src/), then collapse the
-      // public surface into dist/index.d.ts via api-extractor. This is
+      // public surface into one declaration per entry via api-extractor. This is
       // independent of Rollup's preserveModules JS output — api-extractor reads
       // the generated entry declaration, not the bundled JS graph.
       // Named `rollupTypes` before vite-plugin-dts 5; under the old name it was
@@ -84,7 +84,10 @@ export default defineConfig({
   build: {
     minify: "esbuild", // Options: false | "esbuild" | "terser" | true (default: "esbuild")
     lib: {
-      entry: path.resolve(dirname, "src/index.ts"),
+      entry: {
+        index: path.resolve(srcRoot, "index.ts"),
+        "rich-text-editor": path.resolve(srcRoot, "rich-text-editor.ts"),
+      },
       formats: ["es", "cjs"],
     },
     rollupOptions: {

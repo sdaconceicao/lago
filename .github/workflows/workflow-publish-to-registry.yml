@@ -19,6 +19,9 @@ jobs:
       RELEASED_VERSION: ${{ steps.released-version.outputs.version }}
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
       - name: Restore Build
         uses: actions/cache/restore@v5
         id: restore-build
@@ -43,6 +46,17 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Measure release core bundle
+        run: pnpm size:record "$RUNNER_TEMP/lago-bundle-size/bundle-size.json"
+
+      - name: Preserve release measurement
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-size-${{ steps.released-version.outputs.version }}
+          path: ${{ runner.temp }}/lago-bundle-size/bundle-size.json
+          if-no-files-found: error
+          overwrite: true
+
       # Trusted publishing (OIDC) requires npm >= 11.5.1, which is newer than
       # the npm bundled with Node 24.
       - name: Update npm for trusted publishing
@@ -50,3 +64,33 @@ jobs:
 
       - name: Publish to npm
         run: npm publish
+
+  bundle-baseline:
+    name: Save published bundle baseline
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download successful release measurement
+        uses: actions/download-artifact@v4
+        with:
+          name: bundle-size-${{ needs.publish.outputs.RELEASED_VERSION }}
+          path: ${{ runner.temp }}/lago-bundle-size
+
+      - name: Attach baseline to the published release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_VERSION: ${{ needs.publish.outputs.RELEASED_VERSION }}
+        run: |
+          for attempt in {1..6}; do
+            if gh release view "lago-v$RELEASE_VERSION" >/dev/null 2>&1; then
+              gh release upload "lago-v$RELEASE_VERSION" \
+                "$RUNNER_TEMP/lago-bundle-size/bundle-size.json" --clobber
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "GitHub release lago-v$RELEASE_VERSION is missing; baseline was not saved." >&2
+          exit 1

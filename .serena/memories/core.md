@@ -11,7 +11,8 @@ React design system published as `@code-x/lago`. Single package, not a monorepo.
 - `src/styles/` — tokens (`theme.css`), `base.module.css`.
 - `test-utils/` — aliased as `@test-utils/*`.
 - `.storybook/` — Storybook 10 + browser vitest project.
-- `.cursor/rules/` — agent coding standards (also imported from `AGENTS.md`).
+- `docs/rules/` — shared engineering standards referenced by `AGENTS.md`, including CSS Modules styling.
+- `.cursor/rules/` — Cursor forwarding rules that reference the shared standards.
 
 Typical colocated files: `Name.tsx`, `Name.module.css`, `Name.test.tsx`, `Name.stories.tsx`, optional `Name.utils.ts` / `Name.hooks.ts` / `BaseComponents/`.
 

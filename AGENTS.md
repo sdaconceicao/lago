@@ -1,18 +1,28 @@
-# lago
+# Lago Agent Instructions
 
-React component library / design system (components, Storybook, unit tests).
+Lago is a React and TypeScript design system built
+on React Aria Components.
 
-## Coding standards
+## Project standards
 
-The rules below were authored for Cursor (`.cursor/rules/*.mdc`). Claude Code
-imports the **content** of each file via the `@`-import lines. Note: Claude Code
-does **not** interpret the `.mdc` frontmatter (`globs`, `alwaysApply`), so these
-are always in context regardless of which file you're editing — the per-glob
-auto-attach behavior from Cursor is not replicated.
+Shared engineering standards live in `docs/rules/`.
+These apply to both human and automated contributors.
 
-@.cursor/rules/jcodemunch.mdc
-@.cursor/rules/serena.mdc
-@.cursor/rules/react.mdc
-@.cursor/rules/pure-functions.mdc
-@.cursor/rules/testing-unit-standards.mdc
-@.cursor/rules/storybook-stories.mdc
+Read [docs/development/ARCHITECTURE.md](docs/development/ARCHITECTURE.md) before changing
+dependencies, package exports, or the library build.
+
+Before editing:
+1. Read the standards relevant to the task.
+2. Inspect existing implementations.
+3. Follow established patterns unless the task
+   explicitly requires changing them.
+
+## Validation
+
+Run checks appropriate to the files changed.
+Report any checks that could not be completed.
+
+## Boundaries
+
+Do not commit, push, publish, or deploy without
+explicit authorization.

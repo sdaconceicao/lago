@@ -1,0 +1,50 @@
+name: Bundle size
+
+permissions:
+  contents: read
+
+on:
+  workflow_call:
+    inputs:
+      cached-build-id:
+        description: "ID for cached build"
+        required: true
+        type: string
+      checkout-ref:
+        description: "Optional ref to checkout, matching the cached build"
+        required: false
+        type: string
+
+jobs:
+  bundle-size:
+    name: Core bundle size
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.checkout-ref || github.sha }}
+
+      - name: Restore dependencies
+        uses: actions/cache/restore@v5
+        with:
+          path: ./*
+          key: ${{ inputs.cached-build-id }}
+          fail-on-cache-miss: true
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+
+      - name: Build
+        run: pnpm build
+
+      - name: Test bundle size guard
+        run: pnpm test:bundle-size
+
+      - name: Check core bundle growth against the latest release
+        run: pnpm size

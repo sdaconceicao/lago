@@ -1,0 +1,7 @@
+---
+description: CSS Modules Styling Standards
+globs: **/*.module.css
+alwaysApply: false
+---
+
+Read and follow @docs/rules/STYLING_CSS_MODULES.md.
