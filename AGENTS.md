@@ -8,7 +8,7 @@ on React Aria Components.
 Shared engineering standards live in `docs/rules/`.
 These apply to both human and automated contributors.
 
-Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before changing
+Read [docs/development/ARCHITECTURE.md](docs/development/ARCHITECTURE.md) before changing
 dependencies, package exports, or the library build.
 
 Before editing:

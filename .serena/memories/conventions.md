@@ -1,6 +1,6 @@
 # Conventions
 
-Authoritative detail lives in `.cursor/rules/` (`react.mdc`, `pure-functions.mdc`, `testing-unit-standards.mdc`, `storybook-stories.mdc`). Below is what is easy to get wrong.
+Authoritative detail lives in `docs/rules/`. For component styles, follow `docs/rules/STYLING_CSS_MODULES.md`. Below is what is easy to get wrong.
 
 ## Components
 

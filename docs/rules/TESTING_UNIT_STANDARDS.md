@@ -7,7 +7,6 @@ This rule works with:
 - **React Standards** - Test React components thoroughly
 - **Pure Functions Guide** - Test extracted logic functions
 - **CSS Modules Styling Standards** - Test CSS class application
-- **E2E Testing Standards** - Complementary testing coverage
 
 ## Core Principles
 
@@ -178,41 +177,7 @@ expect(mockFunction).toHaveBeenCalledWith(expectedArgs);
 
 ## Breaking Out Pure Functions
 
-### Identify Pure Function Candidates
-
-- Data transformations and calculations
-- Formatting and validation functions
-- Filter, sort, and map operations
-- Mathematical computations
-- String and array manipulations
-
-### Extraction Process
-
-```typescript
-// Before: Inside component
-const Component = () => {
-  const sortedItems = items.sort((a, b) => a.date - b.date);
-  const filteredItems = sortedItems.filter(item => item.isActive);
-  return <div>{filteredItems.map(item => <Item {...item} />)}</div>
-}
-
-// After: Pure functions in utils
-export const sortItemsByDate = (items: Item[]): Item[] => {
-  return [...items].sort((a, b) => a.date - b.date);
-};
-
-export const filterActiveItems = (items: Item[]): Item[] => {
-  return items.filter(item => item.isActive);
-};
-
-// Component using pure functions
-const Component = () => {
-  const sortedItems = sortItemsByDate(items);
-  const filteredItems = filterActiveItems(sortedItems);
-
-  return <div>{filteredItems.map(item => <Item {...item} />)}</div>
-}
-```
+Follow the [Pure Functions Guide](PURE_FUNCTIONS.md#breaking-out-pure-functions-from-components) to identify and extract component logic. Test extracted helpers independently, including their edge cases and input immutability.
 
 ### Testing Extracted Functions
 
@@ -446,5 +411,4 @@ describe('SearchInput', () => {
 
 - [React Standards](REACT.md) - For component structure and testing requirements
 - [Pure Functions Guide](PURE_FUNCTIONS.md) - For testing pure functions and extracted logic
-- [CSS Modules Styling Standards](mdc:styling-css-modules.mdc) - For testing CSS class application
-- [E2E Testing Standards](mdc:testing-e2e-standards.mdc) - For complementary user workflow testing
+- [CSS Modules Styling Standards](STYLING_CSS_MODULES.md) - For testing CSS class application

@@ -63,4 +63,4 @@ Validate the packed package, not only imports from source:
 
 The core Size Limit check bundles all core exports and their reachable dependencies. It excludes only the shared React, React DOM, and React Aria peers. Keep this exclusion list explicit so moving a large library to peer dependencies cannot hide an accidental core import.
 
-The automated size gate currently covers core JavaScript. Measure optional features separately when evaluating their dependencies. See [Bundle size checks](development/BUNDLE_SIZE.md) for commands, the release comparison policy, and baseline recovery.
+The automated size gate currently covers core JavaScript. Measure optional features separately when evaluating their dependencies. See [Bundle size checks](BUNDLE_SIZE.md) for commands, the release comparison policy, and baseline recovery.

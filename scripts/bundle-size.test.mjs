@@ -221,6 +221,65 @@ describe("command failures", () => {
   });
 });
 
+describe("Size Limit peer isolation", () => {
+  it("counts optional peers while excluding shared peers and their subpaths", async (t) => {
+    const directory = await mkdtemp(path.join(tmpdir(), "lago-size-peers-"));
+    t.after(() => rm(directory, { recursive: true, force: true }));
+    const engine = path.join(directory, "node_modules/@tiptap/core");
+    await mkdir(engine, { recursive: true });
+    await mkdir(path.join(directory, "dist"));
+    await copyFile(
+      fileURLToPath(new URL("../.size-limit.cjs", import.meta.url)),
+      path.join(directory, ".size-limit.cjs")
+    );
+    await writeFile(
+      path.join(directory, "package.json"),
+      JSON.stringify({
+        private: true,
+        devDependencies: {
+          "@size-limit/esbuild": "14.1.0",
+          "@size-limit/file": "14.1.0",
+        },
+        peerDependencies: { "@tiptap/core": "*" },
+        peerDependenciesMeta: { "@tiptap/core": { optional: true } },
+      })
+    );
+    await writeFile(
+      path.join(engine, "package.json"),
+      JSON.stringify({ type: "module", exports: "./index.js" })
+    );
+    const payload = Array.from({ length: 2048 }, (_, index) => index);
+    await writeFile(
+      path.join(engine, "index.js"),
+      `export const payload = ${JSON.stringify(payload)};`
+    );
+    await writeFile(
+      path.join(directory, "dist/index.mjs"),
+      [
+        'export { payload } from "@tiptap/core";',
+        'export { createElement } from "react";',
+        'export { createRoot } from "react-dom/client";',
+        'export { Button } from "react-aria-components/Button";',
+      ].join("\n")
+    );
+    const result = spawnSync(
+      process.execPath,
+      [
+        fileURLToPath(
+          new URL("../node_modules/size-limit/bin.js", import.meta.url)
+        ),
+        "--json",
+      ],
+      { cwd: directory, encoding: "utf8" }
+    );
+    assert.equal(result.status, 0, result.stderr);
+    assert.ok(
+      parseMeasurement(result.stdout) > 1_000,
+      "Optional peer implementation must contribute to the measured size"
+    );
+  });
+});
+
 describe("built bundle integration", () => {
   const cli = fileURLToPath(new URL("./bundle-size.mjs", import.meta.url));
 
@@ -246,7 +305,7 @@ describe("built bundle integration", () => {
     assert.match(passing.stdout, /PASS/);
     assert.match(await readFile(summaryFile, "utf8"), /0\.000%/);
 
-    baseline.sizeBytes = Math.floor((baseline.sizeBytes * 100) / 105);
+    baseline.sizeBytes = Math.floor((baseline.sizeBytes * 100) / 105) - 1;
     await writeFile(baselineFile, JSON.stringify(baseline));
     const failing = check();
     assert.equal(failing.status, 1);

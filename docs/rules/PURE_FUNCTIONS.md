@@ -124,37 +124,7 @@ const UserList = ({ users }: { users: User[] }) => {
 
 ## Testing Pure Functions
 
-Pure functions are easy to test because they're predictable:
-
-```typescript
-describe("sortUsersByName", () => {
-  it("sorts users alphabetically by name", () => {
-    const users = [
-      { id: "1", name: "Charlie" },
-      { id: "2", name: "Alice" },
-      { id: "3", name: "Bob" },
-    ];
-
-    const result = sortUsersByName(users);
-
-    expect(result[0].name).toBe("Alice");
-    expect(result[1].name).toBe("Bob");
-    expect(result[2].name).toBe("Charlie");
-  });
-
-  it("does not mutate original array", () => {
-    const users = [
-      { id: "1", name: "Charlie" },
-      { id: "2", name: "Alice" },
-    ];
-    const originalUsers = [...users];
-
-    sortUsersByName(users);
-
-    expect(users).toEqual(originalUsers);
-  });
-});
-```
+Verify outputs, edge cases, determinism, and input immutability. Follow the examples in [Unit Testing Standards](TESTING_UNIT_STANDARDS.md#testing-pure-functions).
 
 ## Common Patterns for Pure Functions
 

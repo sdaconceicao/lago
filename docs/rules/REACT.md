@@ -5,6 +5,7 @@
 This rule works with:
 
 - **Pure Functions Guide** - Extract logic from components
+- **CSS Modules Styling Standards** - Style components with scoped CSS
 - **Unit Testing Standards** - Test components thoroughly
 
 ## Core Principles
@@ -420,68 +421,7 @@ export const ComponentName = ({ onSave }: { onSave: (data: Data) => void }) => {
 
 ## Testing Requirements
 
-### Test File Structure
-
-```tsx
-// ComponentName.test.tsx
-import { render, screen, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { ComponentName } from "./ComponentName";
-
-describe("ComponentName", () => {
-  const defaultProps = {
-    requiredProp: "test value",
-    optionalProp: "optional value",
-  };
-
-  it("renders with required props", () => {
-    render(<ComponentName {...defaultProps} />);
-    expect(screen.getByText("test value")).toBeInTheDocument();
-  });
-
-  it("renders with optional props", () => {
-    render(<ComponentName requiredProp="required" optionalProp="custom" />);
-    expect(screen.getByText("custom")).toBeInTheDocument();
-  });
-
-  it("handles user interactions", async () => {
-    const user = userEvent.setup();
-    const mockOnClick = jest.fn();
-
-    render(<ComponentName {...defaultProps} onClick={mockOnClick} />);
-
-    const button = screen.getByRole("button");
-    await user.click(button);
-
-    expect(mockOnClick).toHaveBeenCalledTimes(1);
-  });
-
-  it("applies correct CSS classes", () => {
-    render(<ComponentName {...defaultProps} />);
-
-    const container = screen.getByTestId("component-name");
-    expect(container).toHaveClass("componentName");
-  });
-
-  it("applies conditional classes correctly", () => {
-    render(
-      <ComponentName {...defaultProps} isActive={true} variant="primary" />
-    );
-
-    const container = screen.getByTestId("component-name");
-    expect(container).toHaveClass("componentName", "active", "primary");
-  });
-});
-```
-
-### Test Coverage Requirements
-
-- Test all prop variations
-- Test user interactions
-- Test edge cases
-- Test conditional class application
-- Test hook behavior
-- Test utility function integration
+Every component must have unit tests covering prop variations, user interactions, edge cases, conditional classes, hook behavior, and utility integration. Follow the examples and query guidance in [Unit Testing Standards](TESTING_UNIT_STANDARDS.md#react-component-testing-with-react-testing-library).
 
 ## Best Practices
 
@@ -620,5 +560,5 @@ export default UserProfile;
 ## Related Rules
 
 - [Pure Functions Guide](PURE_FUNCTIONS.md) - For extracting logic from components
-- [CSS Modules Styling Standards](mdc:styling-css-modules.mdc) - For component styling and CSS structure
+- [CSS Modules Styling Standards](STYLING_CSS_MODULES.md) - For component styling and CSS structure
 - [Unit Testing Standards](TESTING_UNIT_STANDARDS.md) - For testing React components thoroughly

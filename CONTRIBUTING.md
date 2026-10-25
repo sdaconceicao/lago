@@ -25,23 +25,24 @@ Run it during initial setup and when the required Playwright browser version cha
 Shared standards live in [`docs/rules/`](docs/rules/):
 
 - [React components](docs/rules/REACT.md)
+- [CSS Modules styling](docs/rules/STYLING_CSS_MODULES.md)
 - [Pure functions and logic extraction](docs/rules/PURE_FUNCTIONS.md)
 - [Unit testing](docs/rules/TESTING_UNIT_STANDARDS.md)
 - [Storybook stories and prop documentation](docs/rules/STORYBOOK_STORIES.md)
 
-Follow the [architecture and dependency policy](docs/ARCHITECTURE.md) when changing dependencies, package exports, or the library build. It documents the rich text editor split, optional peer boundaries, and tree-shaking requirements for keeping core small.
+Follow the [architecture and dependency policy](docs/development/ARCHITECTURE.md) when changing dependencies, package exports, or the library build. It documents the rich text editor split, optional peer boundaries, and tree-shaking requirements for keeping core small.
 
 ## Validate changes
 
 Run checks appropriate to the files changed. For code changes, the main checks are:
 
 ```sh
-pn ci:validate 
+pn ci:validate
 pn build
 ```
 
-The coverage command runs both unit and browser-based Storybook tests.
-For a unit only check while developing:
+`ci:validate` applies lint and formatting fixes, type-checks, and runs unit and browser-based Storybook tests. Review any changes it makes before committing.
+For a unit-only check while developing:
 
 ```sh
 pnpm exec vitest run --project unit

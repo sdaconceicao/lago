@@ -33,11 +33,11 @@ pnpm run size .github/bundle-size-baseline.json
 
 After npm publishing succeeds, CI automatically attaches `bundle-size.json` to that version's GitHub release. Subsequent checks resolve npm's `latest` version and download its matching release asset.
 
-For the initial core/editor split only, [`.github/bundle-size-baseline.json`](../.github/bundle-size-baseline.json) seeds comparisons while npm's latest version is `0.10.0` and that release has no baseline asset. It measures the new core layout, not the old combined release. Later releases cannot fall back to this seed.
+For the initial core/editor split only, [`.github/bundle-size-baseline.json`](../../.github/bundle-size-baseline.json) seeds comparisons while npm's latest version is `0.10.0` and that release has no baseline asset. It measures the new core layout, not the old combined release. Later releases cannot fall back to this seed.
 
 ## Change the budget or measurement
 
-To investigate an intentional budget change, edit `MAX_GROWTH_PERCENT` in [`scripts/bundle-size.mjs`](../scripts/bundle-size.mjs). Ordinary checks do not update the checked-in seed.
+To investigate an intentional budget change, edit `MAX_GROWTH_PERCENT` in [`scripts/bundle-size.mjs`](../../scripts/bundle-size.mjs). Ordinary checks do not update the checked-in seed.
 
 Changes to measurement settings must also change the measurement identifier and establish a compatible baseline.
 
