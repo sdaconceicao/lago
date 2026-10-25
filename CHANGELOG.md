@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.1](https://github.com/sdaconceicao/lago/compare/lago-v0.10.0...lago-v0.10.1) (2026-10-25)
+
+
+### Bug Fixes
+
+* Break out RichTextEditor and made optional peer deps ([#137](https://github.com/sdaconceicao/lago/issues/137)) ([e6eeb01](https://github.com/sdaconceicao/lago/commit/e6eeb01f2bd2f3add13e322250ed798f505d1b16))
+
 ## [0.10.0](https://github.com/sdaconceicao/lago/compare/lago-v0.9.1...lago-v0.10.0) (2026-10-24)
 
 
