@@ -38,8 +38,8 @@ jobs:
       - name: Run Biome (lint + format + import checks)
         run: pnpm exec biome ci --error-on-warnings .
 
-      - name: Run type checking - frontend
-        run: pnpm exec tsc --noEmit
+      - name: Run type checking
+        run: pnpm type-check
 
       - name: Run tests
         run: pnpm test:coverage

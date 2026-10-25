@@ -23,7 +23,7 @@
     "check": "biome check .",
     "check:fix": "biome check --write .",
     "ci:validate": "pn lint:fix && pn format && pn check:fix && pn type-check && pn test",
-    "type-check": "tsc -p tsconfig.app.json --noEmit && tsc -p tsconfig.node.json --noEmit && tsc -p .storybook/tsconfig.json --noEmit"
+    "type-check": "node node_modules/@typescript/native/bin/tsc -p tsconfig.app.json --noEmit && node node_modules/@typescript/native/bin/tsc -p tsconfig.node.json --noEmit && node node_modules/@typescript/native/bin/tsc -p .storybook/tsconfig.json --noEmit"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -137,6 +137,7 @@
     "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "@typescript/native": "npm:typescript@7.0.2",
     "@vitejs/plugin-react-swc": "^4.3.3",
     "@vitest/browser-playwright": "^4.1.11",
     "@vitest/coverage-v8": "^4.1.11",
