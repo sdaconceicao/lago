@@ -1,11 +1,28 @@
-# lago
+# Lago Agent Instructions
 
-React component library / design system (components, Storybook, unit tests).
+Lago is a React and TypeScript design system built
+on React Aria Components.
 
-## Coding standards
+## Project standards
 
-Shared coding standards live in `docs/rules/`. The Cursor rule files in
-`.cursor/rules/` retain their metadata and reference those documents.
+Shared engineering standards live in `docs/rules/`.
+These apply to both human and automated contributors.
 
-Before making changes, list all Markdown files in `docs/rules/`, read each
-file, and follow those rules.
+Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) before changing
+dependencies, package exports, or the library build.
+
+Before editing:
+1. Read the standards relevant to the task.
+2. Inspect existing implementations.
+3. Follow established patterns unless the task
+   explicitly requires changing them.
+
+## Validation
+
+Run checks appropriate to the files changed.
+Report any checks that could not be completed.
+
+## Boundaries
+
+Do not commit, push, publish, or deploy without
+explicit authorization.

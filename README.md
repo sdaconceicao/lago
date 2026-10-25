@@ -37,10 +37,6 @@ import type { RichTextEditorProps } from "@code-x/lago/rich-text-editor";
 import "@code-x/lago/styles";
 ```
 
-## Getting started
+## Contributing
 
-**Note:** This project uses [pnpm](https://pnpm.io) as the package manager. All installs and commands should use `pnpm` to ensure `pnpm-lock.yaml` is properly maintained.
-
-1. `pn install` to install required dependencies.
-2. `pn test:setup` to install playwright browsers for local testing
-3. `pn storybook` to view the interactive storybook.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup, engineering standards, validation commands, and pull request guidance.
