@@ -52,6 +52,7 @@
   "files": [
     "dist",
     "styles.d.ts",
+    "THIRD_PARTY_NOTICES.md",
     "LICENSE"
   ],
   "peerDependencies": {
@@ -104,6 +105,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "lucide-react": "^1.60.0",
+    "react-country-flag": "3.1.0",
     "react-payment-logos": "^1.1.0"
   },
   "devDependencies": {

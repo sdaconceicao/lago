@@ -6,6 +6,7 @@ import {
   Select as AriaSelect,
   type SelectProps as AriaSelectProps,
   SelectValue,
+  type SelectValueProps,
 } from "react-aria-components/Select";
 import { DropdownListBox } from "@/components/Collections/ListBox/ListBox";
 import {
@@ -34,6 +35,8 @@ export interface AffixSelectProps<T extends object>
   size?: FieldSize;
   /** CSS class name applied to the dropdown root, merged with the defaults. */
   className?: string;
+  /** Custom content for the selected value, leaving the dropdown options unchanged. */
+  renderValue?: SelectValueProps<T>["children"];
 }
 
 /**
@@ -51,6 +54,7 @@ export function AffixSelect<T extends object>({
   children,
   size,
   className,
+  renderValue,
   onSelectionChange,
   ...props
 }: AffixSelectProps<T>) {
@@ -88,7 +92,7 @@ export function AffixSelect<T extends object>({
       className={clsx("react-aria-Select", styles.select, className)}
     >
       <FieldButton className={styles.trigger}>
-        <SelectValue className={styles.value} />
+        <SelectValue className={styles.value}>{renderValue}</SelectValue>
         <ChevronDown aria-hidden="true" className={styles.chevron} />
       </FieldButton>
       {/* The popover is portaled to the document body, so it cannot inherit the
