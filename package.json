@@ -52,7 +52,6 @@
   "files": [
     "dist",
     "styles.d.ts",
-    "THIRD_PARTY_NOTICES.md",
     "LICENSE"
   ],
   "peerDependencies": {

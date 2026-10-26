@@ -44,7 +44,10 @@ export interface TelephoneFieldProps
   flagCdnUrl?: string;
 }
 
-/** A masked telephone field with a calling-code selector and CDN-backed country flags. */
+/**
+ * A masked telephone field with a calling-code selector and CDN-backed country flags.
+ * Reset through controlled value and country props; native form.reset() is not supported.
+ */
 export function TelephoneField({
   value,
   defaultValue,

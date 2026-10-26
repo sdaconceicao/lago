@@ -1,6 +1,7 @@
 import { TELEPHONE_COUNTRIES } from "./TelephoneField.countries";
 import {
   formatTelephoneDigits,
+  formatTelephoneInput,
   formatTelephoneValue,
   getTelephoneCaretPosition,
   getTelephoneCountries,
@@ -263,6 +264,112 @@ describe("formatTelephoneDigits", () => {
     const formatted = formatTelephoneDigits("2125550123");
 
     expect(formatTelephoneDigits(formatted)).toBe(formatted);
+  });
+});
+
+describe("formatTelephoneInput", () => {
+  it("defaults to parentheses for an allowed country", () => {
+    expect(
+      formatTelephoneInput(
+        parseTelephoneValue("2125550123"),
+        getTelephoneCountries(["US"])
+      )
+    ).toBe("(212) 555-0123");
+  });
+
+  it("recognizes an allowed country when its definition was copied", () => {
+    const countries = getTelephoneCountries(["US"]).map((country) => ({
+      ...country,
+    }));
+
+    expect(
+      formatTelephoneInput(parseTelephoneValue("2125550123"), countries)
+    ).toBe("(212) 555-0123");
+  });
+
+  it.each([
+    ["parentheses", "(212) 555-0123"],
+    ["spaces", "212 555 0123"],
+    ["dashes", "212-555-0123"],
+    ["digits", "2125550123"],
+  ] as const)(
+    "uses the %s preset for an allowed country",
+    (format, expected) => {
+      expect(
+        formatTelephoneInput(
+          parseTelephoneValue("2125550123"),
+          getTelephoneCountries(["US"]),
+          format
+        )
+      ).toBe(expected);
+    }
+  );
+
+  it.each([
+    ["filtered", parseTelephoneValue("2125550123"), ["FR"]],
+    ["unresolved", parseTelephoneValue("+12125550123"), ["US"]],
+  ] as const)(
+    "leaves digits raw when the country is %s",
+    (_, parsed, allowed) => {
+      expect(formatTelephoneInput(parsed, getTelephoneCountries(allowed))).toBe(
+        "2125550123"
+      );
+    }
+  );
+
+  it.each([
+    ["allowed", parseTelephoneValue("2125550123"), ["US"]],
+    ["filtered", parseTelephoneValue("2125550123"), ["FR"]],
+    ["unresolved", parseTelephoneValue("+12125550123"), ["US"]],
+  ] as const)(
+    "uses a custom mask when the country is %s",
+    (_, parsed, allowed) => {
+      expect(
+        formatTelephoneInput(
+          parsed,
+          getTelephoneCountries(allowed),
+          "dashes",
+          "##.##.##.####"
+        )
+      ).toBe("21.25.55.0123");
+    }
+  );
+
+  it("lets an empty custom mask override the preset", () => {
+    expect(
+      formatTelephoneInput(
+        parseTelephoneValue("2125550123"),
+        getTelephoneCountries(["US"]),
+        "parentheses",
+        ""
+      )
+    ).toBe("2125550123");
+  });
+
+  it("keeps an empty number empty even with mask literals", () => {
+    expect(
+      formatTelephoneInput(
+        parseTelephoneValue(""),
+        getTelephoneCountries(["US"]),
+        "parentheses",
+        "(###) ###-####"
+      )
+    ).toBe("");
+  });
+
+  it("does not mutate its inputs and returns the same display repeatedly", () => {
+    const parsed = parseTelephoneValue("2125550123");
+    const countries = getTelephoneCountries(["US", "FR"]);
+    const beforeParsed = structuredClone(parsed);
+    const beforeCountries = structuredClone(countries);
+
+    const first = formatTelephoneInput(parsed, countries, "spaces");
+    const second = formatTelephoneInput(parsed, countries, "spaces");
+
+    expect(first).toBe("212 555 0123");
+    expect(second).toBe(first);
+    expect(parsed).toEqual(beforeParsed);
+    expect(countries).toEqual(beforeCountries);
   });
 });
 

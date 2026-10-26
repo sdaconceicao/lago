@@ -10,7 +10,7 @@ const meta: Meta<typeof TelephoneField> = {
     docs: {
       description: {
         component:
-          "A telephone field with a country calling-code dropdown and a mask that formats digits as they are entered. TelephoneField shares TextField's labels, descriptions, validation states, and field sizes. Empty and local values default to the United States. Existing international prefixes are preserved; an explicit country disambiguates a calling code shared by several countries. The trigger shows the calling code, while dropdown options show country names and flags. `onChange` reports the full formatted string, including its calling code, and accepts that string back through `value`.",
+          "A telephone field with a country calling-code dropdown and a mask that formats digits as they are entered. TelephoneField shares TextField's labels, descriptions, validation states, and field sizes. Empty and local values default to the United States. Existing international prefixes are preserved; an explicit country disambiguates a calling code shared by several countries. The trigger shows the calling code, while dropdown options show country names and flags. `onChange` reports the full formatted string, including its calling code, and accepts that string back through `value`. Reset the field by restoring both controlled `value` and `country` props from the parent. Native `form.reset()` is not supported.",
       },
     },
   },

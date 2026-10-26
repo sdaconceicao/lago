@@ -690,6 +690,42 @@ describe("TelephoneField", () => {
       expect(onChange).not.toHaveBeenCalled();
       expect(onCountryChange).not.toHaveBeenCalled();
     });
+
+    it("keeps edits and clearing of a conflicting international number in sync", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const onCountryChange = vi.fn();
+      render(
+        <form aria-label="Contact">
+          <TelephoneField
+            {...defaultProps}
+            country="US"
+            defaultValue="+442079460958"
+            name="telephone"
+            onChange={onChange}
+            onCountryChange={onCountryChange}
+          />
+        </form>
+      );
+      const form = screen.getByRole("form", {
+        name: "Contact",
+      }) as HTMLFormElement;
+
+      await user.type(getInput(), "{Backspace}");
+
+      expect(getInput()).toHaveValue("207946095");
+      expect(onChange).toHaveBeenLastCalledWith("+44 207946095");
+      expect(new FormData(form).get("telephone")).toBe(
+        onChange.mock.lastCall?.[0]
+      );
+
+      await user.clear(getInput());
+
+      expect(getInput()).toHaveValue("");
+      expect(onChange).toHaveBeenLastCalledWith("");
+      expect(new FormData(form).get("telephone")).toBe("");
+      expect(onCountryChange).not.toHaveBeenCalled();
+    });
   });
 
   describe("caret handling", () => {
@@ -1022,6 +1058,71 @@ describe("TelephoneField", () => {
         name: "Contact",
       }) as HTMLFormElement;
       expect(new FormData(form).get("telephone")).toBe("+1 (212) 555-0123");
+    });
+
+    it("lets the application reset the controlled number and country together", async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      const onCountryChange = vi.fn();
+      const ResettableTelephone = () => {
+        const [value, setValue] = useState("+1 (212) 555-0123");
+        const [country, setCountry] = useState("US");
+
+        return (
+          <form aria-label="Contact">
+            <TelephoneField
+              {...defaultProps}
+              name="telephone"
+              value={value}
+              country={country}
+              onChange={(next) => {
+                setValue(next);
+                onChange(next);
+              }}
+              onCountryChange={(next) => {
+                setCountry(next);
+                onCountryChange(next);
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setValue("+1 (212) 555-0123");
+                setCountry("US");
+              }}
+            >
+              Reset telephone
+            </button>
+          </form>
+        );
+      };
+      render(<ResettableTelephone />);
+      const form = screen.getByRole("form", {
+        name: "Contact",
+      }) as HTMLFormElement;
+      await user.click(getCountryTrigger());
+      await user.click(screen.getByRole("option", { name: /France/ }));
+      await user.clear(getInput());
+      await user.type(getInput(), "987654321");
+      expect(getInput()).toHaveValue("(9)87-65-43-21");
+      expect(new FormData(form).get("telephone")).toBe(
+        onChange.mock.lastCall?.[0]
+      );
+      onChange.mockClear();
+
+      await user.click(screen.getByRole("button", { name: "Reset telephone" }));
+
+      expect(getInput()).toHaveValue("(212) 555-0123");
+      expect(getCountryTrigger()).toHaveTextContent(/^\+1$/);
+      expect(new FormData(form).getAll("telephone")).toEqual([
+        "+1 (212) 555-0123",
+      ]);
+      await user.click(getCountryTrigger());
+      expect(
+        screen.getByRole("option", { name: /United States/ })
+      ).toHaveAttribute("aria-selected", "true");
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onCountryChange).toHaveBeenCalledExactlyOnceWith("FR");
     });
 
     it("omits a disabled telephone from form submission", () => {

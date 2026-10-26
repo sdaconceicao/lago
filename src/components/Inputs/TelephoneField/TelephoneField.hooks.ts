@@ -11,6 +11,7 @@ import {
 import type { AffixKey } from "../TextFieldWithAffixes/AffixContext";
 import {
   formatTelephoneDigits,
+  formatTelephoneInput,
   formatTelephoneValue,
   getTelephoneCaretPosition,
   getTelephoneCountries,
@@ -70,6 +71,7 @@ export function useTelephoneField({
     value: string;
     country?: string;
     revision: number;
+    isCountryChange?: boolean;
     previous?: { value: string; country?: string };
   }>(() => ({
     value: value ?? defaultValue ?? "",
@@ -87,6 +89,7 @@ export function useTelephoneField({
     // until its value/country props accept the proposed selection.
     const waitingForCountry =
       state.previous &&
+      state.isCountryChange &&
       country !== undefined &&
       country.toUpperCase() !== state.country;
     const waitingForValue =
@@ -113,16 +116,8 @@ export function useTelephoneField({
       ? parsed.country
       : null;
   const inputValue = useMemo(
-    () =>
-      selectedCountry || mask !== undefined
-        ? formatTelephoneDigits(
-            parsed.digits,
-            selectedCountry?.country,
-            format,
-            mask
-          )
-        : parsed.digits,
-    [parsed.digits, selectedCountry, format, mask]
+    () => formatTelephoneInput(parsed, countries, format, mask),
+    [parsed, countries, format, mask]
   );
   const fullValue = formatTelephoneValue(parsed.callingCode, inputValue);
 
@@ -153,14 +148,12 @@ export function useTelephoneField({
         nextParsed.callingCode,
         nextParsed.country?.country
       );
-      const formattingCountry =
-        nextParsed.country && countries.includes(nextParsed.country)
-          ? nextParsed.country.country
-          : undefined;
-      const formatted =
-        formattingCountry || mask !== undefined
-          ? formatTelephoneDigits(digits, formattingCountry, format, mask)
-          : digits;
+      const formatted = formatTelephoneInput(
+        { ...nextParsed, digits },
+        countries,
+        format,
+        mask
+      );
       const nextValue = formatTelephoneValue(nextParsed.callingCode, formatted);
       const digitsBeforeCaret =
         getTelephoneDigits(next.slice(0, caret)).length -
@@ -216,6 +209,7 @@ export function useTelephoneField({
       setState((previous) => ({
         value: nextValue,
         country: definition.country,
+        isCountryChange: true,
         previous: { value: fullValue, country: parsed.country?.country },
         revision: previous.revision + 1,
       }));

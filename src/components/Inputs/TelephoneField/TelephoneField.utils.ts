@@ -196,6 +196,24 @@ export const formatTelephoneDigits = (
   return firstGroup + gap + groups.slice(1).join("-");
 };
 
+/** Formats allowed countries; unresolved or excluded countries keep raw digits unless a custom mask is supplied. */
+export const formatTelephoneInput = (
+  parsed: ParsedTelephoneValue,
+  countries: readonly TelephoneCountryDefinition[],
+  format: TelephoneFormat = "parentheses",
+  mask?: string
+): string => {
+  const country = countries.some(
+    (entry) => entry.country === parsed.country?.country
+  )
+    ? parsed.country?.country
+    : undefined;
+
+  return country || mask !== undefined
+    ? formatTelephoneDigits(parsed.digits, country, format, mask)
+    : parsed.digits;
+};
+
 /** Applies the country digit limit without counting mask punctuation. */
 export const limitTelephoneDigits = (
   value: string,
