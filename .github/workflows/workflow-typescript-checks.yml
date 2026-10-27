@@ -37,7 +37,7 @@ jobs:
       cached-build-id: ${{ needs.setup.outputs.cache-key }}
 
   bundle-size:
-    name: Core bundle size
+    name: Consumer bundle size
     needs: setup
     uses: ./.github/workflows/workflow-bundle-size.yml
     with:
