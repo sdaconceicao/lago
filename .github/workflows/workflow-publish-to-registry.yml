@@ -46,7 +46,7 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Measure release core bundle
+      - name: Measure release consumer bundles and styles
         run: pnpm size:record "$RUNNER_TEMP/lago-bundle-size/bundle-size.json"
 
       - name: Preserve release measurement

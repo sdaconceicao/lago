@@ -10,7 +10,11 @@ Large libraries needed by a specialized component must be isolated behind a sepa
 
 React, React DOM, and React Aria Components are shared, required peers. Feature-specific engines and their extensions belong to the optional component that uses them.
 
-There is no universal byte threshold that makes a dependency appropriate for core. The bundle growth allowance is a regression guard; dependency placement must also follow these architectural boundaries.
+Every new public core runtime export must fit within an explicit budget of at most **10,000 minified gzip bytes**, including its retained Lago components and transitive dependencies. Only React, React DOM, and React Aria Components are excluded from this measurement. The ceiling applies to components, hooks, helpers, providers, and constants exposed at runtime. Type-only exports have no runtime bundle.
+
+If a feature cannot fit within that ceiling, optimize it or isolate it behind an optional public entry, including its runtime code, public types, and feature-specific dependencies. The size ceiling supplements the dependency boundaries above. A small measured bundle does not excuse a required installation dependency for an optional feature.
+
+`CreditCardNumber` and `CARD_BRAND_LOGOS` exceeded the ceiling in the audited published `0.10.1` core and retain legacy allowances of 24,576 and 19,456 bytes, respectively. Both remain subject to release growth checks. New exports cannot use those legacy exceptions. Optional public subpaths have independent dependency boundaries and do not inherit the core size ceiling.
 
 ## Decision: isolate the rich text editor
 
@@ -41,7 +45,7 @@ See the [installation instructions](../../README.md#rich-text-editor) for the ed
 
 ## Apply the same boundary to other large components
 
-When adding a component that needs a large dependency:
+When adding a component that needs a large dependency, or whose retained named-import bundle cannot fit the 10,000-byte core ceiling:
 
 1. Add a dedicated source entry and public package subpath for the component and its types.
 2. Emit independent ESM, CommonJS, and declaration entries. Keep core runtime imports and declarations free of references to the optional feature.
@@ -61,6 +65,6 @@ Validate the packed package, not only imports from source:
 - A consumer bundle importing a small core component must exclude optional feature modules and their engines.
 - The optional entry must load, type-check, and bundle with its documented peers installed.
 
-The core Size Limit check bundles all core exports and their reachable dependencies. It excludes only the shared React, React DOM, and React Aria peers. Keep this exclusion list explicit so moving a large library to peer dependencies cannot hide an accidental core import.
+The Size Limit checks discover every public runtime export from the built core entry and require its explicit budget in [`scripts/core-component-budgets.json`](../../scripts/core-component-budgets.json) before measuring its named import. Each retained bundle includes reachable dependencies after tree shaking and excludes only the shared React, React DOM, and React Aria peers. Keep this exclusion list explicit so moving a large library to peer dependencies cannot hide an accidental core import. The complete core export bundle is reported to show catalog growth.
 
-The automated size gate currently covers core JavaScript. Measure optional features separately when evaluating their dependencies. See [Bundle size checks](BUNDLE_SIZE.md) for commands, the release comparison policy, and baseline recovery.
+The automated size gate enforces each core export's absolute budget and cumulative release growth, plus release growth for a representative form and the shared stylesheet. A new export's absolute budget applies before its first release baseline exists. Measure optional feature JavaScript separately when evaluating its dependencies; optional subpaths are outside the automatic core inventory, while the shared stylesheet already includes their CSS. See [Bundle size checks](BUNDLE_SIZE.md) for commands, the release comparison policy, export budgets, and baseline recovery.
