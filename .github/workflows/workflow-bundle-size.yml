@@ -17,7 +17,7 @@ on:
 
 jobs:
   bundle-size:
-    name: Core bundle size
+    name: Consumer bundle size
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -46,5 +46,5 @@ jobs:
       - name: Test bundle size guard
         run: pnpm test:bundle-size
 
-      - name: Check core bundle growth against the latest release
+      - name: Check consumer bundles and styles against the latest release
         run: pnpm size
