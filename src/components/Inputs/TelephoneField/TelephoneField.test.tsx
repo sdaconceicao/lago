@@ -365,14 +365,6 @@ describe("TelephoneField", () => {
         ],
       },
       {
-        country: "TA",
-        callingCode: "290",
-        digits: "1234",
-        boundary: ["1234", "5", "(1234)", "(1234)"],
-        display: ["(1234)", "1234", "1234", "1234", "12.34"],
-        placeholder: ["(0000)", "0000", "0000", "0000", "00.00"],
-      },
-      {
         country: "CK",
         callingCode: "682",
         digits: "12345",
@@ -710,6 +702,30 @@ describe("TelephoneField", () => {
   });
 
   describe("country selection", () => {
+    it("does not offer territories without flags even when explicitly included", async () => {
+      const user = userEvent.setup();
+      render(
+        <TelephoneField
+          {...defaultProps}
+          defaultCountry="SH"
+          onlyCountries={["AC", "TA", "SH"]}
+        />
+      );
+
+      await user.click(getCountryTrigger());
+
+      expect(screen.getAllByRole("option")).toHaveLength(1);
+      const option = screen.getByRole("option", { name: /Helena/ });
+      expect(option).toHaveTextContent("+290");
+      expect(option.querySelector("img")).toHaveAttribute(
+        "src",
+        "https://cdn.jsdelivr.net/npm/flag-icons@7.6.0/flags/4x3/sh.svg"
+      );
+      expect(
+        screen.queryByRole("option", { name: /Ascension|Tristan/ })
+      ).toBeNull();
+    });
+
     it("shows only the calling code in the closed trigger", () => {
       const { container } = render(<TelephoneField {...defaultProps} />);
 

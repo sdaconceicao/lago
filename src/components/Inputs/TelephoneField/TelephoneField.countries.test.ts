@@ -28,8 +28,8 @@ describe("TELEPHONE_COUNTRIES", () => {
   it("includes dialing territories with their own country selector entries", () => {
     expect(TELEPHONE_COUNTRIES).toEqual(
       expect.arrayContaining([
-        { country: "AC", callingCode: "247", maxLength: 6 },
-        { country: "TA", callingCode: "290", maxLength: 4 },
+        { country: "FO", callingCode: "298", maxLength: 6 },
+        { country: "SH", callingCode: "290", maxLength: 5 },
         { country: "XK", callingCode: "383", maxLength: 12 },
       ])
     );
@@ -38,9 +38,18 @@ describe("TELEPHONE_COUNTRIES", () => {
   it("includes each supported country once", () => {
     const countries = TELEPHONE_COUNTRIES.map((entry) => entry.country);
 
-    expect(countries).toHaveLength(245);
+    expect(countries).toHaveLength(243);
     expect(new Set(countries).size).toBe(countries.length);
   });
+
+  it.each(["AC", "TA"])(
+    "excludes %s because the pinned flag library has no SVG for it",
+    (country) => {
+      expect(
+        TELEPHONE_COUNTRIES.some((entry) => entry.country === country)
+      ).toBe(false);
+    }
+  );
 
   it("uses country codes and lengths compatible with international dialing", () => {
     for (const entry of TELEPHONE_COUNTRIES) {

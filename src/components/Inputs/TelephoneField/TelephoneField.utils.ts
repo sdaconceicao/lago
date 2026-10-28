@@ -109,7 +109,7 @@ const getTelephoneGroups = (country: string, digitCount: number): number[] => {
 
   // Keep the first group stable while entering a country's national number.
   const maxLength = getTelephoneCountry(country)?.maxLength;
-  const groups: number[] = maxLength ? [maxLength <= 4 ? maxLength : 3] : [];
+  const groups: number[] = maxLength ? [3] : [];
   let remaining = digitCount - (groups[0] ?? 0);
 
   while (remaining > 0) {

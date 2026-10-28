@@ -24,9 +24,8 @@ const COUNTRY_DATA: readonly (readonly [
   maxLength: number,
   countries: string,
 ])[] = [
-  [4, "TA290"],
   [5, "CK682 FK500 SH290"],
-  [6, "AC247 FO298 GL299 NC687 NF672"],
+  [6, "FO298 GL299 NC687 NF672"],
   [
     7,
     "AW297 BN673 BQ599 CV238 ER291 FM691 GY592 IO246 KM269 MH692 " +

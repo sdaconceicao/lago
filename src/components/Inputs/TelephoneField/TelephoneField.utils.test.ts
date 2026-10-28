@@ -55,6 +55,8 @@ describe("getTelephoneCountry", () => {
     expect(getTelephoneCountry()).toBeNull();
     expect(getTelephoneCountry("")).toBeNull();
     expect(getTelephoneCountry("ZZ")).toBeNull();
+    expect(getTelephoneCountry("AC")).toBeNull();
+    expect(getTelephoneCountry("TA")).toBeNull();
   });
 });
 
@@ -101,6 +103,25 @@ describe("getTelephoneCountries", () => {
 });
 
 describe("parseTelephoneValue", () => {
+  it("keeps Saint Helena's supported calling code after removing Tristan da Cunha", () => {
+    expect(parseTelephoneValue("+290 1234")).toEqual({
+      country: getTelephoneCountry("SH"),
+      callingCode: "290",
+      digits: "1234",
+    });
+  });
+
+  it("preserves unsupported Ascension Island numbers without selecting a country", () => {
+    const parsed = parseTelephoneValue("+247 123456");
+    expect(parsed).toEqual({
+      country: null,
+      callingCode: "",
+      digits: "247123456",
+    });
+    expect(formatTelephoneValue(parsed.callingCode, parsed.digits)).toBe(
+      "+247123456"
+    );
+  });
   it("defaults national input to the United States", () => {
     expect(parseTelephoneValue("(212) 555-0123")).toEqual({
       country: getTelephoneCountry("US"),
@@ -418,7 +439,7 @@ describe("getTelephonePlaceholder", () => {
     ["FR", "(0) 00-00-00-00"],
     ["FO", "(000) 000"],
     ["SB", "(000) 0000"],
-    ["TA", "(0000)"],
+    ["CK", "(000) 00"],
     ["AU", "(000) 000-000"],
     ["IN", "(00000) 00000"],
     ["JP", "(00) 0000-0000"],
@@ -808,7 +829,7 @@ describe("telephone formatting across supported countries", () => {
     ["BR", "11987654321", "(11) 98765-4321", "11 98765 4321", "11-98765-4321"],
     ["MX", "5512345678", "(55) 1234-5678", "55 1234 5678", "55-1234-5678"],
     ["JP", "9012345678", "(90) 1234-5678", "90 1234 5678", "90-1234-5678"],
-    ["TA", "1234", "(1234)", "1234", "1234"],
+    ["SH", "1234", "(123) 4", "123 4", "123-4"],
     ["CK", "12345", "(123) 45", "123 45", "123-45"],
     ["DE", "3012345678", "(301) 234-5678", "301 234 5678", "301-234-5678"],
     [
