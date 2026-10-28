@@ -107,8 +107,10 @@ const getTelephoneGroups = (country: string, digitCount: number): number[] => {
     return commonGroups[country];
   }
 
-  const groups: number[] = [];
-  let remaining = digitCount;
+  // Keep the first group stable while entering a country's national number.
+  const maxLength = getTelephoneCountry(country)?.maxLength;
+  const groups: number[] = maxLength ? [maxLength <= 4 ? maxLength : 3] : [];
+  let remaining = digitCount - (groups[0] ?? 0);
 
   while (remaining > 0) {
     const length = remaining > 4 ? 3 : remaining;
@@ -119,8 +121,12 @@ const getTelephoneGroups = (country: string, digitCount: number): number[] => {
   return groups;
 };
 
-/** Mask slots consume digits; trailing literals wait until another digit exists. */
-const applyTelephoneMask = (digits: string, mask: string): string => {
+/** Numeric literals consume an existing matching digit in complete values. */
+const applyTelephoneMask = (
+  digits: string,
+  mask: string,
+  consumeLiterals = true
+): string => {
   let formatted = "";
   let digitIndex = 0;
 
@@ -134,15 +140,120 @@ const applyTelephoneMask = (digits: string, mask: string): string => {
       digitIndex += 1;
     } else {
       formatted += character;
+      if (
+        consumeLiterals &&
+        /\d/.test(character) &&
+        digits[digitIndex] === character
+      )
+        digitIndex += 1;
     }
   }
 
   return formatted + digits.slice(digitIndex);
 };
 
+/** Fixed mask digits behave like separators when navigating editable slots. */
+export const isTelephoneDigitEditable = (
+  value: string,
+  position: number,
+  mask?: string
+): boolean =>
+  /\d/.test(value[position] ?? "") &&
+  (mask?.[position] === undefined || mask[position] === "#");
+
+const getTelephoneSlotDigits = (
+  value: string,
+  mask: string,
+  start = 0,
+  end = value.length
+): string => {
+  let digits = "";
+  for (let index = start; index < end; index += 1) {
+    if (isTelephoneDigitEditable(value, index, mask)) digits += value[index];
+  }
+  return digits;
+};
+
+/** Reapplies fixed digits while preserving the editable digits around an edit. */
+export const getTelephoneMaskEdit = (
+  previous: string,
+  next: string,
+  mask: string,
+  caret: number
+): { digits: string; caretDigits: number } => {
+  let previousEnd = previous.length;
+  let nextEnd = next.length;
+  while (
+    nextEnd > caret &&
+    previousEnd > 0 &&
+    previous[previousEnd - 1] === next[nextEnd - 1]
+  ) {
+    previousEnd -= 1;
+    nextEnd -= 1;
+  }
+  let start = 0;
+  while (
+    start < previousEnd &&
+    start < nextEnd &&
+    previous[start] === next[start]
+  )
+    start += 1;
+
+  const before = getTelephoneSlotDigits(previous, mask, 0, start);
+  const after = getTelephoneSlotDigits(previous, mask, previousEnd);
+  const inserted = getTelephoneDigits(next.slice(start, nextEnd));
+  // Whole-number pastes may already contain the mask's fixed digits.
+  if (
+    (start === 0 && previousEnd === previous.length) ||
+    (!before && !after && inserted.length > 1)
+  ) {
+    const formatted = applyTelephoneMask(
+      getTelephoneDigits(next.slice(start, nextEnd)),
+      mask
+    );
+    const prefix = applyTelephoneMask(
+      getTelephoneDigits(next.slice(start, caret)),
+      mask
+    );
+    return {
+      digits: getTelephoneDigits(formatted),
+      caretDigits: getTelephoneSlotDigits(prefix, mask).length,
+    };
+  }
+
+  if (start === previous.length) {
+    const remainingMask = mask.slice(start);
+    const suffix = applyTelephoneMask(inserted, remainingMask);
+    const prefix = applyTelephoneMask(
+      getTelephoneDigits(next.slice(start, caret)),
+      remainingMask
+    );
+    return {
+      digits: getTelephoneDigits(previous + suffix),
+      caretDigits:
+        before.length +
+        getTelephoneSlotDigits(prefix, remainingMask).length +
+        (prefix &&
+        !isTelephoneDigitEditable(prefix, prefix.length - 1, remainingMask)
+          ? 1
+          : 0),
+    };
+  }
+
+  return {
+    digits: getTelephoneDigits(
+      applyTelephoneMask(before + inserted + after, mask, false)
+    ),
+    caretDigits:
+      before.length +
+      getTelephoneDigits(next.slice(start, Math.min(caret, nextEnd))).length,
+  };
+};
+
 /**
  * Formats national digits without truncating them. A custom # mask overrides the
- * preset. Parentheses wrap the first group; US/CA add a space after that group.
+ * preset; matching numeric literals are consumed once and missing ones inserted.
+ * Parentheses wrap the first group, with a space before following digits.
  */
 export const formatTelephoneDigits = (
   value: string,
@@ -192,8 +303,37 @@ export const formatTelephoneDigits = (
     return firstGroup;
   }
 
-  const gap = countryCode === "US" || countryCode === "CA" ? " " : "";
-  return firstGroup + gap + groups.slice(1).join("-");
+  return `${firstGroup} ${groups.slice(1).join("-")}`;
+};
+
+/** Builds a zero-digit format hint without guessing an unresolved country. */
+export const getTelephonePlaceholder = (
+  country?: string,
+  format: TelephoneFormat = "parentheses",
+  mask?: string
+): string | undefined => {
+  const definition = getTelephoneCountry(country);
+  if (!definition) return undefined;
+
+  const length = Math.min(
+    definition.maxLength,
+    getTelephoneGroups(definition.country, definition.maxLength).reduce(
+      (total, group) => total + group,
+      0
+    )
+  );
+
+  return formatTelephoneDigits(
+    limitTelephoneDigits(
+      "0".repeat(length),
+      definition.callingCode,
+      country,
+      mask
+    ),
+    definition.country,
+    format,
+    mask
+  );
 };
 
 /** Formats allowed countries; unresolved or excluded countries keep raw digits unless a custom mask is supplied. */
@@ -214,18 +354,22 @@ export const formatTelephoneInput = (
     : parsed.digits;
 };
 
-/** Applies the country digit limit without counting mask punctuation. */
+/** Applies the country digit limit, including fixed mask digits but not punctuation. */
 export const limitTelephoneDigits = (
   value: string,
   callingCode: string,
-  country?: string
+  country?: string,
+  mask?: string
 ): string => {
   const maxLength = Math.min(
     getTelephoneCountry(country)?.maxLength ?? 15,
     Math.max(0, 15 - getTelephoneDigits(callingCode).length)
   );
 
-  return getTelephoneDigits(value).slice(0, maxLength);
+  const digits = getTelephoneDigits(value);
+  return getTelephoneDigits(
+    mask === undefined ? digits : applyTelephoneMask(digits, mask)
+  ).slice(0, maxLength);
 };
 
 /** Keeps unknown explicit international prefixes visible until they resolve. */
@@ -237,19 +381,25 @@ export const formatTelephoneValue = (
     ? `+${callingCode}${callingCode ? " " : ""}${nationalValue}`
     : "";
 
-/** Finds the caret immediately after the requested count of formatted digits. */
+/** Finds the caret after a digit count, skipping fixed literals when a mask is supplied. */
 export const getTelephoneCaretPosition = (
   formatted: string,
-  digitCount: number
+  digitCount: number,
+  mask?: string
 ): number => {
   if (digitCount <= 0) {
-    return 0;
+    return mask === undefined
+      ? 0
+      : Math.min(
+          formatted.length,
+          mask.includes("#") ? mask.indexOf("#") : mask.length
+        );
   }
 
   let count = 0;
 
   for (let index = 0; index < formatted.length; index += 1) {
-    if (/\d/.test(formatted[index])) {
+    if (isTelephoneDigitEditable(formatted, index, mask)) {
       count += 1;
 
       if (count === digitCount) {

@@ -17,6 +17,8 @@ import {
   getTelephoneCountries,
   getTelephoneCountry,
   getTelephoneDigits,
+  getTelephoneMaskEdit,
+  isTelephoneDigitEditable,
   limitTelephoneDigits,
   parseTelephoneValue,
   type TelephoneFormat,
@@ -44,7 +46,7 @@ export interface UseTelephoneFieldOptions {
   excludeCountries?: readonly string[];
   /** Punctuation style for national digits. */
   format?: TelephoneFormat;
-  /** Custom mask, with # for each digit. */
+  /** Custom mask, with # for editable digits and numeric literals kept fixed. */
   mask?: string;
   /** Consumer input ref. */
   inputRef?: React.Ref<HTMLInputElement>;
@@ -70,6 +72,7 @@ export function useTelephoneField({
   const [state, setState] = useState<{
     value: string;
     country?: string;
+    callingCode?: string;
     revision: number;
     isCountryChange?: boolean;
     previous?: { value: string; country?: string };
@@ -80,6 +83,7 @@ export function useTelephoneField({
   }));
   const inputRef = useRef<HTMLInputElement | null>(null);
   const pendingCaretRef = useRef<number | null>(null);
+  const committedCountryRevisionRef = useRef(0);
   const countries = useMemo(
     () => getTelephoneCountries(onlyCountries, excludeCountries),
     [onlyCountries, excludeCountries]
@@ -100,6 +104,16 @@ export function useTelephoneField({
       value ??
       (waitingForCountry ? state.previous?.value : undefined) ??
       state.value;
+    // Clearing national digits must not resolve a shared prefix to the default.
+    if (
+      currentValue === "" &&
+      !waitingForValue &&
+      country === undefined &&
+      state.country === undefined &&
+      state.callingCode
+    ) {
+      return { country: null, callingCode: state.callingCode, digits: "" };
+    }
     const result = parseTelephoneValue(
       currentValue,
       country ?? (waitingForValue ? state.previous?.country : state.country)
@@ -143,10 +157,23 @@ export function useTelephoneField({
       if (pastedInternational && !country && !nextParsed.country) {
         nextParsed = parseTelephoneValue(next);
       }
+      const digitsBeforeCaret =
+        getTelephoneDigits(next.slice(0, caret)).length -
+        (pastedInternational ? nextParsed.callingCode.length : 0);
+      const maskEdit =
+        mask && /\d/.test(mask)
+          ? getTelephoneMaskEdit(
+              pastedInternational ? "" : inputValue,
+              pastedInternational ? nextParsed.digits : next,
+              mask,
+              pastedInternational ? Math.max(0, digitsBeforeCaret) : caret
+            )
+          : undefined;
       const digits = limitTelephoneDigits(
-        nextParsed.digits,
+        maskEdit?.digits ?? nextParsed.digits,
         nextParsed.callingCode,
-        nextParsed.country?.country
+        nextParsed.country?.country,
+        mask
       );
       const formatted = formatTelephoneInput(
         { ...nextParsed, digits },
@@ -155,16 +182,15 @@ export function useTelephoneField({
         mask
       );
       const nextValue = formatTelephoneValue(nextParsed.callingCode, formatted);
-      const digitsBeforeCaret =
-        getTelephoneDigits(next.slice(0, caret)).length -
-        (pastedInternational ? nextParsed.callingCode.length : 0);
       pendingCaretRef.current = getTelephoneCaretPosition(
         formatted,
-        digitsBeforeCaret
+        maskEdit?.caretDigits ?? digitsBeforeCaret,
+        maskEdit ? mask : undefined
       );
       setState((previous) => ({
         value: nextValue,
         country: nextParsed.country?.country,
+        callingCode: nextParsed.callingCode,
         previous: { value: fullValue, country: parsed.country?.country },
         revision: previous.revision + 1,
       }));
@@ -176,6 +202,7 @@ export function useTelephoneField({
       parsed,
       countries,
       fullValue,
+      inputValue,
       format,
       mask,
       onChange,
@@ -197,7 +224,8 @@ export function useTelephoneField({
       const digits = limitTelephoneDigits(
         parsed.digits,
         definition.callingCode,
-        definition.country
+        definition.country,
+        mask
       );
       const formatted = formatTelephoneDigits(
         digits,
@@ -235,21 +263,33 @@ export function useTelephoneField({
       const input = event.currentTarget;
       const { selectionStart, selectionEnd } = input;
       if (selectionStart === null || selectionStart !== selectionEnd) return;
+      if (
+        mask &&
+        !input.value
+          .split("")
+          .some((_, index) =>
+            isTelephoneDigitEditable(input.value, index, mask)
+          )
+      )
+        return;
       let position = selectionStart;
       if (event.key === "Backspace") {
-        while (position > 0 && /\D/.test(input.value[position - 1]))
+        while (
+          position > 0 &&
+          !isTelephoneDigitEditable(input.value, position - 1, mask)
+        )
           position -= 1;
       } else if (event.key === "Delete") {
         while (
           position < input.value.length &&
-          /\D/.test(input.value[position])
+          !isTelephoneDigitEditable(input.value, position, mask)
         )
           position += 1;
       }
       if (position !== selectionStart)
         input.setSelectionRange(position, position);
     },
-    [onKeyDown]
+    [onKeyDown, mask]
   );
 
   useIsomorphicLayoutEffect(() => {
@@ -260,6 +300,20 @@ export function useTelephoneField({
       input?.setSelectionRange(caret, caret);
     }
   }, [state]);
+
+  useIsomorphicLayoutEffect(() => {
+    if (
+      state.isCountryChange &&
+      state.revision !== committedCountryRevisionRef.current &&
+      parsed.country?.country === state.country &&
+      fullValue === state.value
+    ) {
+      committedCountryRevisionRef.current = state.revision;
+      // Country selections edit the full value without a native input edit.
+      // Commit React Aria validation after the accepted value reaches the DOM.
+      inputRef.current?.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  }, [state, parsed.country?.country, fullValue]);
 
   return {
     value: fullValue,

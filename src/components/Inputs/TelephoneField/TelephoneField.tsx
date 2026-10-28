@@ -11,7 +11,10 @@ import {
 } from "@/components/Inputs/TextFieldWithAffixes/TextFieldWithAffixes";
 import { useTelephoneField } from "./TelephoneField.hooks";
 import styles from "./TelephoneField.module.css";
-import type { TelephoneFormat } from "./TelephoneField.utils";
+import {
+  getTelephonePlaceholder,
+  type TelephoneFormat,
+} from "./TelephoneField.utils";
 
 export interface TelephoneFieldProps
   extends Omit<
@@ -36,8 +39,10 @@ export interface TelephoneFieldProps
   excludeCountries?: readonly string[];
   /** National digit punctuation: parentheses (default), spaces, dashes, or digits only. Every emitted nonempty value includes its calling code. */
   format?: TelephoneFormat;
-  /** Custom national mask using # for digit slots. Overrides format; remaining valid digits follow the mask. */
+  /** Custom national mask: # marks editable digits; numeric literals stay fixed and are included in the value. Matching supplied literals are consumed once. Overrides format; remaining valid digits follow the mask. */
   mask?: string;
+  /** Custom hint instead of the automatic country/format placeholder. An empty string hides the hint. */
+  placeholder?: string;
   /** Accessible name for the country dropdown. Defaults to "Country calling code". */
   countryLabel?: string;
   /** Base URL for lowercase country SVG filenames. Defaults to version-pinned flag-icons on jsDelivr; supports self-hosting. */
@@ -59,6 +64,7 @@ export function TelephoneField({
   excludeCountries,
   format = "parentheses",
   mask,
+  placeholder,
   countryLabel = "Country calling code",
   flagCdnUrl = "https://cdn.jsdelivr.net/npm/flag-icons@7.6.0/flags/4x3/",
   inputRef,
@@ -106,12 +112,17 @@ export function TelephoneField({
     [validate, phone.value]
   );
   const callingCode = phone.callingCode ? `+${phone.callingCode}` : "+";
+  const countryPlaceholder = useMemo(
+    () => getTelephonePlaceholder(phone.country ?? undefined, format, mask),
+    [phone.country, format, mask]
+  );
 
   return (
     <>
       <TextFieldWithAffixes
         {...props}
         type="tel"
+        placeholder={placeholder ?? countryPlaceholder}
         value={phone.inputValue}
         onChange={handleChange}
         onKeyDown={phone.onKeyDown}
