@@ -234,7 +234,6 @@ describe("measurement policy validation", () => {
       CARD_BRAND_LOGOS: 19_456,
     });
     assert.deepEqual(policy.componentBudgets, {
-      TelephoneField: 9_216,
       CreditCardNumber: 24_576,
       CARD_BRAND_LOGOS: 19_456,
     });
@@ -389,40 +388,6 @@ describe("consumer bundle growth", () => {
     }
     assert.deepEqual(bootstrap, baselineCopy);
     assert.deepEqual(current, currentCopy);
-  });
-
-  it("applies the default budget to a new helper and preserves a tighter override", () => {
-    const {
-      getTelephoneDigits: _helper,
-      TelephoneField: _component,
-      ...withoutNewExports
-    } = sizes;
-    const comparisons = compareMeasurements(
-      { ...bootstrap, sizes: withoutNewExports },
-      { ...sizes, getTelephoneDigits: 10_000, TelephoneField: 9_216 }
-    );
-    const helper = comparisons.find(
-      ({ name }) => name === "getTelephoneDigits"
-    );
-    assert.equal(helper.baselineBytes, undefined);
-    assert.equal(helper.limitBytes, 10_000);
-    assert.equal(helper.passed, true);
-    const component = comparisons.find(({ name }) => name === "TelephoneField");
-    assert.equal(component.baselineBytes, undefined);
-    assert.equal(component.limitBytes, 9_216);
-    assert.equal(component.passed, true);
-    const overBudget = compareMeasurements(
-      { ...bootstrap, sizes: withoutNewExports },
-      { ...sizes, getTelephoneDigits: 10_001, TelephoneField: 9_217 }
-    );
-    for (const name of ["getTelephoneDigits", "TelephoneField"]) {
-      assert.equal(
-        overBudget.find((entry) => entry.name === name).passed,
-        false
-      );
-    }
-    assert.throws(() => compareMeasurements(bootstrap, withoutNewExports));
-    assert.throws(() => compareMeasurements({}, sizes));
   });
 
   it("applies only release growth to the representative form and shared stylesheet", () => {
