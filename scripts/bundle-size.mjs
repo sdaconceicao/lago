@@ -19,6 +19,12 @@ export const MAX_GROWTH_PERCENT = policy.maxGrowthPercent;
 const MEASUREMENT_BATCH_SIZE = 6;
 export const MEASUREMENT = policy.measurement;
 export const MEASUREMENT_NAMES = checks.map(({ name }) => name);
+export const CORE_EXPORT_NAMES = checks
+  .filter(
+    (entry) =>
+      entry.path === "dist/index.mjs" && entry.import === `{ ${entry.name} }`
+  )
+  .map(({ name }) => name);
 const root = fileURLToPath(new URL("../", import.meta.url));
 const bootstrapPath = path.join(root, ".github/bundle-size-baseline.json");
 const isSize = (value) => Number.isSafeInteger(value) && value > 0;
@@ -45,9 +51,20 @@ export function validatePolicy(
     settings.maxGrowthPercent < 0 ||
     typeof settings.measurement !== "string" ||
     !settings.measurement.trim() ||
+    !isSize(settings.defaultCoreBudget) ||
+    settings.defaultCoreBudget > MAX_CORE_COMPONENT_BYTES ||
     !Array.isArray(settings.reportOnly) ||
     new Set(settings.reportOnly).size !== settings.reportOnly.length ||
-    settings.reportOnly.some((name) => !names.includes(name)) ||
+    settings.reportOnly.some(
+      (name) =>
+        !names.includes(name) ||
+        definitions.some(
+          (entry) =>
+            entry.name === name &&
+            entry.path === "dist/index.mjs" &&
+            entry.import === `{ ${name} }`
+        )
+    ) ||
     !legacy ||
     typeof legacy !== "object" ||
     Array.isArray(legacy) ||
@@ -72,7 +89,7 @@ export function validatePolicy(
     )
   ) {
     throw new Error(
-      `Invalid bundle measurement policy. Core budgets must be at most ${MAX_CORE_COMPONENT_BYTES} B unless covered by an audited legacy exception.`
+      `Invalid bundle measurement policy. The default core budget and non-legacy overrides must be at most ${MAX_CORE_COMPONENT_BYTES} B.`
     );
   }
   return settings;
@@ -95,7 +112,6 @@ export function validateCoreExports(
   }
   const missing = exportNames.filter(
     (name) =>
-      !Object.hasOwn(settings.componentBudgets, name) ||
       !definitions.some(
         (entry) =>
           entry.name === name &&
@@ -105,7 +121,7 @@ export function validateCoreExports(
   );
   if (missing.length) {
     throw new Error(
-      `Core exports require explicit budgets of at most ${MAX_CORE_COMPONENT_BYTES} B: ${missing.join(", ")}. Add a budget or move them to a separate public entry.`
+      `Core exports require named-import measurements: ${missing.join(", ")}. Include every core export in the size checks.`
     );
   }
   const stale = Object.keys(settings.componentBudgets).filter(
@@ -113,7 +129,7 @@ export function validateCoreExports(
   );
   if (stale.length) {
     throw new Error(
-      `Budgets reference exports outside core: ${stale.join(", ")}.`
+      `Budget overrides reference exports outside core: ${stale.join(", ")}.`
     );
   }
   return exportNames;
@@ -135,7 +151,8 @@ export function validateBaseline(
     MEASUREMENT_NAMES.some(
       (name) =>
         !Object.hasOwn(baseline.sizes, name) &&
-        !Object.hasOwn(policy.componentBudgets, name)
+        (Object.hasOwn(migrationBaseline.sizes, name) ||
+          !CORE_EXPORT_NAMES.includes(name))
     )
   ) {
     throw new Error("Invalid or incompatible consumer bundle baseline.");
@@ -197,10 +214,13 @@ export function compareMeasurements(baseline, current) {
     )
   );
   return MEASUREMENT_NAMES.map((name) => {
+    const coreBudget = Object.hasOwn(policy.componentBudgets, name)
+      ? policy.componentBudgets[name]
+      : policy.defaultCoreBudget;
     const comparison = compareSizes(
       baseline.sizes[name],
       current[name],
-      policy.componentBudgets[name]
+      CORE_EXPORT_NAMES.includes(name) ? coreBudget : undefined
     );
     const reportOnly = policy.reportOnly.includes(name);
     return {
@@ -316,7 +336,7 @@ export function formatReport(comparisons, source) {
     "",
     `Baseline: ${source}`,
     "",
-    `Every core runtime export has an explicit budget. New exports are capped at ${MAX_CORE_COMPONENT_BYTES} B gzip; listed legacy exceptions retain their budgets. Existing cases also allow at most +${MAX_GROWTH_PERCENT}% cumulative growth. Core exports reports catalog growth only.`,
+    `Every core runtime export inherits a ${policy.defaultCoreBudget} B gzip budget unless overridden in the policy. Listed legacy exceptions retain their budgets. Existing cases also allow at most +${MAX_GROWTH_PERCENT}% cumulative growth. Core exports reports catalog growth only.`,
     "",
     "| Measurement | Baseline | Current | Change | Growth | Maximum | Result |",
     "| :--- | ---: | ---: | ---: | ---: | ---: | :--- |",

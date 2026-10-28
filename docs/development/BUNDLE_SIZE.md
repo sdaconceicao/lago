@@ -4,13 +4,13 @@ The [bundle size workflow](../../.github/workflows/workflow-bundle-size.yml) che
 
 ## Measurements
 
-CI discovers public runtime exports by importing the built core ESM entry, `dist/index.mjs`. Every discovered export must have an explicit byte budget in [`scripts/core-component-budgets.json`](../../scripts/core-component-budgets.json). This includes components, hooks, helpers, providers, and constants; type-only exports have no runtime measurement. A missing budget fails before bundle measurement starts.
+CI discovers public runtime exports by importing the built core ESM entry, `dist/index.mjs`, and automatically measures each named import. Every export receives the default 10,000-byte budget from [`scripts/bundle-size-policy.cjs`](../../scripts/bundle-size-policy.cjs), unless that policy defines an override. This includes components, hooks, helpers, providers, and constants; type-only exports have no runtime measurement. New exports need no budget configuration.
 
 Size Limit bundles each named import, minifies it, and measures gzip size. Runtime dependencies are included; only React, React DOM, and React Aria Components are excluded. Keeping this list explicit ensures optional peer dependencies still count if they accidentally enter the core dependency graph.
 
 | Case | Contents | Check |
 | --- | --- | --- |
-| Each public core runtime export | One named import and all retained dependencies | Explicit absolute budget and release growth |
+| Each public core runtime export | One named import and all retained dependencies | Default or overridden absolute budget and release growth |
 | Representative form | `Form`, `Button`, `TextField`, `Checkbox` | Release growth |
 | Shared styles | Complete `dist/index.css`, including editor styles | Release growth |
 | Core exports | All core ESM exports | Report only |
@@ -19,11 +19,11 @@ A named-import budget covers the entire retained bundle after tree shaking. Inte
 
 The stylesheet is already minified by the library build and is measured directly with gzip, without a JavaScript wrapper. Optional public subpaths, such as the rich text editor, are outside the automatic core inventory and its size ceiling. Evaluate their JavaScript costs separately; their CSS remains in the shared stylesheet.
 
-Measurement settings are defined in [`.size-limit.cjs`](../../.size-limit.cjs), with core cases generated from the budget manifest. Growth policy and the audited legacy exception live in [`scripts/bundle-size-policy.cjs`](../../scripts/bundle-size-policy.cjs). Measurement tools are pinned in the lockfile and both measurement jobs use Node 24. The `pnpm size` command measures cases in batches of six to bound concurrent bundling.
+Measurement settings are defined in [`.size-limit.cjs`](../../.size-limit.cjs), with core cases generated from the discovered runtime exports. The default budget, optional overrides, growth policy, and audited legacy exceptions live in [`scripts/bundle-size-policy.cjs`](../../scripts/bundle-size-policy.cjs). Measurement tools are pinned in the lockfile and both measurement jobs use Node 24. The `pnpm size` command measures cases in batches of six to bound concurrent bundling.
 
 ## Core size ceiling
 
-Every new core runtime export must have an explicit budget of at most **10,000 minified gzip bytes**. Here, 10 kB means 10,000 bytes, not 10 KiB. An individual budget may be stricter than this ceiling.
+The default budget for every core runtime export is **10,000 minified gzip bytes**, configured as `defaultCoreBudget` in the policy. Here, 10 kB means 10,000 bytes, not 10 KiB. Optional `componentBudgets` overrides may set stricter limits, such as TelephoneField's 9,216-byte budget. New exports cannot receive budgets above the default ceiling.
 
 If an export cannot fit within the ceiling, optimize its retained bundle or move the feature to a separate optional public entry following the [architecture policy](ARCHITECTURE.md#apply-the-same-boundary-to-other-large-components). Its runtime code, public types, and feature-specific dependencies must leave the core dependency graph. Optional subpaths do not inherit the core 10,000-byte ceiling.
 
@@ -38,7 +38,7 @@ These exceptions are tied to the published measurements and the explicit legacy 
 
 ## Growth allowance
 
-Existing named-import cases, the representative form, and shared styles fail when growth exceeds **5%** of their sizes in the latest successfully published npm release. This allowance is cumulative until the next release; it does not reset for each pull request. Each core export must also stay within its explicit absolute budget, so the stricter limit applies.
+Existing named-import cases, the representative form, and shared styles fail when growth exceeds **5%** of their sizes in the latest successfully published npm release. This allowance is cumulative until the next release; it does not reset for each pull request. Each core export must also stay within its default or overridden absolute budget, so the stricter limit applies.
 
 A new export's absolute budget applies immediately, even while that export is absent from the published baseline. Release growth also applies after a release records the export's first measurement. Unexpected missing or invalid baselines and measurement failures fail the check.
 
@@ -73,19 +73,21 @@ Automatic checks can use the seed only while npm's latest version is exactly `0.
 
 Ordinary checks never update the seed. Each successful publication supplies the next release baseline through its preserved measurement artifact. Extending the audited migration seed measures the published package; it does not reset the release baseline to pull request code.
 
-## Add an export budget or change a measurement
+## Add an export or override a budget
 
-When adding a public core runtime export, add its name and an explicit budget to [`scripts/core-component-budgets.json`](../../scripts/core-component-budgets.json). The measurement case is generated from that entry; a separate hand-maintained case is unnecessary. Confirm that the actual retained named-import bundle fits the budget and that the budget is no greater than 10,000 bytes. Inventory validation catches public runtime exports without budgets.
+A new public core runtime export is discovered and measured automatically under the 10,000-byte default. Components and their exported helpers need no individual configuration. Confirm that each retained named-import bundle fits the ceiling; if it exceeds 10,000 bytes, optimize it or use the optional-entry boundary. Existing export and stylesheet checks continue to apply when adding a component.
 
-For example, after measuring a new `NewField` export, a budget manifest entry could be:
+To set a stricter limit, add an override under `componentBudgets` in [`scripts/bundle-size-policy.cjs`](../../scripts/bundle-size-policy.cjs). For example, TelephoneField uses:
 
-```json
-"NewField": 9000
+```js
+componentBudgets: {
+  TelephoneField: 9 * 1024,
+},
 ```
 
-That export must stay within 9,000 bytes before its first published baseline, then also satisfy the cumulative 5% release growth check. Existing export and stylesheet checks continue to apply when adding a component. If the retained bundle exceeds 10,000 bytes, use the optional-entry boundary instead of increasing its core budget beyond the ceiling.
+Its 9,216-byte limit applies before its first published baseline, then also follows the cumulative 5% release growth check. Overrides above 10,000 bytes are permitted only for the audited legacy exceptions listed above.
 
-To investigate an intentional growth allowance change, edit `maxGrowthPercent` in the policy file. Changing measurement settings for an existing case must also change the measurement identifier and establish a compatible baseline. Adding a new export with an explicit budget preserves release comparisons for the existing cases.
+To investigate an intentional growth allowance change, edit `maxGrowthPercent` in the policy file. Changing an absolute budget preserves existing measurements and release baselines. Changing measurement settings for an existing case must also change the measurement identifier and establish a compatible baseline.
 
 ## Recover a failed baseline upload
 
