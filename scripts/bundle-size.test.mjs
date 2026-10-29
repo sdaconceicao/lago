@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import {
+  appendFile,
   copyFile,
   mkdir,
   mkdtemp,
@@ -14,6 +15,7 @@ import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
 import {
+  CORE_EXPORT_NAMES,
   compareMeasurements,
   compareSizes,
   formatReport,
@@ -63,6 +65,7 @@ describe("measurement policy validation", () => {
   const settings = {
     measurement: "consumer-test-gzip",
     maxGrowthPercent: 5,
+    defaultCoreBudget: 10_000,
     reportOnly: ["Catalog"],
     componentBudgets: { Component: 1_024 },
   };
@@ -110,6 +113,23 @@ describe("measurement policy validation", () => {
     }
   });
 
+  it("rejects report-only core exports even without a budget override", () => {
+    const directImports = [
+      { name: "Catalog", path: "dist/index.mjs", import: "*" },
+      { name: "Component", path: "dist/index.mjs", import: "{ Component }" },
+    ];
+    const defaultBudgetSettings = { ...settings, componentBudgets: {} };
+    assert.doesNotThrow(() =>
+      validatePolicy(directImports, defaultBudgetSettings)
+    );
+    assert.throws(() =>
+      validatePolicy(directImports, {
+        ...defaultBudgetSettings,
+        reportOnly: ["Catalog", "Component"],
+      })
+    );
+  });
+
   it("rejects unknown, overlapping or malformed component budgets", () => {
     const invalidBudgets = [
       null,
@@ -139,22 +159,31 @@ describe("measurement policy validation", () => {
     );
   });
 
-  it("caps new exports at exactly 10,000 gzip bytes", () => {
+  it("caps the default budget at exactly 10,000 gzip bytes", () => {
     assert.equal(MAX_CORE_COMPONENT_BYTES, 10_000);
+    assert.equal(policy.defaultCoreBudget, 10_000);
     assert.doesNotThrow(() =>
       validatePolicy(definitions, {
         ...settings,
-        componentBudgets: { Component: 10_000 },
+        defaultCoreBudget: 10_000,
       })
     );
-    assert.throws(() =>
-      validatePolicy(definitions, {
-        ...settings,
-        componentBudgets: { Component: 10_001 },
-      })
-    );
-    assert.equal(compareSizes(undefined, 10_000, 10_000).passed, true);
-    assert.equal(compareSizes(undefined, 10_001, 10_000).passed, false);
+    for (const defaultCoreBudget of [
+      undefined,
+      0,
+      -1,
+      1.5,
+      Infinity,
+      NaN,
+      "10000",
+      null,
+      10_001,
+      Number.MAX_SAFE_INTEGER + 1,
+    ]) {
+      assert.throws(() =>
+        validatePolicy(definitions, { ...settings, defaultCoreBudget })
+      );
+    }
   });
 
   it("permits audited existing exceptions but rejects forged legacy names and caps", () => {
@@ -204,6 +233,10 @@ describe("measurement policy validation", () => {
       CreditCardNumber: 24_576,
       CARD_BRAND_LOGOS: 19_456,
     });
+    assert.deepEqual(policy.componentBudgets, {
+      CreditCardNumber: 24_576,
+      CARD_BRAND_LOGOS: 19_456,
+    });
   });
 });
 
@@ -216,44 +249,44 @@ describe("core runtime export coverage", () => {
   const settings = (componentBudgets) => ({
     measurement: "consumer-test-gzip",
     maxGrowthPercent: 5,
+    defaultCoreBudget: 10_000,
     reportOnly: [],
     componentBudgets,
   });
 
-  it("measures every configured core export with its explicit budget", () => {
-    assert.doesNotThrow(() =>
-      validateCoreExports(Object.keys(policy.componentBudgets))
+  it("measures every discovered core export without requiring a budget override", () => {
+    assert.doesNotThrow(() => validateCoreExports(CORE_EXPORT_NAMES));
+    assert.ok(CORE_EXPORT_NAMES.includes("getTelephoneDigits"));
+    assert.equal(
+      Object.hasOwn(policy.componentBudgets, "getTelephoneDigits"),
+      false
     );
   });
 
-  it("fails a new export without a budget with an actionable optional-entry remedy", () => {
+  it("fails a new export without its named-import measurement", () => {
     assert.throws(
       () =>
         validateCoreExports(
           ["Component", "NewFeature"],
           [definition("Component")],
-          settings({ Component: 10_000 })
+          settings({})
         ),
       (error) =>
         /NewFeature/.test(error.message) &&
-        /separate public entry/i.test(error.message)
+        /named-import measurements/i.test(error.message)
     );
   });
 
-  it("requires budgets for utilities, constants and lowercase aliases too", () => {
+  it("measures utilities, constants and lowercase aliases with the default budget", () => {
     for (const name of ["formatValue", "CARD_BRAND_LOGOS", "buttonAlias"]) {
       assert.throws(() => validateCoreExports([name], [], settings({})));
       assert.doesNotThrow(() =>
-        validateCoreExports(
-          [name],
-          [definition(name)],
-          settings({ [name]: 10_000 })
-        )
+        validateCoreExports([name], [definition(name)], settings({}))
       );
     }
   });
 
-  it("rejects stale budgets and measurements that do not isolate the root named import", () => {
+  it("rejects stale overrides and measurements that do not isolate the root named import", () => {
     assert.throws(() =>
       validateCoreExports(
         ["Component"],
@@ -302,7 +335,7 @@ describe("consumer bundle growth", () => {
     assert.equal(compareSizes(24_000, 24_577, 24_576).limitBytes, 24_576);
   });
 
-  it("allows a newly added component only with an explicit absolute budget", () => {
+  it("allows a new measurement when its absolute budget is supplied", () => {
     assert.deepEqual(compareSizes(undefined, 10_000, 10_000), {
       baselineBytes: undefined,
       currentBytes: 10_000,
@@ -357,20 +390,27 @@ describe("consumer bundle growth", () => {
     assert.deepEqual(current, currentCopy);
   });
 
-  it("validates every comparison and applies the explicit budget to a new component", () => {
-    const { CreditCardNumber: _component, ...withoutComponent } = sizes;
-    const comparisons = compareMeasurements(
-      { ...bootstrap, sizes: withoutComponent },
-      sizes
-    );
-    const component = comparisons.find(
-      ({ name }) => name === "CreditCardNumber"
-    );
-    assert.equal(component.baselineBytes, undefined);
-    assert.equal(component.limitBytes, 24_576);
-    assert.equal(component.passed, true);
-    assert.throws(() => compareMeasurements(bootstrap, withoutComponent));
-    assert.throws(() => compareMeasurements({}, sizes));
+  it("applies only release growth to the representative form and shared stylesheet", () => {
+    const baseline = {
+      ...bootstrap,
+      sizes: {
+        ...sizes,
+        "Representative form": 20_000,
+        "Shared styles": 20_000,
+      },
+    };
+    for (const size of [21_000, 21_001]) {
+      const comparisons = compareMeasurements(baseline, {
+        ...sizes,
+        "Representative form": size,
+        "Shared styles": size,
+      });
+      for (const name of ["Representative form", "Shared styles"]) {
+        const comparison = comparisons.find((entry) => entry.name === name);
+        assert.equal(comparison.limitBytes, 21_000);
+        assert.equal(comparison.passed, size === 21_000);
+      }
+    }
   });
 
   it("reports each source, exact sizes, percentage, limit and verdict", () => {
@@ -389,14 +429,14 @@ describe("consumer bundle growth", () => {
     );
     assert.match(report, /Core exports .*\| — \| REPORT/);
     assert.match(report, /TextField .*\| PASS/);
-    const { CreditCardNumber: _component, ...withoutComponent } = sizes;
+    const { getTelephoneDigits: _helper, ...withoutHelper } = sizes;
     const newComponentReport = formatReport(
-      compareMeasurements({ ...bootstrap, sizes: withoutComponent }, sizes),
+      compareMeasurements({ ...bootstrap, sizes: withoutHelper }, sizes),
       "migration"
     );
     assert.match(
       newComponentReport,
-      /CreditCardNumber \| — \| 21060 B \| — \| — \| 24576 B \| PASS/
+      /getTelephoneDigits \| — \| 1000 B \| — \| — \| 10000 B \| PASS/
     );
   });
 });
@@ -466,13 +506,25 @@ describe("Size Limit output and baseline validation", () => {
     assert.throws(() => parseMeasurement("not JSON", names));
   });
 
-  it("accepts the complete contract and an explicitly budgeted new component", () => {
+  it("accepts the complete contract and new core exports absent from the migration seed", () => {
     assert.deepEqual(validateBaseline(bootstrap, "0.10.1"), bootstrap);
-    const { CreditCardNumber: _component, ...withoutComponent } = sizes;
-    const newComponentBaseline = { ...bootstrap, sizes: withoutComponent };
+    const {
+      TelephoneField: _component,
+      getTelephoneDigits: _helper,
+      ...withoutNewExports
+    } = sizes;
+    const newComponentBaseline = { ...bootstrap, sizes: withoutNewExports };
     assert.deepEqual(
       validateBaseline(newComponentBaseline),
       newComponentBaseline
+    );
+  });
+
+  it("requires known published core measurements even when an override exists", () => {
+    const { CreditCardNumber: _component, ...withoutPublishedComponent } =
+      sizes;
+    assert.throws(() =>
+      validateBaseline({ ...bootstrap, sizes: withoutPublishedComponent })
     );
   });
 
@@ -489,7 +541,9 @@ describe("Size Limit output and baseline validation", () => {
       { ...bootstrap, sizes: {} },
     ];
     for (const name of Object.keys(sizes).filter(
-      (name) => !Object.hasOwn(policy.componentBudgets, name)
+      (name) =>
+        !CORE_EXPORT_NAMES.includes(name) ||
+        Object.hasOwn(migrationSeed.sizes, name)
     )) {
       const incomplete = { ...sizes };
       delete incomplete[name];
@@ -700,19 +754,32 @@ describe("Size Limit peer isolation", () => {
       fileURLToPath(new URL("../.size-limit.cjs", import.meta.url)),
       path.join(directory, ".size-limit.cjs")
     );
-    const fixtureBudgets = Object.fromEntries(
-      ["Button", "TextField", "Form", "Checkbox", "CreditCardNumber"].map(
-        (name) => [name, 10_000]
-      )
-    );
-    await mkdir(path.join(directory, "scripts"));
-    await writeFile(
-      path.join(directory, "scripts/core-component-budgets.json"),
-      JSON.stringify(fixtureBudgets)
-    );
-    await writeFile(
-      path.join(directory, "scripts/bundle-size-policy.cjs"),
-      'module.exports = { componentBudgets: require("./core-component-budgets.json") };'
+    const optionalExports = [
+      "Button",
+      "TextField",
+      "Form",
+      "Checkbox",
+      "CreditCardNumber",
+    ];
+    const sharedModules = [
+      {
+        name: "react",
+        files: { "index.js": "createElement", "jsx-runtime.js": "jsx" },
+        exports: { ".": "./index.js", "./jsx-runtime": "./jsx-runtime.js" },
+      },
+      {
+        name: "react-dom",
+        files: { "client.js": "createRoot" },
+        exports: { "./client": "./client.js" },
+      },
+      {
+        name: "react-aria-components",
+        files: { "Button.js": "AriaButton" },
+        exports: { "./Button": "./Button.js" },
+      },
+    ];
+    const sharedExports = sharedModules.flatMap(({ files }) =>
+      Object.values(files)
     );
     await writeFile(
       path.join(directory, "package.json"),
@@ -722,7 +789,12 @@ describe("Size Limit peer isolation", () => {
           "@size-limit/esbuild": "14.1.0",
           "@size-limit/file": "14.1.0",
         },
-        peerDependencies: { "@tiptap/core": "*" },
+        peerDependencies: {
+          "@tiptap/core": "*",
+          react: "*",
+          "react-dom": "*",
+          "react-aria-components": "*",
+        },
         peerDependenciesMeta: { "@tiptap/core": { optional: true } },
       })
     );
@@ -735,10 +807,24 @@ describe("Size Limit peer isolation", () => {
       path.join(engine, "index.js"),
       `export const payload = ${JSON.stringify(payload)};`
     );
+    for (const { name, files, exports } of sharedModules) {
+      const packageDirectory = path.join(directory, "node_modules", name);
+      await mkdir(packageDirectory, { recursive: true });
+      await writeFile(
+        path.join(packageDirectory, "package.json"),
+        JSON.stringify({ type: "module", exports })
+      );
+      for (const [file, exportedName] of Object.entries(files)) {
+        await writeFile(
+          path.join(packageDirectory, file),
+          `export const ${exportedName} = ${JSON.stringify(payload)};`
+        );
+      }
+    }
     await writeFile(
       path.join(directory, "dist/index.mjs"),
       [
-        'export { payload as Button, payload as TextField, payload as Form, payload as Checkbox, payload as CreditCardNumber } from "@tiptap/core";',
+        `export { ${optionalExports.map((name) => `payload as ${name}`).join(", ")} } from "@tiptap/core";`,
         'export { createElement } from "react";',
         'export { jsx } from "react/jsx-runtime";',
         'export { createRoot } from "react-dom/client";',
@@ -762,16 +848,29 @@ describe("Size Limit peer isolation", () => {
     assert.equal(result.status, 0, result.stderr);
     const measured = parseMeasurement(result.stdout, [
       "Core exports",
-      ...Object.keys(fixtureBudgets),
+      ...optionalExports,
+      ...sharedExports,
       "Representative form",
       "Shared styles",
     ]);
-    for (const [name, size] of Object.entries(measured)) {
+    assert.equal(optionalExports.length + sharedExports.length, 9);
+    for (const name of [
+      "Core exports",
+      "Representative form",
+      ...optionalExports,
+    ]) {
       assert.ok(
-        name === "Shared styles" ? size > 0 : size > 1_000,
-        `${name} must include its optional peer implementation or stylesheet`
+        measured[name] > 1_000,
+        `${name} must include its optional peer implementation`
       );
     }
+    for (const name of sharedExports) {
+      assert.ok(
+        measured[name] < 1_000,
+        `${name} must exclude its shared peer implementation`
+      );
+    }
+    assert.ok(measured["Shared styles"] > 0);
   });
 });
 
@@ -782,15 +881,10 @@ async function createCliFixture(t, { withTooling = true } = {}) {
   await mkdir(scripts);
   await mkdir(path.join(directory, "dist"));
   await mkdir(path.join(directory, ".github"));
-  const budgets = {
-    Button: 10_000,
-    TextField: 10_000,
-    Form: 10_000,
-    Checkbox: 10_000,
-  };
+  const exports = ["Button", "TextField", "Form", "Checkbox"];
   const names = [
     "Core exports",
-    ...Object.keys(budgets),
+    ...exports,
     "Representative form",
     "Shared styles",
   ];
@@ -804,12 +898,8 @@ async function createCliFixture(t, { withTooling = true } = {}) {
     path.join(directory, ".size-limit.cjs")
   );
   await writeFile(
-    path.join(scripts, "core-component-budgets.json"),
-    JSON.stringify(budgets)
-  );
-  await writeFile(
     path.join(scripts, "bundle-size-policy.cjs"),
-    `module.exports = ${JSON.stringify({ maxGrowthPercent: 5, measurement: MEASUREMENT, reportOnly: ["Core exports"], componentBudgets: budgets })};`
+    `module.exports = ${JSON.stringify({ maxGrowthPercent: 5, measurement: MEASUREMENT, reportOnly: ["Core exports"], defaultCoreBudget: 10_000, componentBudgets: {} })};`
   );
   const baseline = {
     ...bootstrap,
@@ -836,7 +926,7 @@ async function createCliFixture(t, { withTooling = true } = {}) {
     path.join(directory, "dist/index.mjs"),
     [
       `const payload = ${JSON.stringify(payload)};`,
-      ...Object.keys(budgets).map((name) => `export const ${name} = payload;`),
+      ...exports.map((name) => `export const ${name} = payload;`),
     ].join("\n")
   );
   await writeFile(
@@ -854,8 +944,12 @@ async function createCliFixture(t, { withTooling = true } = {}) {
 }
 
 describe("built bundle integration", () => {
-  it("records each fixture measurement and enforces imports and CSS while reporting catalog growth", async (t) => {
+  it("discovers an added helper and enforces imports and CSS while reporting catalog growth", async (t) => {
     const { directory, cli, names } = await createCliFixture(t);
+    await appendFile(
+      path.join(directory, "dist/index.mjs"),
+      "\nexport const formatValue = (value) => String(value);\n"
+    );
     const baselineFile = path.join(directory, "baseline.json");
     const summaryFile = path.join(directory, "summary.md");
     const record = spawnSync(process.execPath, [cli, "record", baselineFile], {
@@ -865,7 +959,10 @@ describe("built bundle integration", () => {
     const baseline = JSON.parse(await readFile(baselineFile, "utf8"));
     assert.equal(baseline.schemaVersion, 2);
     assert.equal(baseline.measurement, MEASUREMENT);
-    assert.deepEqual(Object.keys(baseline.sizes).sort(), names.toSorted());
+    assert.deepEqual(
+      Object.keys(baseline.sizes).sort(),
+      [...names, "formatValue"].toSorted()
+    );
     const check = () =>
       spawnSync(process.execPath, [cli, "check", baselineFile], {
         encoding: "utf8",
@@ -875,6 +972,17 @@ describe("built bundle integration", () => {
     assert.equal(passing.status, 0, passing.stderr);
     assert.match(passing.stdout, /PASS/);
     assert.match(await readFile(summaryFile, "utf8"), /0\.000%/);
+    const { formatValue: _helper, ...withoutHelper } = baseline.sizes;
+    await writeFile(
+      baselineFile,
+      JSON.stringify({ ...baseline, sizes: withoutHelper })
+    );
+    const newHelper = check();
+    assert.equal(newHelper.status, 0, newHelper.stderr);
+    assert.match(
+      newHelper.stdout,
+      /formatValue \| — \| \d+ B \| — \| — \| 10000 B \| PASS/
+    );
     await writeFile(
       baselineFile,
       JSON.stringify({

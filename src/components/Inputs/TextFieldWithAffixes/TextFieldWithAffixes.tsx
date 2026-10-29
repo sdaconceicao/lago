@@ -23,6 +23,8 @@ import styles from "./TextFieldWithAffixes.module.css";
 
 export interface TextFieldWithAffixesProps<T = HTMLInputElement>
   extends Omit<TextFieldProps<T>, "onChange"> {
+  /** Overrides the native input name while retaining the field name for form validation. Use an empty string when a composed field submits its value separately. */
+  inputName?: string;
   /**
    * Trailing control rendered inside the input segment, e.g. a FieldButton for
    * a clear or reveal action. It sits against the value it acts on rather than
@@ -72,6 +74,7 @@ export function TextFieldWithAffixes({
   errorMessage,
   placeholder,
   inputRef,
+  inputName,
   button,
   prefix,
   suffix,
@@ -125,6 +128,7 @@ export function TextFieldWithAffixes({
         >
           <Input
             ref={inputRef}
+            name={inputName}
             className={clsx("react-aria-Input", styles.input)}
             placeholder={placeholder}
           />

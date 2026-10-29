@@ -1,0 +1,20 @@
+.telephoneField {
+  min-width: 0;
+}
+
+.countryOption {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--field-gap);
+}
+
+.countryOption .flag {
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.callingCode {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+}

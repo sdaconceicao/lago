@@ -1,4 +1,4 @@
-const { componentBudgets } = require("./scripts/bundle-size-policy.cjs");
+const coreExports = Object.keys(require("./dist/index.mjs"));
 const sharedPeers = ["react", "react-dom", "react-aria-components"];
 
 const javascript = (name, imports) => ({
@@ -21,9 +21,7 @@ const javascript = (name, imports) => ({
 const checks = [
   javascript("Core exports", "*"),
   javascript("Representative form", "{ Form, Button, TextField, Checkbox }"),
-  ...Object.keys(componentBudgets).map((name) =>
-    javascript(name, `{ ${name} }`)
-  ),
+  ...coreExports.map((name) => javascript(name, `{ ${name} }`)),
   {
     name: "Shared styles",
     path: "dist/index.css",
