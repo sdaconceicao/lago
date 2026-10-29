@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.11.0](https://github.com/sdaconceicao/lago/compare/lago-v0.10.1...lago-v0.11.0) (2026-10-29)
+
+
+### Features
+
+* Telephone component ([#140](https://github.com/sdaconceicao/lago/issues/140)) ([a95e7b3](https://github.com/sdaconceicao/lago/commit/a95e7b3866af16e835f650c748567c9287a780c8))
+
+
+### Bug Fixes
+
+* Adjust alignment of toasts without descriptions ([#142](https://github.com/sdaconceicao/lago/issues/142)) ([33b5ecc](https://github.com/sdaconceicao/lago/commit/33b5eccb5a9bbc875e585b1290a5b8967ed21503))
+
 ## [0.10.1](https://github.com/sdaconceicao/lago/compare/lago-v0.10.0...lago-v0.10.1) (2026-10-25)
 
 
