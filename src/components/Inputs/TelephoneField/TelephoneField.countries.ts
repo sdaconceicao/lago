@@ -3,7 +3,6 @@
  * countries[ISO][0] supplies the calling code, countries[ISO][3] possible lengths.
  * https://github.com/catamphetamine/libphonenumber-js/tree/v1.13.15
  * Copyright (c) 2016 @catamphetamine <purecatamphetamine@gmail.com> (MIT).
- * The complete license is included in THIRD_PARTY_NOTICES.md.
  *
  * Entries group countries with the same maximum national significant length,
  * capped to 15 minus the calling-code length. Each token is the two-letter ISO
