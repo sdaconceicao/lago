@@ -1,11 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
-import {
-  CARD_BRAND_LOGOS,
-  type CardBrandLogo,
-  CreditCardNumber,
-} from "./CreditCardNumber";
+import { CreditCardNumber } from "./CreditCardNumber";
 
 const getInput = () => screen.getByRole("textbox", { name: "Card number" });
 
@@ -294,20 +290,6 @@ describe("CreditCardNumber", () => {
         "/assets/cards/mastercard.svg"
       );
       expect(getInput()).not.toHaveAttribute("cardLogoCdnUrl");
-    });
-
-    it("preserves the public SVG logo components", () => {
-      const Logo: CardBrandLogo = CARD_BRAND_LOGOS.visa;
-      const { container } = render(
-        <Logo role="img" aria-label="Visa" width={78} height={50} />
-      );
-
-      const logo = screen.getByRole("img", { name: "Visa" });
-      expect(logo.tagName.toLowerCase()).toBe("svg");
-      expect(logo).toHaveAttribute("viewBox", "0 0 780 500");
-      expect(logo).toHaveAttribute("width", "78");
-      expect(logo).toHaveAttribute("height", "50");
-      expect(container.querySelector("img")).toBeNull();
     });
 
     it("names the brand once the digits identify one", async () => {

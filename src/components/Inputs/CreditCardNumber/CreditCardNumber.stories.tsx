@@ -11,7 +11,7 @@ const meta: Meta<typeof CreditCardNumber> = {
     docs: {
       description: {
         component:
-          "A field for entering a card number. CreditCardNumber is a TextField that masks what the user types — digits only, grouped the way the brand groups them, capped at the brand's longest form — and shows the mark of the brand it recognises from the leading digits, so it carries the same label, description, validation states, and field sizing as every other field and lines up with them in a payment form. Brands are matched against their issuer identification numbers in the field itself, and detection, masking, and validation stay local. Brand marks load as SVG images from a CDN; the image URL identifies only the detected brand and never includes the card number. Use `cardLogoCdnUrl` to serve the images from your own host. `onChange` reports the masked value, which can be passed straight back as `value`; `getCardDigits` returns the raw number and `isValidCardNumber` runs the length and Luhn checks before submit.",
+          "A field for entering a card number. CreditCardNumber is a TextField that masks what the user types — digits only, grouped the way the brand groups them, capped at the brand's longest form — and shows the mark of the brand it recognises from the leading digits, so it carries the same label, description, validation states, and field sizing as every other field and lines up with them in a payment form. Brands are matched against their issuer identification numbers in the field itself, and detection, masking, and validation stay local. The shared `CardBrandImage` component loads brand marks as SVG images from a CDN; the image URL identifies only the detected brand and never includes the card number. Use `cardLogoCdnUrl` to serve the images from your own host, with or without a trailing slash. `onChange` reports the masked value, which can be passed straight back as `value`; `getCardDigits` returns the raw number and `isValidCardNumber` runs the length and Luhn checks before submit.",
       },
     },
   },
@@ -84,13 +84,23 @@ export const Brands: Story = {
         defaultValue="36227206271667"
       />
       <CreditCardNumber {...args} label="JCB" defaultValue="3566002020360505" />
+      <CreditCardNumber
+        {...args}
+        label="UnionPay"
+        defaultValue="6200000000000005"
+      />
+      <CreditCardNumber
+        {...args}
+        label="Maestro"
+        defaultValue="6759649826438453"
+      />
     </div>
   ),
   parameters: {
     docs: {
       description: {
         story:
-          'The brand is read from the leading digits and changes both the mask and the mark in the field. Visa, Mastercard, Discover, JCB, UnionPay, and Maestro group in fours; American Express groups 4-6-5 and Diners Club 4-6-4, and each brand stops at the longest number it issues. Marks use the flat SVGs from the `react-payment-logos` source repository, served by jsDelivr at a pinned commit. They share one card canvas, so the slot reserves their width from the start and the field never reflows as the brand resolves. Set `cardLogoCdnUrl` to your own image base URL for self-hosted logos. Until the digits settle on one brand — "6" alone could open a Discover, UnionPay, or Maestro number — or if the image fails to load, the slot shows an outline card icon. The mark is hidden from assistive technology; the detected brand is announced through a polite status message independently of the image, so a screen reader hears "Visa card" once rather than on every keystroke.',
+          'The brand is read from the leading digits and changes both the mask and the mark in the field. Visa, Mastercard, Discover, JCB, UnionPay, and Maestro group in fours; American Express groups 4-6-5 and Diners Club 4-6-4, and each brand stops at the longest number it issues. Marks use the flat SVGs from the `react-payment-logos` source repository, served by jsDelivr at a pinned commit through `CardBrandImage`. They share one card canvas, so the slot reserves their width from the start and the field never reflows as the brand resolves. Set `cardLogoCdnUrl` to your own image base URL for self-hosted logos. Until the digits settle on one brand — "6" alone could open a Discover, UnionPay, or Maestro number — or if the image fails to load, the slot shows an outline card icon. The mark is hidden from assistive technology; the detected brand is announced through a polite status message independently of the image, so a screen reader hears "Visa card" once rather than on every keystroke. For marks outside a field, use `CardBrandImage`; inline SVG components are available separately from `@code-x/lago/payment-logos`.',
       },
     },
   },
