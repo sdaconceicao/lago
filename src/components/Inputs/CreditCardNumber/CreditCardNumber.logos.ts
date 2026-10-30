@@ -22,9 +22,9 @@ export type CardBrandLogo = (
 ) => React.ReactNode;
 
 /**
- * The mark drawn in the field for each recognised brand, from
- * `react-payment-logos` (MIT). Every brand in `CARD_BRANDS` has one, so the
- * field never resolves a brand it cannot show.
+ * SVG components from `react-payment-logos` (MIT), retained for consumers that
+ * render card marks directly. CreditCardNumber uses CDN-backed images instead
+ * so its bundle does not retain these SVG paths.
  */
 export const CARD_BRAND_LOGOS: Record<CardBrand, CardBrandLogo> = {
   visa: Visa,

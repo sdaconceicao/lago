@@ -1,13 +1,13 @@
 "use client";
 import clsx from "clsx";
 import { CreditCard } from "lucide-react";
+import { useState } from "react";
 import { VisuallyHidden } from "react-aria-components/VisuallyHidden";
 import {
   TextField,
   type TextFieldProps,
 } from "@/components/Inputs/TextField/TextField";
 import { useCreditCardNumber } from "./CreditCardNumber.hooks";
-import { CARD_BRAND_LOGOS } from "./CreditCardNumber.logos";
 import styles from "./CreditCardNumber.module.css";
 import type { CardBrand } from "./CreditCardNumber.utils";
 
@@ -22,6 +22,8 @@ export interface CreditCardNumberProps
    * digits so far fit more than one brand.
    */
   onBrandChange?: (brand: CardBrand | null) => void;
+  /** Base URL for lowercase brand SVG filenames. Defaults to commit-pinned react-payment-logos on jsDelivr; supports self-hosting. Include a trailing slash. */
+  cardLogoCdnUrl?: string;
 }
 
 /**
@@ -36,6 +38,7 @@ export function CreditCardNumber({
   defaultValue,
   onChange,
   onBrandChange,
+  cardLogoCdnUrl = "https://cdn.jsdelivr.net/gh/iamgutz/react-payment-logos@d90ff73460cad65ab68289d51b795545c63f7f04/src/svg/flat/",
   onKeyDown,
   inputRef,
   autoComplete = "cc-number",
@@ -52,7 +55,10 @@ export function CreditCardNumber({
     inputRef,
     onKeyDown,
   });
-  const Logo = card.definition && CARD_BRAND_LOGOS[card.definition.brand];
+  const [failedLogoSrc, setFailedLogoSrc] = useState<string>();
+  const logoSrc = card.definition
+    ? `${cardLogoCdnUrl}${card.definition.brand}.svg`
+    : undefined;
 
   return (
     <TextField
@@ -74,10 +80,16 @@ export function CreditCardNumber({
         // brand reaches assistive technology through the status message beside
         // it, which is the only part that changes when a brand is recognised.
         <span className={styles.brand} data-brand={card.definition?.brand}>
-          {Logo ? (
-            <Logo
+          {logoSrc && logoSrc !== failedLogoSrc ? (
+            <img
+              key={logoSrc}
+              src={logoSrc}
+              alt=""
               aria-hidden="true"
-              focusable="false"
+              width={780}
+              height={500}
+              decoding="async"
+              onError={() => setFailedLogoSrc(logoSrc)}
               className={styles.brandLogo}
             />
           ) : (

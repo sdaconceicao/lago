@@ -230,11 +230,9 @@ describe("measurement policy validation", () => {
       );
     }
     assert.deepEqual(policy.legacyComponentBudgets, {
-      CreditCardNumber: 24_576,
       CARD_BRAND_LOGOS: 19_456,
     });
     assert.deepEqual(policy.componentBudgets, {
-      CreditCardNumber: 24_576,
       CARD_BRAND_LOGOS: 19_456,
     });
   });
@@ -333,6 +331,18 @@ describe("consumer bundle growth", () => {
     assert.equal(compareSizes(24_000, 24_576, 24_576).passed, true);
     assert.equal(compareSizes(24_000, 24_577, 24_576).passed, false);
     assert.equal(compareSizes(24_000, 24_577, 24_576).limitBytes, 24_576);
+  });
+
+  it("applies the default 10,000-byte budget to CreditCardNumber", () => {
+    for (const currentBytes of [10_000, 10_001]) {
+      const comparison = compareMeasurements(bootstrap, {
+        ...sizes,
+        CreditCardNumber: currentBytes,
+      }).find(({ name }) => name === "CreditCardNumber");
+      assert.equal(comparison.baselineBytes, 21_060);
+      assert.equal(comparison.limitBytes, 10_000);
+      assert.equal(comparison.passed, currentBytes <= 10_000);
+    }
   });
 
   it("allows a new measurement when its absolute budget is supplied", () => {

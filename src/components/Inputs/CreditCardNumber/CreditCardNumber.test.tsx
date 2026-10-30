@@ -1,9 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState } from "react";
-import { CreditCardNumber } from "./CreditCardNumber";
-import { CARD_BRAND_LOGOS } from "./CreditCardNumber.logos";
-import { CARD_BRANDS } from "./CreditCardNumber.utils";
+import {
+  CARD_BRAND_LOGOS,
+  type CardBrandLogo,
+  CreditCardNumber,
+} from "./CreditCardNumber";
 
 const getInput = () => screen.getByRole("textbox", { name: "Card number" });
 
@@ -241,21 +243,71 @@ describe("CreditCardNumber", () => {
   });
 
   describe("brand detection", () => {
-    it("shows a placeholder mark while no brand is known", () => {
-      const { container } = render(<CreditCardNumber label="Card number" />);
+    it.each(["", "9999", "6"])(
+      "shows a placeholder mark while no brand is known for %s",
+      (value) => {
+        const { container } = render(
+          <CreditCardNumber label="Card number" value={value} />
+        );
 
-      expect(container.querySelector("[data-brand]")).toBeNull();
-      expect(container.querySelector("svg")).toHaveAttribute(
-        "aria-hidden",
-        "true"
+        expect(container.querySelector("[data-brand]")).toBeNull();
+        expect(container.querySelector("img")).toBeNull();
+        expect(container.querySelector("svg")).toHaveAttribute(
+          "aria-hidden",
+          "true"
+        );
+        expect(screen.getByRole("status")).toBeEmptyDOMElement();
+      }
+    );
+
+    it.each([
+      ["4242424242424242", "visa"],
+      ["5555555555554444", "mastercard"],
+      ["378282246310005", "amex"],
+      ["6011111111111117", "discover"],
+      ["30569309025904", "diners"],
+      ["3566002020360505", "jcb"],
+      ["6200000000000005", "unionpay"],
+      ["6759649826438453", "maestro"],
+    ])("loads the pinned SVG for %s as %s", (value, brand) => {
+      const { container } = render(
+        <CreditCardNumber label="Card number" value={value} />
       );
-      expect(screen.getByRole("status")).toBeEmptyDOMElement();
+
+      expect(container.querySelector("[data-brand] img")).toHaveAttribute(
+        "src",
+        `https://cdn.jsdelivr.net/gh/iamgutz/react-payment-logos@d90ff73460cad65ab68289d51b795545c63f7f04/src/svg/flat/${brand}.svg`
+      );
     });
 
-    it("renders a mark for every brand it can recognise", () => {
-      for (const definition of CARD_BRANDS) {
-        expect(CARD_BRAND_LOGOS[definition.brand]).toBeTypeOf("function");
-      }
+    it("loads card logos from a self-hosted base URL", () => {
+      const { container } = render(
+        <CreditCardNumber
+          label="Card number"
+          value="5555555555554444"
+          cardLogoCdnUrl="/assets/cards/"
+        />
+      );
+
+      expect(container.querySelector("[data-brand] img")).toHaveAttribute(
+        "src",
+        "/assets/cards/mastercard.svg"
+      );
+      expect(getInput()).not.toHaveAttribute("cardLogoCdnUrl");
+    });
+
+    it("preserves the public SVG logo components", () => {
+      const Logo: CardBrandLogo = CARD_BRAND_LOGOS.visa;
+      const { container } = render(
+        <Logo role="img" aria-label="Visa" width={78} height={50} />
+      );
+
+      const logo = screen.getByRole("img", { name: "Visa" });
+      expect(logo.tagName.toLowerCase()).toBe("svg");
+      expect(logo).toHaveAttribute("viewBox", "0 0 780 500");
+      expect(logo).toHaveAttribute("width", "78");
+      expect(logo).toHaveAttribute("height", "50");
+      expect(container.querySelector("img")).toBeNull();
     });
 
     it("names the brand once the digits identify one", async () => {
@@ -277,7 +329,7 @@ describe("CreditCardNumber", () => {
 
       await user.type(getInput(), "4242");
 
-      const visaMark = container.querySelector("[data-brand] svg");
+      const visaMark = container.querySelector("[data-brand] img");
 
       await user.clear(getInput());
       await user.type(getInput(), "5555");
@@ -286,16 +338,17 @@ describe("CreditCardNumber", () => {
         "data-brand",
         "mastercard"
       );
-      expect(container.querySelector("[data-brand] svg")).not.toBe(visaMark);
+      expect(container.querySelector("[data-brand] img")).not.toBe(visaMark);
     });
 
     it("waits for a digit that tells the brands apart", async () => {
       const user = userEvent.setup();
-      render(<CreditCardNumber label="Card number" />);
+      const { container } = render(<CreditCardNumber label="Card number" />);
 
       await user.type(getInput(), "6");
 
       expect(screen.getByRole("status")).toBeEmptyDOMElement();
+      expect(container.querySelector("img")).toBeNull();
 
       await user.type(getInput(), "5");
 
@@ -308,13 +361,81 @@ describe("CreditCardNumber", () => {
 
       await user.type(getInput(), "378282246310005");
 
+      const logo = container.querySelector("[data-brand] img");
+      expect(logo).toHaveAttribute("aria-hidden", "true");
+      expect(logo).toHaveAttribute("alt", "");
+      expect(logo).toHaveAttribute("width", "780");
+      expect(logo).toHaveAttribute("height", "500");
+      expect(logo).toHaveAttribute("decoding", "async");
+      expect(screen.queryByRole("img")).toBeNull();
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "American Express card"
+      );
+    });
+
+    it("keeps the detected brand when the logo fails to load", () => {
+      const onBrandChange = vi.fn();
+      const { container } = render(
+        <CreditCardNumber
+          label="Card number"
+          value="4242424242424242"
+          onBrandChange={onBrandChange}
+        />
+      );
+      onBrandChange.mockClear();
+
+      fireEvent.error(screen.getByAltText(""));
+
+      expect(container.querySelector("img")).toBeNull();
+      expect(container.querySelector("[data-brand]")).toHaveAttribute(
+        "data-brand",
+        "visa"
+      );
       expect(container.querySelector("[data-brand] svg")).toHaveAttribute(
         "aria-hidden",
         "true"
       );
-      expect(screen.getByRole("status")).toHaveTextContent(
-        "American Express card"
+      expect(screen.getByRole("status")).toHaveTextContent("Visa card");
+      expect(getInput()).toHaveValue("4242 4242 4242 4242");
+      expect(onBrandChange).not.toHaveBeenCalled();
+    });
+
+    it("loads a new brand after the previous logo fails", () => {
+      const { container, rerender } = render(
+        <CreditCardNumber label="Card number" value="4242424242424242" />
       );
+      fireEvent.error(screen.getByAltText(""));
+
+      rerender(
+        <CreditCardNumber label="Card number" value="5555555555554444" />
+      );
+
+      expect(container.querySelector("[data-brand] img")).toHaveAttribute(
+        "src",
+        "https://cdn.jsdelivr.net/gh/iamgutz/react-payment-logos@d90ff73460cad65ab68289d51b795545c63f7f04/src/svg/flat/mastercard.svg"
+      );
+      expect(screen.getByRole("status")).toHaveTextContent("Mastercard card");
+    });
+
+    it("loads a new source for the same brand after its logo fails", () => {
+      const { container, rerender } = render(
+        <CreditCardNumber label="Card number" value="4242424242424242" />
+      );
+      fireEvent.error(screen.getByAltText(""));
+
+      rerender(
+        <CreditCardNumber
+          label="Card number"
+          value="4242424242424242"
+          cardLogoCdnUrl="/assets/cards/"
+        />
+      );
+
+      expect(container.querySelector("[data-brand] img")).toHaveAttribute(
+        "src",
+        "/assets/cards/visa.svg"
+      );
+      expect(screen.getByRole("status")).toHaveTextContent("Visa card");
     });
 
     it("calls onBrandChange when the brand is recognised", async () => {

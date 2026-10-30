@@ -14,7 +14,7 @@ Every public core runtime export automatically receives a default budget of **10
 
 If a feature cannot fit within that ceiling, optimize it or isolate it behind an optional public entry, including its runtime code, public types, and feature-specific dependencies. The size ceiling supplements the dependency boundaries above. A small measured bundle does not excuse a required installation dependency for an optional feature.
 
-`CreditCardNumber` and `CARD_BRAND_LOGOS` exceeded the ceiling in the audited published `0.10.1` core and retain legacy allowances of 24,576 and 19,456 bytes, respectively. Both remain subject to release growth checks. New exports cannot use those legacy exceptions. Optional public subpaths have independent dependency boundaries and do not inherit the core size ceiling.
+`CreditCardNumber` and `CARD_BRAND_LOGOS` exceeded the ceiling in the audited published `0.10.1` core. `CreditCardNumber` now loads its brand marks as CDN images and follows the default 10,000-byte budget. The public `CARD_BRAND_LOGOS` SVG component map retains the sole legacy allowance of 19,456 bytes for compatibility. Both remain subject to release growth checks. New exports cannot use that legacy exception. Optional public subpaths have independent dependency boundaries and do not inherit the core size ceiling.
 
 ## Decision: isolate the rich text editor
 

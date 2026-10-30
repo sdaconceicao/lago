@@ -27,14 +27,14 @@ The default budget for every core runtime export is **10,000 minified gzip bytes
 
 If an export cannot fit within the ceiling, optimize its retained bundle or move the feature to a separate optional public entry following the [architecture policy](ARCHITECTURE.md#apply-the-same-boundary-to-other-large-components). Its runtime code, public types, and feature-specific dependencies must leave the core dependency graph. Optional subpaths do not inherit the core 10,000-byte ceiling.
 
-Two runtime exports exceeded the ceiling in the audited `0.10.1` package and retain explicit legacy allowances:
+Two runtime exports exceeded the ceiling in the audited `0.10.1` package. `CreditCardNumber` now loads its brand marks as CDN images and follows the default budget. The public `CARD_BRAND_LOGOS` SVG component map retains the sole legacy allowance for compatibility:
 
-| Legacy export | Published size | Absolute budget |
+| Audited export | Published `0.10.1` size | Current absolute budget |
 | --- | ---: | ---: |
-| `CreditCardNumber` | 21,060 B | 24,576 B |
-| `CARD_BRAND_LOGOS` | 16,160 B | 19,456 B |
+| `CreditCardNumber` | 21,060 B | 10,000 B (default) |
+| `CARD_BRAND_LOGOS` | 16,160 B | 19,456 B (legacy) |
 
-These exceptions are tied to the published measurements and the explicit legacy allowances in the policy. Both still follow the release growth check. Adding a new export does not create another legacy exception.
+The remaining exception is tied to its published measurement and the explicit legacy allowance in the policy. Both exports still follow the release growth check. Adding a new export does not create another legacy exception.
 
 ## Growth allowance
 
@@ -85,7 +85,7 @@ componentBudgets: {
 },
 ```
 
-Its 9,216-byte limit applies before its first published baseline, then also follows the cumulative 5% release growth check. Overrides above 10,000 bytes are permitted only for the audited legacy exceptions listed above.
+Its 9,216-byte limit applies before its first published baseline, then also follows the cumulative 5% release growth check. Overrides above 10,000 bytes are permitted only for the audited legacy exception listed above.
 
 To investigate an intentional growth allowance change, edit `maxGrowthPercent` in the policy file. Changing an absolute budget preserves existing measurements and release baselines. Changing measurement settings for an existing case must also change the measurement identifier and establish a compatible baseline.
 
