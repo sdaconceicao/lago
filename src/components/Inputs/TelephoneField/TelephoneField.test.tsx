@@ -40,6 +40,45 @@ const ControlledTelephone = ({
   );
 };
 
+const ResettableTelephone = ({
+  onChange,
+  onCountryChange,
+}: {
+  onChange: (value: string) => void;
+  onCountryChange: (country: string) => void;
+}) => {
+  const [value, setValue] = useState("+1 (212) 555-0123");
+  const [country, setCountry] = useState("US");
+
+  return (
+    <form aria-label="Contact">
+      <TelephoneField
+        {...defaultProps}
+        name="telephone"
+        value={value}
+        country={country}
+        onChange={(next) => {
+          setValue(next);
+          onChange(next);
+        }}
+        onCountryChange={(next) => {
+          setCountry(next);
+          onCountryChange(next);
+        }}
+      />
+      <button
+        type="button"
+        onClick={() => {
+          setValue("+1 (212) 555-0123");
+          setCountry("US");
+        }}
+      >
+        Reset telephone
+      </button>
+    </form>
+  );
+};
+
 describe("TelephoneField", () => {
   it("renders a labelled telephone input with national autocomplete", () => {
     render(<TelephoneField {...defaultProps} />);
@@ -1977,39 +2016,12 @@ describe("TelephoneField", () => {
       const user = userEvent.setup();
       const onChange = vi.fn();
       const onCountryChange = vi.fn();
-      const ResettableTelephone = () => {
-        const [value, setValue] = useState("+1 (212) 555-0123");
-        const [country, setCountry] = useState("US");
-
-        return (
-          <form aria-label="Contact">
-            <TelephoneField
-              {...defaultProps}
-              name="telephone"
-              value={value}
-              country={country}
-              onChange={(next) => {
-                setValue(next);
-                onChange(next);
-              }}
-              onCountryChange={(next) => {
-                setCountry(next);
-                onCountryChange(next);
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setValue("+1 (212) 555-0123");
-                setCountry("US");
-              }}
-            >
-              Reset telephone
-            </button>
-          </form>
-        );
-      };
-      render(<ResettableTelephone />);
+      render(
+        <ResettableTelephone
+          onChange={onChange}
+          onCountryChange={onCountryChange}
+        />
+      );
       const form = screen.getByRole("form", {
         name: "Contact",
       }) as HTMLFormElement;

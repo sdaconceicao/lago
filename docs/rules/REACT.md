@@ -33,7 +33,6 @@ ComponentName/
 ### Component Template
 
 ```tsx
-
 interface ComponentNameProps {
   // Required props should not have default values
   requiredProp: string;
@@ -76,21 +75,21 @@ export const Navigation = ({
   className,
 }: NavigationProps) => {
   return (
-    <nav className={className ? `${css.navigation} ${className}` : css.navigation}>
+    <nav
+      className={className ? `${css.navigation} ${className}` : css.navigation}
+    >
       {items.map((item) => {
         const navItemClasses = [
           css.navItem,
           css[item.type],
-          currentPath === item.path ? css.active : '',
-          item.disabled ? css.disabled : '',
-        ].filter(Boolean).join(' ');
+          currentPath === item.path ? css.active : "",
+          item.disabled ? css.disabled : "",
+        ]
+          .filter(Boolean)
+          .join(" ");
 
         return (
-          <a
-            key={item.path}
-            href={item.path}
-            className={navItemClasses}
-          >
+          <a key={item.path} href={item.path} className={navItemClasses}>
             {item.label}
           </a>
         );
@@ -225,7 +224,7 @@ export const useUserData = (userId: string) => {
 
   useEffect(() => {
     let cancelled = false;
-    
+
     const fetchUser = async () => {
       setLoading(true);
       try {
@@ -245,7 +244,7 @@ export const useUserData = (userId: string) => {
     };
 
     fetchUser();
-    
+
     return () => {
       cancelled = true;
     };
@@ -258,7 +257,10 @@ export const useUserData = (userId: string) => {
 #### ✅ Correct: DOM Manipulation
 
 ```tsx
-export const useClickOutside = (ref: RefObject<HTMLElement>, callback: () => void) => {
+export const useClickOutside = (
+  ref: RefObject<HTMLElement>,
+  callback: () => void
+) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -266,10 +268,10 @@ export const useClickOutside = (ref: RefObject<HTMLElement>, callback: () => voi
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref, callback]);
 };
@@ -283,7 +285,7 @@ export const useWebSocket = (url: string) => {
 
   useEffect(() => {
     const ws = new WebSocket(url);
-    
+
     ws.onmessage = (event) => {
       setMessage(event.data);
     };
@@ -301,7 +303,7 @@ export const useWebSocket = (url: string) => {
 
 ```tsx
 // ❌ Don't do this
-const [fullName, setFullName] = useState('');
+const [fullName, setFullName] = useState("");
 
 useEffect(() => {
   setFullName(`${firstName} ${lastName}`);
@@ -321,14 +323,14 @@ useEffect(() => {
   const handleClick = () => {
     // handle click
   };
-  buttonRef.current?.addEventListener('click', handleClick);
+  buttonRef.current?.addEventListener("click", handleClick);
   return () => {
-    buttonRef.current?.removeEventListener('click', handleClick);
+    buttonRef.current?.removeEventListener("click", handleClick);
   };
 }, []);
 
 // ✅ Do this instead
-<button onClick={handleClick}>Click me</button>
+<button onClick={handleClick}>Click me</button>;
 ```
 
 #### ❌ Incorrect: Synchronous State Updates
@@ -502,11 +504,13 @@ export const UserProfile: FunctionComponent<UserProfileProps> = ({
 
   const profileClasses = [
     css.userProfile,
-    variant === "compact" ? css.compact : '',
-    variant === "detailed" ? css.detailed : '',
-    isSelected ? css.selected : '',
+    variant === "compact" ? css.compact : "",
+    variant === "detailed" ? css.detailed : "",
+    isSelected ? css.selected : "",
     className,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   if (loading) return <div className={css.loading}>Loading...</div>;
   if (error) return <div className={css.error}>{error}</div>;

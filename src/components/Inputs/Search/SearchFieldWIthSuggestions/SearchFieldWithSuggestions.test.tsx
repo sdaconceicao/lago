@@ -22,6 +22,19 @@ const fruits: SearchSuggestion[] = [
   { id: "banana", label: "Banana" },
 ];
 
+function ControlledSearch() {
+  const [query, setQuery] = useState("");
+  return (
+    <SearchFieldWithSuggestions
+      label="Search"
+      suggestions={fruits}
+      value={query}
+      onChange={setQuery}
+      onSuggestionSelect={() => setQuery("")}
+    />
+  );
+}
+
 describe("SearchFieldWithSuggestions", () => {
   describe("with static suggestions", () => {
     it("renders a labeled searchbox", () => {
@@ -205,18 +218,6 @@ describe("SearchFieldWithSuggestions", () => {
 
     it("hides the clear button when a controlled parent resets the value on select", async () => {
       const user = userEvent.setup();
-      function ControlledSearch() {
-        const [query, setQuery] = useState("");
-        return (
-          <SearchFieldWithSuggestions
-            label="Search"
-            suggestions={fruits}
-            value={query}
-            onChange={setQuery}
-            onSuggestionSelect={() => setQuery("")}
-          />
-        );
-      }
       render(<ControlledSearch />);
 
       await user.type(screen.getByRole("searchbox"), "ban");

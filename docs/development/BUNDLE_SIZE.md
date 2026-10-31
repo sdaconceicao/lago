@@ -8,12 +8,12 @@ CI discovers public runtime exports by importing the built core ESM entry, `dist
 
 Size Limit bundles each named import, minifies it, and measures gzip size. Runtime dependencies are included; only React, React DOM, and React Aria Components are excluded. Keeping this list explicit ensures optional peer dependencies still count if they accidentally enter the core dependency graph.
 
-| Case | Contents | Check |
-| --- | --- | --- |
-| Each public core runtime export | One named import and all retained dependencies | Default or overridden absolute budget and release growth |
-| Representative form | `Form`, `Button`, `TextField`, `Checkbox` | Release growth |
-| Shared styles | Complete `dist/index.css`, including editor styles | Release growth |
-| Core exports | All core ESM exports | Report only |
+| Case                            | Contents                                           | Check                                                    |
+| ------------------------------- | -------------------------------------------------- | -------------------------------------------------------- |
+| Each public core runtime export | One named import and all retained dependencies     | Default or overridden absolute budget and release growth |
+| Representative form             | `Form`, `Button`, `TextField`, `Checkbox`          | Release growth                                           |
+| Shared styles                   | Complete `dist/index.css`, including editor styles | Release growth                                           |
+| Core exports                    | All core ESM exports                               | Report only                                              |
 
 A named-import budget covers the entire retained bundle after tree shaking. Internal Lago components and transitive dependencies count toward that total. Adding individual module gzip sizes does not establish the consumer's retained size.
 
@@ -29,10 +29,10 @@ If an export cannot fit within the ceiling, optimize its retained bundle or move
 
 Two runtime exports exceeded the ceiling in the audited `0.10.1` package. Both legacy allowances have been removed:
 
-| Audited export | Published `0.10.1` size | Current treatment |
-| --- | ---: | ---: |
-| `CreditCardNumber` | 21,060 B | CDN-backed images; 10,000 B core budget |
-| `CARD_BRAND_LOGOS` | 16,160 B | Optional `payment-logos` entry; outside core inventory |
+| Audited export     | Published `0.10.1` size | Current treatment                                      |
+| ------------------ | ----------------------: | ------------------------------------------------------ |
+| `CreditCardNumber` |                21,060 B | CDN-backed images; 10,000 B core budget                |
+| `CARD_BRAND_LOGOS` |                16,160 B | Optional `payment-logos` entry; outside core inventory |
 
 The historical seed keeps both measurements so published baselines remain auditable. Moving an export outside core removes its current core measurement without rewriting that history. The new `CardBrandImage` and `getCardBrandLogoUrl` core exports receive the default budget immediately; image downloads are separate from these JavaScript measurements.
 
