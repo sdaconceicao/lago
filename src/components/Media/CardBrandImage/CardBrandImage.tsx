@@ -1,8 +1,9 @@
 "use client";
 import clsx from "clsx";
 import { CreditCard } from "lucide-react";
-import { type HTMLAttributes, useState } from "react";
+import type { HTMLAttributes } from "react";
 import type { CardBrand } from "@/components/Inputs/CreditCardNumber/CreditCardNumber.utils";
+import { useImageStatus } from "@/components/Media/ImagePlaceholder/ImagePlaceholder.hooks";
 import styles from "./CardBrandImage.module.css";
 import { getCardBrandLogoUrl } from "./CardBrandImage.utils";
 
@@ -29,8 +30,8 @@ export function CardBrandImage({
   className,
   ...props
 }: CardBrandImageProps) {
-  const [failedSrc, setFailedSrc] = useState<string>();
   const src = brand === null ? undefined : getCardBrandLogoUrl(brand, cdnUrl);
+  const { status, markLoaded, markError, settleFromNode } = useImageStatus(src);
 
   return (
     <span
@@ -40,7 +41,7 @@ export function CardBrandImage({
       aria-label={alt || undefined}
       aria-hidden={alt ? undefined : true}
     >
-      {src && src !== failedSrc ? (
+      {src && status !== "error" ? (
         <img
           key={src}
           src={src}
@@ -50,7 +51,9 @@ export function CardBrandImage({
           height={500}
           decoding="async"
           className={styles.image}
-          onError={() => setFailedSrc(src)}
+          ref={settleFromNode}
+          onLoad={markLoaded}
+          onError={markError}
         />
       ) : (
         <CreditCard aria-hidden="true" className={styles.fallback} />

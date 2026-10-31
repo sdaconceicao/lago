@@ -1,4 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { hydrateRoot, type Root } from "react-dom/client";
+import { renderToString } from "react-dom/server";
 import { CardBrandImage } from "./CardBrandImage";
 
 const CDN_URL =
@@ -162,5 +164,69 @@ describe("CardBrandImage", () => {
       "src",
       `${CDN_URL}mastercard.svg`
     );
+  });
+
+  describe("hydration", () => {
+    it("shows the fallback when the server-rendered image failed before hydration", async () => {
+      const container = document.createElement("div");
+      document.body.append(container);
+      let root: Root | undefined;
+
+      try {
+        const card = <CardBrandImage brand="visa" alt="Visa" />;
+        container.innerHTML = renderToString(card);
+        const image = within(container).getByAltText("");
+        Object.defineProperties(image, {
+          complete: { value: true },
+          naturalWidth: { value: 0 },
+        });
+
+        await act(async () => {
+          root = hydrateRoot(container, card);
+        });
+
+        expect(container.querySelector("img")).toBeNull();
+        expect(container.querySelector("svg")).toHaveAttribute(
+          "aria-hidden",
+          "true"
+        );
+        expect(
+          within(container).getByRole("img", { name: "Visa" })
+        ).toBeInTheDocument();
+      } finally {
+        await act(async () => root?.unmount());
+        container.remove();
+      }
+    });
+
+    it("retains an image that loaded successfully before hydration", async () => {
+      const container = document.createElement("div");
+      document.body.append(container);
+      let root: Root | undefined;
+
+      try {
+        const card = <CardBrandImage brand="visa" alt="Visa" />;
+        container.innerHTML = renderToString(card);
+        const image = within(container).getByAltText("");
+        Object.defineProperties(image, {
+          complete: { value: true },
+          naturalWidth: { value: 780 },
+        });
+
+        await act(async () => {
+          root = hydrateRoot(container, card);
+        });
+
+        expect(container.querySelector("img")).toBe(image);
+        expect(image).toHaveAttribute("src", `${CDN_URL}visa.svg`);
+        expect(container.querySelector("svg")).toBeNull();
+        expect(
+          within(container).getByRole("img", { name: "Visa" })
+        ).toBeInTheDocument();
+      } finally {
+        await act(async () => root?.unmount());
+        container.remove();
+      }
+    });
   });
 });
