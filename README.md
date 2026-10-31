@@ -22,7 +22,11 @@ import "@code-x/lago/styles";
 Use `CardBrandImage` for a card mark without bundling inline artwork. It loads the detected brand's SVG from a commit-pinned jsDelivr URL and shows a generic card icon when `brand` is `null` or the image fails. `CreditCardNumber` uses this same component; card detection, masking, and validation run locally, and image URLs contain only the brand name.
 
 ```tsx
-import { CardBrandImage, CreditCardNumber, getCardBrandLogoUrl } from "@code-x/lago";
+import {
+  CardBrandImage,
+  CreditCardNumber,
+  getCardBrandLogoUrl,
+} from "@code-x/lago";
 import "@code-x/lago/styles";
 
 // Empty alt is decorative; give a standalone mark an accessible name.
