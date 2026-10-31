@@ -17,24 +17,24 @@ Size Limit bundles each named import, minifies it, and measures gzip size. Runti
 
 A named-import budget covers the entire retained bundle after tree shaking. Internal Lago components and transitive dependencies count toward that total. Adding individual module gzip sizes does not establish the consumer's retained size.
 
-The stylesheet is already minified by the library build and is measured directly with gzip, without a JavaScript wrapper. Optional public subpaths, such as the rich text editor, are outside the automatic core inventory and its size ceiling. Evaluate their JavaScript costs separately; their CSS remains in the shared stylesheet.
+The stylesheet is already minified by the library build and is measured directly with gzip, without a JavaScript wrapper. Optional public subpaths, such as `rich-text-editor` and `payment-logos`, are outside the automatic core inventory and its size ceiling. Evaluate their JavaScript costs separately; any styles they contribute remain in the shared stylesheet.
 
-Measurement settings are defined in [`.size-limit.cjs`](../../.size-limit.cjs), with core cases generated from the discovered runtime exports. The default budget, optional overrides, growth policy, and audited legacy exceptions live in [`scripts/bundle-size-policy.cjs`](../../scripts/bundle-size-policy.cjs). Measurement tools are pinned in the lockfile and both measurement jobs use Node 24. The `pnpm size` command measures cases in batches of six to bound concurrent bundling.
+Measurement settings are defined in [`.size-limit.cjs`](../../.size-limit.cjs), with core cases generated from the discovered runtime exports. The default budget, optional overrides, and growth policy live in [`scripts/bundle-size-policy.cjs`](../../scripts/bundle-size-policy.cjs). Measurement tools are pinned in the lockfile and both measurement jobs use Node 24. The `pnpm size` command measures cases in batches of six to bound concurrent bundling.
 
 ## Core size ceiling
 
-The default budget for every core runtime export is **10,000 minified gzip bytes**, configured as `defaultCoreBudget` in the policy. Here, 10 kB means 10,000 bytes, not 10 KiB. Optional `componentBudgets` overrides may set stricter limits, such as TelephoneField's 9,216-byte budget. New exports cannot receive budgets above the default ceiling.
+The default budget for every core runtime export is **10,000 minified gzip bytes**, configured as `defaultCoreBudget` in the policy. Here, 10 kB means 10,000 bytes, not 10 KiB. Optional `componentBudgets` overrides may set stricter limits. No current core export has an allowance above the default ceiling.
 
 If an export cannot fit within the ceiling, optimize its retained bundle or move the feature to a separate optional public entry following the [architecture policy](ARCHITECTURE.md#apply-the-same-boundary-to-other-large-components). Its runtime code, public types, and feature-specific dependencies must leave the core dependency graph. Optional subpaths do not inherit the core 10,000-byte ceiling.
 
-Two runtime exports exceeded the ceiling in the audited `0.10.1` package and retain explicit legacy allowances:
+Two runtime exports exceeded the ceiling in the audited `0.10.1` package. Both legacy allowances have been removed:
 
-| Legacy export      | Published size | Absolute budget |
-| ------------------ | -------------: | --------------: |
-| `CreditCardNumber` |       21,060 B |        24,576 B |
-| `CARD_BRAND_LOGOS` |       16,160 B |        19,456 B |
+| Audited export     | Published `0.10.1` size | Current treatment                                      |
+| ------------------ | ----------------------: | ------------------------------------------------------ |
+| `CreditCardNumber` |                21,060 B | CDN-backed images; 10,000 B core budget                |
+| `CARD_BRAND_LOGOS` |                16,160 B | Optional `payment-logos` entry; outside core inventory |
 
-These exceptions are tied to the published measurements and the explicit legacy allowances in the policy. Both still follow the release growth check. Adding a new export does not create another legacy exception.
+The historical seed keeps both measurements so published baselines remain auditable. Moving an export outside core removes its current core measurement without rewriting that history. The new `CardBrandImage` and `getCardBrandLogoUrl` core exports receive the default budget immediately; image downloads are separate from these JavaScript measurements.
 
 ## Growth allowance
 
@@ -77,7 +77,7 @@ Ordinary checks never update the seed. Each successful publication supplies the 
 
 A new public core runtime export is discovered and measured automatically under the 10,000-byte default. Components and their exported helpers need no individual configuration. Confirm that each retained named-import bundle fits the ceiling; if it exceeds 10,000 bytes, optimize it or use the optional-entry boundary. Existing export and stylesheet checks continue to apply when adding a component.
 
-To set a stricter limit, add an override under `componentBudgets` in [`scripts/bundle-size-policy.cjs`](../../scripts/bundle-size-policy.cjs). For example, TelephoneField uses:
+To set a stricter limit, add an override under `componentBudgets` in [`scripts/bundle-size-policy.cjs`](../../scripts/bundle-size-policy.cjs). For example, a 9,216-byte limit for TelephoneField would be:
 
 ```js
 componentBudgets: {
@@ -85,7 +85,7 @@ componentBudgets: {
 },
 ```
 
-Its 9,216-byte limit applies before its first published baseline, then also follows the cumulative 5% release growth check. Overrides above 10,000 bytes are permitted only for the audited legacy exceptions listed above.
+Such a limit applies before its first published baseline, then also follows the cumulative 5% release growth check. Current policy has no overrides or legacy allowances.
 
 To investigate an intentional growth allowance change, edit `maxGrowthPercent` in the policy file. Changing an absolute budget preserves existing measurements and release baselines. Changing measurement settings for an existing case must also change the measurement identifier and establish a compatible baseline.
 

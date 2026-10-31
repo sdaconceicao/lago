@@ -121,9 +121,6 @@ importers:
       react-country-flag:
         specifier: 3.1.0
         version: 3.1.0(react@19.3.1)
-      react-payment-logos:
-        specifier: ^1.1.0
-        version: 1.1.0(react@19.3.1)
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.6.3
@@ -245,12 +242,18 @@ importers:
       react-dom:
         specifier: ^19.3.0
         version: 19.3.1(react@19.3.1)
+      react-payment-logos:
+        specifier: ^1.1.0
+        version: 1.1.0(react@19.3.1)
       size-limit:
         specifier: 14.3.0
         version: 14.3.0
       storybook:
         specifier: ^10.6.3
         version: 10.6.3(@types/react@19.3.0)(react@19.3.1)
+      tslib:
+        specifier: ^2.8.1
+        version: 2.8.1
       typescript:
         specifier: ^6.0.3
         version: 6.0.3

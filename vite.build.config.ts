@@ -87,6 +87,7 @@ export default defineConfig({
       entry: {
         index: path.resolve(srcRoot, "index.ts"),
         "rich-text-editor": path.resolve(srcRoot, "rich-text-editor.ts"),
+        "payment-logos": path.resolve(srcRoot, "payment-logos.ts"),
       },
       formats: ["es", "cjs"],
     },
