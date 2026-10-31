@@ -36,6 +36,10 @@ const getTagLabels = (container: HTMLElement) =>
     (tag) => tag.textContent
   );
 
+const Wrapper = () => (
+  <TagsInput label="Skills" items={SKILLS} value={["react"]} />
+);
+
 describe("TagsInput", () => {
   describe("rendering", () => {
     it("renders a labeled combobox input", () => {
@@ -572,9 +576,6 @@ describe("TagsInput", () => {
       // React Aria resets the input value whenever the controlled value's
       // identity changes, so a new array literal per render used to wipe the
       // query on every keystroke.
-      const Wrapper = () => (
-        <TagsInput label="Skills" items={SKILLS} value={["react"]} />
-      );
       const { rerender } = render(<Wrapper />);
       const input = screen.getByRole("combobox");
 

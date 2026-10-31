@@ -34,6 +34,26 @@ function HookInput({
   );
 }
 
+const ControlledInput = ({
+  onChange,
+}: {
+  onChange: (value: string) => void;
+}) => {
+  const [value, setValue] = useState("");
+
+  return (
+    <HookInput
+      country="US"
+      mask="0##-##"
+      value={value}
+      onChange={(next) => {
+        setValue(next);
+        onChange(next);
+      }}
+    />
+  );
+};
+
 const getInput = () =>
   screen.getByRole<HTMLInputElement>("textbox", { name: "National telephone" });
 
@@ -366,22 +386,7 @@ describe("useTelephoneField fixed numeric mask literals", () => {
   it("accepts each full callback as its controlled value without duplicating fixed digits", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const ControlledInput = () => {
-      const [value, setValue] = useState("");
-
-      return (
-        <HookInput
-          country="US"
-          mask="0##-##"
-          value={value}
-          onChange={(next) => {
-            setValue(next);
-            onChange(next);
-          }}
-        />
-      );
-    };
-    render(<ControlledInput />);
+    render(<ControlledInput onChange={onChange} />);
 
     await user.type(getInput(), "1234");
 

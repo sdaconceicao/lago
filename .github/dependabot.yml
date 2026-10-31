@@ -12,6 +12,12 @@ updates:
     cooldown:
       default-days: 3
     groups:
+      biome:
+        patterns:
+          - "@biomejs/*"
+        update-types:
+          - "minor"
+          - "patch"
       production-dependencies:
         dependency-type: "production"
         update-types:
@@ -19,6 +25,8 @@ updates:
           - "patch"
       development-dependencies:
         dependency-type: "development"
+        exclude-patterns:
+          - "@biomejs/*"
         update-types:
           - "minor"
           - "patch"

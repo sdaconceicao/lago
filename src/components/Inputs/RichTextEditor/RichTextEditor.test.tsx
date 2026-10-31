@@ -46,6 +46,18 @@ const renderEditor = async (
   return { ...result, textbox };
 };
 
+function ControlledEditor() {
+  const [value, setValue] = useState("<p>hello</p>");
+  return (
+    <RichTextEditor
+      label="Bio"
+      value={value}
+      onChange={setValue}
+      toolbar={[]}
+    />
+  );
+}
+
 describe("RichTextEditor", () => {
   describe("list indentation", () => {
     it.each(["ul", "ol"])(
@@ -1341,17 +1353,6 @@ describe("RichTextEditor", () => {
 
   it("keeps the caret in place when controlled edits are accepted", async () => {
     const user = userEvent.setup();
-    function ControlledEditor() {
-      const [value, setValue] = useState("<p>hello</p>");
-      return (
-        <RichTextEditor
-          label="Bio"
-          value={value}
-          onChange={setValue}
-          toolbar={[]}
-        />
-      );
-    }
     render(<ControlledEditor />);
     const textbox = await screen.findByRole("textbox", { name: "Bio" });
 
