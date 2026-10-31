@@ -8,12 +8,12 @@ CI discovers public runtime exports by importing the built core ESM entry, `dist
 
 Size Limit bundles each named import, minifies it, and measures gzip size. Runtime dependencies are included; only React, React DOM, and React Aria Components are excluded. Keeping this list explicit ensures optional peer dependencies still count if they accidentally enter the core dependency graph.
 
-| Case | Contents | Check |
-| --- | --- | --- |
-| Each public core runtime export | One named import and all retained dependencies | Default or overridden absolute budget and release growth |
-| Representative form | `Form`, `Button`, `TextField`, `Checkbox` | Release growth |
-| Shared styles | Complete `dist/index.css`, including editor styles | Release growth |
-| Core exports | All core ESM exports | Report only |
+| Case                            | Contents                                           | Check                                                    |
+| ------------------------------- | -------------------------------------------------- | -------------------------------------------------------- |
+| Each public core runtime export | One named import and all retained dependencies     | Default or overridden absolute budget and release growth |
+| Representative form             | `Form`, `Button`, `TextField`, `Checkbox`          | Release growth                                           |
+| Shared styles                   | Complete `dist/index.css`, including editor styles | Release growth                                           |
+| Core exports                    | All core ESM exports                               | Report only                                              |
 
 A named-import budget covers the entire retained bundle after tree shaking. Internal Lago components and transitive dependencies count toward that total. Adding individual module gzip sizes does not establish the consumer's retained size.
 
@@ -29,10 +29,10 @@ If an export cannot fit within the ceiling, optimize its retained bundle or move
 
 Two runtime exports exceeded the ceiling in the audited `0.10.1` package and retain explicit legacy allowances:
 
-| Legacy export | Published size | Absolute budget |
-| --- | ---: | ---: |
-| `CreditCardNumber` | 21,060 B | 24,576 B |
-| `CARD_BRAND_LOGOS` | 16,160 B | 19,456 B |
+| Legacy export      | Published size | Absolute budget |
+| ------------------ | -------------: | --------------: |
+| `CreditCardNumber` |       21,060 B |        24,576 B |
+| `CARD_BRAND_LOGOS` |       16,160 B |        19,456 B |
 
 These exceptions are tied to the published measurements and the explicit legacy allowances in the policy. Both still follow the release growth check. Adding a new export does not create another legacy exception.
 

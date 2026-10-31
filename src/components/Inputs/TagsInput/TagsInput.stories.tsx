@@ -16,6 +16,32 @@ const SKILLS: TagsInputItem[] = [
   { id: "accessibility", label: "Accessibility" },
 ];
 
+const ControlledExample = () => {
+  const [selected, setSelected] = useState<Key[]>(["react"]);
+  const [created, setCreated] = useState<TagsInputItem[]>([]);
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+      <TagsInput
+        label="Skills"
+        items={SKILLS}
+        placeholder="Search skills..."
+        allowsCreate
+        value={selected}
+        onChange={setSelected}
+        onCreate={(item) => setCreated((current) => [...current, item])}
+      />
+      <pre style={{ margin: 0, fontSize: 12 }}>
+        {JSON.stringify(
+          { value: selected, created: created.map((i) => i.label) },
+          null,
+          2
+        )}
+      </pre>
+    </div>
+  );
+};
+
 const meta: Meta<typeof TagsInput> = {
   component: TagsInput,
   parameters: {
@@ -140,37 +166,7 @@ export const TagVariants: Story = {
 };
 
 export const Controlled: Story = {
-  render: () => {
-    const ControlledExample = () => {
-      const [selected, setSelected] = useState<Key[]>(["react"]);
-      const [created, setCreated] = useState<TagsInputItem[]>([]);
-
-      return (
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}
-        >
-          <TagsInput
-            label="Skills"
-            items={SKILLS}
-            placeholder="Search skills..."
-            allowsCreate
-            value={selected}
-            onChange={setSelected}
-            onCreate={(item) => setCreated((current) => [...current, item])}
-          />
-          <pre style={{ margin: 0, fontSize: 12 }}>
-            {JSON.stringify(
-              { value: selected, created: created.map((i) => i.label) },
-              null,
-              2
-            )}
-          </pre>
-        </div>
-      );
-    };
-
-    return <ControlledExample />;
-  },
+  render: () => <ControlledExample />,
   parameters: {
     docs: {
       description: {

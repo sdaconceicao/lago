@@ -43,6 +43,44 @@ const RemovableTagGroup = ({
   );
 };
 
+const SelectionExample = () => {
+  const [single, setSingle] = useState<Set<Key>>(new Set(["mint"]));
+  const [multiple, setMultiple] = useState<Set<Key>>(
+    new Set(["chocolate", "vanilla"])
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      <TagGroup
+        label="Single selection"
+        selectionMode="single"
+        selectedKeys={single}
+        onSelectionChange={(keys) => setSingle(keys as Set<Key>)}
+        items={FLAVORS}
+      >
+        {(flavor) => <Tag id={flavor.id}>{flavor.label}</Tag>}
+      </TagGroup>
+      <TagGroup
+        label="Multiple selection"
+        selectionMode="multiple"
+        selectedKeys={multiple}
+        onSelectionChange={(keys) => setMultiple(keys as Set<Key>)}
+        items={FLAVORS}
+      >
+        {(flavor) => <Tag id={flavor.id}>{flavor.label}</Tag>}
+      </TagGroup>
+      <TagGroup
+        label="Disabled keys"
+        selectionMode="multiple"
+        disabledKeys={["strawberry"]}
+        items={FLAVORS}
+      >
+        {(flavor) => <Tag id={flavor.id}>{flavor.label}</Tag>}
+      </TagGroup>
+    </div>
+  );
+};
+
 const meta: Meta<typeof Tag> = {
   component: Tag,
   parameters: {
@@ -77,49 +115,7 @@ export const Default: Story = {
 };
 
 export const Selection: Story = {
-  render: () => {
-    const SelectionExample = () => {
-      const [single, setSingle] = useState<Set<Key>>(new Set(["mint"]));
-      const [multiple, setMultiple] = useState<Set<Key>>(
-        new Set(["chocolate", "vanilla"])
-      );
-
-      return (
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}
-        >
-          <TagGroup
-            label="Single selection"
-            selectionMode="single"
-            selectedKeys={single}
-            onSelectionChange={(keys) => setSingle(keys as Set<Key>)}
-            items={FLAVORS}
-          >
-            {(flavor) => <Tag id={flavor.id}>{flavor.label}</Tag>}
-          </TagGroup>
-          <TagGroup
-            label="Multiple selection"
-            selectionMode="multiple"
-            selectedKeys={multiple}
-            onSelectionChange={(keys) => setMultiple(keys as Set<Key>)}
-            items={FLAVORS}
-          >
-            {(flavor) => <Tag id={flavor.id}>{flavor.label}</Tag>}
-          </TagGroup>
-          <TagGroup
-            label="Disabled keys"
-            selectionMode="multiple"
-            disabledKeys={["strawberry"]}
-            items={FLAVORS}
-          >
-            {(flavor) => <Tag id={flavor.id}>{flavor.label}</Tag>}
-          </TagGroup>
-        </div>
-      );
-    };
-
-    return <SelectionExample />;
-  },
+  render: () => <SelectionExample />,
   parameters: {
     docs: {
       description: {
