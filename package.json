@@ -103,7 +103,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "lucide-react": "^1.61.0",
+    "lucide-react": "^1.62.0",
     "react-country-flag": "3.1.0",
     "react-payment-logos": "^1.1.0"
   },
