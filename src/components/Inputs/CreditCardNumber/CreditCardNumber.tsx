@@ -1,13 +1,12 @@
 "use client";
 import clsx from "clsx";
-import { CreditCard } from "lucide-react";
 import { VisuallyHidden } from "react-aria-components/VisuallyHidden";
 import {
   TextField,
   type TextFieldProps,
 } from "@/components/Inputs/TextField/TextField";
+import { CardBrandImage } from "@/components/Media/CardBrandImage/CardBrandImage";
 import { useCreditCardNumber } from "./CreditCardNumber.hooks";
-import { CARD_BRAND_LOGOS } from "./CreditCardNumber.logos";
 import styles from "./CreditCardNumber.module.css";
 import type { CardBrand } from "./CreditCardNumber.utils";
 
@@ -22,6 +21,8 @@ export interface CreditCardNumberProps
    * digits so far fit more than one brand.
    */
   onBrandChange?: (brand: CardBrand | null) => void;
+  /** Base URL for lowercase brand SVG filenames. Defaults to commit-pinned react-payment-logos on jsDelivr; supports self-hosting. */
+  cardLogoCdnUrl?: string;
 }
 
 /**
@@ -36,6 +37,7 @@ export function CreditCardNumber({
   defaultValue,
   onChange,
   onBrandChange,
+  cardLogoCdnUrl,
   onKeyDown,
   inputRef,
   autoComplete = "cc-number",
@@ -52,7 +54,6 @@ export function CreditCardNumber({
     inputRef,
     onKeyDown,
   });
-  const Logo = card.definition && CARD_BRAND_LOGOS[card.definition.brand];
 
   return (
     <TextField
@@ -74,15 +75,11 @@ export function CreditCardNumber({
         // brand reaches assistive technology through the status message beside
         // it, which is the only part that changes when a brand is recognised.
         <span className={styles.brand} data-brand={card.definition?.brand}>
-          {Logo ? (
-            <Logo
-              aria-hidden="true"
-              focusable="false"
-              className={styles.brandLogo}
-            />
-          ) : (
-            <CreditCard aria-hidden="true" className={styles.brandIcon} />
-          )}
+          <CardBrandImage
+            brand={card.definition?.brand ?? null}
+            cdnUrl={cardLogoCdnUrl}
+            className={styles.brandLogo}
+          />
           <VisuallyHidden>
             <span role="status">
               {card.definition ? `${card.definition.label} card` : ""}
@@ -94,8 +91,6 @@ export function CreditCardNumber({
   );
 }
 
-export type { CardBrandLogo } from "./CreditCardNumber.logos";
-export { CARD_BRAND_LOGOS } from "./CreditCardNumber.logos";
 export type {
   CardBrand,
   CardBrandDefinition,

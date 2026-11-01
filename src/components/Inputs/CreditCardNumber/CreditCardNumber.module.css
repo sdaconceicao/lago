@@ -9,28 +9,20 @@
   justify-content: center;
   width: calc(var(--field-inner-height) * 1.56);
   height: var(--field-inner-height);
-}
-
-.brandLogo {
-  width: 100%;
-  height: 100%;
-  border-radius: calc(var(--field-inner-height) / 12);
-  forced-color-adjust: none;
-}
-
-.brandIcon {
-  width: var(--field-icon-size);
-  height: var(--field-icon-size);
   color: var(--text-color-placeholder);
 }
 
+.creditCardNumber .brandLogo {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--field-inner-height) / 12);
+}
+
 .creditCardNumber [data-disabled] .brand {
+  color: var(--text-color-disabled);
+
   .brandLogo {
     filter: grayscale(1);
     opacity: 0.6;
-  }
-
-  .brandIcon {
-    color: var(--text-color-disabled);
   }
 }

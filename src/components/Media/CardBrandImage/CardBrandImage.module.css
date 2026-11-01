@@ -1,0 +1,23 @@
+.cardBrandImage {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--spacing) * 12);
+  aspect-ratio: 780 / 500;
+  vertical-align: middle;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: contain;
+  forced-color-adjust: none;
+}
+
+.fallback {
+  width: var(--field-icon-size, 1.25rem);
+  height: var(--field-icon-size, 1.25rem);
+}

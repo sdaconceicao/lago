@@ -14,7 +14,7 @@ Every public core runtime export automatically receives a default budget of **10
 
 If a feature cannot fit within that ceiling, optimize it or isolate it behind an optional public entry, including its runtime code, public types, and feature-specific dependencies. The size ceiling supplements the dependency boundaries above. A small measured bundle does not excuse a required installation dependency for an optional feature.
 
-`CreditCardNumber` and `CARD_BRAND_LOGOS` exceeded the ceiling in the audited published `0.10.1` core and retain legacy allowances of 24,576 and 19,456 bytes, respectively. Both remain subject to release growth checks. New exports cannot use those legacy exceptions. Optional public subpaths have independent dependency boundaries and do not inherit the core size ceiling.
+Every current core export follows the default 10,000-byte budget; there are no legacy allowances. `CreditCardNumber` uses the shared `CardBrandImage` component to load one brand mark as an image, and inline SVG logos live behind the optional `payment-logos` entry. The audited `0.10.1` baseline remains unchanged, including measurements for exports that have since left core. Optional public subpaths have independent dependency boundaries and do not inherit the core size ceiling.
 
 ## Decision: isolate the rich text editor
 
@@ -42,6 +42,14 @@ A subpath keeps one package and release process while giving the editor an expli
 Optional peers change installation and version ownership. Applications that use the editor still bundle its required runtime code. The benefit for core consumers comes from isolating the dependency graph, not from renaming dependencies as peers.
 
 See the [installation instructions](../../README.md#rich-text-editor) for the editor's peer packages and import examples.
+
+## Decision: isolate inline payment logos
+
+Core consumers use `CardBrandImage` for CDN-backed logos or `getCardBrandLogoUrl` with their own image renderer. `CreditCardNumber` reuses the same image component. Both accept a self-hosted image base URL; filenames are lowercase card brands followed by `.svg`. No inline artwork or `react-payment-logos` imports enter the core runtime or declaration graph.
+
+Applications that need inline SVGs use `@code-x/lago/payment-logos` and install its optional `react-payment-logos` and `tslib` peers. The artwork package uses `tslib` helpers at runtime. The entry exports each of the eight SVG components separately, plus the `CARD_BRAND_LOGOS` map and its `CardBrandLogo` type. Importing a specific SVG allows unused brands to be removed; a runtime lookup through the complete map retains all eight brands.
+
+`CARD_BRAND_LOGOS` and `CardBrandLogo` have moved out of the package root. This is a breaking API change: consumers must update their imports to the optional subpath and install its peers, or switch to the core image API. The optional entry has independent ESM, CommonJS, and declaration outputs and follows the same package isolation checks as the rich text editor. See the [payment logo instructions](../../README.md#payment-logos) for both rendering approaches.
 
 ## Apply the same boundary to other large components
 

@@ -10,10 +10,13 @@ import {
   symlink,
   writeFile,
 } from "node:fs/promises";
+import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { fileURLToPath } from "node:url";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import {
   CORE_EXPORT_NAMES,
   compareMeasurements,
@@ -229,14 +232,6 @@ describe("measurement policy validation", () => {
         )
       );
     }
-    assert.deepEqual(policy.legacyComponentBudgets, {
-      CreditCardNumber: 24_576,
-      CARD_BRAND_LOGOS: 19_456,
-    });
-    assert.deepEqual(policy.componentBudgets, {
-      CreditCardNumber: 24_576,
-      CARD_BRAND_LOGOS: 19_456,
-    });
   });
 });
 
@@ -256,11 +251,15 @@ describe("core runtime export coverage", () => {
 
   it("measures every discovered core export without requiring a budget override", () => {
     assert.doesNotThrow(() => validateCoreExports(CORE_EXPORT_NAMES));
-    assert.ok(CORE_EXPORT_NAMES.includes("getTelephoneDigits"));
-    assert.equal(
-      Object.hasOwn(policy.componentBudgets, "getTelephoneDigits"),
-      false
-    );
+    for (const name of [
+      "getTelephoneDigits",
+      "CardBrandImage",
+      "getCardBrandLogoUrl",
+    ]) {
+      assert.ok(CORE_EXPORT_NAMES.includes(name));
+      assert.equal(Object.hasOwn(policy.componentBudgets, name), false);
+    }
+    assert.equal(CORE_EXPORT_NAMES.includes("CARD_BRAND_LOGOS"), false);
   });
 
   it("fails a new export without its named-import measurement", () => {
@@ -278,7 +277,7 @@ describe("core runtime export coverage", () => {
   });
 
   it("measures utilities, constants and lowercase aliases with the default budget", () => {
-    for (const name of ["formatValue", "CARD_BRAND_LOGOS", "buttonAlias"]) {
+    for (const name of ["formatValue", "CARD_BRANDS", "buttonAlias"]) {
       assert.throws(() => validateCoreExports([name], [], settings({})));
       assert.doesNotThrow(() =>
         validateCoreExports([name], [definition(name)], settings({}))
@@ -333,6 +332,18 @@ describe("consumer bundle growth", () => {
     assert.equal(compareSizes(24_000, 24_576, 24_576).passed, true);
     assert.equal(compareSizes(24_000, 24_577, 24_576).passed, false);
     assert.equal(compareSizes(24_000, 24_577, 24_576).limitBytes, 24_576);
+  });
+
+  it("applies the default 10,000-byte budget to CreditCardNumber", () => {
+    for (const currentBytes of [10_000, 10_001]) {
+      const comparison = compareMeasurements(bootstrap, {
+        ...sizes,
+        CreditCardNumber: currentBytes,
+      }).find(({ name }) => name === "CreditCardNumber");
+      assert.equal(comparison.baselineBytes, 21_060);
+      assert.equal(comparison.limitBytes, 10_000);
+      assert.equal(comparison.passed, currentBytes <= 10_000);
+    }
   });
 
   it("allows a new measurement when its absolute budget is supplied", () => {
@@ -518,6 +529,21 @@ describe("Size Limit output and baseline validation", () => {
       validateBaseline(newComponentBaseline),
       newComponentBaseline
     );
+  });
+
+  it("preserves historical measurements for exports moved outside core", () => {
+    assert.deepEqual(validateBaseline(migrationSeed, "0.10.1"), migrationSeed);
+    assert.equal(migrationSeed.sizes.CARD_BRAND_LOGOS, 16_160);
+    const comparisons = compareMeasurements(migrationSeed, sizes);
+    assert.equal(
+      comparisons.some(({ name }) => name === "CARD_BRAND_LOGOS"),
+      false
+    );
+    for (const name of ["CardBrandImage", "getCardBrandLogoUrl"]) {
+      const comparison = comparisons.find((entry) => entry.name === name);
+      assert.equal(comparison.baselineBytes, undefined);
+      assert.equal(comparison.limitBytes, 10_000);
+    }
   });
 
   it("requires known published core measurements even when an override exists", () => {
@@ -942,6 +968,43 @@ async function createCliFixture(t, { withTooling = true } = {}) {
   }
   return { directory, cli, names, baseline };
 }
+
+describe("built payment logo entries", () => {
+  const require = createRequire(import.meta.url);
+  const brands = {
+    amex: "Amex",
+    diners: "Diners",
+    discover: "Discover",
+    jcb: "Jcb",
+    maestro: "Maestro",
+    mastercard: "Mastercard",
+    unionpay: "Unionpay",
+    visa: "Visa",
+  };
+
+  for (const [format, load] of [
+    ["ESM", () => import("../dist/payment-logos.mjs")],
+    ["CommonJS", () => require("../dist/payment-logos.cjs")],
+  ]) {
+    it(`renders every named SVG and map entry from ${format}`, async () => {
+      const entry = await load();
+      assert.deepEqual(
+        Object.keys(entry.CARD_BRAND_LOGOS).sort(),
+        Object.keys(brands).sort()
+      );
+      for (const [brand, name] of Object.entries(brands)) {
+        const Logo = entry[name];
+        assert.equal(typeof Logo, "function", `${format} ${name}`);
+        assert.equal(entry.CARD_BRAND_LOGOS[brand], Logo);
+        const markup = renderToStaticMarkup(
+          createElement(Logo, { width: 78, height: 50 })
+        );
+        assert.match(markup, /^<svg\b/, `${format} ${name}`);
+        assert.match(markup, /viewBox="0 0 780 500"/);
+      }
+    });
+  }
+});
 
 describe("built bundle integration", () => {
   it("discovers an added helper and enforces imports and CSS while reporting catalog growth", async (t) => {
