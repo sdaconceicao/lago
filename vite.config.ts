@@ -37,6 +37,21 @@ export default defineConfig({
           setupFiles: ["./vitest.setup.ts"],
           globals: true,
           include: ["src/**/*.{test,spec}.{js,ts,jsx,tsx}"],
+          exclude: ["src/**/*.browser.test.{ts,tsx}"],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "browser",
+          include: ["src/**/*.browser.test.{ts,tsx}"],
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright({}),
+            instances: [{ browser: "chromium" }],
+          },
+          setupFiles: [".storybook/vitest.setup.ts"],
         },
       },
       {

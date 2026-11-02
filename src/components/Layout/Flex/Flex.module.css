@@ -1,0 +1,118 @@
+.flex {
+  /* Define every link on each container so nested layouts never inherit a
+   * parent's responsive values. Sparse overrides follow the preceding link. */
+  --flex-direction-base: row;
+  --flex-align-base: stretch;
+  --flex-justify-base: flex-start;
+  --flex-wrap-base: nowrap;
+  --flex-gap-base: 0px;
+  --flex-row-gap-base: initial;
+  --flex-column-gap-base: initial;
+
+  --flex-direction-xs: var(--flex-direction-base);
+  --flex-align-xs: var(--flex-align-base);
+  --flex-justify-xs: var(--flex-justify-base);
+  --flex-wrap-xs: var(--flex-wrap-base);
+  --flex-gap-xs: var(--flex-gap-base);
+  --flex-row-gap-xs: var(--flex-row-gap-base);
+  --flex-column-gap-xs: var(--flex-column-gap-base);
+
+  --flex-direction-sm: var(--flex-direction-xs);
+  --flex-align-sm: var(--flex-align-xs);
+  --flex-justify-sm: var(--flex-justify-xs);
+  --flex-wrap-sm: var(--flex-wrap-xs);
+  --flex-gap-sm: var(--flex-gap-xs);
+  --flex-row-gap-sm: var(--flex-row-gap-xs);
+  --flex-column-gap-sm: var(--flex-column-gap-xs);
+
+  --flex-direction-md: var(--flex-direction-sm);
+  --flex-align-md: var(--flex-align-sm);
+  --flex-justify-md: var(--flex-justify-sm);
+  --flex-wrap-md: var(--flex-wrap-sm);
+  --flex-gap-md: var(--flex-gap-sm);
+  --flex-row-gap-md: var(--flex-row-gap-sm);
+  --flex-column-gap-md: var(--flex-column-gap-sm);
+
+  --flex-direction-lg: var(--flex-direction-md);
+  --flex-align-lg: var(--flex-align-md);
+  --flex-justify-lg: var(--flex-justify-md);
+  --flex-wrap-lg: var(--flex-wrap-md);
+  --flex-gap-lg: var(--flex-gap-md);
+  --flex-row-gap-lg: var(--flex-row-gap-md);
+  --flex-column-gap-lg: var(--flex-column-gap-md);
+
+  --flex-direction-xl: var(--flex-direction-lg);
+  --flex-align-xl: var(--flex-align-lg);
+  --flex-justify-xl: var(--flex-justify-lg);
+  --flex-wrap-xl: var(--flex-wrap-lg);
+  --flex-gap-xl: var(--flex-gap-lg);
+  --flex-row-gap-xl: var(--flex-row-gap-lg);
+  --flex-column-gap-xl: var(--flex-column-gap-lg);
+
+  display: flex;
+  flex-direction: var(--flex-direction-base);
+  align-items: var(--flex-align-base);
+  justify-content: var(--flex-justify-base);
+  flex-wrap: var(--flex-wrap-base);
+  row-gap: var(--flex-row-gap-base, var(--flex-gap-base));
+  column-gap: var(--flex-column-gap-base, var(--flex-gap-base));
+}
+
+.flex[data-inline] {
+  display: inline-flex;
+}
+
+@media (min-width: 20rem) {
+  .flex {
+    flex-direction: var(--flex-direction-xs);
+    align-items: var(--flex-align-xs);
+    justify-content: var(--flex-justify-xs);
+    flex-wrap: var(--flex-wrap-xs);
+    row-gap: var(--flex-row-gap-xs, var(--flex-gap-xs));
+    column-gap: var(--flex-column-gap-xs, var(--flex-gap-xs));
+  }
+}
+
+@media (min-width: 40rem) {
+  .flex {
+    flex-direction: var(--flex-direction-sm);
+    align-items: var(--flex-align-sm);
+    justify-content: var(--flex-justify-sm);
+    flex-wrap: var(--flex-wrap-sm);
+    row-gap: var(--flex-row-gap-sm, var(--flex-gap-sm));
+    column-gap: var(--flex-column-gap-sm, var(--flex-gap-sm));
+  }
+}
+
+@media (min-width: 48rem) {
+  .flex {
+    flex-direction: var(--flex-direction-md);
+    align-items: var(--flex-align-md);
+    justify-content: var(--flex-justify-md);
+    flex-wrap: var(--flex-wrap-md);
+    row-gap: var(--flex-row-gap-md, var(--flex-gap-md));
+    column-gap: var(--flex-column-gap-md, var(--flex-gap-md));
+  }
+}
+
+@media (min-width: 64rem) {
+  .flex {
+    flex-direction: var(--flex-direction-lg);
+    align-items: var(--flex-align-lg);
+    justify-content: var(--flex-justify-lg);
+    flex-wrap: var(--flex-wrap-lg);
+    row-gap: var(--flex-row-gap-lg, var(--flex-gap-lg));
+    column-gap: var(--flex-column-gap-lg, var(--flex-gap-lg));
+  }
+}
+
+@media (min-width: 80rem) {
+  .flex {
+    flex-direction: var(--flex-direction-xl);
+    align-items: var(--flex-align-xl);
+    justify-content: var(--flex-justify-xl);
+    flex-wrap: var(--flex-wrap-xl);
+    row-gap: var(--flex-row-gap-xl, var(--flex-gap-xl));
+    column-gap: var(--flex-column-gap-xl, var(--flex-gap-xl));
+  }
+}
