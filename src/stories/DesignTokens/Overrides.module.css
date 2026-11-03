@@ -1,0 +1,64 @@
+.examples {
+  display: grid;
+  gap: var(--spacing-6);
+  color: var(--text-color);
+  font: var(--font-size) var(--font-family);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+/* Inheritance from a wrapper has the same local-declaration limitation as :root. */
+.inherited {
+  --button-color: var(--purple);
+  --button-border-size: 3px;
+  --button-background: rgb(120 30 90);
+}
+
+/* Avoid transitional colors while the examples compare light/dark and hover. */
+.examples :global(.react-aria-Button) {
+  transition: none;
+}
+
+@media (forced-colors: none) {
+  .scopedHue {
+    --button-color: var(--purple);
+    --button-border-size: 3px;
+  }
+
+  .scopedSurface:not([data-disabled]) {
+    --button-background: rgb(24 48 72);
+    --button-text: white;
+  }
+}
+
+.fields {
+  display: grid;
+  gap: var(--spacing-4);
+  max-width: 28rem;
+  --field-height: 64px;
+}
+
+/* Metrics are overridden where data-field-size declares them, not on .fields. */
+.scopedField[data-field-size="sm"] {
+  --field-height: 32px;
+  --field-inner-height: 24px;
+  --field-inner-inset: 4px;
+  --field-padding-x: 8px;
+  --field-reserved-inline-end: calc(
+    var(--field-inner-height) +
+    2 *
+    var(--field-inner-inset)
+  );
+  --field-radius: var(--radius-lg);
+}
+
+.spacingUnit {
+  width: var(--spacing);
+  height: 0;
+  overflow: hidden;
+}

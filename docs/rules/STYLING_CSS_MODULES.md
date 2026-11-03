@@ -15,6 +15,18 @@ This rule works with:
 4. **Predictable Naming** - Use consistent naming conventions
 5. **Avoid important overrides** - Only use if there is no other option
 
+
+## Public token contract
+
+The [public token reference](../../src/stories/DesignTokens/Reference.mdx) defines
+supported names, value types, override scopes, private properties, and the
+deprecation policy. Update that reference and the token override stories when
+adding or changing a public CSS property. Verify the documented scope and
+relevant light/dark, interaction, disabled, and forced-color behavior in a browser.
+Do not describe a locally declared property as an inherited fallback input.
+Public replacements require migration guidance and the documented compatibility
+period before a breaking removal; private `--_*` aliases are not consumer APIs.
+
 ## File Structure
 
 ```

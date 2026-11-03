@@ -47,7 +47,7 @@ export interface AvatarInitialsProps
  *
  * The fill takes a hue derived from `name`, so the same person keeps the same
  * colour everywhere without anyone having to store one. Override
- * `--avatar-color` through `style` or a class to pin it to a specific colour.
+ * `--avatar-color` through `style` to replace the generated inline colour.
  */
 export function AvatarInitials({
   name,
