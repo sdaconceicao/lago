@@ -8,19 +8,18 @@
 @layer lago.base {
   /* utility that creates a button-like element, which can be optionally selected */
   .buttonBase {
-    /* The `--button-*` properties are this treatment's public inputs: a
-       component sets one to specialize itself — Tag asks for grey, Column for
-       its own border — and everything below is derived from what it resolves
-       to. They are read through a private `--_button-*` alias carrying the
-       default in a `var()` fallback, rather than declared here outright, so a
-       component that sets one is supplying the only declaration instead of
-       winning a cascade fight against ours. That keeps the contract explicit
-       and independent of which layer either rule happens to sit in.
+    /* Optional inputs (color, border-size, gradient-size, border, shadow)
+       are read through private --_button-* fallback aliases. They can inherit
+       until a component, variant, or state specializes them on this element.
 
-       Values Base itself varies by variant or state — the tones below, the
-       filled treatment, forced colors — do still declare the public property,
-       because those are decisions rather than defaults, and the alias picks
-       them up the same way. */
+       Background, gradient, highlight, and text are resolved appearance values:
+       their defaults and states are declared locally below. Consumers override
+       those on the actual styled element, not an ancestor. In particular the
+       global --button-background palette token is also used by other controls;
+       reading it as this treatment's default would erase --button-color-based
+       specializations such as a secondary button or Tag.
+
+       See Design Tokens/Reference for the public names and override scopes. */
     --_button-color: var(--button-color, var(--tint));
     --_button-border-size: var(--button-border-size, 1px);
     --_button-gradient-size: var(--button-gradient-size, 8px);
@@ -238,8 +237,10 @@
 
   /* utility that creates a small indicator, such as a checkbox, radio, switch, or slider thumb */
   .indicator {
-    /* Public inputs, read through private aliases — see .buttonBase above for
-       why. Slider and Switch both set `--indicator-color`. */
+    /* Optional inputs use fallback aliases. Appearance values such as
+       --indicator-background and --indicator-border are declared locally and
+       require an override on the indicator itself. Slider and Switch both
+       specialize --indicator-color; states below can specialize it too. */
     --_indicator-color: var(--indicator-color, var(--gray));
     --_indicator-drop-shadow: var(--indicator-drop-shadow, 0 0);
 
@@ -330,6 +331,9 @@
 
   /* utility that creates an inset effect, used for form fields, slider/progress tracks, etc. */
   .inset {
+    /* These public appearance properties have local defaults and state rules.
+       Override them on the actual inset input, group, or track; a value on a
+       field wrapper or :root does not outrank these declarations. */
     --inset-background: var(--field-background);
     --inset-border: var(--border-color);
     --inset-border-size: 1px;
