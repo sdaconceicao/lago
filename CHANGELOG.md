@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/sdaconceicao/lago/compare/lago-v0.11.0...lago-v0.11.1) (2026-11-06)
+
+
+### Bug Fixes
+
+* Use cdn for credit card logos by default ([#147](https://github.com/sdaconceicao/lago/issues/147)) ([7a1eb7c](https://github.com/sdaconceicao/lago/commit/7a1eb7c9aae1a1342218e2d3c0a55eefeacb046c))
+
 ## [0.11.0](https://github.com/sdaconceicao/lago/compare/lago-v0.10.1...lago-v0.11.0) (2026-10-29)
 
 
