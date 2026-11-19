@@ -1,3 +1,4 @@
+import { createMockLocalStorage } from "@test-utils/createMockLocalStorage";
 import { act, render, renderHook, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { ThemeProvider, useTheme } from "./theme-provider";
@@ -40,15 +41,18 @@ describe("useTheme", () => {
 
 describe("ThemeProvider", () => {
   let originalMatchMedia: typeof window.matchMedia;
+  let originalLocalStorage: typeof localStorage;
 
   beforeEach(() => {
     originalMatchMedia = window.matchMedia;
-    localStorage.clear();
+    originalLocalStorage = window.localStorage;
+    window.localStorage = createMockLocalStorage();
     document.documentElement.classList.remove("dark-mode");
   });
 
   afterEach(() => {
     window.matchMedia = originalMatchMedia;
+    window.localStorage = originalLocalStorage;
   });
 
   it("defaults to system theme", () => {

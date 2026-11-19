@@ -1,3 +1,4 @@
+import { createMockLocalStorage } from "@test-utils/createMockLocalStorage";
 import { renderHook } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { ThemeProvider } from "../providers/theme-provider";
@@ -31,14 +32,17 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 
 describe("useDarkMode", () => {
   let originalMatchMedia: typeof window.matchMedia;
+  let originalLocalStorage: typeof localStorage;
 
   beforeEach(() => {
     originalMatchMedia = window.matchMedia;
-    localStorage.clear();
+    originalLocalStorage = window.localStorage;
+    window.localStorage = createMockLocalStorage();
   });
 
   afterEach(() => {
     window.matchMedia = originalMatchMedia;
+    window.localStorage = originalLocalStorage;
   });
 
   it("returns false when theme is light", () => {
