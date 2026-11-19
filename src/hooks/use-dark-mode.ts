@@ -7,10 +7,16 @@ type ThemeValue = Theme | undefined;
 /**
  * Resolves whether the given theme setting is dark.
  * Returns `false` (light) when `theme` is undefined (e.g. no ThemeProvider).
+ * The system preference also falls back to light during server rendering.
  */
 export const useResolvedDarkMode = (theme: ThemeValue): boolean => {
   const [systemPrefersDark, setSystemPrefersDark] = useState(() => {
-    if (typeof window.matchMedia !== "function") return false;
+    if (
+      typeof window === "undefined" ||
+      typeof window.matchMedia !== "function"
+    ) {
+      return false;
+    }
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
