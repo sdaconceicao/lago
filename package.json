@@ -155,7 +155,7 @@
     "@vitest/browser-playwright": "^4.1.11",
     "@vitest/coverage-v8": "^4.1.11",
     "ajv": "^8.20.0",
-    "jsdom": "^30.1.2",
+    "jsdom": "^31.0.1",
     "playwright": "^1.65.1",
     "react": "^19.3.0",
     "react-aria-components": "^1.22.1",
